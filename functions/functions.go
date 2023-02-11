@@ -37,7 +37,7 @@ var fmap = map[string]interface{}{
 	"mul":      func(a, b int) int { return a * b },
 	"max":      math.Max,
 	"min":      math.Min,
-	"integer":  func(min, max int) int { return rand.Intn(min-max+1) + max },
+	"integer":  func(min, max int) int { return min + rand.Intn(max-min) },
 	"floating": func(min, max float32) float32 { return min + rand.Float32()*(max-min) },
 	"random":   func(s []string) string { return s[rand.Intn(len(s))] },
 	"randoms":  func(s string) string { a := strings.Split(s, "|"); return a[rand.Intn(len(a))] },

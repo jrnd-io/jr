@@ -1,0 +1,18 @@
+{
+        "VLAN": {{randoms "ALPHA|BETA|GAMMA|DELTA"}},
+        "IPV4_SRC_ADDR": {{ip "10.1.0.0/16"}},
+        "IPV4_DST_ADDR": {{ip "10.1.0.0/16"}},
+        "IN_BYTES": {{rnd 1000 2000}},
+        "FIRST_SWITCHED": {{unix_time_stamp 60}},
+        "LAST_SWITCHED": {{unix_time_stamp 10}},
+        "L4_SRC_PORT": {{ip_known_ports}},
+        "L4_DST_PORT": {{ip_known_ports}},
+        "TCP_FLAGS": 0,
+        "PROTOCOL": {{rnd 0 5}},
+        "SRC_TOS": 192,
+        "SRC_AS": 0,
+        "DST_AS": 0,
+        "L7_PROTO": {{ip_known_ports}},
+        "L7_PROTO_NAME": {{ip_known_protocols}},
+        "L7_PROTO_CATEGORY": {{randoms "Network|Application|Transport|Session"}}
+}

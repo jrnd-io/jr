@@ -1,0 +1,8 @@
+{
+        "id": {{uuid}},
+        "text": "{{lorem 10}}",
+        "isTested": {{yesorno}},
+        "isValid": {{bool}}
+        "latitude": {{floating -90.000001 90}},
+        "longitude": {{floating -180.000001 180}}
+}

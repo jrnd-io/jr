@@ -4,6 +4,11 @@
 *.dll
 *.so
 *.dylib
+*.o
+*.a
+*.so
+*.test
+*.prof
 
 # Test binary, built with `go test -c`
 *.test
@@ -13,3 +18,31 @@
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
+
+# Folders
+_obj
+_test
+
+# Architecture specific extensions/prefixes
+*.[568vq]
+[568vq].out
+
+*.cgo1.go
+*.cgo2.c
+_cgo_defun.c
+_cgo_gotypes.go
+_cgo_export.*
+_testmain.go
+
+# Various
+*~
+*.iws
+*.ipr
+*.iml
+.idea/
+.idea
+.DS_Store
+
+# Specific project files
+releases
+build

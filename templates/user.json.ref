@@ -1,5 +1,4 @@
-[
-  '{{repeat(5, 7)}}',
+
   {
     _id: '{{objectId}}',
     index: '{{index}}',

@@ -49,12 +49,22 @@ var fmap = map[string]interface{}{
 	"unix_time_stamp":    func(days int) int64 { return unixTimeStamp(days) },
 
 	//people
-	"name":       name,
-	"surname":    surname,
-	"middlename": middlename,
-	"address":    address,
-	"city":       city,
-	"state":      state,
+	"name":   name,
+	"name_m": nameM,
+	"name_f": nameF,
+
+	"surname":        surname,
+	"middlename":     middlename,
+	"address":        address,
+	"capital":        capital,
+	"capital_at":     capitalAt,
+	"state":          state,
+	"state_at":       stateAt,
+	"state_short":    stateShort,
+	"state_short_at": stateShortAt,
+	"zip":            zip,
+	"zip_at":         zipAt,
+	"company":        company,
 
 	//generic
 	"uuid":    uniqueId,

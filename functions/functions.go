@@ -59,11 +59,11 @@ var fmap = map[string]interface{}{
 	"capital":        capital,
 	"capital_at":     capitalAt,
 	"state":          state,
-	"state_at":       stateAt,
+	"state_at":       func(index int) string { return stateAt(index) },
 	"state_short":    stateShort,
-	"state_short_at": stateShortAt,
+	"state_short_at": func(index int) string { return stateShortAt(index) },
 	"zip":            zip,
-	"zip_at":         zipAt,
+	"zip_at":         func(index int) string { return zipAt(index) },
 	"company":        company,
 
 	//generic

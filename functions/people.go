@@ -42,9 +42,9 @@ var surnamesAll string = "Smith\nJohnson\nWilliams\nBrown\nJones\nGarcia\nMiller
 	"\nJames\nBennett\nGray\nMendosa\nRuiz\nHughes\nPrice\nAlvarez\nCastillo\nSanders\nPatel\nMyers\nLong\nRoss\nFoster\nJimenez"
 var surnames []string = strings.Split(surnamesAll, "\n")
 var usStatesAll = "Alabama\nAlaska\nArizona\nArkansas\nCalifornia\nColorado\nConnecticut\nDelaware\nFlorida\nGeorgia" +
-	"\nHawaii\nIdaho\nIllinoisIndiana\nIowa\nKansas\nKentucky\nLouisiana\nMaine\nMaryland\nMassachusetts\nMichigan" +
-	"\nMinnesota\nMississippi\nMissouri\nMontanaNebraska\nNevada\nNew Hampshire\nNew Jersey\nNew Mexico\nNew York" +
-	"\nNorth Carolina\nNorth Dakota\nOhio\nOklahoma\nOregon\nPennsylvaniaRhode Island\nSouth Carolina\nSouth Dakota" +
+	"\nHawaii\nIdaho\nIllinois\nIndiana\nIowa\nKansas\nKentucky\nLouisiana\nMaine\nMaryland\nMassachusetts\nMichigan" +
+	"\nMinnesota\nMississippi\nMissouri\nMontana\nNebraska\nNevada\nNew Hampshire\nNew Jersey\nNew Mexico\nNew York" +
+	"\nNorth Carolina\nNorth Dakota\nOhio\nOklahoma\nOregon\nPennsylvania\nRhode Island\nSouth Carolina\nSouth Dakota" +
 	"\nTennessee\nTexas\nUtah\nVermont\nVirginia\nWashington\nWest Virginia\nWisconsin\nWyoming"
 var usStates = strings.Split(usStatesAll, "\n")
 var usStatesShortAll = "AL\nAK\nAZ\nAR\nCA\nCO\nCT\nDE\nFL\nGA\nHI\nID\nIL\nIN\nIA\nKS\nKY\nLA\nME\nMD\nMA\nMI\nMN\nMS" +
@@ -52,14 +52,14 @@ var usStatesShortAll = "AL\nAK\nAZ\nAR\nCA\nCO\nCT\nDE\nFL\nGA\nHI\nID\nIL\nIN\n
 var usStatesShort = strings.Split(usStatesShortAll, "\n")
 var usCapitalsAll = "Montgomery\nJuneau\nPhoenix\nLittle Rock\nSacramento\nDenver\nHartford\nDover\nTallahassee" +
 	"\nAtlanta\nHonolulu\nBoise\nSpringfield\nIndianapolis\nDes Moines\nTopeka\nFrankfort\nBaton Rouge\nAugusta" +
-	"\nAnnapolis\nBoston\nLansing\nSt. Paul\nJackson\nJefferson City\nHelena\nLincoln\nCarson City\nConcord\nTrenton" +
+	"\nAnnapolis\nBoston\nLansing\nSt.Paul\nJackson\nJefferson City\nHelena\nLincoln\nCarson City\nConcord\nTrenton" +
 	"\nSanta Fe\nAlbany\nRaleigh\nBismarck\nColumbus\nOklahoma City\nSalem\nHarrisburg\nProvidence\nColumbia\nPierre" +
 	"\nNashville\nAustin\nSalt Lake City\nMontpelier\nRichmond\nOlympia\nCharleston\nMadison\nCheyenne"
 var usCapitals = strings.Split(usCapitalsAll, "\n")
 var zipCodesAll = "36104\n99801\n85001\n72201\n95814\n80202\n6103\n19901\n32301\n30303\n96813\n83702\n62701\n46225" +
-	"\n50309\n66603\n40601\n70802\n4330\n21401\n2201\n48933\n55102\n39205\n65101\n59623\n68502\n89701\n3301\n8608\n87501" +
+	"\n50309\n66603\n40601\n70802\n4330\n21401\n02201\n48933\n55102\n39205\n65101\n59623\n68502\n89701\n3301\n8608\n87501" +
 	"\n12207\n27601\n58501\n43215\n73102\n97301\n17101\n2903\n29217\n57501\n37219\n78701\n84111\n5602\n23219\n98507" +
-	"\n25301\n53703\n82001\n96799\n20001\n96941\n96910\n96960\n96950\n96939\n901\n802"
+	"\n25301\n53703\n82001" //\n96799\n20001\n96941\n96910\n96960\n96950\n96939\n901\n802"
 var zipCodes = strings.Split(zipCodesAll, "\n")
 
 func name() string {
@@ -99,7 +99,7 @@ func state() string {
 }
 
 func stateAt(index int) string {
-	return usStates[rand.Intn(index)]
+	return usStates[index]
 }
 
 func stateShort() string {
@@ -107,7 +107,7 @@ func stateShort() string {
 }
 
 func stateShortAt(index int) string {
-	return usStatesShort[rand.Intn(index)]
+	return usStatesShort[index]
 }
 
 func capital() string {
@@ -115,7 +115,7 @@ func capital() string {
 }
 
 func capitalAt(index int) string {
-	return usCapitals[rand.Intn(index)]
+	return usCapitals[index]
 }
 
 func zip() string {
@@ -123,7 +123,7 @@ func zip() string {
 }
 
 func zipAt(index int) string {
-	return zipCodes[rand.Intn(index)]
+	return zipCodes[index]
 }
 
 func company() string {

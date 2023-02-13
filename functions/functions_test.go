@@ -42,6 +42,33 @@ func TestMin(t *testing.T) {
 	}
 }
 
+func TestUSState(t *testing.T) {
+	hawaii := `{{capital_at 10}} {{state_at 10}} {{state_short_at 10}} {{zip_at 10}}`
+	massachussets := `{{capital_at 20}} {{state_at 20}} {{state_short_at 20}} {{zip_at 20}}`
+	newyork := `{{capital_at 31}} {{state_at 31}} {{state_short_at 31}} {{zip_at 31}}`
+	texas := `{{capital_at 42}} {{state_at 42}} {{state_short_at 42}} {{zip_at 42}}`
+	virginia := `{{capital_at 45}} {{state_at 45}} {{state_short_at 45}} {{zip_at 45}}`
+	wyoming := `{{capital_at 49}} {{state_at 49}} {{state_short_at 49}} {{zip_at 49}}`
+	if err := runt(hawaii, "Honolulu Hawaii HI 96813"); err != nil {
+		t.Error(err)
+	}
+	if err := runt(massachussets, "Boston Massachusetts MA 02201"); err != nil {
+		t.Error(err)
+	}
+	if err := runt(newyork, "Albany New York NY 12207"); err != nil {
+		t.Error(err)
+	}
+	if err := runt(texas, "Austin Texas TX 78701"); err != nil {
+		t.Error(err)
+	}
+	if err := runt(virginia, "Richmond Virginia VA 23219"); err != nil {
+		t.Error(err)
+	}
+	if err := runt(wyoming, "Cheyenne Wyoming WY 82001"); err != nil {
+		t.Error(err)
+	}
+}
+
 func runt(tpl, expect string) error {
 	return runtv(tpl, expect, "")
 }

@@ -35,6 +35,17 @@ func TestMax(t *testing.T) {
 	}
 }
 
+func TestRandomness(t *testing.T) {
+	tpl := `{{integer 0 100}}`
+	if err := runt(tpl, "74"); err != nil {
+		t.Error(err)
+	}
+	tpl_seed := `{{seed 100}}{{integer 0 100}}`
+	if err := runt(tpl_seed, "83"); err != nil {
+		t.Error(err)
+	}
+}
+
 func TestMin(t *testing.T) {
 	tpl := `{{min 1 4}}`
 	if err := runt(tpl, "1"); err != nil {

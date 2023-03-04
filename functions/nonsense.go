@@ -6,7 +6,6 @@ import (
 	"bufio"
 	"fmt"
 	"io"
-	"math/rand"
 	"strings"
 )
 
@@ -62,7 +61,7 @@ func (c *Chain) Generate(n int) string {
 		if len(choices) == 0 {
 			break
 		}
-		next := choices[rand.Intn(len(choices))]
+		next := choices[random.Intn(len(choices))]
 
 		if i == n-1 {
 			if strings.HasSuffix(next, ",") {

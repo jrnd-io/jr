@@ -1,7 +1,6 @@
 package functions
 
 import (
-	"math/rand"
 	"strings"
 )
 
@@ -63,39 +62,39 @@ var zipCodesAll = "36104\n99801\n85001\n72201\n95814\n80202\n6103\n19901\n32301\
 var zipCodes = strings.Split(zipCodesAll, "\n")
 
 func name() string {
-	s := rand.Intn(2)
+	s := random.Intn(2)
 	if s == 0 {
-		return males[rand.Intn(len(males))]
+		return males[random.Intn(len(males))]
 
 	} else {
-		return females[rand.Intn(len(males))]
+		return females[random.Intn(len(males))]
 	}
 }
 
 func nameM() string {
-	return males[rand.Intn(len(males))]
+	return males[random.Intn(len(males))]
 }
 
 func nameF() string {
-	return females[rand.Intn(len(males))]
+	return females[random.Intn(len(males))]
 }
 
 func surname() string {
-	return surnames[rand.Intn(len(surnames))]
+	return surnames[random.Intn(len(surnames))]
 }
 
 func middlename() string {
 	middles := []string{"M", "J", "K", "P", "T", "S"}
-	return middles[rand.Intn(len(middles))]
+	return middles[random.Intn(len(middles))]
 }
 
 func address() string {
 	addresses := []string{"80", "81", "443", "22", "631"}
-	return addresses[rand.Intn(len(addresses))]
+	return addresses[random.Intn(len(addresses))]
 }
 
 func state() string {
-	return stateAt(rand.Intn(len(usStates)))
+	return stateAt(random.Intn(len(usStates)))
 }
 
 func stateAt(index int) string {
@@ -103,7 +102,7 @@ func stateAt(index int) string {
 }
 
 func stateShort() string {
-	return stateAt(rand.Intn(len(usStatesShort)))
+	return stateAt(random.Intn(len(usStatesShort)))
 }
 
 func stateShortAt(index int) string {
@@ -111,7 +110,7 @@ func stateShortAt(index int) string {
 }
 
 func capital() string {
-	return capitalAt(rand.Intn(len(usCapitals)))
+	return capitalAt(random.Intn(len(usCapitals)))
 }
 
 func capitalAt(index int) string {
@@ -119,7 +118,7 @@ func capitalAt(index int) string {
 }
 
 func zip() string {
-	return zipAt(rand.Intn(len(zipCodes)))
+	return zipAt(random.Intn(len(zipCodes)))
 }
 
 func zipAt(index int) string {
@@ -129,5 +128,5 @@ func zipAt(index int) string {
 func company() string {
 	companies := []string{"Acme Corporation", "Globex Corporation", "Soylent Corp", "Initech", "Umbrella Corporation",
 		"Hooli", "Veement Capital Partners", "Massive Dynamics", "Evil Partners", "Angels Investors", "Boston Static"}
-	return companies[rand.Intn(len(companies))]
+	return companies[random.Intn(len(companies))]
 }

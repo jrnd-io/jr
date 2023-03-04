@@ -12,6 +12,9 @@ func FunctionsMap() template.FuncMap {
 	return template.FuncMap(fmap)
 }
 
+var source = rand.NewSource(0)
+var random = rand.New(source)
+
 var fmap = map[string]interface{}{
 
 	// text utilities
@@ -37,10 +40,10 @@ var fmap = map[string]interface{}{
 	"mul":      func(a, b int) int { return a * b },
 	"max":      math.Max,
 	"min":      math.Min,
-	"integer":  func(min, max int) int { return min + rand.Intn(max-min) },
-	"floating": func(min, max float32) float32 { return min + rand.Float32()*(max-min) },
-	"random":   func(s []string) string { return s[rand.Intn(len(s))] },
-	"randoms":  func(s string) string { a := strings.Split(s, "|"); return a[rand.Intn(len(a))] },
+	"integer":  func(min, max int) int { return min + random.Intn(max-min) },
+	"floating": func(min, max float32) float32 { return min + random.Float32()*(max-min) },
+	"random":   func(s []string) string { return s[random.Intn(len(s))] },
+	"randoms":  func(s string) string { a := strings.Split(s, "|"); return a[random.Intn(len(a))] },
 
 	//networking and time utilities
 	"ip":                 func(s string) string { return ip(s) },
@@ -67,6 +70,7 @@ var fmap = map[string]interface{}{
 	"company":        company,
 
 	//generic
+	"seed":    func(rndSeed int64) string { random.Seed(rndSeed); return "" },
 	"uuid":    uniqueId,
 	"bool":    randomBool,
 	"yesorno": yesOrNo,

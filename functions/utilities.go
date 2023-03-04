@@ -2,7 +2,6 @@ package functions
 
 import (
 	"github.com/google/uuid"
-	"math/rand"
 )
 
 func uniqueId() string {
@@ -10,7 +9,7 @@ func uniqueId() string {
 }
 
 func randomBool() string {
-	b := rand.Intn(2)
+	b := random.Intn(2)
 	if b == 0 {
 		return "false"
 	} else {
@@ -19,7 +18,7 @@ func randomBool() string {
 }
 
 func yesOrNo() string {
-	b := rand.Intn(2)
+	b := random.Intn(2)
 	if b == 0 {
 		return "no"
 	} else {

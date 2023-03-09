@@ -21,7 +21,7 @@ THE SOFTWARE.
 */
 package main
 
-import "jg/cmd"
+import "jr/cmd"
 
 func main() {
 	cmd.Execute()

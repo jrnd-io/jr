@@ -32,17 +32,12 @@ import (
 // listCmd represents the list command
 var listCmd = &cobra.Command{
 	Use:   "list",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "List all available templates",
+	Long:  `List all available templates`,
 	Run: func(cmd *cobra.Command, args []string) {
 
 		fmt.Println()
-		fmt.Println("List of available JG templates:")
+		fmt.Println("List of available JR templates:")
 		fmt.Println()
 		root := "templates"
 		err := filepath.Walk(root, func(path string, info os.FileInfo, err error) error {

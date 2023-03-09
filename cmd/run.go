@@ -24,7 +24,7 @@ package cmd
 import (
 	"fmt"
 	"github.com/spf13/cobra"
-	"jg/jr"
+	"jr/jr"
 	"log"
 	"os"
 	"text/template"
@@ -34,9 +34,8 @@ import (
 // runCmd represents the run command
 var runCmd = &cobra.Command{
 	Use:   "run",
-	Short: "execute a template",
-	Long: `Execute a template
-								.`,
+	Short: "Execute a template",
+	Long:  `Execute a template`,
 	Run: func(cmd *cobra.Command, args []string) {
 
 		templateName := fmt.Sprintf("templates/%s.json", args[0])

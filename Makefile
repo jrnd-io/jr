@@ -3,7 +3,7 @@ hello:
 
 compile:
 	@echo "Compiling"
-	go build -o build jr.go
+	go build -o build/ jr.go
 	
 compile-all:
 	@echo "Compiling for every OS and Platform"
@@ -12,7 +12,7 @@ compile-all:
 	GOOS=freebsd GOARCH=386 go build -o build/jg-freebsd-386 jr.go
 
 run: compile
-	./jr
+	./build/jr
 
 clean:
 	go clean

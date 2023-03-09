@@ -1,4 +1,4 @@
-package functions
+package jg
 
 import (
 	"strings"
@@ -62,39 +62,39 @@ var zipCodesAll = "36104\n99801\n85001\n72201\n95814\n80202\n6103\n19901\n32301\
 var zipCodes = strings.Split(zipCodesAll, "\n")
 
 func name() string {
-	s := random.Intn(2)
+	s := Random.Intn(2)
 	if s == 0 {
-		return males[random.Intn(len(males))]
+		return males[Random.Intn(len(males))]
 
 	} else {
-		return females[random.Intn(len(males))]
+		return females[Random.Intn(len(males))]
 	}
 }
 
 func nameM() string {
-	return males[random.Intn(len(males))]
+	return males[Random.Intn(len(males))]
 }
 
 func nameF() string {
-	return females[random.Intn(len(males))]
+	return females[Random.Intn(len(males))]
 }
 
 func surname() string {
-	return surnames[random.Intn(len(surnames))]
+	return surnames[Random.Intn(len(surnames))]
 }
 
 func middlename() string {
 	middles := []string{"M", "J", "K", "P", "T", "S"}
-	return middles[random.Intn(len(middles))]
+	return middles[Random.Intn(len(middles))]
 }
 
 func address() string {
 	addresses := []string{"80", "81", "443", "22", "631"}
-	return addresses[random.Intn(len(addresses))]
+	return addresses[Random.Intn(len(addresses))]
 }
 
 func state() string {
-	return stateAt(random.Intn(len(usStates)))
+	return stateAt(Random.Intn(len(usStates)))
 }
 
 func stateAt(index int) string {
@@ -102,7 +102,7 @@ func stateAt(index int) string {
 }
 
 func stateShort() string {
-	return stateAt(random.Intn(len(usStatesShort)))
+	return stateAt(Random.Intn(len(usStatesShort)))
 }
 
 func stateShortAt(index int) string {
@@ -110,7 +110,7 @@ func stateShortAt(index int) string {
 }
 
 func capital() string {
-	return capitalAt(random.Intn(len(usCapitals)))
+	return capitalAt(Random.Intn(len(usCapitals)))
 }
 
 func capitalAt(index int) string {
@@ -118,7 +118,7 @@ func capitalAt(index int) string {
 }
 
 func zip() string {
-	return zipAt(random.Intn(len(zipCodes)))
+	return zipAt(Random.Intn(len(zipCodes)))
 }
 
 func zipAt(index int) string {
@@ -128,5 +128,5 @@ func zipAt(index int) string {
 func company() string {
 	companies := []string{"Acme Corporation", "Globex Corporation", "Soylent Corp", "Initech", "Umbrella Corporation",
 		"Hooli", "Veement Capital Partners", "Massive Dynamics", "Evil Partners", "Angels Investors", "Boston Static"}
-	return companies[random.Intn(len(companies))]
+	return companies[Random.Intn(len(companies))]
 }

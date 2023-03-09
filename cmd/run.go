@@ -22,13 +22,13 @@ THE SOFTWARE.
 package cmd
 
 import (
-	"bytes"
 	"fmt"
 	"github.com/spf13/cobra"
-	"jg/functions"
+	"jg/jg"
 	"log"
 	"os"
 	"text/template"
+	"time"
 )
 
 // runCmd represents the run command
@@ -45,16 +45,21 @@ var runCmd = &cobra.Command{
 			fmt.Print(err)
 		}
 
-		report, err := template.New("json").Funcs(functions.FunctionsMap()).Parse(string(templateScript))
+		report, err := template.New("json").Funcs(jg.FunctionsMap()).Parse(string(templateScript))
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		var bt bytes.Buffer
-		if err := report.Execute(&bt, nil); err != nil {
+		howMany, _ := cmd.Flags().GetInt("n")
+		frequency, _ := cmd.Flags().GetInt("f")
+		seed, _ := cmd.Flags().GetInt64("seed")
+		jg.Random.Seed(seed)
+
+		c := jg.NewContext(howMany, frequency, []string{"IT"}, seed)
+		if err := report.Execute(os.Stdout, c); err != nil {
 			log.Fatal(err)
 		}
-		fmt.Println(bt.String())
+
 	},
 }
 
@@ -69,5 +74,8 @@ func init() {
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// runCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	runCmd.Flags().Int("n", 1, "Number of elements to create for each pass")
+	runCmd.Flags().Int("f", 1, "Frequency: elements generated per second")
+	runCmd.Flags().Int64("seed", time.Now().UTC().UnixNano(), "Seed to init pseudorandom generator")
+
 }

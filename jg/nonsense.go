@@ -1,6 +1,6 @@
 // modified from https://golang.org/doc%2Fcodewalk%2Fmarkov.go
 
-package functions
+package jg
 
 import (
 	"bufio"
@@ -61,7 +61,7 @@ func (c *Chain) Generate(n int) string {
 		if len(choices) == 0 {
 			break
 		}
-		next := choices[random.Intn(len(choices))]
+		next := choices[Random.Intn(len(choices))]
 
 		if i == n-1 {
 			if strings.HasSuffix(next, ",") {

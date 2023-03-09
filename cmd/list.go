@@ -26,6 +26,7 @@ import (
 	"github.com/spf13/cobra"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 // listCmd represents the list command
@@ -45,7 +46,7 @@ to quickly create a Cobra application.`,
 		fmt.Println()
 		root := "templates"
 		err := filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
-			if !info.IsDir() {
+			if !info.IsDir() && strings.HasSuffix(path, "json") {
 				fmt.Println(path)
 			}
 			return nil

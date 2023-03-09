@@ -1,4 +1,4 @@
-package functions
+package jg
 
 import (
 	"net"
@@ -10,17 +10,17 @@ func unixTimeStamp(days int) int64 {
 	now := time.Now()
 	first := now.AddDate(0, 0, -days).Sub(unixEpoch).Seconds()
 	last := now.Sub(unixEpoch).Seconds()
-	return random.Int63n(int64(last-first)) + int64(first)
+	return Random.Int63n(int64(last-first)) + int64(first)
 }
 
 func ipKnownPorts() string {
 	ports := []string{"80", "81", "443", "22", "631"}
-	return ports[random.Intn(len(ports))]
+	return ports[Random.Intn(len(ports))]
 }
 
 func ipKnownProtocols() string {
 	protocols := []string{"TCP", "UDP", "ICMP", "FTP", "HTTP", "SFTP"}
-	return protocols[random.Intn(len(protocols))]
+	return protocols[Random.Intn(len(protocols))]
 }
 
 func ip(cidr string) string {
@@ -37,9 +37,9 @@ GENERATE:
 	quotient := ones / 8
 	remainder := ones % 8
 
-	// create random 4-byte byte slice
+	// create Random 4-byte byte slice
 	r := make([]byte, 4)
-	random.Read(r)
+	Random.Read(r)
 
 	for i := 0; i <= quotient; i++ {
 		if i == quotient {

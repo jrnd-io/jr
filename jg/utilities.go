@@ -1,4 +1,4 @@
-package functions
+package jg
 
 import (
 	"github.com/google/uuid"
@@ -9,7 +9,7 @@ func uniqueId() string {
 }
 
 func randomBool() string {
-	b := random.Intn(2)
+	b := Random.Intn(2)
 	if b == 0 {
 		return "false"
 	} else {
@@ -18,7 +18,7 @@ func randomBool() string {
 }
 
 func yesOrNo() string {
-	b := random.Intn(2)
+	b := Random.Intn(2)
 	if b == 0 {
 		return "no"
 	} else {

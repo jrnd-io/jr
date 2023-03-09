@@ -1,4 +1,4 @@
-module jg
+module jr
 
 go 1.20
 

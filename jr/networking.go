@@ -1,4 +1,4 @@
-package jg
+package jr
 
 import (
 	"net"

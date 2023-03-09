@@ -24,7 +24,7 @@ package cmd
 import (
 	"fmt"
 	"github.com/spf13/cobra"
-	"jg/jg"
+	"jg/jr"
 	"log"
 	"os"
 	"text/template"
@@ -45,7 +45,7 @@ var runCmd = &cobra.Command{
 			fmt.Print(err)
 		}
 
-		report, err := template.New("json").Funcs(jg.FunctionsMap()).Parse(string(templateScript))
+		report, err := template.New("json").Funcs(jr.FunctionsMap()).Parse(string(templateScript))
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -53,9 +53,9 @@ var runCmd = &cobra.Command{
 		howMany, _ := cmd.Flags().GetInt("n")
 		frequency, _ := cmd.Flags().GetInt("f")
 		seed, _ := cmd.Flags().GetInt64("seed")
-		jg.Random.Seed(seed)
+		jr.Random.Seed(seed)
 
-		c := jg.NewContext(howMany, frequency, []string{"IT"}, seed)
+		c := jr.NewContext(howMany, frequency, []string{"IT"}, seed)
 		if err := report.Execute(os.Stdout, c); err != nil {
 			log.Fatal(err)
 		}

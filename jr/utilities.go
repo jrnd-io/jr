@@ -1,4 +1,4 @@
-package jg
+package jr
 
 import (
 	"github.com/google/uuid"

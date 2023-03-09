@@ -33,14 +33,13 @@ var cfgFile string
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "jg",
-	Short: "A brief description of your application",
-	Long: `A longer description that spans multiple lines and likely contains
-examples and usage of using your application. For example:
+	Use:   "jr",
+	Short: "JSON RANDOM GENERATOR",
+	Long: `JR is a JSON Random Generator that helps you in generating quality random data for your needs. 
+It may be used in conjunction with kcat to feed Kafka, for example:
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+> jr bla bla | kcat bla bla
+.`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	// Run: func(cmd *cobra.Command, args []string) { },
@@ -62,7 +61,7 @@ func init() {
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
 
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.jg.yaml)")
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.jr.yaml)")
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
@@ -79,10 +78,10 @@ func initConfig() {
 		home, err := os.UserHomeDir()
 		cobra.CheckErr(err)
 
-		// Search config in home directory with name ".jg" (without extension).
+		// Search config in home directory with name ".jr" (without extension).
 		viper.AddConfigPath(home)
 		viper.SetConfigType("yaml")
-		viper.SetConfigName(".jg")
+		viper.SetConfigName(".jr")
 	}
 
 	viper.AutomaticEnv() // read in environment variables that match

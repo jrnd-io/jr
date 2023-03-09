@@ -1,5 +1,5 @@
 hello:
-	@echo "JG,the JSON Random Generator"
+	@echo "JR,the JSON Random Generator"
 
 compile:
 	@echo "Compiling"

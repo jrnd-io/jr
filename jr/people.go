@@ -130,3 +130,8 @@ func company() string {
 		"Hooli", "Veement Capital Partners", "Massive Dynamics", "Evil Partners", "Angels Investors", "Boston Static"}
 	return companies[Random.Intn(len(companies))]
 }
+
+func emailProvider() string {
+	providers := []string{"gmail.com", "mac.com", "email.com", "hotmail.com", "aol.com", "yahoo.com", "icloud.com"}
+	return providers[Random.Intn(len(providers))]
+}

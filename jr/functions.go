@@ -67,6 +67,7 @@ var fmap = map[string]interface{}{
 	"zip":            zip,
 	"zip_at":         func(index int) string { return zipAt(index) },
 	"company":        company,
+	"email_provider": emailProvider,
 
 	//generic
 	"seed":    func(rndSeed int64) string { Random.Seed(rndSeed); return "" },

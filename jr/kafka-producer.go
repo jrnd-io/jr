@@ -16,7 +16,7 @@ func Initialize(configFile string) {
 	conf = ReadConfig(configFile)
 	p, err = kafka.NewProducer(&conf)
 	if err != nil {
-		log.Fatal("Failed to create producer: %s", err)
+		log.Fatalf("Failed to create producer: %s", err)
 	}
 }
 

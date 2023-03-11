@@ -22,11 +22,13 @@ THE SOFTWARE.
 package cmd
 
 import (
+	"bytes"
 	"fmt"
 	"github.com/spf13/cobra"
 	"jr/jr"
 	"log"
 	"os"
+	"regexp"
 	"text/template"
 	"time"
 )
@@ -41,7 +43,7 @@ var runCmd = &cobra.Command{
 		templateName := fmt.Sprintf("templates/%s.json", args[0])
 		templateScript, err := os.ReadFile(templateName)
 		if err != nil {
-			fmt.Print(err)
+			log.Fatal(err)
 		}
 
 		report, err := template.New("json").Funcs(jr.FunctionsMap()).Parse(string(templateScript))
@@ -52,14 +54,36 @@ var runCmd = &cobra.Command{
 		howMany, _ := cmd.Flags().GetInt("n")
 		frequency, _ := cmd.Flags().GetInt("f")
 		seed, _ := cmd.Flags().GetInt64("seed")
+		oneline, _ := cmd.Flags().GetBool("oneline")
+
 		jr.Random.Seed(seed)
 
 		c := jr.NewContext(howMany, frequency, []string{"IT"}, seed)
-		if err := report.Execute(os.Stdout, c); err != nil {
-			log.Fatal(err)
+
+		if frequency != -1 {
+			for range time.Tick(time.Millisecond * time.Duration(frequency)) {
+				executeReport(report, c, oneline)
+			}
+		} else {
+			executeReport(report, c, oneline)
 		}
 
 	},
+}
+
+func executeReport(report *template.Template, c *jr.Context, oneline bool) {
+	var bt bytes.Buffer
+	if err := report.Execute(&bt, c); err != nil {
+		log.Fatal(err)
+	}
+	output := bt.String()
+	if oneline {
+		re := regexp.MustCompile(`\r?\n?`)
+		output = re.ReplaceAllString(output, "")
+		fmt.Println(output)
+	} else {
+		fmt.Print(output)
+	}
 }
 
 func init() {
@@ -74,7 +98,8 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	runCmd.Flags().Int("n", 1, "Number of elements to create for each pass")
-	runCmd.Flags().Int("f", 1, "Frequency: elements generated per second")
+	runCmd.Flags().Int("f", -1, "Frequency: elements generated per second")
 	runCmd.Flags().Int64("seed", time.Now().UTC().UnixNano(), "Seed to init pseudorandom generator")
+	runCmd.Flags().Bool("oneline", false, "strips /n from output, for example to be pipelined to tools like kcat")
 
 }

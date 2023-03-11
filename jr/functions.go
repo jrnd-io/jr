@@ -17,19 +17,20 @@ var Random = rand.New(rand.NewSource(0))
 var fmap = map[string]interface{}{
 
 	// text utilities
-	"trim":    strings.TrimSpace,
-	"upper":   strings.ToUpper,
-	"lower":   strings.ToLower,
-	"title":   strings.Title,
-	"substr":  func(start, length int, s string) string { return s[start:length] },
-	"first":   func(s string) string { return s[:1] },
-	"join":    func(sep string, ss []string) string { return strings.Join(ss, sep) },
-	"repeat":  func(count int, str string) string { return strings.Repeat(str, count) },
-	"trimall": func(c, s string) string { return strings.Trim(s, c) },
-	"atoi":    func(a string) int { i, _ := strconv.Atoi(a); return i },
-	"split":   func(sep, s string) []string { return strings.Split(s, sep) },
-	"markov":  func(prefixLen, numWords int, baseText string) string { return Nonsense(prefixLen, numWords, baseText) },
-	"lorem":   func(size int) string { return Lorem(size) },
+	"trim":      strings.TrimSpace,
+	"upper":     strings.ToUpper,
+	"lower":     strings.ToLower,
+	"title":     strings.Title,
+	"substr":    func(start, length int, s string) string { return s[start:length] },
+	"first":     func(s string) string { return s[:1] },
+	"firstword": func(s string) string { return strings.Split(s, " ")[0] },
+	"join":      func(sep string, ss []string) string { return strings.Join(ss, sep) },
+	"repeat":    func(count int, str string) string { return strings.Repeat(str, count) },
+	"trimall":   func(c, s string) string { return strings.Trim(s, c) },
+	"atoi":      func(a string) int { i, _ := strconv.Atoi(a); return i },
+	"split":     func(sep, s string) []string { return strings.Split(s, sep) },
+	"markov":    func(prefixLen, numWords int, baseText string) string { return Nonsense(prefixLen, numWords, baseText) },
+	"lorem":     func(size int) string { return Lorem(size) },
 
 	//math utilities
 	"add":      func(a, b int) int { return a + b },

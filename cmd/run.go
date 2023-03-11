@@ -62,16 +62,16 @@ var runCmd = &cobra.Command{
 
 		if frequency != -1 {
 			for range time.Tick(time.Millisecond * time.Duration(frequency)) {
-				executeReport(report, c, oneline)
+				executeTemplate(report, c, oneline)
 			}
 		} else {
-			executeReport(report, c, oneline)
+			executeTemplate(report, c, oneline)
 		}
 
 	},
 }
 
-func executeReport(report *template.Template, c *jr.Context, oneline bool) {
+func executeTemplate(report *template.Template, c *jr.Context, oneline bool) {
 	var bt bytes.Buffer
 	if err := report.Execute(&bt, c); err != nil {
 		log.Fatal(err)

@@ -55,5 +55,5 @@ option to strip all newlines. The alternative is obviously to create a template 
 The following commands generates 5 net-device random data every half-second and writes them to topic test:
 
 ```bash
-./build/jr run net-device --n 5 --f 500 --oneline | kcat -F kcat/librdkafka.config -K , -P -t test
+./build/jr run net-device --n 5 --f 500 --oneline | kcat -T -F kcat/librdkafka.config -K , -P -t test
 ```

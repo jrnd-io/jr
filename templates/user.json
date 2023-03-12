@@ -1,4 +1,4 @@
-{ {{$NAME := name}}{{$SURNAME := surname}}{{$COMPANY := company}}
+{{$NAME := name}}{{$SURNAME := surname}}{{$COMPANY := company}}{
   "guid": {{uuid}},
   "isActive": '{{bool}}',
   "balance": {{floating 1000 4000}},
@@ -8,6 +8,7 @@
   "name": "{{$NAME}} {{$SURNAME}}",
   "company": "{{$COMPANY}}",
   "email": "{{lower $NAME}}.{{lower $SURNAME}}@{{firstword (lower $COMPANY)}}.com",
+  "alt_email": "{{first (lower $NAME)}}.{{lower $SURNAME}}@{{squeeze (lower $COMPANY)}}.com",
   "about": "{{lorem 20}}",
   "latitude": {{floating -90.000001 90}},
   "longitude": {{floating -180.000001 180}},

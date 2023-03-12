@@ -52,7 +52,7 @@ A simple way of streaming to Apache Kafka is to use kcat in conjunction with JR.
 kcat needs K,V to be on a single line, so if your template generates multiline data you have to use the ```oneline``` 
 option to strip all newlines. The alternative is obviously to create a template without newlines, but that's not very readable!
 
-The following commands generates 5 net-device random data every half-second and writes them to topic test:
+The following line generates 5 net-device random data every half-second and writes them to topic test:
 
 ```bash
 ./build/jr run net-device --n 5 --f 500 --oneline | kcat -T -F kcat/librdkafka.config -K , -P -t test

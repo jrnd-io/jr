@@ -62,10 +62,14 @@ var runCmd = &cobra.Command{
 
 		if frequency != -1 {
 			for range time.Tick(time.Millisecond * time.Duration(frequency)) {
-				executeTemplate(report, c, oneline)
+				for range c.Range {
+					executeTemplate(report, c, oneline)
+				}
 			}
 		} else {
-			executeTemplate(report, c, oneline)
+			for range c.Range {
+				executeTemplate(report, c, oneline)
+			}
 		}
 
 	},

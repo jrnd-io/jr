@@ -51,4 +51,4 @@ install_bin:
 
 install: install_bin copy_templates
 
-all: hello compile install
+all: hello compile

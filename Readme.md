@@ -16,6 +16,11 @@ If you want to run the Unit tests, run:
 make test
 ```
 
+To install the binary and the templates:
+```bash
+sudo make install
+```
+
 ## Basic usage
 
 JR is very straightforward to use. Here are some examples

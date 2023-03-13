@@ -39,6 +39,12 @@ var runCmd = &cobra.Command{
 	Short: "Execute a template",
 	Long:  `Execute a template`,
 	Run: func(cmd *cobra.Command, args []string) {
+
+		if len(args) == 0 {
+			log.Println("Template missing. Try the list command to see available templates")
+			os.Exit(1)
+		}
+
 		templateDir, _ := cmd.Flags().GetString("templateDir")
 		templateDir = os.ExpandEnv(templateDir)
 		templateName := fmt.Sprintf("%s/%s.json", templateDir, args[0])

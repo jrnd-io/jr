@@ -1,9 +1,13 @@
+VERSION=0.0.2
+USER=$(shell id -u -n)
+TIME=$(shell date)
+
 hello:
 	@echo "JR,the JSON Random Generator"
 
 compile:
 	@echo "Compiling"
-	go build -o build/ jr.go
+	go build -v -ldflags="-X 'jr/cmd.Version=$(VERSION)' -X 'jr/cmd.BuildUser=$(USER)' -X 'jr/cmd.BuildTime=$(TIME)'" -o build jr.go
 	
 compile-all:
 	@echo "Compiling for every OS and Platform"

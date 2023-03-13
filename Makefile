@@ -9,11 +9,6 @@ compile:
 	@echo "Compiling"
 	go build -v -ldflags="-X 'jr/cmd.Version=$(VERSION)' -X 'jr/cmd.BuildUser=$(USER)' -X 'jr/cmd.BuildTime=$(TIME)'" -o build/jr jr.go
 	
-compile-all:
-	@echo "Compiling for every OS and Platform"
-	GOOS=darwin GOARCH=amd64 	go build -v -ldflags="-X 'jr/cmd.Version=$(VERSION)' -X 'jr/cmd.BuildUser=$(USER)' -X 'jr/cmd.BuildTime=$(TIME)'" -o build/jg-darwin-amd64 jr.go
-	GOOS=linux GOARCH=arm64 	go build -v -ldflags="-X 'jr/cmd.Version=$(VERSION)' -X 'jr/cmd.BuildUser=$(USER)' -X 'jr/cmd.BuildTime=$(TIME)'" -o build/jg-linux-arm64 jr.go
-	GOOS=linux GOARCH=386 	go build -v -ldflags="-X 'jr/cmd.Version=$(VERSION)' -X 'jr/cmd.BuildUser=$(USER)' -X 'jr/cmd.BuildTime=$(TIME)'" -o build/jg-linux-386 jr.go
 
 run: compile
 	./build/jr

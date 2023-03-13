@@ -2,6 +2,11 @@
 
 JR is a CLI program that helps you to create quality random data for your applications.
 
+## Prerequisites
+
+JR requires golang >= 1.20
+
+
 ## Building and compiling
 
 you need just to use the provided Makefile to build JR

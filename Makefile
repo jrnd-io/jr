@@ -1,7 +1,6 @@
 VERSION=0.0.3
 USER=$(shell id -u -n)
 TIME=$(shell date)
-BUILD_NUMBER_FILE=build-number.txt
 
 hello:
 	@echo "JR,the JSON Random Generator"
@@ -12,9 +11,9 @@ compile:
 	
 compile-all:
 	@echo "Compiling for every OS and Platform"
-	GOOS=linux GOARCH=arm go build -o build/jg-linux-arm jr.go
-	GOOS=linux GOARCH=arm64 go build -o build/jg-linux-arm64 jr.go
-	GOOS=freebsd GOARCH=386 go build -o build/jg-freebsd-386 jr.go
+	GOOS=darwin GOARCH=amd64 	go build -v -ldflags="-X 'jr/cmd.Version=$(VERSION)' -X 'jr/cmd.BuildUser=$(USER)' -X 'jr/cmd.BuildTime=$(TIME)'" -o build/jg-darwin-amd64 jr.go
+	GOOS=linux GOARCH=arm64 	go build -v -ldflags="-X 'jr/cmd.Version=$(VERSION)' -X 'jr/cmd.BuildUser=$(USER)' -X 'jr/cmd.BuildTime=$(TIME)'" -o build/jg-linux-arm64 jr.go
+	GOOS=linux GOARCH=386 	go build -v -ldflags="-X 'jr/cmd.Version=$(VERSION)' -X 'jr/cmd.BuildUser=$(USER)' -X 'jr/cmd.BuildTime=$(TIME)'" -o build/jg-linux-386 jr.go
 
 run: compile
 	./build/jr

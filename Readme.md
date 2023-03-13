@@ -4,7 +4,7 @@ JR is a CLI program that helps you to create quality random data for your applic
 
 ## Prerequisites
 
-jr requires golang >= 1.20
+JR requires golang >= 1.20
 
 
 ## Building and compiling

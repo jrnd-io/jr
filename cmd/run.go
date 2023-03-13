@@ -39,8 +39,9 @@ var runCmd = &cobra.Command{
 	Short: "Execute a template",
 	Long:  `Execute a template`,
 	Run: func(cmd *cobra.Command, args []string) {
-
-		templateName := fmt.Sprintf("templates/%s.json", args[0])
+		templateDir, _ := cmd.Flags().GetString("templateDir")
+		templateDir = os.ExpandEnv(templateDir)
+		templateName := fmt.Sprintf("%s/%s.json", templateDir, args[0])
 		templateScript, err := os.ReadFile(templateName)
 		if err != nil {
 			log.Fatal(err)
@@ -105,5 +106,6 @@ func init() {
 	runCmd.Flags().Int("f", -1, "Frequency: elements generated per second")
 	runCmd.Flags().Int64("seed", time.Now().UTC().UnixNano(), "Seed to init pseudorandom generator")
 	runCmd.Flags().Bool("oneline", false, "strips /n from output, for example to be pipelined to tools like kcat")
+	runCmd.Flags().String("templateDir", "$HOME/.jr/templates", "directory containing templates")
 
 }

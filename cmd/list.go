@@ -39,8 +39,9 @@ var listCmd = &cobra.Command{
 		fmt.Println()
 		fmt.Println("List of available JR templates:")
 		fmt.Println()
-		root := "templates"
-		err := filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
+		templateDir, _ := cmd.Flags().GetString("templateDir")
+		templateDir = os.ExpandEnv(templateDir)
+		err := filepath.Walk(templateDir, func(path string, info os.FileInfo, err error) error {
 			if !info.IsDir() && strings.HasSuffix(path, "json") {
 				fmt.Println(path)
 			}
@@ -49,7 +50,7 @@ var listCmd = &cobra.Command{
 		fmt.Println()
 
 		if err != nil {
-			fmt.Printf("Error in %q: %v\n", root, err)
+			fmt.Printf("Error in %q: %v\n", templateDir, err)
 			return
 		}
 	},
@@ -67,4 +68,5 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// listCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	listCmd.Flags().String("templateDir", "$HOME/.jr/templates", "directory containing templates")
 }

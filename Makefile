@@ -39,4 +39,12 @@ help: hello
 	@echo '  ${YELLOW}make${RESET} ${GREEN}all${RESET}'
 	@echo ''
 
-all: hello compile
+copy_templates:
+	mkdir -p ~/.jr && cp -r templates ~/.jr/
+
+install_bin:
+	install build/jr /usr/local/bin
+
+install: install_bin copy_templates
+
+all: hello compile install

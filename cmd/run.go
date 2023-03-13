@@ -23,11 +23,13 @@ package cmd
 
 import (
 	"bytes"
+	"context"
 	"fmt"
 	"github.com/spf13/cobra"
 	"jr/jr"
 	"log"
 	"os"
+	"os/signal"
 	"regexp"
 	"text/template"
 	"time"
@@ -67,10 +69,21 @@ var runCmd = &cobra.Command{
 
 		c := jr.NewContext(howMany, frequency, []string{"IT"}, seed)
 
+		ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
+		defer stop()
+
 		if frequency != -1 {
-			for range time.Tick(time.Millisecond * time.Duration(frequency)) {
-				for range c.Range {
-					executeTemplate(report, c, oneline)
+		Infinite:
+			for {
+				select {
+				case <-time.After(time.Millisecond * time.Duration(frequency)):
+					for range c.Range {
+						executeTemplate(report, c, oneline)
+					}
+				case <-ctx.Done():
+					fmt.Println("Stopping JR")
+					stop()
+					break Infinite
 				}
 			}
 		} else {

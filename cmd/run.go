@@ -41,7 +41,7 @@ var runCmd = &cobra.Command{
 	Long:  `Execute a template. Templates must be in templates directory, which by default is in '$HOME/.jr/templates'`,
 	Run: func(cmd *cobra.Command, args []string) {
 
-		t, _ := cmd.Flags().GetString("t")
+		t, _ := cmd.Flags().GetString("template")
 		templatePath, _ := cmd.Flags().GetString("templatePath")
 
 		if len(args) == 0 && len(t) == 0 && len(templatePath) == 0 {

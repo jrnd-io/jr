@@ -34,14 +34,32 @@ JR is very straightforward to use. Here are some examples
 ```bash
 jr list
 ```
+Templates are in the directory ```$HOME/.jr/templates```. You can override with the ```--templatePath``` command flag
 
 ### Create random data from one of the provided templates
 
-Use net-device template to generate a random JSON network device
+Use predefined net-device template to generate a random JSON network device
 
 ```bash
 jr run net-device
 ```
+
+### Other options for templates
+
+If you want to use your own template, you have several options:
+
+- put it in the default directory
+- put it in another directory and use the ```--templateDir``` flag
+- put it in another directory and use the ```--templatePath``` flag to directly refer to it
+- embed it directly in the command using the ```--template``` flag
+
+For a quick and dirty test, you can refer a template like this:
+```jr --templatePath ./templates/user.json run ```
+
+For an even quicker and dirtier test, you can embed directly a template in the command like this:
+```jr --template "name:{{name}}" run```
+
+
 ### Create more random data 
 
 Using ``` --n ``` option you can create more data

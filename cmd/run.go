@@ -41,7 +41,9 @@ var runCmd = &cobra.Command{
 	Long:  `Execute a template. Templates must be in templates directory, which by default is in '$HOME/.jr/templates'`,
 	Run: func(cmd *cobra.Command, args []string) {
 
-		if len(args) == 0 {
+		t, _ := cmd.Flags().GetString("t")
+
+		if len(args) == 0 && len(t) == 0 {
 			log.Println("Template missing. Try the list command to see available templates")
 			os.Exit(1)
 		}
@@ -49,7 +51,6 @@ var runCmd = &cobra.Command{
 		var templateScript []byte
 		var err error
 
-		t, _ := cmd.Flags().GetString("t")
 		if t != "" {
 			templateDir, _ := cmd.Flags().GetString("templateDir")
 			templateDir = os.ExpandEnv(templateDir)

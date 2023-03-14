@@ -51,7 +51,7 @@ var runCmd = &cobra.Command{
 		var templateScript []byte
 		var err error
 
-		if t != "" {
+		if len(t) == 0 {
 			templateDir, _ := cmd.Flags().GetString("templateDir")
 			templateDir = os.ExpandEnv(templateDir)
 			templateName := fmt.Sprintf("%s/%s.json", templateDir, args[0])

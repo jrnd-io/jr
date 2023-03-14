@@ -142,7 +142,7 @@ func init() {
 	runCmd.Flags().Int64("seed", time.Now().UTC().UnixNano(), "Seed to init pseudorandom generator")
 	runCmd.Flags().Bool("oneline", false, "strips /n from output, for example to be pipelined to tools like kcat")
 	runCmd.Flags().String("templateDir", "$HOME/.jr/templates", "directory containing templates")
-	runCmd.Flags().String("templatePath", "", "Path to the template file")
-	runCmd.Flags().String("t", "", "use a template on the fly")
+	runCmd.Flags().String("templatePath", "", "Path to a single template file")
+	runCmd.Flags().String("template", "", "embed a template directly in the script")
 
 }

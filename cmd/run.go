@@ -35,11 +35,10 @@ import (
 	"time"
 )
 
-// runCmd represents the run command
 var runCmd = &cobra.Command{
 	Use:   "run",
 	Short: "Execute a template",
-	Long:  `Execute a template`,
+	Long:  `Execute a template. Templates must be in templates directory, which by default is in '$HOME/.jr/templates'`,
 	Run: func(cmd *cobra.Command, args []string) {
 
 		if len(args) == 0 {
@@ -67,7 +66,7 @@ var runCmd = &cobra.Command{
 
 		jr.Random.Seed(seed)
 
-		c := jr.NewContext(howMany, frequency, []string{"IT"}, seed)
+		c := jr.NewContext(time.Now(), howMany, frequency, []string{"IT"}, seed)
 
 		ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
 		defer stop()
@@ -81,7 +80,6 @@ var runCmd = &cobra.Command{
 						executeTemplate(report, c, oneline)
 					}
 				case <-ctx.Done():
-					fmt.Println("Stopping JR")
 					stop()
 					break Infinite
 				}
@@ -92,7 +90,18 @@ var runCmd = &cobra.Command{
 			}
 		}
 
+		writeStats(c)
+
 	},
+}
+
+func writeStats(c *jr.Context) {
+	fmt.Fprintln(os.Stderr)
+	elapsed := time.Since(c.StartTime)
+	fmt.Fprintf(os.Stderr, "Elapsed time: %s\n", elapsed)
+	fmt.Fprintf(os.Stderr, "Data Generated (Objects): %d\n", c.GeneratedObjects)
+	fmt.Fprintf(os.Stderr, "Data Generated (bytes): %d\n", c.GeneratedBytes)
+	//fmt.Fprintf(os.Stderr, "Data Generated (bytes per second): %d\n", c.GeneratedBytes / elapsed )
 }
 
 func executeTemplate(report *template.Template, c *jr.Context, oneline bool) {
@@ -108,21 +117,15 @@ func executeTemplate(report *template.Template, c *jr.Context, oneline bool) {
 	} else {
 		fmt.Print(output)
 	}
+	c.GeneratedObjects++
+	c.GeneratedBytes += int64(len(output))
 }
 
 func init() {
 	rootCmd.AddCommand(runCmd)
 
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// runCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
 	runCmd.Flags().Int("n", 1, "Number of elements to create for each pass")
-	runCmd.Flags().Int("f", -1, "Frequency: elements generated per second")
+	runCmd.Flags().Int("f", -1, "Frequency: number of milliseconds to wait for next generation pass")
 	runCmd.Flags().Int64("seed", time.Now().UTC().UnixNano(), "Seed to init pseudorandom generator")
 	runCmd.Flags().Bool("oneline", false, "strips /n from output, for example to be pipelined to tools like kcat")
 	runCmd.Flags().String("templateDir", "$HOME/.jr/templates", "directory containing templates")

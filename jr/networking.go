@@ -32,12 +32,10 @@ GENERATE:
 		return "0.0.0.0"
 	}
 
-	// The number of leading 1s in the mask
 	ones, _ := ipnet.Mask.Size()
 	quotient := ones / 8
 	remainder := ones % 8
 
-	// create Random 4-byte byte slice
 	r := make([]byte, 4)
 	Random.Read(r)
 
@@ -52,8 +50,6 @@ GENERATE:
 	ip = net.IPv4(r[0], r[1], r[2], r[3])
 
 	if ip.Equal(ipnet.IP) /*|| ip.Equal(broadcast) */ {
-		// we got unlucky. The host portion of our ipv4 address was
-		// either all 0s (the network address) or all 1s (the broadcast address)
 		goto GENERATE
 	}
 	return ip.String()

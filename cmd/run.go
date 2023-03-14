@@ -42,8 +42,9 @@ var runCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 
 		t, _ := cmd.Flags().GetString("t")
+		templatePath, _ := cmd.Flags().GetString("templatePath")
 
-		if len(args) == 0 && len(t) == 0 {
+		if len(args) == 0 && len(t) == 0 && len(templatePath) == 0 {
 			log.Println("Template missing. Try the list command to see available templates")
 			os.Exit(1)
 		}
@@ -51,13 +52,16 @@ var runCmd = &cobra.Command{
 		var templateScript []byte
 		var err error
 
-		if len(t) == 0 {
+		if len(t) > 0 {
+			templateScript = []byte(t)
+		} else if len(templatePath) > 0 {
+			templatePath = os.ExpandEnv(templatePath)
+			templateScript, err = os.ReadFile(templatePath)
+		} else {
 			templateDir, _ := cmd.Flags().GetString("templateDir")
 			templateDir = os.ExpandEnv(templateDir)
-			templateName := fmt.Sprintf("%s/%s.json", templateDir, args[0])
-			templateScript, err = os.ReadFile(templateName)
-		} else {
-			templateScript = []byte(t)
+			templatePath := fmt.Sprintf("%s/%s.json", templateDir, args[0])
+			templateScript, err = os.ReadFile(templatePath)
 		}
 		if err != nil {
 			log.Fatal(err)
@@ -138,6 +142,7 @@ func init() {
 	runCmd.Flags().Int64("seed", time.Now().UTC().UnixNano(), "Seed to init pseudorandom generator")
 	runCmd.Flags().Bool("oneline", false, "strips /n from output, for example to be pipelined to tools like kcat")
 	runCmd.Flags().String("templateDir", "$HOME/.jr/templates", "directory containing templates")
+	runCmd.Flags().String("templatePath", "", "Path to the template file")
 	runCmd.Flags().String("t", "", "use a template on the fly")
 
 }

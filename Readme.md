@@ -55,16 +55,20 @@ If you want to use your own template, you have several options:
 
 For a quick and dirty test, you can refer a template like this:
 
-```jr --templatePath ./templates/user.json run ```
+```bash 
+jr --templatePath ./templates/user.json run
+```
 
 For an even quicker and dirtier test, you can embed directly a template in the command like this:
 
-```jr --template "name:{{name}}" run```
+```bash
+jr --template "name:{{name}}" run
+```
 
 
 ### Create more random data 
 
-Using ``` --n ``` option you can create more data
+Using ``` --n ``` option you can create more data in each pass.
 
 ```bash
 jr run net-device --n 3
@@ -73,8 +77,9 @@ jr run net-device --n 3
 
 Using ``` --f ``` option you can repeat the creation every ```f``` milliseconds
 
+This example creates 2 net-device every second.
 ```bash
-jr run net-device --n 2 --f 500 
+jr run net-device --n 2 --f 1000 
 ```
 ### Use JR to stream data to Apache Kafka
 

@@ -46,7 +46,7 @@ var fmap = map[string]interface{}{
 	"integer":   func(min, max int) int { return min + Random.Intn(max-min) },
 	"integer64": func(min, max int64) int64 { return min + Random.Int63n(max-min) },
 	"floating":  func(min, max float32) float32 { return min + Random.Float32()*(max-min) },
-	"Random":    func(s []string) string { return s[Random.Intn(len(s))] },
+	"random":    func(s []string) string { return s[Random.Intn(len(s))] },
 	"randoms":   func(s string) string { a := strings.Split(s, "|"); return a[Random.Intn(len(a))] },
 
 	//networking and time utilities

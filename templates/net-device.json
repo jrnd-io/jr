@@ -1,4 +1,4 @@
-{{randoms "KEY1|KEY2|KEY3|KEY4"}},
+{{key "KEY" 20}},
 {
 "VLAN": "{{randoms "ALPHA|BETA|GAMMA|DELTA"}}",
 "IPV4_SRC_ADDR": "{{ip "10.1.0.0/16"}}",

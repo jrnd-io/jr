@@ -54,9 +54,11 @@ If you want to use your own template, you have several options:
 - embed it directly in the command using the ```--template``` flag
 
 For a quick and dirty test, you can refer a template like this:
+
 ```jr --templatePath ./templates/user.json run ```
 
 For an even quicker and dirtier test, you can embed directly a template in the command like this:
+
 ```jr --template "name:{{name}}" run```
 
 

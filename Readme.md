@@ -32,7 +32,7 @@ JR is very straightforward to use. Here are some examples
 
 ### Listing existing templates
 ```bash
-./build/jr list
+jr list
 ```
 
 ### Create random data from one of the provided templates
@@ -40,21 +40,21 @@ JR is very straightforward to use. Here are some examples
 Use net-device template to generate a random JSON network device
 
 ```bash
-./build/jr run net-device
+jr run net-device
 ```
 ### Create more random data 
 
 Using ``` --n ``` option you can create more data
 
 ```bash
-./build/jr run net-device --n 3
+jr run net-device --n 3
 ```
 ### Continuos streaming data
 
 Using ``` --f ``` option you can repeat the creation every ```f``` milliseconds
 
 ```bash
-./build/jr run net-device --n 2 --f 500 
+jr run net-device --n 2 --f 500 
 ```
 ### Use JR to stream data to Apache Kafka
 
@@ -65,5 +65,5 @@ option to strip all newlines. The alternative is obviously to create a template 
 The following line generates 5 net-device random data every half-second and writes them to topic test:
 
 ```bash
-./build/jr run net-device --n 5 --f 500 --oneline | kcat -T -F kcat/librdkafka.config -K , -P -t test
+jr run net-device --n 5 --f 500 --oneline | kcat -T -F kcat/librdkafka.config -K , -P -t test
 ```

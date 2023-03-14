@@ -46,10 +46,18 @@ var runCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		templateDir, _ := cmd.Flags().GetString("templateDir")
-		templateDir = os.ExpandEnv(templateDir)
-		templateName := fmt.Sprintf("%s/%s.json", templateDir, args[0])
-		templateScript, err := os.ReadFile(templateName)
+		var templateScript []byte
+		var err error
+
+		t, _ := cmd.Flags().GetString("t")
+		if t != "" {
+			templateDir, _ := cmd.Flags().GetString("templateDir")
+			templateDir = os.ExpandEnv(templateDir)
+			templateName := fmt.Sprintf("%s/%s.json", templateDir, args[0])
+			templateScript, err = os.ReadFile(templateName)
+		} else {
+			templateScript = []byte(t)
+		}
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -129,5 +137,6 @@ func init() {
 	runCmd.Flags().Int64("seed", time.Now().UTC().UnixNano(), "Seed to init pseudorandom generator")
 	runCmd.Flags().Bool("oneline", false, "strips /n from output, for example to be pipelined to tools like kcat")
 	runCmd.Flags().String("templateDir", "$HOME/.jr/templates", "directory containing templates")
+	runCmd.Flags().String("t", "", "use a template on the fly")
 
 }

@@ -1,4 +1,4 @@
-VERSION=0.0.3
+VERSION=0.0.4
 USER=$(shell id -u -n)
 TIME=$(shell date)
 

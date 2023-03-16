@@ -50,19 +50,19 @@ If you want to use your own template, you have several options:
 
 - put it in the default directory
 - put it in another directory and use the ```--templateDir``` flag
-- put it in another directory and use the ```--templatePath``` flag to directly refer to it
+- put it in another directory and use the ```--templateFileName``` flag to directly refer to it
 - embed it directly in the command using the ```--template``` flag
 
 For a quick and dirty test, you can refer a template like this:
 
 ```bash 
-jr --templatePath ./templates/user.json run
+jr run --templateFileName ~/.jr/templates/user.json
 ```
 
 For an even quicker and dirtier test, you can embed directly a template in the command like this:
 
 ```bash
-jr --template "name:{{name}}" run
+jr run --template "name:{{name}}"
 ```
 
 

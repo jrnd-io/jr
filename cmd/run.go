@@ -36,27 +36,28 @@ import (
 )
 
 var runCmd = &cobra.Command{
-	Use:   "run",
+	Use:   "run [template]",
 	Short: "Execute a template",
-	Long:  `Execute a template. Templates must be in templates directory, which by default is in '$HOME/.jr/templates'`,
+	Long: `Execute a template. 
+  Without any other flag, [template] is just the name of a template in the templates directory, which by default is in '$HOME/.jr/templates' Example: 
+jr run net-device
+  With the --template flag, [template] is a string containing a full template. Example:
+jr run --template "{{name}}"
+ With the -templateFileName flag [template] is a file name with a template. Example:
+jr run --templateFileName ~/.jr/templates/net-device.json
+`,
+	Args: cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 
-		t, _ := cmd.Flags().GetString("template")
-		templatePath, _ := cmd.Flags().GetString("templatePath")
-
-		if len(args) == 0 && len(t) == 0 && len(templatePath) == 0 {
-			log.Println("Template missing. Try the list command to see available templates")
-			os.Exit(1)
-		}
-
+		embeddedTemplate, _ := cmd.Flags().GetBool("template")
+		templateFileName, _ := cmd.Flags().GetBool("templateFileName")
 		var templateScript []byte
 		var err error
 
-		if len(t) > 0 {
-			templateScript = []byte(t)
-		} else if len(templatePath) > 0 {
-			templatePath = os.ExpandEnv(templatePath)
-			templateScript, err = os.ReadFile(templatePath)
+		if embeddedTemplate {
+			templateScript = []byte(args[0])
+		} else if templateFileName {
+			templateScript, err = os.ReadFile(os.ExpandEnv(args[0]))
 		} else {
 			templateDir, _ := cmd.Flags().GetString("templateDir")
 			templateDir = os.ExpandEnv(templateDir)
@@ -136,13 +137,12 @@ func executeTemplate(report *template.Template, c *jr.Context, oneline bool) {
 
 func init() {
 	rootCmd.AddCommand(runCmd)
-
 	runCmd.Flags().Int("n", 1, "Number of elements to create for each pass")
 	runCmd.Flags().Int("f", -1, "Frequency: number of milliseconds to wait for next generation pass")
 	runCmd.Flags().Int64("seed", time.Now().UTC().UnixNano(), "Seed to init pseudorandom generator")
 	runCmd.Flags().Bool("oneline", false, "strips /n from output, for example to be pipelined to tools like kcat")
 	runCmd.Flags().String("templateDir", "$HOME/.jr/templates", "directory containing templates")
-	runCmd.Flags().String("templatePath", "", "Path to a single template file")
-	runCmd.Flags().String("template", "", "embed a template directly in the script")
+	runCmd.Flags().Bool("templateFileName", false, "If enabled, [template] must be a template file")
+	runCmd.Flags().Bool("template", false, "If enabled, [template] must be a string containing a template, to be embedded directly in the script")
 
 }

@@ -25,12 +25,14 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
 	"github.com/spf13/cobra"
 	"jr/jr"
 	"log"
 	"os"
 	"os/signal"
 	"regexp"
+	"strings"
 	"text/template"
 	"time"
 )
@@ -51,8 +53,17 @@ jr run --templateFileName ~/.jr/templates/net-device.json
 
 		embeddedTemplate, _ := cmd.Flags().GetBool("template")
 		templateFileName, _ := cmd.Flags().GetBool("templateFileName")
+		topic, _ := cmd.Flags().GetString("t")
+		var producer *kafka.Producer
 		var templateScript []byte
 		var err error
+
+		if topic != "" {
+			producer, err = jr.Initialize("./kcat/librdkafka.config")
+			if err != nil {
+				log.Fatal(err)
+			}
+		}
 
 		if embeddedTemplate {
 			templateScript = []byte(args[0])
@@ -91,7 +102,7 @@ jr run --templateFileName ~/.jr/templates/net-device.json
 				select {
 				case <-time.After(time.Millisecond * time.Duration(frequency)):
 					for range c.Range {
-						executeTemplate(report, c, oneline)
+						executeTemplate(report, c, oneline, producer, topic)
 					}
 				case <-ctx.Done():
 					stop()
@@ -100,8 +111,12 @@ jr run --templateFileName ~/.jr/templates/net-device.json
 			}
 		} else {
 			for range c.Range {
-				executeTemplate(report, c, oneline)
+				executeTemplate(report, c, oneline, producer, topic)
 			}
+		}
+
+		if topic != "" {
+			jr.Close(producer)
 		}
 
 		writeStats(c)
@@ -115,10 +130,10 @@ func writeStats(c *jr.Context) {
 	fmt.Fprintf(os.Stderr, "Elapsed time: %s\n", elapsed)
 	fmt.Fprintf(os.Stderr, "Data Generated (Objects): %d\n", c.GeneratedObjects)
 	fmt.Fprintf(os.Stderr, "Data Generated (bytes): %d\n", c.GeneratedBytes)
-	//fmt.Fprintf(os.Stderr, "Data Generated (bytes per second): %d\n", c.GeneratedBytes / elapsed )
+	fmt.Fprintf(os.Stderr, "Throughput (bytes per second): %9.f\n", float64(c.GeneratedBytes)/elapsed.Seconds())
 }
 
-func executeTemplate(report *template.Template, c *jr.Context, oneline bool) {
+func executeTemplate(report *template.Template, c *jr.Context, oneline bool, p *kafka.Producer, topic string) {
 	var bt bytes.Buffer
 	if err := report.Execute(&bt, c); err != nil {
 		log.Fatal(err)
@@ -131,6 +146,12 @@ func executeTemplate(report *template.Template, c *jr.Context, oneline bool) {
 	} else {
 		fmt.Print(output)
 	}
+
+	if topic != "" {
+		k, v, _ := strings.Cut(output, ",")
+		jr.Produce(p, []byte(k), []byte(v), topic)
+	}
+
 	c.GeneratedObjects++
 	c.GeneratedBytes += int64(len(output))
 }
@@ -144,5 +165,5 @@ func init() {
 	runCmd.Flags().String("templateDir", "$HOME/.jr/templates", "directory containing templates")
 	runCmd.Flags().Bool("templateFileName", false, "If enabled, [template] must be a template file")
 	runCmd.Flags().Bool("template", false, "If enabled, [template] must be a string containing a template, to be embedded directly in the script")
-
+	runCmd.Flags().String("t", "", "Kafka topic name")
 }

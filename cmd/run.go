@@ -53,6 +53,7 @@ jr run --templateFileName ~/.jr/templates/net-device.json
 
 		embeddedTemplate, _ := cmd.Flags().GetBool("template")
 		templateFileName, _ := cmd.Flags().GetBool("templateFileName")
+		silent, _ := cmd.Flags().GetBool("silent")
 		topic, _ := cmd.Flags().GetString("t")
 		var producer *kafka.Producer
 		var templateScript []byte
@@ -102,7 +103,7 @@ jr run --templateFileName ~/.jr/templates/net-device.json
 				select {
 				case <-time.After(time.Millisecond * time.Duration(frequency)):
 					for range c.Range {
-						executeTemplate(report, c, oneline, producer, topic)
+						executeTemplate(report, c, oneline, producer, topic, silent)
 					}
 				case <-ctx.Done():
 					stop()
@@ -111,7 +112,7 @@ jr run --templateFileName ~/.jr/templates/net-device.json
 			}
 		} else {
 			for range c.Range {
-				executeTemplate(report, c, oneline, producer, topic)
+				executeTemplate(report, c, oneline, producer, topic, silent)
 			}
 		}
 
@@ -127,13 +128,13 @@ jr run --templateFileName ~/.jr/templates/net-device.json
 func writeStats(c *jr.Context) {
 	fmt.Fprintln(os.Stderr)
 	elapsed := time.Since(c.StartTime)
-	fmt.Fprintf(os.Stderr, "Elapsed time: %s\n", elapsed)
+	fmt.Fprintf(os.Stderr, "Elapsed time: %v\n", elapsed.Round(1*time.Second))
 	fmt.Fprintf(os.Stderr, "Data Generated (Objects): %d\n", c.GeneratedObjects)
 	fmt.Fprintf(os.Stderr, "Data Generated (bytes): %d\n", c.GeneratedBytes)
 	fmt.Fprintf(os.Stderr, "Throughput (bytes per second): %9.f\n", float64(c.GeneratedBytes)/elapsed.Seconds())
 }
 
-func executeTemplate(report *template.Template, c *jr.Context, oneline bool, p *kafka.Producer, topic string) {
+func executeTemplate(report *template.Template, c *jr.Context, oneline bool, p *kafka.Producer, topic string, silent bool) {
 	var bt bytes.Buffer
 	if err := report.Execute(&bt, c); err != nil {
 		log.Fatal(err)
@@ -142,9 +143,13 @@ func executeTemplate(report *template.Template, c *jr.Context, oneline bool, p *
 	if oneline {
 		re := regexp.MustCompile(`\r?\n?`)
 		output = re.ReplaceAllString(output, "")
-		fmt.Println(output)
+		if !silent {
+			fmt.Println(output)
+		}
 	} else {
-		fmt.Print(output)
+		if !silent {
+			fmt.Println(output)
+		}
 	}
 
 	if topic != "" {
@@ -166,4 +171,6 @@ func init() {
 	runCmd.Flags().Bool("templateFileName", false, "If enabled, [template] must be a template file")
 	runCmd.Flags().Bool("template", false, "If enabled, [template] must be a string containing a template, to be embedded directly in the script")
 	runCmd.Flags().String("t", "", "Kafka topic name")
+	runCmd.Flags().Bool("silent", false, "No standard output (makes sense only when writing directly to Kafka)")
+
 }

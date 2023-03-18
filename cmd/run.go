@@ -85,8 +85,9 @@ jr run --templateFileName ~/.jr/templates/net-device.json
 			log.Fatal(err)
 		}
 
-		howMany, _ := cmd.Flags().GetInt("n")
-		frequency, _ := cmd.Flags().GetInt("f")
+		howMany, _ := cmd.Flags().GetInt("num")
+		frequency, _ := cmd.Flags().GetDuration("frequency")
+		duration, _ := cmd.Flags().GetDuration("duration")
 		seed, _ := cmd.Flags().GetInt64("seed")
 		oneline, _ := cmd.Flags().GetBool("oneline")
 
@@ -94,17 +95,24 @@ jr run --templateFileName ~/.jr/templates/net-device.json
 
 		c := jr.NewContext(time.Now(), howMany, frequency, []string{"IT"}, seed)
 
+		timer := time.NewTimer(duration)
+		timeOver := false
+		go func() {
+			<-timer.C
+			timeOver = true
+		}()
 		ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
 		defer stop()
 
-		if frequency != -1 {
+		if frequency != 0 {
 		Infinite:
-			for {
+			for ok := true; ok; ok = !timeOver {
 				select {
-				case <-time.After(time.Millisecond * time.Duration(frequency)):
+				case <-time.After(frequency):
 					for range c.Range {
 						executeTemplate(report, c, oneline, producer, topic, silent)
 					}
+
 				case <-ctx.Done():
 					stop()
 					break Infinite
@@ -163,14 +171,14 @@ func executeTemplate(report *template.Template, c *jr.Context, oneline bool, p *
 
 func init() {
 	rootCmd.AddCommand(runCmd)
-	runCmd.Flags().Int("n", 1, "Number of elements to create for each pass")
-	runCmd.Flags().Int("f", -1, "Frequency: number of milliseconds to wait for next generation pass")
+	runCmd.Flags().IntP("num", "n", 1, "Number of elements to create for each pass")
+	runCmd.Flags().DurationP("frequency", "f", 0, "how much time to wait for next generation pass")
+	runCmd.Flags().DurationP("duration", "d", 0, "If frequency is enabled, with Duration you can set a finite amount of time")
 	runCmd.Flags().Int64("seed", time.Now().UTC().UnixNano(), "Seed to init pseudorandom generator")
-	runCmd.Flags().Bool("oneline", false, "strips /n from output, for example to be pipelined to tools like kcat")
+	runCmd.Flags().BoolP("oneline", "o", false, "strips /n from output, for example to be pipelined to tools like kcat")
 	runCmd.Flags().String("templateDir", "$HOME/.jr/templates", "directory containing templates")
 	runCmd.Flags().Bool("templateFileName", false, "If enabled, [template] must be a template file")
 	runCmd.Flags().Bool("template", false, "If enabled, [template] must be a string containing a template, to be embedded directly in the script")
-	runCmd.Flags().String("t", "", "Kafka topic name")
-	runCmd.Flags().Bool("silent", false, "No standard output (makes sense only when writing directly to Kafka)")
-
+	runCmd.Flags().StringP("topic", "t", "", "Kafka topic name")
+	runCmd.Flags().BoolP("silent", "s", false, "No standard output (makes sense only when writing directly to Kafka)")
 }

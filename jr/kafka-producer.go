@@ -2,6 +2,7 @@ package jr
 
 import (
 	"bufio"
+	"encoding/json"
 	"fmt"
 	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
 	"log"
@@ -76,6 +77,18 @@ func Produce(p *kafka.Producer, key []byte, data []byte, topic string) {
 				// recover from any errors encountered, the application
 				// does not need to take action on them.
 				fmt.Printf("Error: %v\n", ev)
+			case *kafka.Stats:
+				// Stats events are emitted as JSON (as string).
+				// Either directly forward the JSON to your
+				// statistics collector, or convert it to a
+				// map to extract fields of interest.
+				// The definition of the statistics JSON
+				// object can be found here:
+				// https://github.com/confluentinc/librdkafka/blob/master/STATISTICS.md
+				var stats map[string]interface{}
+				json.Unmarshal([]byte(e.String()), &stats)
+				fmt.Printf("%9.f %9.f \n", stats["txmsg_bytes"], stats["rxmsg_bytes"])
+
 			default:
 				fmt.Printf("Ignored event: %s\n", ev)
 			}

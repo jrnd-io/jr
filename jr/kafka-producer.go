@@ -87,7 +87,7 @@ func Produce(p *kafka.Producer, key []byte, data []byte, topic string) {
 				// https://github.com/confluentinc/librdkafka/blob/master/STATISTICS.md
 				var stats map[string]interface{}
 				json.Unmarshal([]byte(e.String()), &stats)
-				fmt.Printf("%9.f %9.f \n", stats["txmsg_bytes"], stats["rxmsg_bytes"])
+				fmt.Printf("%9.f bytes produced to Kafka\n", stats["txmsg_bytes"])
 
 			default:
 				fmt.Printf("Ignored event: %s\n", ev)

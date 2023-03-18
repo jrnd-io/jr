@@ -54,13 +54,14 @@ jr run --templateFileName ~/.jr/templates/net-device.json
 		embeddedTemplate, _ := cmd.Flags().GetBool("template")
 		templateFileName, _ := cmd.Flags().GetBool("templateFileName")
 		silent, _ := cmd.Flags().GetBool("silent")
-		topic, _ := cmd.Flags().GetString("t")
+		topic, _ := cmd.Flags().GetString("topic")
+		kafkaConfig, _ := cmd.Flags().GetString("kafkaConfig")
 		var producer *kafka.Producer
 		var templateScript []byte
 		var err error
 
 		if topic != "" {
-			producer, err = jr.Initialize("./kcat/librdkafka.config")
+			producer, err = jr.Initialize(kafkaConfig)
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -179,6 +180,7 @@ func init() {
 	runCmd.Flags().Int64("seed", time.Now().UTC().UnixNano(), "Seed to init pseudorandom generator")
 	runCmd.Flags().BoolP("oneline", "o", false, "strips /n from output, for example to be pipelined to tools like kcat")
 	runCmd.Flags().String("templateDir", "$HOME/.jr/templates", "directory containing templates")
+	runCmd.Flags().String("kafkaConfig", "./kafka/librdkafka.config", "Kafka configuration")
 	runCmd.Flags().Bool("templateFileName", false, "If enabled, [template] must be a template file")
 	runCmd.Flags().Bool("template", false, "If enabled, [template] must be a string containing a template, to be embedded directly in the script")
 	runCmd.Flags().StringP("topic", "t", "", "Kafka topic name")

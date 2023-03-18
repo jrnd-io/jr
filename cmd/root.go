@@ -38,8 +38,8 @@ var rootCmd = &cobra.Command{
 It may be used in conjunction with kcat to feed Kafka:
 
 > jr run net-device --n 20
-> jr run user --oneline | kcat -F kcat/librdkafka.config -K , -P -t test
-> jr run net-device --f 100 --oneline | kcat -F kcat/librdkafka.config -K , -P -t test
+> jr run user --oneline | kcat -F kafka/librdkafka.config -K , -P -t test
+> jr run net-device --f 100 --oneline | kcat -F kafka/librdkafka.config -K , -P -t test
 `,
 }
 

@@ -86,7 +86,10 @@ func Produce(p *kafka.Producer, key []byte, data []byte, topic string) {
 				// object can be found here:
 				// https://github.com/confluentinc/librdkafka/blob/master/STATISTICS.md
 				var stats map[string]interface{}
-				json.Unmarshal([]byte(e.String()), &stats)
+				err := json.Unmarshal([]byte(e.String()), &stats)
+				if err != nil {
+					return
+				}
 				fmt.Printf("%9.f bytes produced to Kafka\n", stats["txmsg_bytes"])
 
 			default:

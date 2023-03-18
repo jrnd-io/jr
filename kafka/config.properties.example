@@ -1,0 +1,9 @@
+# Kafka configuration
+bootstrap.servers=
+security.protocol=SASL_SSL
+sasl.mechanisms=PLAIN
+sasl.username=
+sasl.password=
+compression.type=gzip
+compression.level=9
+# statistics.interval.ms=1000

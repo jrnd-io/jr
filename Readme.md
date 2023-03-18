@@ -90,6 +90,9 @@ jr run net-device -n 2 -f 100ms -d 1m
 ### Use JR to stream data to Apache Kafka
 
 A simple way of streaming to Apache Kafka is to use kcat in conjunction with JR.
+First thing to do is to create a kafka.properties file. The easiest way to do that is to use Confluent Cloud and copy-paste 
+the configuration in the HOME > ENVIRONMENTS > YOUR ENVIRONMENT > YOUR CLUSTER > CLIENTS > New Client section 
+
 kcat needs K,V to be on a single line, so if your template generates multiline data you have to use the ```oneline``` 
 option to strip all newlines. The alternative is obviously to create a template without newlines, but that's not very readable!
 

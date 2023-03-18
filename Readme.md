@@ -95,6 +95,19 @@ the configuration in the HOME > ENVIRONMENTS > YOUR ENVIRONMENT > YOUR CLUSTER >
 
 You can also fill the gaps in the provided ```kafka/config.properties.example```
 
+```properties
+# Kafka configuration
+# https://github.com/confluentinc/librdkafka/blob/master/CONFIGURATION.md
+
+bootstrap.servers=
+security.protocol=SASL_SSL
+sasl.mechanisms=PLAIN
+sasl.username=
+sasl.password=
+compression.type=gzip
+compression.level=9
+# statistics.interval.ms=1000
+```
 kcat needs K,V to be on a single line, so if your template generates multiline data you have to use the ```oneline``` 
 option to strip all newlines. The alternative is obviously to create a template without newlines, but that's not very readable!
 

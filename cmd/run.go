@@ -94,19 +94,21 @@ jr run --templateFileName ~/.jr/templates/net-device.json
 		jr.Random.Seed(seed)
 
 		c := jr.NewContext(time.Now(), howMany, frequency, []string{"IT"}, seed)
+		infinite := true
+		if duration > 0 {
+			timer := time.NewTimer(duration)
 
-		timer := time.NewTimer(duration)
-		timeOver := false
-		go func() {
-			<-timer.C
-			timeOver = true
-		}()
+			go func() {
+				<-timer.C
+				infinite = false
+			}()
+		}
 		ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
 		defer stop()
 
 		if frequency != 0 {
 		Infinite:
-			for ok := true; ok; ok = !timeOver {
+			for ok := true; ok; ok = infinite {
 				select {
 				case <-time.After(frequency):
 					for range c.Range {

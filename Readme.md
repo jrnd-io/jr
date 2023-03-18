@@ -114,7 +114,7 @@ option to strip all newlines. The alternative is obviously to create a template 
 The following line generates 5 net-device random data every half-second and writes them to topic test:
 
 ```bash
-jr run net-device -n 5 -f 500ms -o | kafka -T -F kafka/config.properties -K , -P -t test
+jr run net-device -n 5 -f 500ms -o | kcat -T -F kafka/config.properties -K , -P -t test
 ```
 
 You can do the same thing with jr, just use the -t flag to indicate teh topic name:

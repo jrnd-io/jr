@@ -23,7 +23,7 @@ make test
 
 To install the binary and the templates:
 ```bash
-sudo make install
+make copy_templates; sudo make install
 ```
 
 ## Basic usage

@@ -41,9 +41,7 @@ help: hello
 copy_templates:
 	mkdir -p ~/.jr && cp -r templates ~/.jr/
 
-install_bin:
+install:
 	install build/jr /usr/local/bin
-
-install: install_bin copy_templates
 
 all: hello compile

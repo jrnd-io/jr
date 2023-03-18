@@ -1,4 +1,6 @@
 # Kafka configuration
+# https://github.com/confluentinc/librdkafka/blob/master/CONFIGURATION.md
+
 bootstrap.servers=
 security.protocol=SASL_SSL
 sasl.mechanisms=PLAIN

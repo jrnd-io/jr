@@ -90,8 +90,10 @@ jr run net-device -n 2 -f 100ms -d 1m
 ### Use JR to stream data to Apache Kafka
 
 A simple way of streaming to Apache Kafka is to use kcat in conjunction with JR.
-First thing to do is to create a kafka.properties file. The easiest way to do that is to use Confluent Cloud and copy-paste 
-the configuration in the HOME > ENVIRONMENTS > YOUR ENVIRONMENT > YOUR CLUSTER > CLIENTS > New Client section 
+First thing to do is to create a kafka.properties file. The easiest way to do that is to use [Confluent Cloud]("https://confluent.cloud/") and copy-paste 
+the configuration in the HOME > ENVIRONMENTS > YOUR ENVIRONMENT > YOUR CLUSTER > CLIENTS > New Client section.
+
+You can also fill the gaps in the provided ```kafka/config.properties.example```
 
 kcat needs K,V to be on a single line, so if your template generates multiline data you have to use the ```oneline``` 
 option to strip all newlines. The alternative is obviously to create a template without newlines, but that's not very readable!
@@ -102,13 +104,13 @@ The following line generates 5 net-device random data every half-second and writ
 jr run net-device -n 5 -f 500ms -o | kafka -T -F kafka/config.properties -K , -P -t test
 ```
 
-You can do the same writing directly to Kafka with jr:
+You can do the same thing with jr, just use the -t flag to indicate teh topic name:
 
 ```bash
 jr run net-device -n 5 -f 500ms -t test
 ```
 
-With ```silent``` mode you can stop the standard output:
+With ```silent``` mode you can stop the standard output. Do not do this when piping to kcat or the pipe won't work!:
 
 ```bash
 jr run net-device -n 5 -f 500ms -s -t test

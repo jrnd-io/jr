@@ -68,10 +68,10 @@ jr run --template "name:{{name}}"
 
 ### Create more random data 
 
-Using ``` --n ``` option you can create more data in each pass.
+Using ``` -n ``` option you can create more data in each pass.
 
 ```bash
-jr run net-device --n 3
+jr run net-device -n 3
 ```
 ### Continuos streaming data
 
@@ -79,8 +79,14 @@ Using ``` --f ``` option you can repeat the creation every ```f``` milliseconds
 
 This example creates 2 net-device every second.
 ```bash
-jr run net-device --n 2 --f 1000 
+jr run net-device -n 2 -f 1s 
 ```
+
+This example creates 2 net-device every 100ms for 1 minute.
+```bash
+jr run net-device -n 2 -f 100ms -d 1m 
+```
+
 ### Use JR to stream data to Apache Kafka
 
 A simple way of streaming to Apache Kafka is to use kcat in conjunction with JR.
@@ -90,5 +96,5 @@ option to strip all newlines. The alternative is obviously to create a template 
 The following line generates 5 net-device random data every half-second and writes them to topic test:
 
 ```bash
-jr run net-device --n 5 --f 500 --oneline | kcat -T -F kcat/librdkafka.config -K , -P -t test
+jr run net-device -n 5 -f 500ms -o | kcat -T -F kcat/librdkafka.config -K , -P -t test
 ```

@@ -115,10 +115,10 @@ compression.level=9
 # statistics.interval.ms=1000
 ```
 
-Just use the ```--output``` flag with "kafka" as output and ```--topic``` flag to indicate the topic name:
+Just use the ```--output kafka``` flag and ```--topic``` flag to indicate the topic name:
 
 ```bash
-jr run net-device -n 5 -f 500ms -o "kafka" -t test
+jr run net-device -n 5 -f 500ms -o kafka -t test
 ```
 
 If you don't specify a key, the string "key" will be used for each record. 
@@ -126,13 +126,16 @@ Using ```--key``` you can use a template for the key, embedding it directly in t
 
 For example:
 ```bash
-jr run -k '{{key "KEY" 20}}' -f 1s -d 10s net-device -o "kafka" -t test
+jr run -k '{{key "KEY" 20}}' -f 1s -d 10s net-device -o kafka -t test
 ```
 Another example:
 ```bash 
-jr run -k '{{randoms "ONE|TWO|THREE"}}' -f 1s -d 10s net-device -o "kafka" -t test
+jr run -k '{{randoms "ONE|TWO|THREE"}}' -f 1s -d 10s net-device -o kafka -t test
 ```
-
+It is possible to write to both stdout and kafka at the same time:
+```bash
+jr run -k '{{randoms "ONE|TWO|THREE"}}' -f 1s -d 10s net-device -o stdout,kafka -t test
+```
 ### Using JR to pipe data to **KCAT**
 
 Another simple way of streaming to Apache Kafka is to use [kcat](https://github.com/edenhill/kcat) in conjunction with JR. 

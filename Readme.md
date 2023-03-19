@@ -73,7 +73,7 @@ Using ``` -n ``` option you can create more data in each pass.
 ```bash
 jr run net-device -n 3
 ```
-### Continuos streaming data
+### Continuous streaming data
 
 Using ``` --f ``` option you can repeat the creation every ```f``` milliseconds
 
@@ -89,7 +89,6 @@ jr run net-device -n 2 -f 100ms -d 1m
 
 ### Use JR to stream data to Apache Kafka
 
-A simple way of streaming to Apache Kafka is to use kcat in conjunction with JR.
 First thing to do is to create a kafka.properties file. The easiest way to do that is to use [Confluent Cloud]("https://confluent.cloud/") and copy-paste 
 the configuration in the HOME > ENVIRONMENTS > YOUR ENVIRONMENT > YOUR CLUSTER > CLIENTS > New Client section.
 
@@ -108,23 +107,35 @@ compression.type=gzip
 compression.level=9
 # statistics.interval.ms=1000
 ```
-kcat needs K,V to be on a single line, so if your template generates multiline data you have to use the ```oneline``` 
-option to strip all newlines. The alternative is obviously to create a template without newlines, but that's not very readable!
 
-The following line generates 5 net-device random data every half-second and writes them to topic test:
-
-```bash
-jr run net-device -n 5 -f 500ms -o | kcat -T -F kafka/config.properties -K , -P -t test
-```
-
-You can do the same thing with jr, just use the -t flag to indicate teh topic name:
+Just use the -t flag to indicate the topic name:
 
 ```bash
 jr run net-device -n 5 -f 500ms -t test
 ```
-
-With ```silent``` mode you can stop the standard output. Do not do this when piping to kcat or the pipe won't work!:
+With ```silent``` mode you can stop the standard output:
 
 ```bash
 jr run net-device -n 5 -f 500ms -s -t test
+```
+
+If you don't specify a key, the string "key" will be used for each record. 
+Using ```--key``` you can use a template for the key, embedding it directly in the command:
+
+For example:
+```bash
+jr run -k '{{key "KEY" 20}}' -f 1s -d 10s net-device -s -t test
+```
+Another example:
+```bash 
+jr run -k '{{randoms "ONE|TWO|THREE"}}' -f 1s -d 10s net-device -s -t test
+```
+
+### Using JR to pipe data to KCAT
+
+Another simple way of streaming to Apache Kafka is to use kcat in conjunction with JR. 
+JR supports KCAT out of the box. Using the ```--kcat``` flag the standard output will be formatted with K,V on a single line
+
+```bash
+jr run -k '{{randoms "ONE|TWO|THREE"}}' -f 1s -d 5s net-device --kcat | kcat -F kafka/config.properties -K , -P -t test
 ```

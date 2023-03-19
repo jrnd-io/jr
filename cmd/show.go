@@ -42,7 +42,7 @@ var showCmd = &cobra.Command{
 
 		templateDir, _ := cmd.Flags().GetString("templateDir")
 		templateDir = os.ExpandEnv(templateDir)
-		templatePath := fmt.Sprintf("%s/%s.json", templateDir, args[0])
+		templatePath := fmt.Sprintf("%s/%s.tpl", templateDir, args[0])
 		templateScript, err := os.ReadFile(templatePath)
 		if err != nil {
 			log.Fatal(err)

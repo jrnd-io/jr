@@ -56,7 +56,7 @@ If you want to use your own template, you have several options:
 For a quick and dirty test, you can refer a template like this:
 
 ```bash 
-jr run --templateFileName ~/.jr/templates/user.json
+jr run --templateFileName ~/.jr/templates/user.tpl
 ```
 
 For an even quicker and dirtier test, you can embed directly a template in the command like this:

@@ -46,7 +46,7 @@ var listCmd = &cobra.Command{
 		}
 
 		err := filepath.Walk(templateDir, func(path string, info os.FileInfo, err error) error {
-			if !info.IsDir() && strings.HasSuffix(path, "json") {
+			if !info.IsDir() && strings.HasSuffix(path, "tpl") {
 				fmt.Println(path)
 			}
 			return nil

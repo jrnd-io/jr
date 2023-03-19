@@ -43,6 +43,7 @@ var showCmd = &cobra.Command{
 		}
 
 		templateDir, _ := cmd.Flags().GetString("templateDir")
+		nocolor, _ := cmd.Flags().GetBool("nocolor")
 		templateDir = os.ExpandEnv(templateDir)
 		templatePath := fmt.Sprintf("%s/%s.tpl", templateDir, args[0])
 		templateScript, err := os.ReadFile(templatePath)
@@ -50,7 +51,7 @@ var showCmd = &cobra.Command{
 		if err != nil {
 			log.Fatal(err)
 		}
-		if runtime.GOOS != "windows" {
+		if runtime.GOOS != "windows" && !nocolor {
 			var Reset = "\033[0m"
 			var Cyan = "\033[36m"
 			coloredOpeningBracket := fmt.Sprintf("%s%s", Cyan, "{{")
@@ -66,5 +67,5 @@ var showCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(showCmd)
 	showCmd.Flags().String("templateDir", "$HOME/.jr/templates", "directory containing templates")
-
+	showCmd.Flags().BoolP("nocolor", "n", false, "disable colorized output")
 }

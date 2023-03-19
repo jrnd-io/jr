@@ -1,4 +1,3 @@
-{{randoms "KEY1|KEY2|KEY3|KEY4"}},
 {{$NAME := name}}{{$SURNAME := surname}}{{$COMPANY := company}}{
   "guid": {{uuid}},
   "isActive": '{{bool}}',

@@ -131,10 +131,10 @@ Another example:
 jr run -k '{{randoms "ONE|TWO|THREE"}}' -f 1s -d 10s net-device -s -t test
 ```
 
-### Using JR to pipe data to KCAT
+### Using JR to pipe data to **KCAT**
 
-Another simple way of streaming to Apache Kafka is to use kcat in conjunction with JR. 
-JR supports KCAT out of the box. Using the ```--kcat``` flag the standard output will be formatted with K,V on a single line
+Another simple way of streaming to Apache Kafka is to use [kcat](https://github.com/edenhill/kcat) in conjunction with JR. 
+JR supports **kcat** out of the box. Using the ```--kcat``` flag the standard output will be formatted with K,V on a single line
 
 ```bash
 jr run -k '{{randoms "ONE|TWO|THREE"}}' -f 1s -d 5s net-device --kcat | kcat -F kafka/config.properties -K , -P -t test

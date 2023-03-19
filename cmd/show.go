@@ -23,10 +23,10 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/spf13/cobra"
 	"log"
 	"os"
-
-	"github.com/spf13/cobra"
+	"strings"
 )
 
 // showCmd represents the show command
@@ -45,11 +45,18 @@ var showCmd = &cobra.Command{
 		templateDir = os.ExpandEnv(templateDir)
 		templatePath := fmt.Sprintf("%s/%s.tpl", templateDir, args[0])
 		templateScript, err := os.ReadFile(templatePath)
+		templateString := string(templateScript)
 		if err != nil {
 			log.Fatal(err)
 		}
+		var Reset = "\033[0m"
+		var Cyan = "\033[36m"
+		coloredOpeningBracket := fmt.Sprintf("%s%s", Cyan, "{{")
+		coloredClosingBracket := fmt.Sprintf("%s%s", "}}", Reset)
 
-		fmt.Println(string(templateScript))
+		templateString = strings.ReplaceAll(templateString, "{{", coloredOpeningBracket)
+		templateString = strings.ReplaceAll(templateString, "}}", coloredClosingBracket)
+		fmt.Println(templateString)
 
 	},
 }

@@ -65,7 +65,6 @@ For an even quicker and dirtier test, you can embed directly a template in the c
 jr run --template "name:{{name}}"
 ```
 
-
 ### Create more random data 
 
 Using ``` -n ``` option you can create more data in each pass.
@@ -86,6 +85,14 @@ This example creates 2 net-device every 100ms for 1 minute.
 ```bash
 jr run net-device -n 2 -f 100ms -d 1m 
 ```
+
+Results are by default written on standard out (```--output "stdout"```) with this output template:
+
+```
+"{{.V}}\n"
+```
+
+which means that only the "Value" is in the output. You can change this behaviour with the ```--outputTemplate```
 
 ### Use JR to stream data to Apache Kafka
 
@@ -108,15 +115,10 @@ compression.level=9
 # statistics.interval.ms=1000
 ```
 
-Just use the -t flag to indicate the topic name:
+Just use the ```--output``` flag with "kafka" as output and ```--topic``` flag to indicate the topic name:
 
 ```bash
-jr run net-device -n 5 -f 500ms -t test
-```
-With ```silent``` mode you can stop the standard output:
-
-```bash
-jr run net-device -n 5 -f 500ms -s -t test
+jr run net-device -n 5 -f 500ms -o "kafka" -t test
 ```
 
 If you don't specify a key, the string "key" will be used for each record. 
@@ -124,17 +126,20 @@ Using ```--key``` you can use a template for the key, embedding it directly in t
 
 For example:
 ```bash
-jr run -k '{{key "KEY" 20}}' -f 1s -d 10s net-device -s -t test
+jr run -k '{{key "KEY" 20}}' -f 1s -d 10s net-device -o "kafka" -t test
 ```
 Another example:
 ```bash 
-jr run -k '{{randoms "ONE|TWO|THREE"}}' -f 1s -d 10s net-device -s -t test
+jr run -k '{{randoms "ONE|TWO|THREE"}}' -f 1s -d 10s net-device -o "kafka" -t test
 ```
 
 ### Using JR to pipe data to **KCAT**
 
 Another simple way of streaming to Apache Kafka is to use [kcat](https://github.com/edenhill/kcat) in conjunction with JR. 
-JR supports **kcat** out of the box. Using the ```--kcat``` flag the standard output will be formatted with K,V on a single line
+JR supports **kcat** out of the box. Using the ```--kcat``` flag the standard output will be formatted with K,V on a single line.
+
+```--kcat``` it's a shorthand equivalent for --output stdout --outputTemplate '{{key}},{{value}}' --oneline")
+
 
 ```bash
 jr run -k '{{randoms "ONE|TWO|THREE"}}' -f 1s -d 5s net-device --kcat | kcat -F kafka/config.properties -K , -P -t test

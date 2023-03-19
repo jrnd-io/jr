@@ -15,3 +15,4 @@
 "L7_PROTO": {{ip_known_ports}},
 "L7_PROTO_NAME": "{{ip_known_protocols}}",
 "L7_PROTO_CATEGORY": "{{randoms "Network|Application|Transport|Session"}}"
+}

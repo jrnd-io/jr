@@ -26,6 +26,7 @@ import (
 	"github.com/spf13/cobra"
 	"log"
 	"os"
+	"runtime"
 	"strings"
 )
 
@@ -49,13 +50,14 @@ var showCmd = &cobra.Command{
 		if err != nil {
 			log.Fatal(err)
 		}
-		var Reset = "\033[0m"
-		var Cyan = "\033[36m"
-		coloredOpeningBracket := fmt.Sprintf("%s%s", Cyan, "{{")
-		coloredClosingBracket := fmt.Sprintf("%s%s", "}}", Reset)
-
-		templateString = strings.ReplaceAll(templateString, "{{", coloredOpeningBracket)
-		templateString = strings.ReplaceAll(templateString, "}}", coloredClosingBracket)
+		if runtime.GOOS != "windows" {
+			var Reset = "\033[0m"
+			var Cyan = "\033[36m"
+			coloredOpeningBracket := fmt.Sprintf("%s%s", Cyan, "{{")
+			coloredClosingBracket := fmt.Sprintf("%s%s", "}}", Reset)
+			templateString = strings.ReplaceAll(templateString, "{{", coloredOpeningBracket)
+			templateString = strings.ReplaceAll(templateString, "}}", coloredClosingBracket)
+		}
 		fmt.Println(templateString)
 
 	},

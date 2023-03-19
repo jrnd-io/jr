@@ -1,4 +1,3 @@
-{{key "KEY" 20}},
 {
 "VLAN": "{{randoms "ALPHA|BETA|GAMMA|DELTA"}}",
 "IPV4_SRC_ADDR": "{{ip "10.1.0.0/16"}}",
@@ -16,4 +15,3 @@
 "L7_PROTO": {{ip_known_ports}},
 "L7_PROTO_NAME": "{{ip_known_protocols}}",
 "L7_PROTO_CATEGORY": "{{randoms "Network|Application|Transport|Session"}}"
-}

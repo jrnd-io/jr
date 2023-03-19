@@ -40,6 +40,11 @@ var listCmd = &cobra.Command{
 		fmt.Println()
 		templateDir, _ := cmd.Flags().GetString("templateDir")
 		templateDir = os.ExpandEnv(templateDir)
+
+		if _, err := os.Stat(templateDir); os.IsNotExist(err) {
+			return
+		}
+
 		err := filepath.Walk(templateDir, func(path string, info os.FileInfo, err error) error {
 			if !info.IsDir() && strings.HasSuffix(path, "json") {
 				fmt.Println(path)

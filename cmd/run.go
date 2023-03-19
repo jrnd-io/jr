@@ -32,7 +32,6 @@ import (
 	"os"
 	"os/signal"
 	"regexp"
-	"strings"
 	"text/template"
 	"time"
 )
@@ -51,13 +50,15 @@ jr run --templateFileName ~/.jr/templates/net-device.json
 	Args: cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 
+		keyTemplate, _ := cmd.Flags().GetString("key")
 		embeddedTemplate, _ := cmd.Flags().GetBool("template")
 		templateFileName, _ := cmd.Flags().GetBool("templateFileName")
 		silent, _ := cmd.Flags().GetBool("silent")
+		kcat, _ := cmd.Flags().GetBool("kcat")
 		topic, _ := cmd.Flags().GetString("topic")
 		kafkaConfig, _ := cmd.Flags().GetString("kafkaConfig")
 		var producer *kafka.Producer
-		var templateScript []byte
+		var valueTemplate []byte
 		var err error
 
 		if topic != "" {
@@ -68,20 +69,25 @@ jr run --templateFileName ~/.jr/templates/net-device.json
 		}
 
 		if embeddedTemplate {
-			templateScript = []byte(args[0])
+			valueTemplate = []byte(args[0])
 		} else if templateFileName {
-			templateScript, err = os.ReadFile(os.ExpandEnv(args[0]))
+			valueTemplate, err = os.ReadFile(os.ExpandEnv(args[0]))
 		} else {
 			templateDir, _ := cmd.Flags().GetString("templateDir")
 			templateDir = os.ExpandEnv(templateDir)
 			templatePath := fmt.Sprintf("%s/%s.json", templateDir, args[0])
-			templateScript, err = os.ReadFile(templatePath)
+			valueTemplate, err = os.ReadFile(templatePath)
 		}
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		report, err := template.New("json").Funcs(jr.FunctionsMap()).Parse(string(templateScript))
+		key, err := template.New("Key").Funcs(jr.FunctionsMap()).Parse(keyTemplate)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		value, err := template.New("Value").Funcs(jr.FunctionsMap()).Parse(string(valueTemplate))
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -91,6 +97,10 @@ jr run --templateFileName ~/.jr/templates/net-device.json
 		duration, _ := cmd.Flags().GetDuration("duration")
 		seed, _ := cmd.Flags().GetInt64("seed")
 		oneline, _ := cmd.Flags().GetBool("oneline")
+
+		if kcat {
+			oneline = true
+		}
 
 		jr.Random.Seed(seed)
 
@@ -113,7 +123,8 @@ jr run --templateFileName ~/.jr/templates/net-device.json
 				select {
 				case <-time.After(frequency):
 					for range c.Range {
-						executeTemplate(report, c, oneline, producer, topic, silent)
+						k, v, _ := executeTemplate(key, value, c, oneline)
+						output(k, v, producer, topic, silent, kcat)
 					}
 
 				case <-ctx.Done():
@@ -123,7 +134,8 @@ jr run --templateFileName ~/.jr/templates/net-device.json
 			}
 		} else {
 			for range c.Range {
-				executeTemplate(report, c, oneline, producer, topic, silent)
+				k, v, _ := executeTemplate(key, value, c, oneline)
+				output(k, v, producer, topic, silent, kcat)
 			}
 		}
 
@@ -143,33 +155,46 @@ func writeStats(c *jr.Context) {
 	fmt.Fprintf(os.Stderr, "Data Generated (Objects): %d\n", c.GeneratedObjects)
 	fmt.Fprintf(os.Stderr, "Data Generated (bytes): %d\n", c.GeneratedBytes)
 	fmt.Fprintf(os.Stderr, "Throughput (bytes per second): %9.f\n", float64(c.GeneratedBytes)/elapsed.Seconds())
+	fmt.Fprintln(os.Stderr)
 }
 
-func executeTemplate(report *template.Template, c *jr.Context, oneline bool, p *kafka.Producer, topic string, silent bool) {
-	var bt bytes.Buffer
-	if err := report.Execute(&bt, c); err != nil {
-		log.Fatal(err)
+func executeTemplate(key *template.Template, value *template.Template, c *jr.Context, oneline bool) (string, string, error) {
+
+	var kBuffer, vBuffer bytes.Buffer
+	var err error
+
+	if err = key.Execute(&kBuffer, c); err != nil {
+		log.Println(err)
 	}
-	output := bt.String()
+	k := kBuffer.String()
+
+	if err = value.Execute(&vBuffer, c); err != nil {
+		log.Println(err)
+	}
+	v := vBuffer.String()
+
 	if oneline {
 		re := regexp.MustCompile(`\r?\n?`)
-		output = re.ReplaceAllString(output, "")
-		if !silent {
-			fmt.Println(output)
-		}
-	} else {
-		if !silent {
-			fmt.Println(output)
-		}
-	}
-
-	if topic != "" {
-		k, v, _ := strings.Cut(output, ",")
-		jr.Produce(p, []byte(k), []byte(v), topic)
+		v = re.ReplaceAllString(v, "")
 	}
 
 	c.GeneratedObjects++
-	c.GeneratedBytes += int64(len(output))
+	c.GeneratedBytes += int64(len(v))
+
+	return k, v, err
+}
+
+func output(key string, value string, p *kafka.Producer, topic string, silent bool, kcat bool) {
+
+	if kcat {
+		fmt.Printf("%s,%s\n", key, value)
+		fmt.Println()
+	} else if !silent {
+		fmt.Println(value)
+	}
+	if topic != "" {
+		jr.Produce(p, []byte(key), []byte(value), topic)
+	}
 }
 
 func init() {
@@ -183,6 +208,8 @@ func init() {
 	runCmd.Flags().StringP("kafkaConfig", "F", "./kafka/config.properties", "Kafka configuration")
 	runCmd.Flags().Bool("templateFileName", false, "If enabled, [template] must be a template file")
 	runCmd.Flags().Bool("template", false, "If enabled, [template] must be a string containing a template, to be embedded directly in the script")
+	runCmd.Flags().StringP("key", "k", "key", "A template to generate a key")
+	runCmd.Flags().Bool("kcat", false, "If you want to pipe jr with kcat, use this flag: it writes key (--key), value (output of the template) on stdout")
 	runCmd.Flags().StringP("topic", "t", "", "Kafka topic name")
 	runCmd.Flags().BoolP("silent", "s", false, "No standard output (makes sense only when writing directly to Kafka)")
 }

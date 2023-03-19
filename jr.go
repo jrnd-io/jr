@@ -1,3 +1,6 @@
+//go:build 1.20
+// +build 1.20
+
 /*
 Copyright © 2022 Ugo Landini <ugo.landini@gmail.com>
 
@@ -19,6 +22,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
+
 package main
 
 import "jr/cmd"

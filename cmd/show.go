@@ -31,9 +31,10 @@ import (
 
 // showCmd represents the show command
 var showCmd = &cobra.Command{
-	Use:   "show",
+	Use:   "show [template]",
 	Short: "Show a template",
 	Long:  `Show a template. Templates must be in templates directory, which by default is in '$HOME/.jr/templates'`,
+	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) == 0 {
 			log.Println("Template missing. Try the list command to see available templates")

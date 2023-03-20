@@ -55,7 +55,8 @@ var listCmd = &cobra.Command{
 			if !info.IsDir() && strings.HasSuffix(path, "tpl") {
 				fullPath, _ := cmd.Flags().GetBool("fullPath")
 
-				if isValidTemplate(path) {
+				t, _ := os.ReadFile(path)
+				if isValidTemplate(t) {
 					fmt.Print(Green)
 				} else {
 					fmt.Print(Red)
@@ -79,12 +80,7 @@ var listCmd = &cobra.Command{
 	},
 }
 
-func isValidTemplate(path string) bool {
-
-	t, err := os.ReadFile(path)
-	if err != nil {
-		return false
-	}
+func isValidTemplate(t []byte) bool {
 
 	tt, err := template.New("test").Funcs(jr.FunctionsMap()).Parse(string(t))
 	if err != nil {

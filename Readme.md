@@ -141,7 +141,7 @@ jr run -k '{{randoms "ONE|TWO|THREE"}}' -f 1s -d 10s net-device -o stdout,kafka 
 Another simple way of streaming to Apache Kafka is to use [kcat](https://github.com/edenhill/kcat) in conjunction with JR. 
 JR supports **kcat** out of the box. Using the ```--kcat``` flag the standard output will be formatted with K,V on a single line.
 
-```--kcat``` it's a shorthand equivalent for --output stdout --outputTemplate '{{key}},{{value}}' --oneline")
+```--kcat``` it's a shorthand equivalent for ```--output stdout --outputTemplate '{{key}},{{value}}' --oneline```
 
 
 ```bash

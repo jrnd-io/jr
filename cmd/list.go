@@ -47,7 +47,13 @@ var listCmd = &cobra.Command{
 
 		err := filepath.Walk(templateDir, func(path string, info os.FileInfo, err error) error {
 			if !info.IsDir() && strings.HasSuffix(path, "tpl") {
-				fmt.Println(path)
+				fullPath, _ := cmd.Flags().GetBool("fullPath")
+				if fullPath {
+					fmt.Println(path)
+				} else {
+					name, _ := strings.CutSuffix(info.Name(), ".tpl")
+					fmt.Println(name)
+				}
 			}
 			return nil
 		})
@@ -63,4 +69,5 @@ var listCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(listCmd)
 	listCmd.Flags().String("templateDir", "$HOME/.jr/templates", "directory containing templates")
+	listCmd.Flags().BoolP("fullPath", "f", false, "Print full path")
 }

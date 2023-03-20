@@ -55,7 +55,7 @@ jr run --templateFileName ~/.jr/templates/net-device.tpl
 		embeddedTemplate, _ := cmd.Flags().GetBool("template")
 		templateFileName, _ := cmd.Flags().GetBool("templateFileName")
 		kcat, _ := cmd.Flags().GetBool("kcat")
-		output, _ := cmd.Flags().GetString("output")
+		output, _ := cmd.Flags().GetStringSlice("output")
 		oneline, _ := cmd.Flags().GetBool("oneline")
 
 		num, _ := cmd.Flags().GetInt("num")
@@ -67,7 +67,7 @@ jr run --templateFileName ~/.jr/templates/net-device.tpl
 
 		if kcat {
 			oneline = true
-			output = "stdout"
+			output = []string{"stdout"}
 			outputTemplate = "{{.K}},{{.V}}\n"
 		}
 
@@ -75,7 +75,7 @@ jr run --templateFileName ~/.jr/templates/net-device.tpl
 		var valueTemplate []byte
 		var err error
 
-		if output == "kafka" {
+		if contains(output, "kafka") {
 			producer, err = jr.Initialize(kafkaConfig)
 			if err != nil {
 				log.Fatal(err)
@@ -147,7 +147,7 @@ jr run --templateFileName ~/.jr/templates/net-device.tpl
 			}
 		}
 
-		if output == "kafka" {
+		if contains(output, "kafka") {
 			jr.Close(producer)
 		}
 
@@ -192,9 +192,9 @@ func executeTemplate(key *template.Template, value *template.Template, c *jr.Con
 	return k, v, err
 }
 
-func printOutput(key string, value string, p *kafka.Producer, topic string, output string, outputTemplateScript *template.Template) {
+func printOutput(key string, value string, p *kafka.Producer, topic string, output []string, outputTemplateScript *template.Template) {
 
-	if output == "stdout" {
+	if contains(output, "stdout") {
 
 		var outBuffer bytes.Buffer
 		var err error
@@ -209,7 +209,7 @@ func printOutput(key string, value string, p *kafka.Producer, topic string, outp
 		}
 		fmt.Print(outBuffer.String())
 	}
-	if output == "kafka" {
+	if contains(output, "kafka") {
 		jr.Produce(p, []byte(key), []byte(value), topic)
 	}
 }
@@ -231,8 +231,17 @@ func init() {
 	runCmd.Flags().StringP("topic", "t", "test", "Kafka topic name")
 
 	runCmd.Flags().Bool("kcat", false, "If you want to pipe jr with kcat, use this flag: it is equivalent to --output stdout --outputTemplate '{{key}},{{value}}' --oneline")
-	runCmd.Flags().StringP("output", "o", "stdout", "can be stdout or kafka")
+	runCmd.Flags().StringSliceP("output", "o", []string{"stdout"}, "can be stdout or kafka")
 	runCmd.Flags().String("outputTemplate", "{{.V}}\n", "Formatting of K,V on standard output")
 	runCmd.Flags().BoolP("oneline", "l", false, "strips /n from output, for example to be pipelined to tools like kcat")
 
+}
+
+func contains(s []string, str string) bool {
+	for _, v := range s {
+		if v == str {
+			return true
+		}
+	}
+	return false
 }

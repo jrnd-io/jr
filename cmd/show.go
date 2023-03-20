@@ -23,17 +23,19 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/spf13/cobra"
 	"log"
 	"os"
-
-	"github.com/spf13/cobra"
+	"runtime"
+	"strings"
 )
 
 // showCmd represents the show command
 var showCmd = &cobra.Command{
-	Use:   "show",
+	Use:   "show [template]",
 	Short: "Show a template",
 	Long:  `Show a template. Templates must be in templates directory, which by default is in '$HOME/.jr/templates'`,
+	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) == 0 {
 			log.Println("Template missing. Try the list command to see available templates")
@@ -41,14 +43,23 @@ var showCmd = &cobra.Command{
 		}
 
 		templateDir, _ := cmd.Flags().GetString("templateDir")
+		nocolor, _ := cmd.Flags().GetBool("nocolor")
 		templateDir = os.ExpandEnv(templateDir)
 		templatePath := fmt.Sprintf("%s/%s.tpl", templateDir, args[0])
 		templateScript, err := os.ReadFile(templatePath)
+		templateString := string(templateScript)
 		if err != nil {
 			log.Fatal(err)
 		}
-
-		fmt.Println(string(templateScript))
+		if runtime.GOOS != "windows" && !nocolor {
+			var Reset = "\033[0m"
+			var Cyan = "\033[36m"
+			coloredOpeningBracket := fmt.Sprintf("%s%s", Cyan, "{{")
+			coloredClosingBracket := fmt.Sprintf("%s%s", "}}", Reset)
+			templateString = strings.ReplaceAll(templateString, "{{", coloredOpeningBracket)
+			templateString = strings.ReplaceAll(templateString, "}}", coloredClosingBracket)
+		}
+		fmt.Println(templateString)
 
 	},
 }
@@ -56,5 +67,5 @@ var showCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(showCmd)
 	showCmd.Flags().String("templateDir", "$HOME/.jr/templates", "directory containing templates")
-
+	showCmd.Flags().BoolP("nocolor", "n", false, "disable colorized output")
 }

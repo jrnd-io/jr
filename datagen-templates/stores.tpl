@@ -1,0 +1,3 @@
+{{randoms
+    "{\"store_id\":1,\"city\":\"Raleigh\",\"state\":\"NC\"}|{\"store_id\":2,\"city\":\"Chicago\",\"state\":\"IL\"}|{\"store_id\":3,\"city\":\"Sacramento\",\"state\":\"CA\"}|{\"store_id\":4,\"city\":\"Austin\",\"state\":\"TX\"}|{\"store_id\":5,\"city\":\"Boston\",\"state\":\"MA\"}|{\"store_id\":6,\"city\":\"Atlanta\",\"state\":\"GA\"}|{\"store_id\":7,\"city\":\"Lexington\",\"state\":\"SC\"}"
+}}

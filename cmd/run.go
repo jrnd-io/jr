@@ -89,7 +89,7 @@ jr run --templateFileName ~/.jr/templates/net-device.tpl
 		} else {
 			templateDir, _ := cmd.Flags().GetString("templateDir")
 			templateDir = os.ExpandEnv(templateDir)
-			templatePath := fmt.Sprintf("%s/%s.json", templateDir, args[0])
+			templatePath := fmt.Sprintf("%s/%s.tpl", templateDir, args[0])
 			valueTemplate, err = os.ReadFile(templatePath)
 		}
 		if err != nil {

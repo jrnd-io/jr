@@ -22,11 +22,14 @@ THE SOFTWARE.
 package cmd
 
 import (
+	"bytes"
 	"fmt"
 	"github.com/spf13/cobra"
+	"jr/jr"
 	"os"
 	"path/filepath"
 	"strings"
+	"text/template"
 )
 
 var listCmd = &cobra.Command{
@@ -45,9 +48,19 @@ var listCmd = &cobra.Command{
 			return
 		}
 
+		var Red = "\033[31m"
+		var Green = "\033[32m"
+
 		err := filepath.Walk(templateDir, func(path string, info os.FileInfo, err error) error {
 			if !info.IsDir() && strings.HasSuffix(path, "tpl") {
 				fullPath, _ := cmd.Flags().GetBool("fullPath")
+
+				if isValidTemplate(path) {
+					fmt.Print(Green)
+				} else {
+					fmt.Print(Red)
+				}
+
 				if fullPath {
 					fmt.Println(path)
 				} else {
@@ -64,6 +77,27 @@ var listCmd = &cobra.Command{
 			return
 		}
 	},
+}
+
+func isValidTemplate(path string) bool {
+
+	t, err := os.ReadFile(path)
+	if err != nil {
+		return false
+	}
+
+	tt, err := template.New("test").Funcs(jr.FunctionsMap()).Parse(string(t))
+	if err != nil {
+		return false
+	}
+
+	var buf bytes.Buffer
+	if err = tt.Execute(&buf, nil); err != nil {
+		return false
+	}
+
+	return true
+
 }
 
 func init() {

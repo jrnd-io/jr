@@ -57,6 +57,7 @@ jr run --templateFileName ~/.jr/templates/net-device.tpl
 		kcat, _ := cmd.Flags().GetBool("kcat")
 		output, _ := cmd.Flags().GetStringSlice("output")
 		oneline, _ := cmd.Flags().GetBool("oneline")
+		locales, _ := cmd.Flags().GetStringSlice("locales")
 
 		num, _ := cmd.Flags().GetInt("num")
 		frequency, _ := cmd.Flags().GetDuration("frequency")
@@ -113,7 +114,7 @@ jr run --templateFileName ~/.jr/templates/net-device.tpl
 
 		jr.Random.Seed(seed)
 
-		c := jr.NewContext(time.Now(), num, frequency, []string{"IT"}, seed)
+		c := jr.NewContext(time.Now(), num, frequency, locales, seed)
 		infinite := true
 		if duration > 0 {
 			timer := time.NewTimer(duration)
@@ -234,6 +235,8 @@ func init() {
 	runCmd.Flags().StringSliceP("output", "o", []string{"stdout"}, "can be stdout or kafka")
 	runCmd.Flags().String("outputTemplate", "{{.V}}\n", "Formatting of K,V on standard output")
 	runCmd.Flags().BoolP("oneline", "l", false, "strips /n from output, for example to be pipelined to tools like kcat")
+
+	runCmd.Flags().StringSlice("locales", []string{"en"}, "List of locales")
 
 }
 

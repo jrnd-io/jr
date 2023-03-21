@@ -91,10 +91,51 @@ Results are by default written on standard out (```--output "stdout"```) with th
 
 which means that only the "Value" is in the output. You can change this behaviour with the ```--outputTemplate```
 
-### Use JR to stream data to Apache Kafka
+## Use JR to stream data to Apache Kafka
 
-First thing to do is to create a kafka.properties file. The easiest way to do that is to use [Confluent Cloud]("https://confluent.cloud/") and copy-paste 
-the configuration in the HOME > ENVIRONMENTS > YOUR ENVIRONMENT > YOUR CLUSTER > CLIENTS > New Client section.
+First thing to do is to create a kafka.properties file. 
+
+### 1a. Using Confluent Cloud & Confluent CLI
+
+The easiest way to do that is to use [Confluent Cloud]("https://confluent.cloud/").
+
+You can use the [confluent CLI]("https://docs.confluent.io/confluent-cli/current/overview.html") to create a cluster:
+
+Config your vars as you see fit:
+```bash
+export CONFLUENT_CLUSTER_NAME=jr-test
+export CONFLUENT_CLUSTER_CLOUD_PROVIDER=aws
+export CONFLUENT_CLUSTER_REGION=eu-west-1 
+```
+
+Then execute the commands
+
+```bash
+
+confluent login --save
+
+OUTPUT=$(confluent kafka cluster create "$CONFLUENT_CLUSTER_NAME" --cloud $CONFLUENT_CLUSTER_CLOUD_PROVIDER --region $CONFLUENT_CLUSTER_REGION --output json 2>&1)
+(($? != 0)) && { echo "$OUTPUT"; exit 1; }
+CONFLUENT_CLUSTER_ID=$(echo "$OUTPUT" | jq -r .id)
+confluent kafka cluster use $CLUSTER 2>/dev/null
+echo "Cluster $CONFLUENT_CLUSTER_NAME created, Id: $CONFLUENT_CLUSTER_ID"
+
+confluent api-key create --resource $CONFLUENT_CLUSTER_ID
+
+OUTPUT=$(confluent api-key create --resource $CONFLUENT_CLUSTER_ID -o json)
+CONFLUENT_CLUSTER_API_KEY=$(echo "$OUTPUT" | jq -r ".api_key")
+CONFLUENT_CLUSTER_API_SECRET=$(echo "$OUTPUT" | jq -r ".api_secret")
+
+echo "API KEY:SECRET  -> $CONFLUENT_CLUSTER_API_KEY:$CONFLUENT_CLUSTER_API_SECRET"
+
+confluent kafka topic create test --cluster $CONFLUENT_CLUSTER_ID
+
+confluent kafka client-config create go --cluster $CONFLUENT_CLUSTER_ID --api-key $CONFLUENT_CLUSTER_API_KEY --api-secret $CONFLUENT_CLUSTER_API_SECRET 1> kafka/config.properties 2>&1
+```
+
+### 1b. Using Confluent Cloud & manually creating config file
+
+You can also create a Cluster in [Confluent Cloud]("https://confluent.cloud/") and copy-paste the configuration in the HOME > ENVIRONMENTS > YOUR ENVIRONMENT > YOUR CLUSTER > CLIENTS > New Client section.
 
 You can also fill the gaps in the provided ```kafka/config.properties.example```
 
@@ -111,6 +152,8 @@ compression.type=gzip
 compression.level=9
 # statistics.interval.ms=1000
 ```
+
+### 2. Writing data to Apache Kakfa
 
 Just use the ```--output kafka``` flag and ```--topic``` flag to indicate the topic name:
 

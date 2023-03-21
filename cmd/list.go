@@ -30,6 +30,7 @@ import (
 	"path/filepath"
 	"strings"
 	"text/template"
+	"time"
 )
 
 var listCmd = &cobra.Command{
@@ -81,6 +82,7 @@ var listCmd = &cobra.Command{
 }
 
 func isValidTemplate(t []byte) bool {
+	jr.JrContext = jr.NewContext(time.Now(), 1, -1, []string{"us"}, 0)
 
 	tt, err := template.New("test").Funcs(jr.FunctionsMap()).Parse(string(t))
 	if err != nil {

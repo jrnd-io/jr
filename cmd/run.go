@@ -114,7 +114,7 @@ jr run --templateFileName ~/.jr/templates/net-device.tpl
 
 		jr.Random.Seed(seed)
 
-		c := jr.NewContext(time.Now(), num, frequency, locales, seed)
+		jr.JrContext = jr.NewContext(time.Now(), num, frequency, locales, seed)
 		infinite := true
 		if duration > 0 {
 			timer := time.NewTimer(duration)
@@ -132,8 +132,8 @@ jr run --templateFileName ~/.jr/templates/net-device.tpl
 			for ok := true; ok; ok = infinite {
 				select {
 				case <-time.After(frequency):
-					for range c.Range {
-						k, v, _ := executeTemplate(key, value, c, oneline)
+					for range jr.JrContext.Range {
+						k, v, _ := executeTemplate(key, value, oneline)
 						printOutput(k, v, producer, topic, output, outTemplate)
 					}
 				case <-ctx.Done():
@@ -142,8 +142,8 @@ jr run --templateFileName ~/.jr/templates/net-device.tpl
 				}
 			}
 		} else {
-			for range c.Range {
-				k, v, _ := executeTemplate(key, value, c, oneline)
+			for range jr.JrContext.Range {
+				k, v, _ := executeTemplate(key, value, oneline)
 				printOutput(k, v, producer, topic, output, outTemplate)
 			}
 		}
@@ -152,32 +152,32 @@ jr run --templateFileName ~/.jr/templates/net-device.tpl
 			jr.Close(producer)
 		}
 
-		writeStats(c)
+		writeStats()
 
 	},
 }
 
-func writeStats(c *jr.Context) {
+func writeStats() {
 	fmt.Fprintln(os.Stderr)
-	elapsed := time.Since(c.StartTime)
+	elapsed := time.Since(jr.JrContext.StartTime)
 	fmt.Fprintf(os.Stderr, "Elapsed time: %v\n", elapsed.Round(1*time.Second))
-	fmt.Fprintf(os.Stderr, "Data Generated (Objects): %d\n", c.GeneratedObjects)
-	fmt.Fprintf(os.Stderr, "Data Generated (bytes): %d\n", c.GeneratedBytes)
-	fmt.Fprintf(os.Stderr, "Throughput (bytes per second): %9.f\n", float64(c.GeneratedBytes)/elapsed.Seconds())
+	fmt.Fprintf(os.Stderr, "Data Generated (Objects): %d\n", jr.JrContext.GeneratedObjects)
+	fmt.Fprintf(os.Stderr, "Data Generated (bytes): %d\n", jr.JrContext.GeneratedBytes)
+	fmt.Fprintf(os.Stderr, "Throughput (bytes per second): %9.f\n", float64(jr.JrContext.GeneratedBytes)/elapsed.Seconds())
 	fmt.Fprintln(os.Stderr)
 }
 
-func executeTemplate(key *template.Template, value *template.Template, c *jr.Context, oneline bool) (string, string, error) {
+func executeTemplate(key *template.Template, value *template.Template, oneline bool) (string, string, error) {
 
 	var kBuffer, vBuffer bytes.Buffer
 	var err error
 
-	if err = key.Execute(&kBuffer, c); err != nil {
+	if err = key.Execute(&kBuffer, jr.JrContext); err != nil {
 		log.Println(err)
 	}
 	k := kBuffer.String()
 
-	if err = value.Execute(&vBuffer, c); err != nil {
+	if err = value.Execute(&vBuffer, jr.JrContext); err != nil {
 		log.Println(err)
 	}
 	v := vBuffer.String()
@@ -187,8 +187,8 @@ func executeTemplate(key *template.Template, value *template.Template, c *jr.Con
 		v = re.ReplaceAllString(v, "")
 	}
 
-	c.GeneratedObjects++
-	c.GeneratedBytes += int64(len(v))
+	jr.JrContext.GeneratedObjects++
+	jr.JrContext.GeneratedBytes += int64(len(v))
 
 	return k, v, err
 }
@@ -236,7 +236,7 @@ func init() {
 	runCmd.Flags().String("outputTemplate", "{{.V}}\n", "Formatting of K,V on standard output")
 	runCmd.Flags().BoolP("oneline", "l", false, "strips /n from output, for example to be pipelined to tools like kcat")
 
-	runCmd.Flags().StringSlice("locales", []string{"en"}, "List of locales")
+	runCmd.Flags().StringSlice("locales", []string{"us"}, "List of locales")
 
 }
 

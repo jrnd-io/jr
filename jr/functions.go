@@ -101,7 +101,6 @@ func initialize(filename string) []string {
 		words = append(words, scanner.Text())
 	}
 
-	fmt.Println(words)
 	return words
 }
 

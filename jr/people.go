@@ -77,10 +77,8 @@ func zipAt(index int) string {
 
 func company() string {
 	return word("company")
-
 }
 
 func emailProvider() string {
 	return word("mail-provider")
-
 }

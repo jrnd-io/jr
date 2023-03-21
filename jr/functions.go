@@ -1,9 +1,11 @@
 package jr
 
 import (
+	"bufio"
 	"fmt"
 	"math"
 	"math/rand"
+	"os"
 	"strconv"
 	"strings"
 	"text/template"
@@ -14,7 +16,8 @@ func FunctionsMap() template.FuncMap {
 }
 
 var Random = rand.New(rand.NewSource(0))
-
+var data = map[string][]string{}
+var JrContext = &Context{}
 var fmap = map[string]interface{}{
 
 	// text utilities
@@ -64,7 +67,7 @@ var fmap = map[string]interface{}{
 	"middlename":     middlename,
 	"address":        address,
 	"capital":        capital,
-	"capital_at":     capitalAt,
+	"capital_at":     func(index int) string { return capitalAt(index) },
 	"state":          state,
 	"state_at":       func(index int) string { return stateAt(index) },
 	"state_short":    stateShort,
@@ -80,4 +83,41 @@ var fmap = map[string]interface{}{
 	"uuid":    uniqueId,
 	"bool":    randomBool,
 	"yesorno": yesOrNo,
+}
+
+func initialize(filename string) []string {
+	file, err := os.Open(filename)
+	if err != nil {
+	}
+	defer file.Close()
+
+	var words []string
+	scanner := bufio.NewScanner(file)
+
+	for scanner.Scan() {
+		words = append(words, scanner.Text())
+	}
+
+	fmt.Println(words)
+	return words
+}
+
+func word(name string) string {
+	cache(name)
+	words := data[name]
+	return words[Random.Intn(len(words))]
+}
+
+func cache(name string) {
+	if data[name] == nil {
+		locale := JrContext.Locales[Random.Intn(len(JrContext.Locales))]
+		filename := fmt.Sprintf("%s/data/%s/%s", "/Users/ugol/.jr/templates", locale, name)
+		data[name] = initialize(filename)
+	}
+}
+
+func wordAt(name string, index int) string {
+	cache(name)
+	words := data[name]
+	return words[index]
 }

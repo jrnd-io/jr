@@ -15,6 +15,7 @@ func FunctionsMap() template.FuncMap {
 
 var Random = rand.New(rand.NewSource(0))
 
+
 var fmap = map[string]interface{}{
 
 	// text utilities
@@ -48,6 +49,9 @@ var fmap = map[string]interface{}{
 	"floating":  func(min, max float32) float32 { return min + Random.Float32()*(max-min) },
 	"random":    func(s []string) string { return s[Random.Intn(len(s))] },
 	"randoms":   func(s string) string { a := strings.Split(s, "|"); return a[Random.Intn(len(a))] },
+
+	"random_string": func (min, max int) string {return RandomString(min, max) },
+	"random_string_from_source": func (min, max int, source string) string {return RandomStringFromSource(min, max, source)},
 
 	//networking and time utilities
 	"ip":                 func(s string) string { return ip(s) },

@@ -9,6 +9,8 @@ import (
 	"strings"
 )
 
+const alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
 // Prefix is a Markov chain prefix of one or more words.
 type Prefix []string
 
@@ -109,4 +111,16 @@ func Nonsense(prefixLen, numWords int, baseText string) string {
 	c := NewChain(prefixLen)
 	c.Build(strings.NewReader(baseText))
 	return c.Generate(numWords)
+}
+
+func RandomString(min, max int) string {
+	return RandomStringFromSource(min, max, alphabet)
+}
+
+func RandomStringFromSource(min, max int, source string) string {
+	textb := make([]byte, min+Random.Intn(max-min))
+	for i := range textb {
+		textb[i] = source[Random.Intn(len(source))]
+	}
+	return string(textb)
 }

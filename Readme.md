@@ -9,21 +9,18 @@ JR requires golang >= 1.20
 
 ## Building and compiling
 
-you need just to use the provided Makefile to build JR
+you can use the `install.sh` to install JR
+
+To install the binary and the templates(make sure it has -x permissions):
 
 ```bash
-make all
+./install.sh
 ```
 
 If you want to run the Unit tests, run:
 
 ```bash
 make test
-```
-
-To install the binary and the templates:
-```bash
-make copy_templates; sudo make install
 ```
 
 ## Basic usage

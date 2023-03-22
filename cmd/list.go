@@ -50,6 +50,7 @@ var listCmd = &cobra.Command{
 
 		var Red = "\033[31m"
 		var Green = "\033[32m"
+		var Reset = "\033[0m"
 
 		err := filepath.Walk(templateDir, func(path string, info os.FileInfo, err error) error {
 			if !info.IsDir() && strings.HasSuffix(path, "tpl") {
@@ -71,7 +72,7 @@ var listCmd = &cobra.Command{
 			}
 			return nil
 		})
-		fmt.Println()
+		fmt.Println(Reset)
 
 		if err != nil {
 			fmt.Printf("Error in %q: %v\n", templateDir, err)

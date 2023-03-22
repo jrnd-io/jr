@@ -36,6 +36,8 @@ var fmap = map[string]interface{}{
 	"split":        func(sep, s string) []string { return strings.Split(s, sep) },
 	"markov":       func(prefixLen, numWords int, baseText string) string { return Nonsense(prefixLen, numWords, baseText) },
 	"lorem":        func(size int) string { return Lorem(size) },
+	"shuffle":      wordShuffle,
+	"shuffle_n":    wordShuffleN,
 
 	//math utilities
 	"add":       func(a, b int) int { return a + b },
@@ -121,4 +123,19 @@ func wordAt(name string, index int) string {
 	cache(name)
 	words := data[name]
 	return words[index]
+}
+
+func wordShuffle(name string) []string {
+	cache(name)
+	words := data[name]
+	return wordShuffleN(name, len(words))
+}
+
+func wordShuffleN(name string, n int) []string {
+	cache(name)
+	words := data[name]
+	Random.Shuffle(len(words), func(i, j int) {
+		words[i], words[j] = words[j], words[i]
+	})
+	return words[:n]
 }

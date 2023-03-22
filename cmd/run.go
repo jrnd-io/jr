@@ -115,7 +115,10 @@ jr run --templateFileName ~/.jr/templates/net-device.tpl
 
 		jr.Random.Seed(seed)
 
-		jr.JrContext = jr.NewContext(time.Now(), num, frequency, locales, seed)
+		jr.JrContext.HowMany = num
+		jr.JrContext.Frequency = frequency
+		jr.JrContext.Locales = locales
+		jr.JrContext.Seed = seed
 		jr.JrContext.TemplateDir = templateDir
 
 		infinite := true
@@ -220,13 +223,13 @@ func printOutput(key string, value string, p *kafka.Producer, topic string, outp
 
 func init() {
 	rootCmd.AddCommand(runCmd)
-	runCmd.Flags().IntP("num", "n", 1, "Number of elements to create for each pass")
+	runCmd.Flags().IntP("num", "n", jr.JrContext.HowMany, "Number of elements to create for each pass")
 	runCmd.Flags().DurationP("frequency", "f", 0, "how much time to wait for next generation pass")
 	runCmd.Flags().DurationP("duration", "d", 0, "If frequency is enabled, with Duration you can set a finite amount of time")
 
-	runCmd.Flags().Int64("seed", time.Now().UTC().UnixNano(), "Seed to init pseudorandom generator")
+	runCmd.Flags().Int64("seed", jr.JrContext.Seed, "Seed to init pseudorandom generator")
 
-	runCmd.Flags().String("templateDir", "$HOME/.jr/templates", "directory containing templates")
+	runCmd.Flags().String("templateDir", jr.JrContext.TemplateDir, "directory containing templates")
 	runCmd.Flags().StringP("kafkaConfig", "F", "./kafka/config.properties", "Kafka configuration")
 	runCmd.Flags().Bool("templateFileName", false, "If enabled, [template] must be a template file")
 	runCmd.Flags().Bool("template", false, "If enabled, [template] must be a string containing a template, to be embedded directly in the script")
@@ -239,7 +242,7 @@ func init() {
 	runCmd.Flags().String("outputTemplate", "{{.V}}\n", "Formatting of K,V on standard output")
 	runCmd.Flags().BoolP("oneline", "l", false, "strips /n from output, for example to be pipelined to tools like kcat")
 
-	runCmd.Flags().StringSlice("locales", []string{"us"}, "List of locales")
+	runCmd.Flags().StringSlice("locales", jr.JrContext.Locales, "List of locales")
 
 }
 

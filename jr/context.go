@@ -1,6 +1,16 @@
 package jr
 
-import "time"
+import (
+	"os"
+	"time"
+)
+
+var JrContext Context
+
+const HOWMANY = 1
+const FREQUENCY = 0
+const DURATION = 0
+const TEMPLATEDIR = "$HOME/.jr/templates"
 
 type Context struct {
 	StartTime        time.Time
@@ -10,11 +20,23 @@ type Context struct {
 	HowMany          int
 	Range            []int
 	Frequency        time.Duration
+	Duration         time.Duration
 	Locales          []string
 	Seed             int64
 }
 
-func NewContext(startTime time.Time, howMany int, frequency time.Duration, locales []string, seed int64) *Context {
-	context := Context{StartTime: startTime, HowMany: howMany, Range: make([]int, howMany), Frequency: frequency, Locales: locales, Seed: seed}
-	return &context
+func init() {
+
+	JrContext = Context{
+		StartTime:        time.Now(),
+		TemplateDir:      os.ExpandEnv(TEMPLATEDIR),
+		GeneratedBytes:   0,
+		GeneratedObjects: 0,
+		HowMany:          HOWMANY,
+		Range:            make([]int, 1),
+		Frequency:        FREQUENCY,
+		Duration:         DURATION,
+		Locales:          []string{"us"},
+		Seed:             time.Now().UTC().UnixNano(),
+	}
 }

@@ -17,7 +17,6 @@ func FunctionsMap() template.FuncMap {
 
 var Random = rand.New(rand.NewSource(0))
 var data = map[string][]string{}
-var JrContext = &Context{}
 var fmap = map[string]interface{}{
 
 	// text utilities

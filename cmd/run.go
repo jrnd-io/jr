@@ -115,7 +115,7 @@ jr run --templateFileName ~/.jr/templates/net-device.tpl
 
 		jr.Random.Seed(seed)
 
-		jr.JrContext.HowMany = num
+		jr.JrContext.Num = num
 		jr.JrContext.Frequency = frequency
 		jr.JrContext.Locales = locales
 		jr.JrContext.Seed = seed
@@ -223,7 +223,7 @@ func printOutput(key string, value string, p *kafka.Producer, topic string, outp
 
 func init() {
 	rootCmd.AddCommand(runCmd)
-	runCmd.Flags().IntP("num", "n", jr.JrContext.HowMany, "Number of elements to create for each pass")
+	runCmd.Flags().IntP("num", "n", jr.JrContext.Num, "Number of elements to create for each pass")
 	runCmd.Flags().DurationP("frequency", "f", 0, "how much time to wait for next generation pass")
 	runCmd.Flags().DurationP("duration", "d", 0, "If frequency is enabled, with Duration you can set a finite amount of time")
 

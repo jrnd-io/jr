@@ -7,7 +7,7 @@ import (
 
 var JrContext Context
 
-const HOWMANY = 1
+const NUM = 1
 const FREQUENCY = 0
 const DURATION = 0
 const TEMPLATEDIR = "$HOME/.jr/templates"
@@ -17,7 +17,7 @@ type Context struct {
 	TemplateDir      string
 	GeneratedObjects int64
 	GeneratedBytes   int64
-	HowMany          int
+	Num              int
 	Range            []int
 	Frequency        time.Duration
 	Duration         time.Duration
@@ -32,8 +32,8 @@ func init() {
 		TemplateDir:      os.ExpandEnv(TEMPLATEDIR),
 		GeneratedBytes:   0,
 		GeneratedObjects: 0,
-		HowMany:          HOWMANY,
-		Range:            make([]int, HOWMANY),
+		Num:              NUM,
+		Range:            make([]int, NUM),
 		Frequency:        FREQUENCY,
 		Duration:         DURATION,
 		Locales:          []string{"us"},

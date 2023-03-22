@@ -38,11 +38,9 @@ JR is very straightforward to use. Here are some examples
 jr list
 ````
 Templates are in the directory `$HOME/.jr/templates`. You can override with the ```--templatePath``` command flag
-Templates with issues are showed in <font color='red'>red</font>.
-, Templates with no issues are showed in <font color='green'>green</font>.
-.
+Templates with issues are showed in <font color='red'>red</font>, Templates with no issues are showed in <font color='green'>green</font>
 
-
+<span style="color:blue">some *This is Blue italic.* text</span>
 
 ### Create random data from one of the provided templates
 

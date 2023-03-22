@@ -33,7 +33,7 @@ func init() {
 		GeneratedBytes:   0,
 		GeneratedObjects: 0,
 		HowMany:          HOWMANY,
-		Range:            make([]int, 1),
+		Range:            make([]int, HOWMANY),
 		Frequency:        FREQUENCY,
 		Duration:         DURATION,
 		Locales:          []string{"us"},

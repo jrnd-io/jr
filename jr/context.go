@@ -4,6 +4,7 @@ import "time"
 
 type Context struct {
 	StartTime        time.Time
+	TemplateDir      string
 	GeneratedObjects int64
 	GeneratedBytes   int64
 	HowMany          int

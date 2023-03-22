@@ -66,6 +66,9 @@ jr run --templateFileName ~/.jr/templates/net-device.tpl
 		kafkaConfig, _ := cmd.Flags().GetString("kafkaConfig")
 		topic, _ := cmd.Flags().GetString("topic")
 
+		templateDir, _ := cmd.Flags().GetString("templateDir")
+		templateDir = os.ExpandEnv(templateDir)
+
 		if kcat {
 			oneline = true
 			output = []string{"stdout"}
@@ -88,8 +91,6 @@ jr run --templateFileName ~/.jr/templates/net-device.tpl
 		} else if templateFileName {
 			valueTemplate, err = os.ReadFile(os.ExpandEnv(args[0]))
 		} else {
-			templateDir, _ := cmd.Flags().GetString("templateDir")
-			templateDir = os.ExpandEnv(templateDir)
 			templatePath := fmt.Sprintf("%s/%s.tpl", templateDir, args[0])
 			valueTemplate, err = os.ReadFile(templatePath)
 		}
@@ -115,6 +116,8 @@ jr run --templateFileName ~/.jr/templates/net-device.tpl
 		jr.Random.Seed(seed)
 
 		jr.JrContext = jr.NewContext(time.Now(), num, frequency, locales, seed)
+		jr.JrContext.TemplateDir = templateDir
+
 		infinite := true
 		if duration > 0 {
 			timer := time.NewTimer(duration)

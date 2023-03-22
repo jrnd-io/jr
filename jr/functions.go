@@ -113,7 +113,7 @@ func word(name string) string {
 func cache(name string) {
 	if data[name] == nil {
 		locale := JrContext.Locales[Random.Intn(len(JrContext.Locales))]
-		filename := fmt.Sprintf("%s/data/%s/%s", "/Users/ugol/.jr/templates", locale, name)
+		filename := fmt.Sprintf("%s/data/%s/%s", JrContext.TemplateDir, locale, name)
 		data[name] = initialize(filename)
 	}
 }

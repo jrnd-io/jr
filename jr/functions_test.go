@@ -54,8 +54,14 @@ func TestMin(t *testing.T) {
 }
 
 /*
+// this test doesn't work anymore after refactoring of wordAt: don't know why, the functions work in the templates
+
 func TestUSState(t *testing.T) {
+
 	JrContext = NewContext(time.Now(), 1, -1, []string{"us"}, 0)
+	templateDir := "~/$HOME/.jr/templates/data"
+	templateDir = os.ExpandEnv(templateDir)
+	JrContext.TemplateDir = templateDir
 	hawaii := "{{capital_at 10}} {{state_at 10}} {{state_short_at 10}} {{zip_at 10}}"
 	massachussets := `{{capital_at 20}} {{state_at 20}} {{state_short_at 20}} {{zip_at 20}}`
 	newyork := `{{capital_at 31}} {{state_at 31}} {{state_short_at 31}} {{zip_at 31}}`
@@ -81,7 +87,8 @@ func TestUSState(t *testing.T) {
 		t.Error(err)
 	}
 }
-*/
+
+//*/
 
 func runt(tpl, expect string) error {
 	return runtv(tpl, expect, "")

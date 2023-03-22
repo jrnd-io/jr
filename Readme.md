@@ -9,15 +9,21 @@ JR requires golang >= 1.20
 
 ## Building and compiling
 
-you can use the `install.sh` to install JR
-
-To install the binary and the templates(make sure it has -x permissions):
+you can use the `install.sh` to install JR. This script does everything needed in one simple command.
 
 ```bash
 ./install.sh
 ```
 
-If you want to run the Unit tests, run:
+These are the steps in the `install.sh` script:
+
+```shell
+make all
+make copy_templates
+sudo make install
+```
+
+If you want to run the Unit tests, you have a `make` target for that:
 
 ```bash
 make test
@@ -30,8 +36,13 @@ JR is very straightforward to use. Here are some examples
 ### Listing existing templates
 ```bash
 jr list
-```
-Templates are in the directory ```$HOME/.jr/templates```. You can override with the ```--templatePath``` command flag
+````
+Templates are in the directory `$HOME/.jr/templates`. You can override with the ```--templatePath``` command flag
+Templates with issues are showed in <font color='red'>red</font>.
+, Templates with no issues are showed in <font color='green'>green</font>.
+.
+
+
 
 ### Create random data from one of the provided templates
 
@@ -39,16 +50,16 @@ Use predefined net-device template to generate a random JSON network device
 
 ```bash
 jr run net-device
-```
+````
 
 ### Other options for templates
 
 If you want to use your own template, you have several options:
 
 - put it in the default directory
-- put it in another directory and use the ```--templateDir``` flag
-- put it in another directory and use the ```--templateFileName``` flag to directly refer to it
-- embed it directly in the command using the ```--template``` flag
+- put it in another directory and use the `--templateDir` flag
+- put it in another directory and use the `--templateFileName` flag to directly refer to it
+- embed it directly in the command using the `--template` flag
 
 For a quick and dirty test, you can refer a template like this:
 
@@ -64,14 +75,14 @@ jr run --template "name:{{name}}"
 
 ### Create more random data 
 
-Using ``` -n ``` option you can create more data in each pass.
+Using `-n` option you can create more data in each pass.
 
 ```bash
 jr run net-device -n 3
 ```
 ### Continuous streaming data
 
-Using ``` --f ``` option you can repeat the creation every ```f``` milliseconds
+Using `--f` option you can repeat the creation every `f` milliseconds
 
 This example creates 2 net-device every second.
 ```bash
@@ -83,13 +94,13 @@ This example creates 2 net-device every 100ms for 1 minute.
 jr run net-device -n 2 -f 100ms -d 1m 
 ```
 
-Results are by default written on standard out (```--output "stdout"```) with this output template:
+Results are by default written on standard out (`--output "stdout"`) with this output template:
 
 ```
 "{{.V}}\n"
 ```
 
-which means that only the "Value" is in the output. You can change this behaviour with the ```--outputTemplate```
+which means that only the "Value" is in the output. You can change this behaviour with the `--outputTemplate`
 
 ## Use JR to stream data to Apache Kafka
 
@@ -137,7 +148,7 @@ confluent kafka client-config create go --cluster $CONFLUENT_CLUSTER_ID --api-ke
 
 You can also create a Cluster in [Confluent Cloud]("https://confluent.cloud/") and copy-paste the configuration in the HOME > ENVIRONMENTS > YOUR ENVIRONMENT > YOUR CLUSTER > CLIENTS > New Client section.
 
-You can also fill the gaps in the provided ```kafka/config.properties.example```
+You can also fill the gaps in the provided `kafka/config.properties.example`
 
 ```properties
 # Kafka configuration
@@ -155,14 +166,14 @@ compression.level=9
 
 ### 2. Writing data to Apache Kakfa
 
-Just use the ```--output kafka``` flag and ```--topic``` flag to indicate the topic name:
+Just use the `--output kafka` flag and `--topic` flag to indicate the topic name:
 
 ```bash
 jr run net-device -n 5 -f 500ms -o kafka -t test
 ```
 
 If you don't specify a key, the string "key" will be used for each record. 
-Using ```--key``` you can use a template for the key, embedding it directly in the command:
+Using `--key` you can use a template for the key, embedding it directly in the command:
 
 For example:
 ```bash
@@ -179,9 +190,9 @@ jr run -k '{{randoms "ONE|TWO|THREE"}}' -f 1s -d 10s net-device -o stdout,kafka 
 ### Using JR to pipe data to **KCAT**
 
 Another simple way of streaming to Apache Kafka is to use [kcat](https://github.com/edenhill/kcat) in conjunction with JR. 
-JR supports **kcat** out of the box. Using the ```--kcat``` flag the standard output will be formatted with K,V on a single line.
+JR supports **kcat** out of the box. Using the `--kcat` flag the standard output will be formatted with K,V on a single line.
 
-```--kcat``` it's a shorthand equivalent for ```--output stdout --outputTemplate '{{key}},{{value}}' --oneline```
+`--kcat` it's a shorthand equivalent for `--output stdout --outputTemplate '{{key}},{{value}}' --oneline`
 
 
 ```bash

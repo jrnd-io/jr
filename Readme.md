@@ -15,7 +15,7 @@ you can use the `make_install.sh` to install JR. This script does everything nee
 ./make_install.sh
 ```
 
-These are the steps in the `install.sh` script:
+These are the steps in the `make_install.sh` script:
 
 ```shell
 make all

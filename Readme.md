@@ -102,7 +102,7 @@ which means that only the "Value" is in the output. You can change this behaviou
 
 First thing to do is to create a Kafka cluster and relative kafka.properties file. The easiest way to do that is to use [Confluent Cloud]("https://confluent.cloud/").
 
-Here we document two different ways of doing that. Choose the one you prefer!
+Here we document three different ways of doing that. Choose the one that fits you better!
 
 ### 1. Confluent Cloud and downloading the config file
 

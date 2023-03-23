@@ -51,8 +51,8 @@ var showCmd = &cobra.Command{
 		if err != nil {
 			log.Fatal(err)
 		}
+		var Reset = "\033[0m"
 		if runtime.GOOS != "windows" && !nocolor {
-			var Reset = "\033[0m"
 			var Cyan = "\033[36m"
 			coloredOpeningBracket := fmt.Sprintf("%s%s", Cyan, "{{")
 			coloredClosingBracket := fmt.Sprintf("%s%s", "}}", Reset)
@@ -60,7 +60,7 @@ var showCmd = &cobra.Command{
 			templateString = strings.ReplaceAll(templateString, "}}", coloredClosingBracket)
 		}
 		fmt.Println(templateString)
-
+		fmt.Print(Reset)
 	},
 }
 

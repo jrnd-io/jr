@@ -81,6 +81,24 @@ func TestUSState(t *testing.T) {
 	}
 }
 
+func TestShuffle(t *testing.T) {
+	tpl := `{{shuffle "state"}}`
+	if err := runt(tpl, "[Virginia Connecticut North Carolina Pennsylvania Nevada Maryland Alaska Indiana Idaho "+
+		"Delaware California Oklahoma Vermont South Dakota Tennessee Colorado Hawaii Wisconsin New York Arizona Iowa Florida "+
+		"Ohio Minnesota West Virginia Rhode Island Louisiana Washington Arkansas Massachusetts Illinois Texas New Jersey Kentucky "+
+		"Mississippi New Mexico Maine Oregon Nebraska North Dakota Kansas Montana South Carolina Wyoming Alabama Utah Missouri "+
+		"Michigan New Hampshire Georgia]"); err != nil {
+		t.Error(err)
+	}
+}
+
+func TestShuffleN(t *testing.T) {
+	tpl := `{{shuffle_n "state" 3}}`
+	if err := runt(tpl, "[Utah Idaho New Mexico]"); err != nil {
+		t.Error(err)
+	}
+}
+
 func runt(tpl, expect string) error {
 	return runtv(tpl, expect, "")
 }

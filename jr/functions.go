@@ -36,6 +36,8 @@ var fmap = map[string]interface{}{
 	"split":        func(sep, s string) []string { return strings.Split(s, sep) },
 	"markov":       func(prefixLen, numWords int, baseText string) string { return Nonsense(prefixLen, numWords, baseText) },
 	"lorem":        func(size int) string { return Lorem(size) },
+	"sentence":     func(size int) string { return Sentence(size) },
+	"sentenceP":    func(prefixLen, size int) string { return SentencePrefix(prefixLen, size) },
 	"shuffle":      wordShuffle,
 	"shuffle_n":    wordShuffleN,
 

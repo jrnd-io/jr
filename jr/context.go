@@ -23,6 +23,8 @@ type Context struct {
 	Duration         time.Duration
 	Locales          []string
 	Seed             int64
+	Counters		 map[string]int
+
 }
 
 func init() {
@@ -38,5 +40,6 @@ func init() {
 		Duration:         DURATION,
 		Locales:          []string{"us"},
 		Seed:             time.Now().UTC().UnixNano(),
+		Counters: 		  make(map[string]int),
 	}
 }

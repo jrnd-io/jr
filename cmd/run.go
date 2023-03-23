@@ -116,6 +116,7 @@ jr run --templateFileName ~/.jr/templates/net-device.tpl
 		jr.Random.Seed(seed)
 
 		jr.JrContext.Num = num
+		jr.JrContext.Range = make([]int, num)
 		jr.JrContext.Frequency = frequency
 		jr.JrContext.Locales = locales
 		jr.JrContext.Seed = seed

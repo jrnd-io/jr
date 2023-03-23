@@ -100,7 +100,7 @@ func TestShuffleN(t *testing.T) {
 }
 
 func TestCounter(t *testing.T) {
-	tpl := `{{counter 0 1 "A"}},{{counter 2 2 "B"}},{{counter -4 1 "C"}},{{counter 0 -1 "D"}}`
+	tpl := `{{counter "A" 0 1}},{{counter "B" 2 2}},{{counter "C" -4 1}},{{counter "D" 0 -1}}`
 
 	if err := runt(tpl, "0,2,-4,0"); err != nil {
 		t.Error(err)

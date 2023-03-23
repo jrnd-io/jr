@@ -4,6 +4,17 @@ import (
 	"github.com/google/uuid"
 )
 
+func counter(c string, start, step int) int {
+	val, exists := JrContext.Counters[c]
+	if exists {
+		JrContext.Counters[c] = val + step
+		return JrContext.Counters[c]
+	} else {
+		JrContext.Counters[c] = start
+		return start
+	}
+}
+
 func uniqueId() string {
 	return uuid.New().String()
 }

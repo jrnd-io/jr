@@ -40,24 +40,21 @@ var fmap = map[string]interface{}{
 	"shuffle_n":    wordShuffleN,
 
 	//math utilities
-	"add":       func(a, b int) int { return a + b },
-	"sub":       func(a, b int) int { return a - b },
-	"div":       func(a, b int) int { return a / b },
-	"mod":       func(a, b int) int { return a % b },
-	"mul":       func(a, b int) int { return a * b },
-	"max":       math.Max,
-	"min":       math.Min,
-	"integer":   func(min, max int) int { return min + Random.Intn(max-min) },
-	"integer64": func(min, max int64) int64 { return min + Random.Int63n(max-min) },
-	"floating":  func(min, max float32) float32 { return min + Random.Float32()*(max-min) },
-	"random":    func(s []string) string { return s[Random.Intn(len(s))] },
-	"randoms":   func(s string) string { a := strings.Split(s, "|"); return a[Random.Intn(len(a))] },
-	"counter":	 func (start, step int, label string) int {		
-		val, exists := JrContext.Counters[label]; if exists { JrContext.Counters[label] = val+step; return JrContext.Counters[label] } else { JrContext.Counters[label] = start; return start}	
-	},
+	"add":                       func(a, b int) int { return a + b },
+	"sub":                       func(a, b int) int { return a - b },
+	"div":                       func(a, b int) int { return a / b },
+	"mod":                       func(a, b int) int { return a % b },
+	"mul":                       func(a, b int) int { return a * b },
+	"max":                       math.Max,
+	"min":                       math.Min,
+	"integer":                   func(min, max int) int { return min + Random.Intn(max-min) },
+	"integer64":                 func(min, max int64) int64 { return min + Random.Int63n(max-min) },
+	"floating":                  func(min, max float32) float32 { return min + Random.Float32()*(max-min) },
+	"random":                    func(s []string) string { return s[Random.Intn(len(s))] },
+	"randoms":                   func(s string) string { a := strings.Split(s, "|"); return a[Random.Intn(len(a))] },
+	"counter":                   counter,
 	"random_string":             func(min, max int) string { return RandomString(min, max) },
 	"random_string_from_source": func(min, max int, source string) string { return RandomStringFromSource(min, max, source) },
-	
 
 	//networking and time utilities
 	"ip":                 func(s string) string { return ip(s) },

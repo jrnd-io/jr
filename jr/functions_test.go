@@ -99,6 +99,22 @@ func TestShuffleN(t *testing.T) {
 	}
 }
 
+func TestCounter(t *testing.T) {
+	tpl := `{{counter 0 1 "A"}},{{counter 2 2 "B"}},{{counter -4 1 "C"}},{{counter 0 -1 "D"}}`
+
+	if err := runt(tpl, "0,2,-4,0"); err != nil {
+		t.Error(err)
+	}
+
+	if err := runt(tpl, "1,4,-3,-1"); err != nil {
+		t.Error(err)
+	}
+
+	if err := runt(tpl, "2,6,-2,-2"); err != nil {
+		t.Error(err)
+	}
+}
+
 func runt(tpl, expect string) error {
 	return runtv(tpl, expect, "")
 }

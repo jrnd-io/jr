@@ -52,9 +52,12 @@ var fmap = map[string]interface{}{
 	"floating":  func(min, max float32) float32 { return min + Random.Float32()*(max-min) },
 	"random":    func(s []string) string { return s[Random.Intn(len(s))] },
 	"randoms":   func(s string) string { a := strings.Split(s, "|"); return a[Random.Intn(len(a))] },
-
+	"counter":	 func (start, step int, label string) int {		
+		val, exists := JrContext.Counters[label]; if exists { JrContext.Counters[label] = val+step; return JrContext.Counters[label] } else { JrContext.Counters[label] = start; return start}	
+	},
 	"random_string":             func(min, max int) string { return RandomString(min, max) },
 	"random_string_from_source": func(min, max int, source string) string { return RandomStringFromSource(min, max, source) },
+	
 
 	//networking and time utilities
 	"ip":                 func(s string) string { return ip(s) },

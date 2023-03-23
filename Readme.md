@@ -9,10 +9,10 @@ JR requires golang >= 1.20
 
 ## Building and compiling
 
-you can use the `install.sh` to install JR. This script does everything needed in one simple command.
+you can use the `make_install.sh` to install JR. This script does everything needed in one simple command.
 
 ```bash
-./build_install.sh
+./make_install.sh
 ```
 
 These are the steps in the `install.sh` script:

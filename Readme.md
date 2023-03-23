@@ -145,7 +145,7 @@ confluent kafka topic create test --cluster $CONFLUENT_CLUSTER_ID
 confluent kafka client-config create go --cluster $CONFLUENT_CLUSTER_ID --api-key $CONFLUENT_CLUSTER_API_KEY --api-secret $CONFLUENT_CLUSTER_API_SECRET 1> kafka/config.properties 2>&1
 ```
 
-### 3. Using Confluent Cloud & manually creating config file
+### 3 An existing Kafka cluster & manually creating config file
 
 If you have an existing cluster, just fill the fields in the provided `kafka/config.properties.example`
 

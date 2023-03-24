@@ -89,6 +89,7 @@ var fmap = map[string]interface{}{
 	"zip_at":         zipAt,
 	"company":        company,
 	"email_provider": emailProvider,
+	"username":       username,
 
 	//generic
 	"key":     func(name string, n int) string { return fmt.Sprintf("%s%d", name, Random.Intn(n)) },

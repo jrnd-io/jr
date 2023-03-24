@@ -15,7 +15,7 @@ func TestSubstr(t *testing.T) {
 }
 
 func TestSplit(t *testing.T) {
-	tpl := `{{"a|b" | split "|"}}`
+	tpl := `{{split "a|b" "|"}}`
 	if err := runt(tpl, "[a b]"); err != nil {
 		t.Error(err)
 	}

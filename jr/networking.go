@@ -1,6 +1,8 @@
 package jr
 
 import (
+	"fmt"
+	"math/rand"
 	"net"
 	"time"
 )
@@ -111,4 +113,54 @@ func password(length int, memorable bool, prefix string, postfix string) string 
 	}
 
 	return prefix + string(password) + postfix
+}
+
+func userAgent() string {
+
+	var desktopOperatingSystems = []string{
+		"Windows NT 10.0", "Windows NT 6.3", "Macintosh; Intel Mac OS X 10_15_7", "Macintosh; Intel Mac OS X 10_14_5", "X11; Linux x86_64",
+	}
+
+	var mobileOperatingSystems = []string{
+		"Android 11", "Android 10", "iOS 14_4_2", "iOS 14_0",
+	}
+
+	var desktopBrowsers = []string{
+		"Chrome", "Safari", "Firefox", "Opera", "Edge",
+	}
+
+	var mobileBrowsers = []string{
+		"Chrome Mobile", "Safari Mobile", "Firefox Mobile", "Opera Mobile", "Edge Mobile",
+	}
+
+	// Generate random desktop user agent
+	isDesktop := Random.Intn(2) == 0
+	var os string
+	var browser string
+	var version string
+	if isDesktop {
+		os = desktopOperatingSystems[Random.Intn(len(desktopOperatingSystems))]
+		browser = desktopBrowsers[Random.Intn(len(desktopBrowsers))]
+		version = fmt.Sprintf("%d.%d.%d.%d", Random.Intn(10), Random.Intn(10), Random.Intn(10), Random.Intn(10))
+	} else {
+		os = mobileOperatingSystems[rand.Intn(len(mobileOperatingSystems))]
+		browser = mobileBrowsers[rand.Intn(len(mobileBrowsers))]
+		switch browser {
+		case "Chrome Mobile":
+			version = fmt.Sprintf("%d.%d.%d.%d", Random.Intn(10), Random.Intn(10), Random.Intn(10), Random.Intn(10))
+		case "Safari Mobile":
+			version = fmt.Sprintf("%d.%d", Random.Intn(14)+1, Random.Intn(3)+1)
+		case "Firefox Mobile":
+			version = fmt.Sprintf("%d.%d", Random.Intn(10)+1, Random.Intn(10))
+		case "Opera Mobile":
+			version = fmt.Sprintf("%d.%d.%d.%d", Random.Intn(10), Random.Intn(10), Random.Intn(10), Random.Intn(10))
+		case "Edge Mobile":
+			version = fmt.Sprintf("%d.%d.%d.%d", Random.Intn(10)+40, Random.Intn(10), Random.Intn(10), Random.Intn(10))
+		}
+	}
+
+	userAgent := fmt.Sprintf("Mozilla/5.0 (%s) AppleWebKit/%d.%d (KHTML, like Gecko) %s/%s Mobile Safari/%d.%d", os, Random.Intn(100)+500, Random.Intn(100)+1, browser, version, Random.Intn(10)+1, Random.Intn(10)+1)
+
+	return userAgent
+
 }

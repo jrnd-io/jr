@@ -193,11 +193,11 @@ func Nonsense(prefixLen, numWords int, baseText string) string {
 	return c.Generate(numWords)
 }
 
-func RandomString(min, max int) string {
-	return RandomStringFromSource(min, max, alphabet)
+func randomString(min, max int) string {
+	return randomStringFromSource(min, max, alphabet)
 }
 
-func RandomStringFromSource(min, max int, source string) string {
+func randomStringFromSource(min, max int, source string) string {
 	textb := make([]byte, min+Random.Intn(max-min))
 	for i := range textb {
 		textb[i] = source[Random.Intn(len(source))]

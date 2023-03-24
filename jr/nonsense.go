@@ -104,10 +104,10 @@ func Lorem(size int) string {
 		"Nam vitae rhoncus odio, vitae scelerisque augue. Maecenas elementum lacus vel sem pharetra, sed consectetur ipsum congue. " +
 		"Proin nec diam purus. In sollicitudin feugiat sodales. Donec elementum volutpat nunc, sed ultricies diam mattis et. " +
 		"Vivamus accumsan neque neque, et porta turpis finibus id."
-	return Nonsense(2, size, lorem)
+	return nonsense(2, size, lorem)
 }
 
-func SentencePrefix(prefixLen, numWords int) string {
+func sentencePrefix(prefixLen, numWords int) string {
 	alice := "Alice was beginning to get very tired of sitting by her sister on the bank, and of having nothing to do: " +
 		"once or twice she had peeped into the book her sister was reading, but it had no pictures or conversations in it, " +
 		"“and what is the use of a book,” thought Alice “without pictures or conversations?”" +
@@ -180,14 +180,14 @@ func SentencePrefix(prefixLen, numWords int) string {
 		"However, this bottle was not marked “poison,” so Alice ventured to taste it, and finding it very nice, (it had, in fact" +
 		"a sort of mixed flavour of cherry-tart, custard, pine-apple, roast turkey, toffee, and hot buttered toast,) she very soon" +
 		"finished it off."
-	return Nonsense(prefixLen, numWords, alice)
+	return nonsense(prefixLen, numWords, alice)
 }
 
-func Sentence(numWords int) string {
-	return SentencePrefix(2, numWords)
+func sentence(numWords int) string {
+	return sentencePrefix(2, numWords)
 }
 
-func Nonsense(prefixLen, numWords int, baseText string) string {
+func nonsense(prefixLen, numWords int, baseText string) string {
 	c := NewChain(prefixLen)
 	c.Build(strings.NewReader(baseText))
 	return c.Generate(numWords)

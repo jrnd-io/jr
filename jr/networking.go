@@ -2,7 +2,6 @@ package jr
 
 import (
 	"fmt"
-	"math/rand"
 	"net"
 	"time"
 )
@@ -143,8 +142,8 @@ func userAgent() string {
 		browser = desktopBrowsers[Random.Intn(len(desktopBrowsers))]
 		version = fmt.Sprintf("%d.%d.%d.%d", Random.Intn(10), Random.Intn(10), Random.Intn(10), Random.Intn(10))
 	} else {
-		os = mobileOperatingSystems[rand.Intn(len(mobileOperatingSystems))]
-		browser = mobileBrowsers[rand.Intn(len(mobileBrowsers))]
+		os = mobileOperatingSystems[Random.Intn(len(mobileOperatingSystems))]
+		browser = mobileBrowsers[Random.Intn(len(mobileBrowsers))]
 		switch browser {
 		case "Chrome Mobile":
 			version = fmt.Sprintf("%d.%d.%d.%d", Random.Intn(10), Random.Intn(10), Random.Intn(10), Random.Intn(10))

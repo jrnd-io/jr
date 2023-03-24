@@ -68,6 +68,7 @@ var fmap = map[string]interface{}{
 	"password":           password,
 	"useragent":          userAgent,
 	"unix_time_stamp":    unixTimeStamp,
+	"user_agent":         userAgent,
 
 	//people
 	"name":   name,

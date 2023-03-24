@@ -120,6 +120,13 @@ func TestIP(t *testing.T) {
 	}
 }
 
+func TestUseragent(t *testing.T) {
+	tpl := `{{useragent}}`
+	if err := runt(tpl, "Mozilla/5.0 (iOS 14_0) AppleWebKit/570.1 (KHTML, like Gecko) Firefox Mobile/6.3 Mobile Safari/7.6"); err != nil {
+		t.Error(err)
+	}
+}
+
 func TestCounter(t *testing.T) {
 	tpl := `{{counter "A" 0 1}},{{counter "B" 2 2}},{{counter "C" -4 1}},{{counter "D" 0 -1}}`
 

@@ -69,12 +69,12 @@ var fmap = map[string]interface{}{
 	"password":           password,
 	"useragent":          userAgent,
 	"unix_time_stamp":    unixTimeStamp,
-	"user_agent":         userAgent,
 
 	//people
-	"name":   name,
-	"name_m": nameM,
-	"name_f": nameF,
+	"name":     name,
+	"name_m":   nameM,
+	"name_f":   nameF,
+	"username": username,
 
 	"surname":        surname,
 	"middlename":     middlename,
@@ -89,7 +89,6 @@ var fmap = map[string]interface{}{
 	"zip_at":         zipAt,
 	"company":        company,
 	"email_provider": emailProvider,
-	"username":       username,
 
 	//generic
 	"key":     func(name string, n int) string { return fmt.Sprintf("%s%d", name, Random.Intn(n)) },

@@ -76,7 +76,7 @@ func (c *Chain) Generate(n int) string {
 	return strings.Join(words, " ")
 }
 
-func Lorem(size int) string {
+func lorem(size int) string {
 	lorem := "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ullamcorper non eros eget porta. Aliquam erat " +
 		"volutpat. Mauris molestie lobortis dolor et cursus. Cras vulputate vitae urna et tristique. Nullam iaculis fringilla est, " +
 		"vitae vulputate felis viverra suscipit. Nullam laoreet ornare tristique. Mauris porta, nisi sed laoreet scelerisque, nisi " +

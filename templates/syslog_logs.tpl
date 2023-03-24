@@ -16,5 +16,5 @@
   "deviceVendor" : "{{random_string_from_source 5 6 "abcdefghijklmnopqrstuvwxyz"}}",
   "deviceProduct" : "{{random_string_from_source 5 6 "abcdefghijklmnopqrstuvwxyz"}}",
   "deviceVersion" : "{{randoms "1.0|2.0|3.0|4.0|5.0"}}",
-  "ts" : {{counter "ts" 1 100}}
+  "ts" : {{counter "ts" 1 100 }}
 }

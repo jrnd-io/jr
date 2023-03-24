@@ -1,5 +1,7 @@
 package jr
 
+import "strconv"
+
 type Person struct {
 	Name    string
 	Surname string
@@ -81,4 +83,34 @@ func company() string {
 
 func emailProvider() string {
 	return word("mail-provider")
+}
+
+func username(firstName string, lastName string, size int) string {
+
+	var name string
+
+	useSurname := (Random.Intn(2)) != 0
+	shuffleName := (Random.Intn(2)) != 0
+	if useSurname || len(name) < size {
+		name = firstName + lastName
+	} else {
+		name = firstName
+	}
+
+	if shuffleName {
+		nameRunes := []rune(name)
+		Random.Shuffle(len(nameRunes), func(i, j int) {
+			nameRunes[i], nameRunes[j] = nameRunes[j], nameRunes[i]
+		})
+		name = string(nameRunes)
+	}
+
+	var username string
+	for i := 0; i < size && i < len(name); i++ {
+		username += string(name[i])
+	}
+
+	username += strconv.Itoa(50 + Random.Intn(49))
+
+	return username
 }

@@ -9,13 +9,13 @@ JR requires golang >= 1.20
 
 ## Building and compiling
 
-you can use the `install.sh` to install JR. This script does everything needed in one simple command.
+you can use the `make_install.sh` to install JR. This script does everything needed in one simple command.
 
 ```bash
-./build_install.sh
+./make_install.sh
 ```
 
-These are the steps in the `install.sh` script:
+These are the steps in the `make_install.sh` script:
 
 ```shell
 make all
@@ -100,22 +100,27 @@ which means that only the "Value" is in the output. You can change this behaviou
 
 ## Use JR to stream data to Apache Kafka
 
-First thing to do is to create a kafka.properties file. 
+First thing to do is to create a Kafka cluster and relative kafka.properties file. The easiest way to do that is to use [Confluent Cloud]("https://confluent.cloud/").
 
-### 1a. Using Confluent Cloud & Confluent CLI
+Here we document three different ways of doing that. Choose the one that fits you better!
 
-The easiest way to do that is to use [Confluent Cloud]("https://confluent.cloud/").
+### 1. Confluent Cloud and downloading the config file
 
-You can use the [confluent CLI]("https://docs.confluent.io/confluent-cli/current/overview.html") to create a cluster:
+Just create a basic (free!) Cluster with the web console in [Confluent Cloud]("https://confluent.cloud/") and 
+copy-paste the configuration in the HOME > ENVIRONMENTS > YOUR ENVIRONMENT > YOUR CLUSTER > CLIENTS > New Client section.
 
-Config your vars as you see fit:
+### 2. Confluent Cloud and config file via Confluent CLI
+
+You can use the [confluent CLI]("https://docs.confluent.io/confluent-cli/current/overview.html") to create a cluster and 
+the configuration in a programmatic way:
+
+Config your vars as you see fit, for example:
 ```bash
 export CONFLUENT_CLUSTER_NAME=jr-test
 export CONFLUENT_CLUSTER_CLOUD_PROVIDER=aws
 export CONFLUENT_CLUSTER_REGION=eu-west-1 
 ```
-
-Then execute the commands
+Then execute the following commands
 
 ```bash
 
@@ -140,11 +145,9 @@ confluent kafka topic create test --cluster $CONFLUENT_CLUSTER_ID
 confluent kafka client-config create go --cluster $CONFLUENT_CLUSTER_ID --api-key $CONFLUENT_CLUSTER_API_KEY --api-secret $CONFLUENT_CLUSTER_API_SECRET 1> kafka/config.properties 2>&1
 ```
 
-### 1b. Using Confluent Cloud & manually creating config file
+### 3 An existing Kafka cluster & manually creating config file
 
-You can also create a Cluster in [Confluent Cloud]("https://confluent.cloud/") and copy-paste the configuration in the HOME > ENVIRONMENTS > YOUR ENVIRONMENT > YOUR CLUSTER > CLIENTS > New Client section.
-
-You can also fill the gaps in the provided `kafka/config.properties.example`
+If you have an existing cluster, just fill the fields in the provided `kafka/config.properties.example`
 
 ```properties
 # Kafka configuration
@@ -160,7 +163,7 @@ compression.level=9
 # statistics.interval.ms=1000
 ```
 
-### 2. Writing data to Apache Kakfa
+### Writing data to Apache Kakfa
 
 Just use the `--output kafka` flag and `--topic` flag to indicate the topic name:
 

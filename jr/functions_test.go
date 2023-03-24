@@ -15,7 +15,7 @@ func TestSubstr(t *testing.T) {
 }
 
 func TestSplit(t *testing.T) {
-	tpl := `{{"a|b" | split "|"}}`
+	tpl := `{{split "a|b" "|"}}`
 	if err := runt(tpl, "[a b]"); err != nil {
 		t.Error(err)
 	}
@@ -95,6 +95,34 @@ func TestShuffle(t *testing.T) {
 func TestShuffleN(t *testing.T) {
 	tpl := `{{shuffle_n "state" 3}}`
 	if err := runt(tpl, "[Utah Idaho New Mexico]"); err != nil {
+		t.Error(err)
+	}
+}
+
+func TestPassword(t *testing.T) {
+	tpl := `{{password 5 true "PwD" "!?!"}}`
+	if err := runt(tpl, "PwDarOSA!?!"); err != nil {
+		t.Error(err)
+	}
+}
+
+func TestIPv6(t *testing.T) {
+	tpl := `{{ipv6}}`
+	if err := runt(tpl, "3e5f:6418:9bd0:f7b7:d9d5:7121:ddf9:e87c"); err != nil {
+		t.Error(err)
+	}
+}
+
+func TestIP(t *testing.T) {
+	tpl := `{{ip "10.2.0.0/16"}}`
+	if err := runt(tpl, "10.2.55.217"); err != nil {
+		t.Error(err)
+	}
+}
+
+func TestUseragent(t *testing.T) {
+	tpl := `{{useragent}}`
+	if err := runt(tpl, "Mozilla/5.0 (iOS 14_0) AppleWebKit/570.1 (KHTML, like Gecko) Firefox Mobile/6.3 Mobile Safari/7.6"); err != nil {
 		t.Error(err)
 	}
 }

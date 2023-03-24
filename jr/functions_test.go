@@ -99,6 +99,27 @@ func TestShuffleN(t *testing.T) {
 	}
 }
 
+func TestPassword(t *testing.T) {
+	tpl := `{{password 5 true "PwD" "!?!"}}`
+	if err := runt(tpl, "PwDarOSA!?!"); err != nil {
+		t.Error(err)
+	}
+}
+
+func TestIPv6(t *testing.T) {
+	tpl := `{{ipv6}}`
+	if err := runt(tpl, "3e5f:6418:9bd0:f7b7:d9d5:7121:ddf9:e87c"); err != nil {
+		t.Error(err)
+	}
+}
+
+func TestIP(t *testing.T) {
+	tpl := `{{ip "10.2.0.0/16"}}`
+	if err := runt(tpl, "10.2.55.217"); err != nil {
+		t.Error(err)
+	}
+}
+
 func TestCounter(t *testing.T) {
 	tpl := `{{counter "A" 0 1}},{{counter "B" 2 2}},{{counter "C" -4 1}},{{counter "D" 0 -1}}`
 

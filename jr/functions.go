@@ -60,8 +60,12 @@ var fmap = map[string]interface{}{
 
 	//networking and time utilities
 	"ip":                 func(s string) string { return ip(s) },
+	"ipv6":               ipv6,
+	"mac":                mac,
+	"http_method":        httpMethod,
 	"ip_known_protocols": ipKnownProtocols,
 	"ip_known_ports":     ipKnownPorts,
+	"password":           password,
 	"unix_time_stamp":    func(days int) int64 { return unixTimeStamp(days) },
 
 	//people

@@ -115,6 +115,23 @@ func TestCounter(t *testing.T) {
 	}
 }
 
+func TestArray(t *testing.T) {
+	tpl := `{{array 5}}`
+	if err := runt(tpl, "[0 0 0 0 0]"); err != nil {
+		t.Error(err)
+	}
+
+	tpl2 := `{{array 1}}`
+	if err := runt(tpl2, "[0]"); err != nil {
+		t.Error(err)
+	}
+
+	tpl3 := `{{array 0}}`
+	if err := runt(tpl3, "[]"); err != nil {
+		t.Error(err)
+	}
+}
+
 func runt(tpl, expect string) error {
 	return runtv(tpl, expect, "")
 }

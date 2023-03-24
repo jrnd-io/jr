@@ -87,6 +87,7 @@ var fmap = map[string]interface{}{
 	"uuid":    uniqueId,
 	"bool":    randomBool,
 	"yesorno": yesOrNo,
+	"array": func (count int) []int {return make([]int, count)},
 }
 
 func initialize(filename string) []string {

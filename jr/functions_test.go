@@ -1,8 +1,11 @@
 package jr
 
 import (
+	"bufio"
 	"bytes"
 	"fmt"
+	"log"
+	"os"
 	"testing"
 	"text/template"
 )
@@ -164,16 +167,41 @@ func runt(tpl, expect string) error {
 	return runtv(tpl, expect, "")
 }
 
-func TestRegex(t *testing.T) {
-	tpl := `{{regex "Z{2,5}"}}`
-	if err := runt(tpl, "ZZZ"); err != nil {
-		t.Error(err)
+// readLines reads a whole file into memory
+// and returns a slice of its lines.
+func readLines(path string) ([]string, error) {
+	file, err := os.Open(path)
+	if err != nil {
+		return nil, err
 	}
-	//123[0-2]+.*\w{3}
-	//tpl = "{{regex `123[0-2]+.*\w{3}`}}"
-	//if err := runt(tpl, "ZZZ"); err != nil {
-	//	t.Error(err)
-	//}
+	defer file.Close()
+
+	var lines []string
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		lines = append(lines, scanner.Text())
+	}
+	return lines, scanner.Err()
+}
+
+func TestRegex(t *testing.T) {
+
+	lines, err := readLines("regex_test_cases.txt")
+	if err != nil {
+		log.Fatalf("readLines: %s", err)
+
+	}
+	i := 0
+	for i < len(lines) {
+		regExStr := lines[i]
+		regExExpectedResult := lines[i+1]
+		fmt.Println(i, regExStr)
+		tpl := "{{regex `" + regExStr + "`}}"
+		if err := runt(tpl, regExExpectedResult); err != nil {
+			t.Error(err)
+		}
+		i += 2
+	}
 }
 func runtv(tpl, expect string, vars interface{}) error {
 	t := template.Must(template.New("test").Funcs(FunctionsMap()).Parse(tpl))

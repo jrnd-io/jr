@@ -41,6 +41,7 @@ var fmap = map[string]interface{}{
 	"sentenceP":    sentencePrefix,
 	"shuffle":      wordShuffle,
 	"shuffle_n":    wordShuffleN,
+	"regex":        regex,
 
 	//math utilities
 	"add":                       func(a, b int) int { return a + b },
@@ -96,7 +97,7 @@ var fmap = map[string]interface{}{
 	"uuid":    uniqueId,
 	"bool":    randomBool,
 	"yesorno": yesOrNo,
-	"array": func (count int) []int {return make([]int, count)},
+	"array":   func(count int) []int { return make([]int, count) },
 }
 
 func initialize(filename string) []string {

@@ -164,6 +164,17 @@ func runt(tpl, expect string) error {
 	return runtv(tpl, expect, "")
 }
 
+func TestRegex(t *testing.T) {
+	tpl := `{{regex "Z{2,5}"}}`
+	if err := runt(tpl, "ZZZ"); err != nil {
+		t.Error(err)
+	}
+	//123[0-2]+.*\w{3}
+	//tpl = "{{regex `123[0-2]+.*\w{3}`}}"
+	//if err := runt(tpl, "ZZZ"); err != nil {
+	//	t.Error(err)
+	//}
+}
 func runtv(tpl, expect string, vars interface{}) error {
 	t := template.Must(template.New("test").Funcs(FunctionsMap()).Parse(tpl))
 	var b bytes.Buffer

@@ -181,6 +181,7 @@ jr run --templateFileName ~/.jr/templates/net-device.tpl
 			jr.Close(producer)
 		}
 
+		time.Sleep(100 * time.Millisecond)
 		writeStats()
 
 	},
@@ -269,8 +270,7 @@ func init() {
 	runCmd.Flags().StringSlice("locales", jr.JrContext.Locales, "List of locales")
 
 	runCmd.Flags().BoolP("schemaRegistry", "s", false, "If you want to use Confluent Schema Registry")
-	runCmd.Flags().String("serializer", "json-schema", "Type of serializer: (json-schema, avro, avro-generic, protobuf")
-
+	runCmd.Flags().String("serializer", "json-schema", "Type of serializer: json-schema, avro-generic, avro, protobuf")
 }
 
 func contains(s []string, str string) bool {

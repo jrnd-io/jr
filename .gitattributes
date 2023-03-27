@@ -1,2 +1,2 @@
-* linguist-vendored
+*.tpl linguist-vendored
 *.go linguist-vendored=false

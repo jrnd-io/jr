@@ -15,6 +15,7 @@ const TEMPLATEDIR = "$HOME/.jr/templates"
 type Context struct {
 	StartTime        time.Time
 	TemplateDir      string
+	TemplateType     string
 	GeneratedObjects int64
 	GeneratedBytes   int64
 	Num              int
@@ -23,8 +24,7 @@ type Context struct {
 	Duration         time.Duration
 	Locales          []string
 	Seed             int64
-	Counters		 map[string]int
-
+	Counters         map[string]int
 }
 
 func init() {
@@ -32,6 +32,7 @@ func init() {
 	JrContext = Context{
 		StartTime:        time.Now(),
 		TemplateDir:      os.ExpandEnv(TEMPLATEDIR),
+		TemplateType:     "",
 		GeneratedBytes:   0,
 		GeneratedObjects: 0,
 		Num:              NUM,
@@ -40,6 +41,6 @@ func init() {
 		Duration:         DURATION,
 		Locales:          []string{"us"},
 		Seed:             time.Now().UTC().UnixNano(),
-		Counters: 		  make(map[string]int),
+		Counters:         make(map[string]int),
 	}
 }

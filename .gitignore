@@ -46,4 +46,4 @@ _testmain.go
 # Specific project files
 releases
 build
-kafka/config.properties
+kafka/*.properties

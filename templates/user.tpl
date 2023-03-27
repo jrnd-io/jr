@@ -1,6 +1,6 @@
 {{$NAME := name}}{{$SURNAME := surname}}{{$COMPANY := company}}{
-  "guid": {{uuid}},
-  "isActive": '{{bool}}',
+  "guid": "{{uuid}}",
+  "isActive": {{bool}},
   "balance": {{floating 1000 4000}},
   "picture": "http://placehold.it/32x32",
   "age": {{integer 20 60}},
@@ -11,5 +11,5 @@
   "alt_email": "{{first (lower $NAME)}}.{{lower $SURNAME}}@{{squeeze (lower $COMPANY)}}.com",
   "about": "{{lorem 20}}",
   "latitude": {{floating -90.000001 90}},
-  "longitude": {{floating -180.000001 180}},
+  "longitude": {{floating -180.000001 180}}
 }

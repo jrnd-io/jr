@@ -3,20 +3,54 @@ package jr
 import (
 	"bufio"
 	"encoding/json"
-	"fmt"
 	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
+	"github.com/confluentinc/confluent-kafka-go/v2/schemaregistry"
+	"github.com/confluentinc/confluent-kafka-go/v2/schemaregistry/serde"
+	"github.com/confluentinc/confluent-kafka-go/v2/schemaregistry/serde/avro"
+	"github.com/confluentinc/confluent-kafka-go/v2/schemaregistry/serde/jsonschema"
 	"log"
 	"os"
 	"strings"
 )
 
+var schemaClient schemaregistry.Client
+var schemaRegistry bool
+
 func Initialize(configFile string) (*kafka.Producer, error) {
-	conf := ReadConfig(configFile)
+
+	conf := convertInKafkaConfig(ReadConfig(configFile))
+
 	p, err := kafka.NewProducer(&conf)
 	if err != nil {
 		log.Fatalf("Failed to create producer: %s", err)
 	}
 	return p, err
+}
+
+func convertInKafkaConfig(m map[string]string) kafka.ConfigMap {
+	var conf kafka.ConfigMap
+	conf = make(map[string]kafka.ConfigValue)
+	for k, v := range m {
+		conf[k] = v
+	}
+	return conf
+}
+
+func InitializeSchemaRegistry(configFile string) error {
+	var err error
+	conf := ReadConfig(configFile)
+
+	schemaClient, err = schemaregistry.NewClient(schemaregistry.NewConfigWithAuthentication(
+		conf["schemaRegistryURL"],
+		conf["schemaRegistryUser"],
+		conf["schemaRegistryPassword"]))
+
+	if err != nil {
+		log.Fatalf("Failed to create schema registry client: %s", err)
+	}
+
+	schemaRegistry = true
+	return err
 }
 
 func Close(p *kafka.Producer) {
@@ -25,9 +59,9 @@ func Close(p *kafka.Producer) {
 	p.Close()
 }
 
-func ReadConfig(configFile string) kafka.ConfigMap {
+func ReadConfig(configFile string) map[string]string {
 
-	m := make(map[string]kafka.ConfigValue)
+	m := make(map[string]string)
 
 	file, err := os.Open(configFile)
 	if err != nil {
@@ -52,7 +86,7 @@ func ReadConfig(configFile string) kafka.ConfigMap {
 	return m
 }
 
-func Produce(p *kafka.Producer, key []byte, data []byte, topic string) {
+func Produce(p *kafka.Producer, key []byte, data []byte, topic string, serializer string, templateType string) {
 
 	go func() {
 		for e := range p.Events() {
@@ -64,7 +98,7 @@ func Produce(p *kafka.Producer, key []byte, data []byte, topic string) {
 				// is already configured to do that.
 				m := ev
 				if m.TopicPartition.Error != nil {
-					fmt.Printf("Delivery failed: %v\n", m.TopicPartition.Error)
+					log.Printf("Delivery failed: %v\n", m.TopicPartition.Error)
 				} else {
 					//fmt.Printf("Delivered message to topic %s [%d] at offset %v\n", *m.TopicPartition.Topic, m.TopicPartition.Partition, m.TopicPartition.Offset)
 				}
@@ -76,7 +110,7 @@ func Produce(p *kafka.Producer, key []byte, data []byte, topic string) {
 				// as the underlying client will automatically try to
 				// recover from any errors encountered, the application
 				// does not need to take action on them.
-				fmt.Printf("Error: %v\n", ev)
+				log.Printf("Error: %v\n", ev)
 			case *kafka.Stats:
 				// Stats events are emitted as JSON (as string).
 				// Either directly forward the JSON to your
@@ -90,13 +124,48 @@ func Produce(p *kafka.Producer, key []byte, data []byte, topic string) {
 				if err != nil {
 					return
 				}
-				fmt.Printf("%9.f bytes produced to Kafka\n", stats["txmsg_bytes"])
+				log.Printf("%9.f bytes produced to Kafka\n", stats["txmsg_bytes"])
 
 			default:
-				fmt.Printf("Ignored event: %s\n", ev)
+				log.Printf("Ignored event: %s\n", ev)
 			}
 		}
 	}()
+
+	var ser serde.Serializer
+
+	if schemaRegistry {
+		var err error
+		if serializer == "avro" {
+			//ser, err = avro.NewSpecificSerializer(schemaClient, serde.ValueSerde, avro.NewSerializerConfig())
+			log.Fatal("Avro not yet implemented")
+		} else if serializer == "avro-generic" {
+			ser, err = avro.NewGenericSerializer(schemaClient, serde.ValueSerde, avro.NewSerializerConfig())
+		} else if serializer == "protobuf" {
+			//ser, err = protobuf.NewSerializer(schemaClient, serde.ValueSerde, protobuf.NewSerializerConfig())
+			log.Fatal("Protobuf not yet implemented")
+		} else if serializer == "json-schema" {
+			ser, err = jsonschema.NewSerializer(schemaClient, serde.ValueSerde, jsonschema.NewSerializerConfig())
+		}
+		if err != nil {
+			log.Fatalf("Error creating serializer: %s\n", err)
+		} else {
+
+			t := getType(templateType)
+			err := json.Unmarshal(data, t)
+
+			if err != nil {
+				log.Fatalf("Failed to unmarshal data: %s\n", err)
+			}
+
+			payload, err := ser.Serialize(topic, t)
+			if err != nil {
+				log.Fatalf("Failed to serialize payload: %s\n", err)
+			} else {
+				data = payload
+			}
+		}
+	}
 
 	err := p.Produce(&kafka.Message{
 		TopicPartition: kafka.TopicPartition{Topic: &topic, Partition: kafka.PartitionAny},
@@ -112,7 +181,21 @@ func Produce(p *kafka.Producer, key []byte, data []byte, topic string) {
 			//time.Sleep(time.Second)
 			//continue
 		}
-		fmt.Printf("Failed to produce message: %v\n", err)
+		log.Printf("Failed to produce message: %v\n", err)
 	}
 
+}
+
+func getType(templateType string) interface{} {
+
+	var netDevice NetDevice
+	var user User
+
+	switch templateType {
+	case "net-device":
+		return &netDevice
+	case "user":
+		return &user
+	}
+	return nil
 }

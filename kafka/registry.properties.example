@@ -1,0 +1,5 @@
+# Confluent Schema Registry configuration
+
+schemaRegistryURL=
+schemaRegistryUser=
+schemaRegistryPassword=

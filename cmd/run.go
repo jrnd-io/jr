@@ -64,10 +64,14 @@ jr run --templateFileName ~/.jr/templates/net-device.tpl
 		duration, _ := cmd.Flags().GetDuration("duration")
 		seed, _ := cmd.Flags().GetInt64("seed")
 		kafkaConfig, _ := cmd.Flags().GetString("kafkaConfig")
+		registryConfig, _ := cmd.Flags().GetString("registryConfig")
 		topic, _ := cmd.Flags().GetString("topic")
 
 		templateDir, _ := cmd.Flags().GetString("templateDir")
 		templateDir = os.ExpandEnv(templateDir)
+
+		schemaRegistry, _ := cmd.Flags().GetBool("schemaRegistry")
+		serializer, _ := cmd.Flags().GetString("serializer")
 
 		if kcat {
 			oneline = true
@@ -84,15 +88,27 @@ jr run --templateFileName ~/.jr/templates/net-device.tpl
 			if err != nil {
 				log.Fatal(err)
 			}
+			if schemaRegistry {
+				_ = jr.InitializeSchemaRegistry(registryConfig)
+				if kcat {
+					log.Println("Ignoring kcat when schemaRegistry is enabled")
+				}
+			}
+		} else {
+			if schemaRegistry {
+				log.Println("Ignoring schemaRegistry and/or serializer when output not set to kafka")
+			}
 		}
 
 		if embeddedTemplate {
 			valueTemplate = []byte(args[0])
 		} else if templateFileName {
 			valueTemplate, err = os.ReadFile(os.ExpandEnv(args[0]))
+			jr.JrContext.TemplateType = args[0]
 		} else {
 			templatePath := fmt.Sprintf("%s/%s.tpl", templateDir, args[0])
 			valueTemplate, err = os.ReadFile(templatePath)
+			jr.JrContext.TemplateType = args[0]
 		}
 		if err != nil {
 			log.Fatal(err)
@@ -141,7 +157,7 @@ jr run --templateFileName ~/.jr/templates/net-device.tpl
 				case <-time.After(frequency):
 					for range jr.JrContext.Range {
 						k, v, _ := executeTemplate(key, value, oneline)
-						printOutput(k, v, producer, topic, output, outTemplate)
+						printOutput(k, v, producer, topic, output, outTemplate, serializer, jr.JrContext.TemplateType)
 					}
 				case <-ctx.Done():
 					stop()
@@ -151,7 +167,7 @@ jr run --templateFileName ~/.jr/templates/net-device.tpl
 		} else {
 			for range jr.JrContext.Range {
 				k, v, _ := executeTemplate(key, value, oneline)
-				printOutput(k, v, producer, topic, output, outTemplate)
+				printOutput(k, v, producer, topic, output, outTemplate, serializer, jr.JrContext.TemplateType)
 			}
 		}
 
@@ -200,7 +216,7 @@ func executeTemplate(key *template.Template, value *template.Template, oneline b
 	return k, v, err
 }
 
-func printOutput(key string, value string, p *kafka.Producer, topic string, output []string, outputTemplateScript *template.Template) {
+func printOutput(key string, value string, p *kafka.Producer, topic string, output []string, outputTemplateScript *template.Template, serializer string, templateType string) {
 
 	if contains(output, "stdout") {
 
@@ -218,7 +234,7 @@ func printOutput(key string, value string, p *kafka.Producer, topic string, outp
 		fmt.Print(outBuffer.String())
 	}
 	if contains(output, "kafka") {
-		jr.Produce(p, []byte(key), []byte(value), topic)
+		jr.Produce(p, []byte(key), []byte(value), topic, serializer, templateType)
 	}
 }
 
@@ -232,6 +248,7 @@ func init() {
 
 	runCmd.Flags().String("templateDir", jr.JrContext.TemplateDir, "directory containing templates")
 	runCmd.Flags().StringP("kafkaConfig", "F", "./kafka/config.properties", "Kafka configuration")
+	runCmd.Flags().String("registryConfig", "./kafka/registry.properties", "Kafka configuration")
 	runCmd.Flags().Bool("templateFileName", false, "If enabled, [template] must be a template file")
 	runCmd.Flags().Bool("template", false, "If enabled, [template] must be a string containing a template, to be embedded directly in the script")
 
@@ -242,8 +259,10 @@ func init() {
 	runCmd.Flags().StringSliceP("output", "o", []string{"stdout"}, "can be stdout or kafka")
 	runCmd.Flags().String("outputTemplate", "{{.V}}\n", "Formatting of K,V on standard output")
 	runCmd.Flags().BoolP("oneline", "l", false, "strips /n from output, for example to be pipelined to tools like kcat")
-
 	runCmd.Flags().StringSlice("locales", jr.JrContext.Locales, "List of locales")
+
+	runCmd.Flags().BoolP("schemaRegistry", "s", false, "If you want to use Confluent Schema Registry")
+	runCmd.Flags().String("serializer", "json-schema", "Type of serializer: (json-schema, avro, avro-generic, protobuf")
 
 }
 

@@ -1,6 +1,3 @@
-//go:build 1.20
-// +build 1.20
-
 /*
 Copyright © 2022 Ugo Landini <ugo.landini@gmail.com>
 

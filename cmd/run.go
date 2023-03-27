@@ -70,6 +70,7 @@ jr run --templateFileName ~/.jr/templates/net-device.tpl
 		templateDir, _ := cmd.Flags().GetString("templateDir")
 		templateDir = os.ExpandEnv(templateDir)
 
+		autocreate, _ := cmd.Flags().GetBool("autocreate")
 		schemaRegistry, _ := cmd.Flags().GetBool("schemaRegistry")
 		serializer, _ := cmd.Flags().GetString("serializer")
 
@@ -88,6 +89,11 @@ jr run --templateFileName ~/.jr/templates/net-device.tpl
 			if err != nil {
 				log.Fatal(err)
 			}
+
+			if autocreate {
+				jr.CreateTopic(topic)
+			}
+
 			if schemaRegistry {
 				_ = jr.InitializeSchemaRegistry(registryConfig)
 				if kcat {
@@ -259,6 +265,7 @@ func init() {
 	runCmd.Flags().StringSliceP("output", "o", []string{"stdout"}, "can be stdout or kafka")
 	runCmd.Flags().String("outputTemplate", "{{.V}}\n", "Formatting of K,V on standard output")
 	runCmd.Flags().BoolP("oneline", "l", false, "strips /n from output, for example to be pipelined to tools like kcat")
+	runCmd.Flags().BoolP("autocreate", "a", false, "if enabled, autocreate topics")
 	runCmd.Flags().StringSlice("locales", jr.JrContext.Locales, "List of locales")
 
 	runCmd.Flags().BoolP("schemaRegistry", "s", false, "If you want to use Confluent Schema Registry")

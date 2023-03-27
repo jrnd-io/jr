@@ -2,6 +2,7 @@ package jr
 
 import (
 	"bufio"
+	"context"
 	"encoding/json"
 	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
 	"github.com/confluentinc/confluent-kafka-go/v2/schemaregistry"
@@ -11,15 +12,22 @@ import (
 	"log"
 	"os"
 	"strings"
+	"time"
 )
 
+var adminClient *kafka.AdminClient
 var schemaClient schemaregistry.Client
 var schemaRegistry bool
 
 func Initialize(configFile string) (*kafka.Producer, error) {
 
+	var err error
 	conf := convertInKafkaConfig(ReadConfig(configFile))
 
+	adminClient, err = kafka.NewAdminClient(&conf)
+	if err != nil {
+		log.Fatalf("Failed to create admin client: %s", err)
+	}
 	p, err := kafka.NewProducer(&conf)
 	if err != nil {
 		log.Fatalf("Failed to create producer: %s", err)
@@ -198,4 +206,42 @@ func getType(templateType string) interface{} {
 		return &user
 	}
 	return nil
+}
+
+func CreateTopic(topic string) {
+	CreateTopicFull(topic, 6, 3)
+}
+
+func CreateTopicFull(topic string, partitions int, rf int) {
+
+	// Contexts are used to abort or limit the amount of time
+	// the Admin call blocks waiting for a result.
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	// Create topics on cluster.
+	// Set Admin options to wait for the operation to finish (or at most 60s)
+	maxDuration, _ := time.ParseDuration("60s")
+
+	results, err := adminClient.CreateTopics(ctx,
+		[]kafka.TopicSpecification{{
+			Topic:             topic,
+			NumPartitions:     partitions,
+			ReplicationFactor: rf}},
+		kafka.SetAdminOperationTimeout(maxDuration))
+
+	if err != nil {
+		log.Printf("Problem during the topic creation: %v\n", err)
+
+	}
+
+	// Check for specific topic errors
+	for _, result := range results {
+		if result.Error.Code() != kafka.ErrNoError && result.Error.Code() != kafka.ErrTopicAlreadyExists {
+			log.Fatalf("Topic creation failed for %s: %v", result.Topic, result.Error.String())
+		}
+	}
+
+	adminClient.Close()
+
 }

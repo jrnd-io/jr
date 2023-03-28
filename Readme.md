@@ -200,7 +200,7 @@ Alternatively, you can also create it explicitly form JR:
 ```bash
 jr createTopic topic1
 ```
-If you want to specify number of partitions and replication Factor you can use teh `-p` and `-r` flags:
+If you want to specify number of partitions and replication Factor you can use the `-p` and `-r` flags:
 
 ```bash
 jr createTopic topic1 -p 10 -r 2

@@ -186,6 +186,53 @@ It is possible to write to both stdout and kafka at the same time:
 ```bash
 jr run -k '{{randoms "ONE|TWO|THREE"}}' -f 1s -d 10s net-device -o stdout,kafka -t test
 ```
+### Autocreate topics
+
+Topics autocreation is disabled in Confluent Cloud. 
+If you are really lazy you can use the `-a` option, so JR will create the topic for you. 
+
+```bash
+jr run -a -k '{{randoms "ONE|TWO|THREE"}}' -f 1s -d 10s net-device -o stdout,kafka -t mynewtopic
+```
+
+Alternatively, you can also create it explicitly form JR:
+
+```bash
+jr createTopic topic1
+```
+If you want to specify number of partitions and replication Factor you can use teh `-p` and `-r` flags:
+
+```bash
+jr createTopic topic1 -p 10 -r 2
+```
+
+### Confluent Schema Registry support
+
+There is also support for Confluent Schema Registry. 
+At the moment only `json-schema` and `avro-generic` is directly supported.
+
+To use Confluent Schema registry you need first to fill the `registry.properties` provided example with the needed link and user/pwd:
+
+```properties
+schemaRegistryURL=https://blabla.europe-west3.gcp.confluent.cloud
+schemaRegistryUser=blablabla-saslkey
+schemaRegistryPassword=blablabla-saslpwd
+```
+then use the `--schema` and the `--serializer` flags
+
+Example usage:
+```bash
+jr run user -o kafka -t topic1 -s --serializer avro-generic
+```
+or 
+```bash
+jr run net-device -o kafka -t topic2 -s --serializer json-schema
+```
+Remember that once you run these commands, `topic1` will be associated with an avro generic schema representing an user 
+object, and `topic2` with a json-schema representing a net-device object. 
+
+
+
 ### Using JR to pipe data to **KCAT**
 
 Another simple way of streaming to Apache Kafka is to use [kcat](https://github.com/edenhill/kcat) in conjunction with JR. 

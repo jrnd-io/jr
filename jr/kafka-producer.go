@@ -9,6 +9,7 @@ import (
 	"github.com/confluentinc/confluent-kafka-go/v2/schemaregistry/serde"
 	"github.com/confluentinc/confluent-kafka-go/v2/schemaregistry/serde/avro"
 	"github.com/confluentinc/confluent-kafka-go/v2/schemaregistry/serde/jsonschema"
+	"jr/jr/types"
 	"log"
 	"os"
 	"strings"
@@ -100,10 +101,6 @@ func Produce(p *kafka.Producer, key []byte, data []byte, topic string, serialize
 		for e := range p.Events() {
 			switch ev := e.(type) {
 			case *kafka.Message:
-				// The message delivery report, indicating success or
-				// permanent failure after retries have been exhausted.
-				// Application level retries won't help since the client
-				// is already configured to do that.
 				m := ev
 				if m.TopicPartition.Error != nil {
 					log.Printf("Delivery failed: %v\n", m.TopicPartition.Error)
@@ -111,21 +108,8 @@ func Produce(p *kafka.Producer, key []byte, data []byte, topic string, serialize
 					//fmt.Printf("Delivered message to topic %s [%d] at offset %v\n", *m.TopicPartition.Topic, m.TopicPartition.Partition, m.TopicPartition.Offset)
 				}
 			case kafka.Error:
-				// Generic client instance-level errors, such as
-				// broker connection failures, authentication issues, etc.
-				//
-				// These errors should generally be considered informational
-				// as the underlying client will automatically try to
-				// recover from any errors encountered, the application
-				// does not need to take action on them.
 				log.Printf("Error: %v\n", ev)
 			case *kafka.Stats:
-				// Stats events are emitted as JSON (as string).
-				// Either directly forward the JSON to your
-				// statistics collector, or convert it to a
-				// map to extract fields of interest.
-				// The definition of the statistics JSON
-				// object can be found here:
 				// https://github.com/confluentinc/librdkafka/blob/master/STATISTICS.md
 				var stats map[string]interface{}
 				err := json.Unmarshal([]byte(e.String()), &stats)
@@ -133,7 +117,6 @@ func Produce(p *kafka.Producer, key []byte, data []byte, topic string, serialize
 					return
 				}
 				log.Printf("%9.f bytes produced to Kafka\n", stats["txmsg_bytes"])
-
 			default:
 				log.Printf("Ignored event: %s\n", ev)
 			}
@@ -196,8 +179,8 @@ func Produce(p *kafka.Producer, key []byte, data []byte, topic string, serialize
 
 func getType(templateType string) interface{} {
 
-	var netDevice NetDevice
-	var user User
+	var netDevice types.NetDevice
+	var user types.User
 
 	switch templateType {
 	case "net-device":

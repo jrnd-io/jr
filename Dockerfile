@@ -1,6 +1,9 @@
 FROM golang:1.20-alpine AS builder
 MAINTAINER Ugo Landini <ugo@confluent.io>
 
+ARG VERSION=0.1.0
+ARG USER=jr-user
+
 RUN apk update \
     && apk add --no-cache git \
     && apk add --no-cache ca-certificates \
@@ -20,7 +23,7 @@ WORKDIR /go/src/github.com/ugol/jr
 COPY . .
 
 RUN go get -u -d -v
-RUN CGO_ENABLED=1 GOOS=linux go build -tags musl -v -ldflags="-X 'jr/cmd.Version=0.1.0' -X 'jr/cmd.BuildUser=jr-user'" -o build/jr jr.go
+RUN CGO_ENABLED=1 GOOS=linux go build -tags musl -v -ldflags="-X 'jr/cmd.Version=${VERSION}' -X 'jr/cmd.BuildUser=${USER}'" -o build/jr jr.go
 
 FROM alpine
 COPY --from=builder /etc/passwd /etc/passwd

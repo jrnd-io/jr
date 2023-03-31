@@ -2,7 +2,8 @@ FROM golang:1.20-alpine AS builder
 MAINTAINER Ugo Landini <ugo@confluent.io>
 
 ARG VERSION=0.1.0
-ARG USER=jr-user
+ARG USER=$(id -u -n)
+ARG TIME=$(date)
 
 RUN apk update \
     && apk add --no-cache git \

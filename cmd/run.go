@@ -84,7 +84,7 @@ jr run --templateFileName ~/.jr/templates/net-device.tpl
 		var valueTemplate []byte
 		var err error
 
-		if contains(output, "kafka") {
+		if jr.Contains(output, "kafka") {
 			producer, err = jr.Initialize(kafkaConfig)
 			if err != nil {
 				log.Fatal(err)
@@ -177,7 +177,7 @@ jr run --templateFileName ~/.jr/templates/net-device.tpl
 			}
 		}
 
-		if contains(output, "kafka") {
+		if jr.Contains(output, "kafka") {
 			jr.Close(producer)
 		}
 
@@ -225,7 +225,7 @@ func executeTemplate(key *template.Template, value *template.Template, oneline b
 
 func printOutput(key string, value string, p *kafka.Producer, topic string, output []string, outputTemplateScript *template.Template, serializer string, templateType string) {
 
-	if contains(output, "stdout") {
+	if jr.Contains(output, "stdout") {
 
 		var outBuffer bytes.Buffer
 		var err error
@@ -240,7 +240,7 @@ func printOutput(key string, value string, p *kafka.Producer, topic string, outp
 		}
 		fmt.Print(outBuffer.String())
 	}
-	if contains(output, "kafka") {
+	if jr.Contains(output, "kafka") {
 		jr.Produce(p, []byte(key), []byte(value), topic, serializer, templateType)
 	}
 }
@@ -271,13 +271,4 @@ func init() {
 
 	runCmd.Flags().BoolP("schemaRegistry", "s", false, "If you want to use Confluent Schema Registry")
 	runCmd.Flags().String("serializer", "json-schema", "Type of serializer: json-schema, avro-generic, avro, protobuf")
-}
-
-func contains(s []string, str string) bool {
-	for _, v := range s {
-		if v == str {
-			return true
-		}
-	}
-	return false
 }

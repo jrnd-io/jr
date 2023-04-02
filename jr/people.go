@@ -41,7 +41,8 @@ func middlename() string {
 }
 
 func address() string {
-	addresses := []string{"80", "81", "443", "22", "631"}
+	//TODO: implement
+	addresses := []string{""}
 	return addresses[Random.Intn(len(addresses))]
 }
 
@@ -82,7 +83,7 @@ func company() string {
 }
 
 func emailProvider() string {
-	return word("mail-provider")
+	return word("mail_provider")
 }
 
 func username(firstName string, lastName string, size int) string {

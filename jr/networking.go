@@ -14,12 +14,12 @@ func unixTimeStamp(days int) int64 {
 	return Random.Int63n(int64(last-first)) + int64(first)
 }
 
-func ipKnownPorts() string {
+func ipKnownPort() string {
 	ports := []string{"80", "81", "443", "22", "631"}
 	return ports[Random.Intn(len(ports))]
 }
 
-func ipKnownProtocols() string {
+func ipKnownProtocol() string {
 	protocols := []string{"TCP", "UDP", "ICMP", "FTP", "HTTP", "SFTP"}
 	return protocols[Random.Intn(len(protocols))]
 }
@@ -79,7 +79,7 @@ GENERATE:
 	return ip.String()
 }
 
-func password(length int, memorable bool, prefix string, postfix string) string {
+func password(length int, memorable bool, prefix string, suffix string) string {
 
 	const (
 		// Define the set of vowels and consonants that can be used to generate the password.
@@ -111,7 +111,7 @@ func password(length int, memorable bool, prefix string, postfix string) string 
 		}
 	}
 
-	return prefix + string(password) + postfix
+	return prefix + string(password) + suffix
 }
 
 func userAgent() string {

@@ -721,7 +721,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "string int int",
 		Localizable: false,
 		Return:      "int",
-		Example:     "jr run --template '{{counter \"mycounter\" 0 1}}'",
-		Output:      "0",
+		Example:     "jr run -n 5 --template '{{counter \"mycounter\" 0 1}}'",
+		Output:      "\n0\n1\n2\n3\n4",
 	},
 }

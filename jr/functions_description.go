@@ -267,7 +267,7 @@ var funcDesc = map[string]FunctionDescription{
 	"from": {
 		Name:        "from",
 		Category:    "text utilities",
-		Description: "returns a random string from a list of strings in a file",
+		Description: "returns a random string from a list of strings in a file. Files are in '$HOME/.jr/data/locale'",
 		Parameters:  "string",
 		Localizable: true,
 		Return:      "string",
@@ -277,7 +277,7 @@ var funcDesc = map[string]FunctionDescription{
 	"from_at": {
 		Name:        "from_at",
 		Category:    "text utilities",
-		Description: "returns a string at a given position in a list of strings in a file",
+		Description: "returns a string at a given position in a list of strings in a file. Files are in '$HOME/.jr/data/locale'",
 		Parameters:  "int",
 		Localizable: true,
 		Return:      "string",
@@ -287,7 +287,7 @@ var funcDesc = map[string]FunctionDescription{
 	"from_shuffle": {
 		Name:        "from_shuffle",
 		Category:    "text utilities",
-		Description: "returns a shuffled list of strings in a file",
+		Description: "returns a shuffled list of strings in a file. Files are in '$HOME/.jr/data/locale'",
 		Parameters:  "string",
 		Localizable: true,
 		Return:      "[]string",
@@ -297,9 +297,9 @@ var funcDesc = map[string]FunctionDescription{
 	"from_n": {
 		Name:        "from_n",
 		Category:    "text utilities",
-		Description: "return a subset of elements in a list of string in a file",
+		Description: "return a subset of elements in a list of string in a file. Files are in '$HOME/.jr/data/locale'",
 		Parameters:  "[]string int",
-		Localizable: false,
+		Localizable: true,
 		Return:      "[]string",
 		Example:     "jr run --template '{{from_n \"state\" 5}}'",
 		Output:      "[West Virginia Idaho Maryland New Hampshire Wyoming]",

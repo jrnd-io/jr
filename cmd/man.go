@@ -24,6 +24,8 @@ package cmd
 import (
 	"fmt"
 	"jr/jr"
+	"os"
+	"os/exec"
 	"strings"
 
 	"github.com/spf13/cobra"
@@ -40,6 +42,7 @@ var manCmd = &cobra.Command{
 		list, _ := cmd.Flags().GetBool("list")
 		category, _ := cmd.Flags().GetBool("category")
 		find, _ := cmd.Flags().GetBool("find")
+		run, _ := cmd.Flags().GetBool("run")
 
 		if list {
 			for k, _ := range jr.FunctionsMap() {
@@ -59,7 +62,19 @@ var manCmd = &cobra.Command{
 				}
 			}
 		} else if len(args) == 1 {
-			printFunction(args[0])
+
+			if run {
+				f, found := printFunction(args[0])
+				if found {
+					fmt.Println()
+					cmd := exec.Command("/bin/sh", "-c", f.Example)
+					cmd.Stdout = os.Stdout
+					cmd.Stderr = os.Stderr
+					cmd.Run()
+				}
+			} else {
+				printFunction(args[0])
+			}
 		} else {
 			fmt.Println("Missing parameter and/or flags")
 		}
@@ -67,7 +82,7 @@ var manCmd = &cobra.Command{
 	},
 }
 
-func printFunction(name string) {
+func printFunction(name string) (jr.FunctionDescription, bool) {
 
 	var Reset = "\033[0m"
 	var Cyan = "\033[36m"
@@ -85,6 +100,8 @@ func printFunction(name string) {
 		fmt.Printf("%sOutput: %s%s\n", Cyan, Reset, f.Output)
 	}
 
+	return f, found
+
 }
 
 func init() {
@@ -92,4 +109,5 @@ func init() {
 	manCmd.Flags().BoolP("list", "l", false, "Show all functions")
 	manCmd.Flags().BoolP("category", "c", false, "Search in category")
 	manCmd.Flags().BoolP("find", "f", false, "Search in description and name")
+	manCmd.Flags().BoolP("run", "r", false, "Run the example")
 }

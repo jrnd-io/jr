@@ -226,7 +226,7 @@ If you are really lazy you can use the `-a` option, so JR will create the topic 
 jr run -a -k '{{randoms "ONE|TWO|THREE"}}' -f 1s -d 10s net-device -o stdout,kafka -t mynewtopic
 ```
 
-Alternatively, you can also create it explicitly form JR:
+Alternatively, you can also create it explicitly from JR:
 
 ```bash
 jr createTopic topic1

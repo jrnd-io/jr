@@ -474,15 +474,15 @@ var funcDesc = map[string]FunctionDescription{
 		Example:     "jr run --template '{{password 10 true \"!\" \"?\"}}'",
 		Output:      "!itAPYgivIH?",
 	},
-	"user_agent": {
-		Name:        "user_agent",
+	"useragent": {
+		Name:        "useragent",
 		Category:    "security",
 		Description: "returns a random user agent",
 		Parameters:  "",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{user_agent}}'",
-		Output:      "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:40.0) Gecko/20100101 Firefox/40.1",
+		Example:     "jr run --template '{{useragent}}'",
+		Output:      "Mozilla/5.0 (Android 10) AppleWebKit/592.64 (KHTML, like Gecko) Chrome Mobile/7.3.5.7 Mobile Safari/9.10",
 	},
 	"unix_time_stamp": {
 		Name:        "unix_time_stamp",

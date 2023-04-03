@@ -667,12 +667,12 @@ var funcDesc = map[string]FunctionDescription{
 	"key": {
 		Name:        "key",
 		Category:    "utilities",
-		Description: "returns a random key",
-		Parameters:  "",
+		Description: "returns a random key string using a prefix and a length",
+		Parameters:  "string int",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{key}}'",
-		Output:      "a1b2c3d4e5f6g7h8i9j0",
+		Example:     "jr run --template '{{key \"KEY\" 20}}'",
+		Output:      "KEY4",
 	},
 	"uuid": {
 		Name:        "uuid",
@@ -682,7 +682,7 @@ var funcDesc = map[string]FunctionDescription{
 		Localizable: false,
 		Return:      "string",
 		Example:     "jr run --template '{{uuid}}'",
-		Output:      "a1b2c3d4-e5f6-g7h8-i9j0-a1b2c3d4e5f6",
+		Output:      "a6da3ed0-5fcb-4bb8-a6aa-654120a1e6e3",
 	},
 	"bool": {
 		Name:        "bool",

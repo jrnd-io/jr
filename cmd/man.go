@@ -58,8 +58,10 @@ var manCmd = &cobra.Command{
 					printFunction(k)
 				}
 			}
-		} else {
+		} else if len(args) == 1 {
 			printFunction(args[0])
+		} else {
+			fmt.Println("Missing parameter and/or flags")
 		}
 		fmt.Println()
 	},

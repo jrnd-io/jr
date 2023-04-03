@@ -4,7 +4,6 @@ JR is a CLI program that helps you to create quality random data for your applic
 
 ![JR-simple](https://user-images.githubusercontent.com/89472/229626362-70ddc95d-1090-4746-a20a-fbffba4193cd.gif)
 
-
 ## Building and compiling
 
 JR requires Go 1.20
@@ -98,6 +97,39 @@ Results are by default written on standard out (`--output "stdout"`) with this o
 
 which means that only the "Value" is in the output. You can change this behaviour with the `--outputTemplate`
 
+## Using embedded function documentation to write your own templates
+
+
+
+JR has plenty of embedded functions that can be used to write yor own templates.
+We have included the documentation for all the functions directly into JR.
+
+You can list all the available functions with a simple command:
+```bash
+jr man -l
+```
+
+You can filter by category:
+```bash
+jr man -c net
+```
+Or you can filter by name and description:
+```bash
+jr man -f random
+```
+You can also execute directly the Example using `-r` flag:
+
+```bash
+jr man ip -r
+```
+which will basically execute this command for you:
+
+```bash
+ jr run --template '{{ip "10.2.0.0/16"}}'
+ ```
+To study more advanced usages, look at the templates in your `templates` directory
+
+
 ## Use JR to stream data to Apache Kafka
 
 First thing to do is to create a Kafka cluster and relative kafka.properties file. The easiest way to do that is to use [Confluent Cloud]("https://confluent.cloud/").
@@ -162,7 +194,6 @@ compression.type=gzip
 compression.level=9
 # statistics.interval.ms=1000
 ```
-
 ### Writing data to Apache Kakfa
 
 Just use the `--output kafka` flag and `--topic` flag to indicate the topic name:

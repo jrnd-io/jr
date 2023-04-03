@@ -431,8 +431,8 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "string",
 		Localizable: false,
 		Return:      "string",
-		Example:     "",
-		Output:      "00:00:00:00:00:00",
+		Example:     "jr run --template '{{mac}}'",
+		Output:      "7e:8e:75:a5:0a:85",
 	},
 	"http_method": {
 		Name:        "http_method",

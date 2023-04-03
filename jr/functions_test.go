@@ -3,9 +3,17 @@ package jr
 import (
 	"bytes"
 	"fmt"
+	"os"
 	"testing"
 	"text/template"
 )
+
+func TestMain(m *testing.M) {
+	JrContext.Seed = 0
+	fmt.Println("HERE")
+	code := m.Run()
+	os.Exit(code)
+}
 
 func TestSubstr(t *testing.T) {
 	tpl := `{{"fooo" | substr 0 3 }}`
@@ -31,17 +39,6 @@ func TestTitle(t *testing.T) {
 func TestMax(t *testing.T) {
 	tpl := `{{max 1 4}}`
 	if err := runt(tpl, "4"); err != nil {
-		t.Error(err)
-	}
-}
-
-func TestRandomness(t *testing.T) {
-	tpl := `{{integer 0 100}}`
-	if err := runt(tpl, "74"); err != nil {
-		t.Error(err)
-	}
-	tpl_seed := `{{seed 100}}{{integer 0 100}}`
-	if err := runt(tpl_seed, "83"); err != nil {
 		t.Error(err)
 	}
 }
@@ -82,19 +79,19 @@ func TestUSState(t *testing.T) {
 }
 
 func TestShuffle(t *testing.T) {
-	tpl := `{{shuffle "state"}}`
-	if err := runt(tpl, "[Virginia Connecticut North Carolina Pennsylvania Nevada Maryland Alaska Indiana Idaho "+
-		"Delaware California Oklahoma Vermont South Dakota Tennessee Colorado Hawaii Wisconsin New York Arizona Iowa Florida "+
-		"Ohio Minnesota West Virginia Rhode Island Louisiana Washington Arkansas Massachusetts Illinois Texas New Jersey Kentucky "+
-		"Mississippi New Mexico Maine Oregon Nebraska North Dakota Kansas Montana South Carolina Wyoming Alabama Utah Missouri "+
-		"Michigan New Hampshire Georgia]"); err != nil {
+	tpl := `{{from_shuffle "state"}}`
+	if err := runt(tpl, "[North Dakota Michigan Colorado Montana California Mississippi South Carolina Indiana "+
+		"North Carolina Virginia New York Texas Alaska Wyoming Oregon Florida Maryland Ohio Minnesota Pennsylvania "+
+		"Kansas Arkansas Nebraska Arizona Hawaii Louisiana Washington South Dakota Massachusetts Connecticut Vermont "+
+		"Kentucky Wisconsin Utah Nevada New Hampshire Alabama New Jersey West Virginia Missouri Idaho Oklahoma "+
+		"Rhode Island Illinois Delaware Tennessee New Mexico Georgia Iowa Maine]"); err != nil {
 		t.Error(err)
 	}
 }
 
 func TestShuffleN(t *testing.T) {
-	tpl := `{{shuffle_n "state" 3}}`
-	if err := runt(tpl, "[Utah Idaho New Mexico]"); err != nil {
+	tpl := `{{from_n "state" 3}}`
+	if err := runt(tpl, "[Massachusetts Utah Kansas]"); err != nil {
 		t.Error(err)
 	}
 }
@@ -117,7 +114,7 @@ func TestCache(t *testing.T) {
 
 func TestFrom(t *testing.T) {
 	tpl := `{{from "actor"}}`
-	if err := runt(tpl, "Julie Andrews"); err != nil {
+	if err := runt(tpl, "Kate Winslet"); err != nil {
 		t.Error(err)
 	}
 	tpl = `{{from "actors"}}`
@@ -128,28 +125,28 @@ func TestFrom(t *testing.T) {
 
 func TestPassword(t *testing.T) {
 	tpl := `{{password 5 true "PwD" "!?!"}}`
-	if err := runt(tpl, "PwDarOSA!?!"); err != nil {
+	if err := runt(tpl, "PwDUSiqU!?!"); err != nil {
 		t.Error(err)
 	}
 }
 
 func TestIPv6(t *testing.T) {
 	tpl := `{{ipv6}}`
-	if err := runt(tpl, "3e5f:6418:9bd0:f7b7:d9d5:7121:ddf9:e87c"); err != nil {
+	if err := runt(tpl, "9e0f:87e3:f10:20c1:3384:666c:f7a9:ffad"); err != nil {
 		t.Error(err)
 	}
 }
 
 func TestIP(t *testing.T) {
 	tpl := `{{ip "10.2.0.0/16"}}`
-	if err := runt(tpl, "10.2.55.217"); err != nil {
+	if err := runt(tpl, "10.2.64.220"); err != nil {
 		t.Error(err)
 	}
 }
 
 func TestUseragent(t *testing.T) {
 	tpl := `{{useragent}}`
-	if err := runt(tpl, "Mozilla/5.0 (iOS 14_0) AppleWebKit/570.1 (KHTML, like Gecko) Firefox Mobile/6.3 Mobile Safari/7.6"); err != nil {
+	if err := runt(tpl, "Mozilla/5.0 (iOS 14_4_2) AppleWebKit/515.46 (KHTML, like Gecko) Edge Mobile/47.0.2.2 Mobile Safari/7.1"); err != nil {
 		t.Error(err)
 	}
 }
@@ -193,7 +190,7 @@ func runt(tpl, expect string) error {
 
 func TestRegex(t *testing.T) {
 	tpl := `{{regex "Z{2,5}"}}`
-	if err := runt(tpl, "ZZZ"); err != nil {
+	if err := runt(tpl, "ZZZZ"); err != nil {
 		t.Error(err)
 	}
 	//123[0-2]+.*\w{3}

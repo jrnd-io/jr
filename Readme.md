@@ -5,12 +5,10 @@ JR is a CLI program that helps you to create quality random data for your applic
 
 ![JR-simple_optimized](https://user-images.githubusercontent.com/89472/229602452-00e8f2e0-b3bf-489b-977b-87d4f4f323ec.gif)
 
-## Prerequisites
-
-JR requires golang >= 1.20
-
 
 ## Building and compiling
+
+JR requires Go 1.20
 
 you can use the `make_install.sh` to install JR. This script does everything needed in one simple command.
 

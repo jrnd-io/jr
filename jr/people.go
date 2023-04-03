@@ -55,11 +55,11 @@ func stateAt(index int) string {
 }
 
 func stateShort() string {
-	return word("state-short")
+	return word("state_short")
 }
 
 func stateShortAt(index int) string {
-	return wordAt("state-short", index)
+	return wordAt("state_short", index)
 }
 
 func capital() string {

@@ -99,6 +99,33 @@ func TestShuffleN(t *testing.T) {
 	}
 }
 
+func TestCache(t *testing.T) {
+	v, f := cache("wine")
+
+	if v != true || f != nil {
+		t.Error("cache should be empty, no errors")
+	}
+	v, f = cache("wine")
+	if v != false || f != nil {
+		t.Error("cache should be full, no errors")
+	}
+	v, f = cache("wines")
+	if f == nil {
+		t.Error("no cacheable, should get error")
+	}
+}
+
+func TestFrom(t *testing.T) {
+	tpl := `{{from "actor"}}`
+	if err := runt(tpl, "Julie Andrews"); err != nil {
+		t.Error(err)
+	}
+	tpl = `{{from "actors"}}`
+	if err := runt(tpl, ""); err != nil {
+		t.Error(err)
+	}
+}
+
 func TestPassword(t *testing.T) {
 	tpl := `{{password 5 true "PwD" "!?!"}}`
 	if err := runt(tpl, "PwDarOSA!?!"); err != nil {

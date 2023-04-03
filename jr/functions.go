@@ -39,14 +39,16 @@ var fmap = map[string]interface{}{
 	"lorem":                    lorem,
 	"sentence":                 sentence,
 	"sentence_prefix":          sentencePrefix,
-	"shuffle":                  wordShuffle,
-	"shuffle_n":                wordShuffleN,
 	"regex":                    regex,
 	"random":                   func(s []string) string { return s[Random.Intn(len(s))] },
 	"randoms":                  func(s string) string { a := strings.Split(s, "|"); return a[Random.Intn(len(a))] },
 	"counter":                  counter,
 	"random_string":            randomString,
 	"random_string_vocabulary": randomStringVocabulary,
+	"from":                     word,
+	"from_at":                  wordAt,
+	"from_shuffle":             wordShuffle,
+	"from_n":                   wordShuffleN,
 
 	//math utilities
 	"add":       func(a, b int) int { return a + b },
@@ -116,36 +118,56 @@ func initialize(filename string) []string {
 }
 
 func word(name string) string {
-	cache(name)
+	_, err := cache(name)
+	if err != nil {
+		return ""
+	}
 	words := data[name]
 	return words[Random.Intn(len(words))]
 }
 
-func cache(name string) {
-	if data[name] == nil {
-		locale := JrContext.Locales[Random.Intn(len(JrContext.Locales))]
-		filename := fmt.Sprintf("%s/data/%s/%s", JrContext.TemplateDir, locale, name)
-		data[name] = initialize(filename)
-	}
-}
-
 func wordAt(name string, index int) string {
-	cache(name)
+	_, err := cache(name)
+	if err != nil {
+		return ""
+	}
 	words := data[name]
 	return words[index]
 }
 
 func wordShuffle(name string) []string {
-	cache(name)
+	_, err := cache(name)
+	if err != nil {
+		return []string{""}
+	}
 	words := data[name]
 	return wordShuffleN(name, len(words))
 }
 
 func wordShuffleN(name string, n int) []string {
-	cache(name)
+	_, err := cache(name)
+	if err != nil {
+		return []string{""}
+	}
 	words := data[name]
 	Random.Shuffle(len(words), func(i, j int) {
 		words[i], words[j] = words[j], words[i]
 	})
 	return words[:n]
+}
+
+func cache(name string) (bool, error) {
+
+	v := data[name]
+	if v == nil {
+		locale := JrContext.Locales[Random.Intn(len(JrContext.Locales))]
+		filename := fmt.Sprintf("%s/data/%s/%s", JrContext.TemplateDir, locale, name)
+		data[name] = initialize(filename)
+		if len(data[name]) == 0 {
+			return false, fmt.Errorf("no words found in %s", filename)
+		} else {
+			return true, nil
+		}
+	}
+	return false, nil
 }

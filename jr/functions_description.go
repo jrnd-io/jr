@@ -714,4 +714,14 @@ var funcDesc = map[string]FunctionDescription{
 		Example:     "jr run --template '{{array 5}}'",
 		Output:      "[0,0,0,0,0]",
 	},
+	"counter": {
+		Name:        "counter",
+		Category:    "utilities",
+		Description: "returns a counter with a name, starting at n incrementing by i",
+		Parameters:  "string int int",
+		Localizable: false,
+		Return:      "int",
+		Example:     "jr run --template '{{counter \"mycounter\" 0 1}}'",
+		Output:      "0",
+	},
 }

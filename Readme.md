@@ -99,7 +99,7 @@ which means that only the "Value" is in the output. You can change this behaviou
 
 ## Using embedded function documentation to write your own templates
 
-
+![JR-man](https://user-images.githubusercontent.com/89472/229628592-68619ec7-2b1d-4704-8c76-ba59bb82579d.gif)
 
 JR has plenty of embedded functions that can be used to write yor own templates.
 We have included the documentation for all the functions directly into JR.

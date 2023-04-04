@@ -105,12 +105,12 @@ var fmap = map[string]interface{}{
 func initialize(filename string) []string {
 	file, err := os.Open(filename)
 	if err != nil {
-		log.Fatalf("Failed to open file: %s", err)
+		log.Printf("Failed to open file: %s", err)
 	}
 	defer func(file *os.File) {
 		err := file.Close()
 		if err != nil {
-			log.Fatalf("Error in closing file: %s", err)
+			log.Printf("Error in closing file: %s", err)
 		}
 	}(file)
 

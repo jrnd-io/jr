@@ -76,7 +76,12 @@ func ReadConfig(configFile string) map[string]string {
 	if err != nil {
 		log.Fatalf("Failed to open file: %s", err)
 	}
-	defer file.Close()
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+			log.Fatalf("Error in closing file: %s", err)
+		}
+	}(file)
 
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {

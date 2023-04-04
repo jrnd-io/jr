@@ -9,7 +9,7 @@ type User struct {
 	Name      string  `json:"name"`
 	Company   string  `json:"company"`
 	Email     string  `json:"email"`
-	Alt_email string  `json:"alt_email"`
+	AltEmail  string  `json:"alt_email"`
 	About     string  `json:"about"`
 	Latitude  float32 `json:"latitude"`
 	Longitude float32 `json:"longitude"`

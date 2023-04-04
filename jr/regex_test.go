@@ -12,7 +12,7 @@ type testCase struct {
 	regex string
 }
 
-var cases = []testCase{
+var c = []testCase{
 	{`123[0-2]+.*\w{3}`},
 	{`^\d{1,2}[/](1[0-2]|[1-9])[/]((19|20)\d{2})$`},
 	{`^((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])$`},
@@ -30,7 +30,7 @@ var cases = []testCase{
 }
 
 func TestGenerate(t *testing.T) {
-	for _, test := range cases {
+	for _, test := range c {
 		for i := 0; i < 10; i++ {
 			r, err := regex(test.regex)
 			if err != nil {

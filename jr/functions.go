@@ -3,6 +3,8 @@ package jr
 import (
 	"bufio"
 	"fmt"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 	"log"
 	"math"
 	"math/rand"
@@ -21,9 +23,10 @@ var data = map[string][]string{}
 var fmap = map[string]interface{}{
 
 	// text utilities
-	"upper":                    strings.ToUpper,
-	"lower":                    strings.ToLower,
-	"title":                    strings.Title,
+	"upper": strings.ToUpper,
+	"lower": strings.ToLower,
+	"title": cases.Title(language.English).String,
+	//	"title":                    func(s string) string {return cases.Title(language.English).String(s)},
 	"trim":                     strings.TrimSpace,
 	"squeeze":                  func(s string) string { return strings.ReplaceAll(s, " ", "") },
 	"substr":                   func(start, length int, s string) string { return s[start:length] },

@@ -25,9 +25,9 @@ func TestRange(t *testing.T) {
 	}
 
 	cities := []City{
-		City{"Roma", "00100"},
-		City{"Milano", "20100"},
-		City{"Napoli", "80100"},
+		{"Roma", "00100"},
+		{"Milano", "20100"},
+		{"Napoli", "80100"},
 	}
 
 	tpl := `{{range $i, $e := .}}{{$i}},{{$e.ZIP}} {{end}}`
@@ -38,7 +38,7 @@ func TestRange(t *testing.T) {
 
 func TestNested(t *testing.T) {
 	tpl := template.Must(template.New("inside").Parse(`{{.Name}}`))
-	tpl.New("outside").Parse(`{{template "inside"}}`)
+	_, _ = tpl.New("outside").Parse(`{{template "inside"}}`)
 
 	data := struct {
 		Name string
@@ -59,15 +59,21 @@ func TestNested(t *testing.T) {
 
 func TestComplexNested(t *testing.T) {
 	tpl := template.Must(template.New("test").Parse(`{{template "header"}} {{.Name}} {{template "footer"}}`))
-	tpl.New("header").Parse(`<HEADER/>`)
-	tpl.New("footer").Parse(`<FOOTER/>`)
+	_, err := tpl.New("header").Parse(`<HEADER/>`)
+	if err != nil {
+		return
+	}
+	_, err = tpl.New("footer").Parse(`<FOOTER/>`)
+	if err != nil {
+		return
+	}
 
 	data := struct {
 		Name string
 	}{"Ugo"}
 	var b bytes.Buffer
 
-	err := tpl.Execute(&b, data)
+	err = tpl.Execute(&b, data)
 	if err != nil {
 		t.Error(err)
 	}

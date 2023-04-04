@@ -160,7 +160,7 @@ func generate(s *regexState, re *syntax.Regexp) string {
 		i := Random.Intn(len(re.Sub))
 		return generate(s, re.Sub[i])
 	default:
-		fmt.Fprintln(os.Stderr, "[reg-gen] Unhandled op: ", op)
+		_, _ = fmt.Fprintln(os.Stderr, "[reg-gen] Unhandled op: ", op)
 	}
 	return ""
 }

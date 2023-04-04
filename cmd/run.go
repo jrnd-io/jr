@@ -188,13 +188,13 @@ jr run --templateFileName ~/.jr/templates/net-device.tpl
 }
 
 func writeStats() {
-	fmt.Fprintln(os.Stderr)
+	_, _ = fmt.Fprintln(os.Stderr)
 	elapsed := time.Since(jr.JrContext.StartTime)
-	fmt.Fprintf(os.Stderr, "Elapsed time: %v\n", elapsed.Round(1*time.Second))
-	fmt.Fprintf(os.Stderr, "Data Generated (Objects): %d\n", jr.JrContext.GeneratedObjects)
-	fmt.Fprintf(os.Stderr, "Data Generated (bytes): %d\n", jr.JrContext.GeneratedBytes)
-	fmt.Fprintf(os.Stderr, "Throughput (bytes per second): %9.f\n", float64(jr.JrContext.GeneratedBytes)/elapsed.Seconds())
-	fmt.Fprintln(os.Stderr)
+	_, _ = fmt.Fprintf(os.Stderr, "Elapsed time: %v\n", elapsed.Round(1*time.Second))
+	_, _ = fmt.Fprintf(os.Stderr, "Data Generated (Objects): %d\n", jr.JrContext.GeneratedObjects)
+	_, _ = fmt.Fprintf(os.Stderr, "Data Generated (bytes): %d\n", jr.JrContext.GeneratedBytes)
+	_, _ = fmt.Fprintf(os.Stderr, "Throughput (bytes per second): %9.f\n", float64(jr.JrContext.GeneratedBytes)/elapsed.Seconds())
+	_, _ = fmt.Fprintln(os.Stderr)
 }
 
 func executeTemplate(key *template.Template, value *template.Template, oneline bool) (string, string, error) {

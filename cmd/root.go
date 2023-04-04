@@ -22,11 +22,10 @@ THE SOFTWARE.
 package cmd
 
 import (
-	"log"
-	"os"
-
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"log"
+	"os"
 )
 
 var cfgFile string

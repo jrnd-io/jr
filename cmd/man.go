@@ -23,12 +23,11 @@ package cmd
 
 import (
 	"fmt"
-	"jr/jr"
+	"github.com/spf13/cobra"
+	"github.com/ugol/jr/jr"
 	"os"
 	"os/exec"
 	"strings"
-
-	"github.com/spf13/cobra"
 )
 
 // manCmd represents the man command

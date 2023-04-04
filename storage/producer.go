@@ -2,7 +2,7 @@ package storage
 
 import (
 	"fmt"
-	"jr/storage/redis"
+	"github.com/ugol/jr/storage/redis"
 	"log"
 )
 

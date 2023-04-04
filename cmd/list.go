@@ -25,7 +25,7 @@ import (
 	"bytes"
 	"fmt"
 	"github.com/spf13/cobra"
-	"jr/jr"
+	"github.com/ugol/jr/jr"
 	"os"
 	"path/filepath"
 	"strings"

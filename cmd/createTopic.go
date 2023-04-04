@@ -23,7 +23,7 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"jr/jr"
+	"github.com/ugol/jr/jr"
 	"log"
 )
 

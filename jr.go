@@ -22,7 +22,7 @@ THE SOFTWARE.
 
 package main
 
-import "jr/cmd"
+import "github.com/ugol/jr/cmd"
 
 func main() {
 	cmd.Execute()

@@ -27,7 +27,7 @@ import (
 	"fmt"
 	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
 	"github.com/spf13/cobra"
-	"jr/jr"
+	"github.com/ugol/jr/jr"
 	"log"
 	"os"
 	"os/signal"

@@ -275,3 +275,26 @@ JR supports **kcat** out of the box. Using the `--kcat` flag the standard output
 ```bash
 jr run -k '{{randoms "ONE|TWO|THREE"}}' -f 1s -d 5s net-device --kcat | kcat -F kafka/config.properties -K , -P -t test
 ```
+
+
+## Docker 
+
+### Multi-Arch Build 
+
+```
+# Create the local builder 
+docker buildx create --name local --bootstrap --use
+# Local build 
+docker buildx build --platform linux/arm64/v8,linux/amd64 --output=local -t jr:latest .
+# Push on DockerHub
+docker buildx build --platform linux/arm64/v8,linux/amd64  --build-arg=USER="$(whoami)" --build-arg="0.1.0"  --push -t ugol/jr:latest .
+```
+
+### How to use jr with local configurations
+
+It is possible to mount config files from your local environment and use them with jr docker image.
+
+```
+docker run -it -v $(pwd)/configs:/home/jr-user/configs --rm ugol/jr:latest jr run net-device -n 5 -f 500ms -o kafka -t net-device -F /home/jr-user/configs/kafka.client.properties -s --serializer json-schema --registryConfig /home/jr-user/configs/registry.client.properties
+```
+![demo](./jr.gif)

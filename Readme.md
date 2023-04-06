@@ -297,5 +297,4 @@ It is possible to mount config files from your local environment and use them wi
 ```
 docker run -it -v $(pwd)/configs:/home/jr-user/configs --rm ugol/jr:latest jr run net-device -n 5 -f 500ms -o kafka -t net-device -F /home/jr-user/configs/kafka.client.properties -s --serializer json-schema --registryConfig /home/jr-user/configs/registry.client.properties
 ```
-
-[![asciicast](https://asciinema.org/a/575049.svg)](https://asciinema.org/a/575049)
+![demo](./jr.gif)

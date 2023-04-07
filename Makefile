@@ -1,4 +1,4 @@
-VERSION=0.1.1
+VERSION=0.1.2
 USER=$(shell id -u -n)
 TIME=$(shell date)
 
@@ -7,7 +7,7 @@ hello:
 
 compile:
 	@echo "Compiling"
-	go build -v -ldflags="-X 'jr/cmd.Version=$(VERSION)' -X 'jr/cmd.BuildUser=$(USER)' -X 'jr/cmd.BuildTime=$(TIME)'" -o build/jr jr.go
+	go build -v -ldflags="-X 'github.com/ugol/jr/cmd.Version=$(VERSION)' -X 'github.com/ugol/jr/cmd.BuildUser=$(USER)' -X 'github.com/ugol/jr/cmd.BuildTime=$(TIME)'" -o build/jr jr.go
 	
 
 run: compile

@@ -24,7 +24,7 @@ WORKDIR /go/src/github.com/ugol/jr
 COPY . .
 
 RUN go get -u -d -v
-RUN CGO_ENABLED=1 GOOS=linux go build -tags musl -v -ldflags="-X 'jr/cmd.Version=${VERSION}' -X 'jr/cmd.BuildUser=${USER}'" -o build/jr jr.go
+RUN CGO_ENABLED=1 GOOS=linux go build -tags musl -v -ldflags="-X 'github.com/ugol/jr/cmd.Version=${VERSION}' -X 'github.com/ugol/jr/cmd.BuildUser=${USER}' -X 'github.com/ugol/jr/cmd.BuildTime=${TIME}'" -o build/jr jr.go
 
 FROM alpine
 COPY --from=builder /etc/passwd /etc/passwd

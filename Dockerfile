@@ -8,8 +8,7 @@ ARG TIME=$(date)
 RUN apk update \
     && apk add --no-cache git \
     && apk add --no-cache ca-certificates \
-    && apk add --update gcc musl-dev \
-    && apk add --update librdkafka \
+    && apk add --update gcc musl-dev libssl3\
     && update-ca-certificates
 
 RUN adduser \

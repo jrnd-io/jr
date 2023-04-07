@@ -15,7 +15,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-
     - name: Set up Go
       uses: actions/setup-go@v4
       with:
@@ -23,6 +22,9 @@ jobs:
     - name: Install dependencies
       run: go get .
     - name: Build
-      run: go build -v -ldflags="-X 'github.com/ugol/jr/cmd.Version=$(VERSION)' -X 'github.com/ugol/jr/cmd.BuildUser=$(USER)' -X 'github.com/ugol/jr/cmd.BuildTime=$(TIME)'" -o build/jr jr.go
+      run: go build -v -o build/jr jr.go
+    - name: Run build script
+      run: ./make_install.sh
+      shell: bash
     - name: Test
       run: go test -v ./...

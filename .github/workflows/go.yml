@@ -21,8 +21,6 @@ jobs:
         go-version: 1.20.2
     - name: Install dependencies
       run: go get .
-    - name: Build
-      run: go build -v -o build/jr jr.go
     - name: Run build script
       run: ./make_install.sh
       shell: bash

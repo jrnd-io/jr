@@ -19,7 +19,7 @@ you can use the `make_install.sh` to install JR. This script does everything nee
 ./make_install.sh
 ```
 
-These are the steps in the `make_install.sh` script:
+These are the steps in the `make_install.sh` script if you want to use them separately:
 
 ```shell
 make all
@@ -27,7 +27,7 @@ make copy_templates
 sudo make install
 ```
 
-If you want to run the Unit tests, you have a `make` target for that:
+If you want to run the Unit tests, you have a `make` target for that too:
 
 ```bash
 make test
@@ -35,18 +35,18 @@ make test
 
 ## Basic usage
 
-JR is very straightforward to use. Here are some examples
+JR is very straightforward to use. Here are some examples:
 
 ### Listing existing templates
 ```bash
 jr list
 ````
 Templates are in the directory `$HOME/.jr/templates`. You can override with the ```--templatePath``` command flag
-Templates with issues are showed in <font color='red'>red</font>, Templates with no issues are showed in <font color='green'>green</font>
+Templates with parsing issues are showed in <font color='red'>red</font>, Templates with no parsing issues are showed in <font color='green'>green</font>
 
 ### Create random data from one of the provided templates
 
-Use predefined net-device template to generate a random JSON network device
+Use for example the predefined `net-device` template to generate a random JSON network device
 
 ```bash
 jr run net-device
@@ -61,13 +61,13 @@ If you want to use your own template, you have several options:
 - put it in another directory and use the `--templateFileName` flag to directly refer to it
 - embed it directly in the command using the `--template` flag
 
-For a quick and dirty test, you can refer a template like this:
+For a quick and dirty test, a good option is to directly point to a template:
 
 ```bash 
 jr run --templateFileName ~/.jr/templates/user.tpl
 ```
 
-For an even quicker and dirtier test, you can embed directly a template in the command like this:
+For an even quicker and dirtier test, the best option is to embed directly a template in the command:
 
 ```bash
 jr run --template "name:{{name}}"
@@ -75,21 +75,22 @@ jr run --template "name:{{name}}"
 
 ### Create more random data 
 
-Using `-n` option you can create more data in each pass.
+Using `-n` option you can create more data in each pass. 
+This example creates 3 net-device objects at once:
 
 ```bash
 jr run net-device -n 3
 ```
 ### Continuous streaming data
 
-Using `--f` option you can repeat the creation every `f` milliseconds
+Using `--frequency` option you can repeat the creation every `f` milliseconds
 
-This example creates 2 net-device every second.
+This example creates 2 net-device every second, for ever:
 ```bash
 jr run net-device -n 2 -f 1s 
 ```
-
-This example creates 2 net-device every 100ms for 1 minute.
+Using `--duration` option you can time bound the entire object creation.
+This example creates 2 net-device every 100ms for 1 minute:
 ```bash
 jr run net-device -n 2 -f 100ms -d 1m 
 ```
@@ -100,7 +101,7 @@ Results are by default written on standard out (`--output "stdout"`) with this o
 "{{.V}}\n"
 ```
 
-which means that only the "Value" is in the output. You can change this behaviour with the `--outputTemplate`
+which means that only the "Value" is in the output. You can change this behaviour embedding a different template with `--outputTemplate`
 
 ## Using embedded function documentation to write your own templates
 
@@ -218,34 +219,31 @@ Another example:
 ```bash 
 jr run -k '{{randoms "ONE|TWO|THREE"}}' -f 1s -d 10s net-device -o kafka -t test
 ```
-It is possible to write to both stdout and kafka at the same time:
-```bash
-jr run -k '{{randoms "ONE|TWO|THREE"}}' -f 1s -d 10s net-device -o stdout,kafka -t test
-```
+
 ### Autocreate topics
 
 Topics autocreation is disabled in Confluent Cloud. 
 If you are really lazy you can use the `-a` option, so JR will create the topic for you. 
 
 ```bash
-jr run -a -k '{{randoms "ONE|TWO|THREE"}}' -f 1s -d 10s net-device -o stdout,kafka -t mynewtopic
+jr run -a -k '{{randoms "ONE|TWO|THREE"}}' -f 1s -d 10s net-device -o kafka -t mynewtopic
 ```
 
 Alternatively, you can also create it explicitly from JR:
 
 ```bash
-jr createTopic topic1
+jr createTopic mynewtopic
 ```
 If you want to specify number of partitions and replication Factor you can use the `-p` and `-r` flags:
 
 ```bash
-jr createTopic topic1 -p 10 -r 2
+jr createTopic mynewtopic -p 10 -r 2
 ```
 
 ### Confluent Schema Registry support
 
 There is also support for Confluent Schema Registry. 
-At the moment only `json-schema` and `avro-generic` is directly supported.
+At the moment only `json-schema` and `avro-generic` are directly supported.
 
 To use Confluent Schema registry you need first to fill the `registry.properties` provided example with the needed link and user/pwd:
 
@@ -274,7 +272,7 @@ object, and `topic2` with a json-schema representing a net-device object.
 Another simple way of streaming to Apache Kafka is to use [kcat](https://github.com/edenhill/kcat) in conjunction with JR. 
 JR supports **kcat** out of the box. Using the `--kcat` flag the standard output will be formatted with K,V on a single line.
 
-`--kcat` it's a shorthand equivalent for `--output stdout --outputTemplate '{{key}},{{value}}' --oneline`
+`--kcat` it's a shorthand equivalent for `--output stdout --outputTemplate '{{.K}},{{.V}}' --oneline`
 
 
 ```bash

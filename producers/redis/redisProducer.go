@@ -3,7 +3,6 @@ package redis
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"github.com/redis/go-redis/v9"
 	"log"
 	"os"
@@ -12,6 +11,7 @@ import (
 
 type RedisProducer struct {
 	client redis.Client
+	Ttl    time.Duration
 }
 
 func (p *RedisProducer) Initialize(configFile string) error {
@@ -38,21 +38,9 @@ func (p *RedisProducer) Close() {
 	}
 }
 
-func (p *RedisProducer) Produce(params ...interface{}) {
+func (p *RedisProducer) Produce(k []byte, v []byte) {
 	ctx := context.Background()
-	key, ok := params[0].(string)
-	if !ok {
-		fmt.Println("Failed to cast interface{} to string")
-	}
-	val, ok := params[1].([]byte)
-	if !ok {
-		fmt.Println("Failed to cast interface{} to []byte]")
-	}
-	exp, ok := params[2].(time.Duration)
-	if !ok {
-		fmt.Println("Failed to cast interface{} to time.Duration")
-	}
-	err := p.client.Set(ctx, key, val, exp).Err()
+	err := p.client.Set(ctx, string(k), string(v), p.Ttl).Err()
 	if err != nil {
 		log.Fatalf("Failed to write data in Redis:\n%s", err)
 	}

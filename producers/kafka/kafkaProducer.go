@@ -49,7 +49,7 @@ type KafkaManager struct {
 func (k *KafkaManager) Initialize(configFile string) {
 
 	var err error
-	conf := k.convertInKafkaConfig(k.ReadConfig(configFile))
+	conf := convertInKafkaConfig(readConfig(configFile))
 	k.admin, err = kafka.NewAdminClient(&conf)
 	if err != nil {
 		log.Fatalf("Failed to create admin client: %s", err)
@@ -60,18 +60,9 @@ func (k *KafkaManager) Initialize(configFile string) {
 	}
 }
 
-func (k *KafkaManager) convertInKafkaConfig(m map[string]string) kafka.ConfigMap {
-	var conf kafka.ConfigMap
-	conf = make(map[string]kafka.ConfigValue)
-	for k, v := range m {
-		conf[k] = v
-	}
-	return conf
-}
-
 func (k *KafkaManager) InitializeSchemaRegistry(configFile string) {
 	var err error
-	conf := k.ReadConfig(configFile)
+	conf := readConfig(configFile)
 
 	k.schema, err = schemaregistry.NewClient(schemaregistry.NewConfigWithAuthentication(
 		conf["schemaRegistryURL"],
@@ -89,38 +80,6 @@ func (k *KafkaManager) Close() {
 	k.admin.Close()
 	k.producer.Flush(15 * 1000)
 	k.producer.Close()
-}
-
-func (k *KafkaManager) ReadConfig(configFile string) map[string]string {
-
-	m := make(map[string]string)
-
-	file, err := os.Open(configFile)
-	if err != nil {
-		log.Fatalf("Failed to open file: %s", err)
-	}
-	defer func(file *os.File) {
-		err := file.Close()
-		if err != nil {
-			log.Fatalf("Error in closing file: %s", err)
-		}
-	}(file)
-
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		line := strings.TrimSpace(scanner.Text())
-		if !strings.HasPrefix(line, "#") && len(line) != 0 {
-			kv := strings.Split(line, "=")
-			parameter := strings.TrimSpace(kv[0])
-			value := strings.TrimSpace(kv[1])
-			m[parameter] = value
-		}
-	}
-
-	if err := scanner.Err(); err != nil {
-		log.Fatalf("Failed to read file: %s", err)
-	}
-	return m
 }
 
 func (k *KafkaManager) Produce(key []byte, data []byte) {
@@ -146,7 +105,7 @@ func (k *KafkaManager) Produce(key []byte, data []byte) {
 			log.Fatalf("Error creating serializer: %s\n", err)
 		} else {
 
-			t := k.getType(k.TemplateType)
+			t := getType(k.TemplateType)
 			err := json.Unmarshal(data, t)
 
 			if err != nil {
@@ -179,48 +138,6 @@ func (k *KafkaManager) Produce(key []byte, data []byte) {
 		log.Printf("Failed to produce message: %v\n", err)
 	}
 
-}
-
-func listenToEventsFrom(k *kafka.Producer) {
-
-	for e := range k.Events() {
-		switch ev := e.(type) {
-		case *kafka.Message:
-			m := ev
-			if m.TopicPartition.Error != nil {
-				log.Printf("Delivery failed: %v\n", m.TopicPartition.Error)
-			} else {
-				//fmt.Printf("Delivered message to topic %s [%d] at offset %v\n", *m.TopicPartition.Topic, m.TopicPartition.Partition, m.TopicPartition.Offset)
-			}
-		case kafka.Error:
-			log.Printf("Error: %v\n", ev)
-		case *kafka.Stats:
-			// https://github.com/confluentinc/librdkafka/blob/master/STATISTICS.md
-			var stats map[string]interface{}
-			err := json.Unmarshal([]byte(e.String()), &stats)
-			if err != nil {
-				return
-			}
-			log.Printf("%9.f bytes produced to Kafka\n", stats["txmsg_bytes"])
-		default:
-			log.Printf("Ignored event: %s\n", ev)
-		}
-	}
-
-}
-
-func (k *KafkaManager) getType(templateType string) interface{} {
-
-	var netDevice types.NetDevice
-	var user types.User
-
-	switch templateType {
-	case "net-device":
-		return &netDevice
-	case "user":
-		return &user
-	}
-	return nil
 }
 
 func (k *KafkaManager) CreateTopic(topic string) {
@@ -259,4 +176,87 @@ func (k *KafkaManager) CreateTopicFull(topic string, partitions int, rf int) {
 
 	k.admin.Close()
 
+}
+
+func listenToEventsFrom(k *kafka.Producer) {
+
+	for e := range k.Events() {
+		switch ev := e.(type) {
+		case *kafka.Message:
+			m := ev
+			if m.TopicPartition.Error != nil {
+				log.Printf("Delivery failed: %v\n", m.TopicPartition.Error)
+			} else {
+				//fmt.Printf("Delivered message to topic %s [%d] at offset %v\n", *m.TopicPartition.Topic, m.TopicPartition.Partition, m.TopicPartition.Offset)
+			}
+		case kafka.Error:
+			log.Printf("Error: %v\n", ev)
+		case *kafka.Stats:
+			// https://github.com/confluentinc/librdkafka/blob/master/STATISTICS.md
+			var stats map[string]interface{}
+			err := json.Unmarshal([]byte(e.String()), &stats)
+			if err != nil {
+				return
+			}
+			log.Printf("%9.f bytes produced to Kafka\n", stats["txmsg_bytes"])
+		default:
+			log.Printf("Ignored event: %s\n", ev)
+		}
+	}
+
+}
+
+func getType(templateType string) interface{} {
+
+	var netDevice types.NetDevice
+	var user types.User
+
+	switch templateType {
+	case "net-device":
+		return &netDevice
+	case "user":
+		return &user
+	}
+	return nil
+}
+
+func readConfig(configFile string) map[string]string {
+
+	m := make(map[string]string)
+
+	file, err := os.Open(configFile)
+	if err != nil {
+		log.Fatalf("Failed to open file: %s", err)
+	}
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+			log.Fatalf("Error in closing file: %s", err)
+		}
+	}(file)
+
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		line := strings.TrimSpace(scanner.Text())
+		if !strings.HasPrefix(line, "#") && len(line) != 0 {
+			kv := strings.Split(line, "=")
+			parameter := strings.TrimSpace(kv[0])
+			value := strings.TrimSpace(kv[1])
+			m[parameter] = value
+		}
+	}
+
+	if err := scanner.Err(); err != nil {
+		log.Fatalf("Failed to read file: %s", err)
+	}
+	return m
+}
+
+func convertInKafkaConfig(m map[string]string) kafka.ConfigMap {
+	var conf kafka.ConfigMap
+	conf = make(map[string]kafka.ConfigValue)
+	for k, v := range m {
+		conf[k] = v
+	}
+	return conf
 }

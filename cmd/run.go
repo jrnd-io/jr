@@ -28,6 +28,7 @@ import (
 	"github.com/ugol/jr/functions"
 	"github.com/ugol/jr/producers/console"
 	"github.com/ugol/jr/producers/kafka"
+	"github.com/ugol/jr/producers/redis"
 	"log"
 	"os"
 	"os/signal"
@@ -78,6 +79,8 @@ jr run --templateFileName ~/.jr/templates/net-device.tpl
 		autocreate, _ := cmd.Flags().GetBool("autocreate")
 		schemaRegistry, _ := cmd.Flags().GetBool("schemaRegistry")
 		serializer, _ := cmd.Flags().GetString("serializer")
+
+		redisTtl, _ := cmd.Flags().GetDuration("redis.ttl")
 
 		if kcat {
 			oneline = true
@@ -131,6 +134,10 @@ jr run --templateFileName ~/.jr/templates/net-device.tpl
 			producer = &console.ConsoleProducer{OutTemplate: outTemplate}
 		}
 
+		if output == "redis" {
+			producer = createRedisProducer(redisTtl)
+		}
+
 		functions.Random.Seed(seed)
 		functions.JrContext.Num = num
 		functions.JrContext.Range = make([]int, num)
@@ -179,6 +186,12 @@ jr run --templateFileName ~/.jr/templates/net-device.tpl
 		writeStats()
 
 	},
+}
+
+func createRedisProducer(ttl time.Duration) Producer {
+	return &redis.RedisProducer{
+		Ttl: ttl,
+	}
 }
 
 func createKafkaProducer(serializer string, topic string, kafkaConfig string, schemaRegistry bool, registryConfig string, kcat bool, autocreate bool) *kafka.KafkaManager {
@@ -264,4 +277,6 @@ func init() {
 
 	runCmd.Flags().BoolP("schemaRegistry", "s", false, "If you want to use Confluent Schema Registry")
 	runCmd.Flags().String("serializer", "json-schema", "Type of serializer: json-schema, avro-generic, avro, protobuf")
+	runCmd.Flags().Duration("redis.ttl", 1000, "If output is redis, ttl of the object")
+
 }

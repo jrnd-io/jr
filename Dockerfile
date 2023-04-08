@@ -1,7 +1,7 @@
 FROM golang:1.20-alpine AS builder
 MAINTAINER Ugo Landini <ugo@confluent.io>
 
-ARG VERSION=0.1.2
+ARG VERSION=0.1.3
 ARG USER=$(id -u -n)
 ARG TIME=$(date)
 

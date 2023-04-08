@@ -81,6 +81,7 @@ jr run --templateFileName ~/.jr/templates/net-device.tpl
 		serializer, _ := cmd.Flags().GetString("serializer")
 
 		redisTtl, _ := cmd.Flags().GetDuration("redis.ttl")
+		redisConfig, _ := cmd.Flags().GetString("redisConfig")
 
 		if kcat {
 			oneline = true
@@ -135,7 +136,7 @@ jr run --templateFileName ~/.jr/templates/net-device.tpl
 		}
 
 		if output == "redis" {
-			producer = createRedisProducer(redisTtl)
+			producer = createRedisProducer(redisTtl, redisConfig)
 		}
 
 		if output == "mongo" {
@@ -192,10 +193,12 @@ jr run --templateFileName ~/.jr/templates/net-device.tpl
 	},
 }
 
-func createRedisProducer(ttl time.Duration) Producer {
-	return &redis.RedisProducer{
+func createRedisProducer(ttl time.Duration, redisConfig string) Producer {
+	rProducer := &redis.RedisProducer{
 		Ttl: ttl,
 	}
+	rProducer.Initialize(redisConfig)
+	return rProducer
 }
 
 func createKafkaProducer(serializer string, topic string, kafkaConfig string, schemaRegistry bool, registryConfig string, kcat bool, autocreate bool) *kafka.KafkaManager {
@@ -282,5 +285,6 @@ func init() {
 	runCmd.Flags().BoolP("schemaRegistry", "s", false, "If you want to use Confluent Schema Registry")
 	runCmd.Flags().String("serializer", "json-schema", "Type of serializer: json-schema, avro-generic, avro, protobuf")
 	runCmd.Flags().Duration("redis.ttl", 1*time.Minute, "If output is redis, ttl of the object")
+	runCmd.Flags().String("redisConfig", "./redis/config.json", "Redis configuration")
 
 }

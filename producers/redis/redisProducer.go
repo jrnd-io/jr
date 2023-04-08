@@ -14,7 +14,7 @@ type RedisProducer struct {
 	Ttl    time.Duration
 }
 
-func (p *RedisProducer) Initialize(configFile string) error {
+func (p *RedisProducer) Initialize(configFile string) {
 	var options redis.Options
 
 	data, err := os.ReadFile(configFile)
@@ -28,7 +28,6 @@ func (p *RedisProducer) Initialize(configFile string) error {
 	}
 
 	p.client = *redis.NewClient(&options)
-	return err
 }
 
 func (p *RedisProducer) Close() {

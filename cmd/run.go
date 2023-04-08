@@ -122,6 +122,10 @@ jr run --templateFileName ~/.jr/templates/net-device.tpl
 
 		var producer Producer
 
+		if output == "stdout" {
+			producer = &console.ConsoleProducer{OutTemplate: outTemplate}
+		}
+
 		if output == "kafka" {
 			producer = createKafkaProducer(serializer, topic, kafkaConfig, schemaRegistry, registryConfig, kcat, autocreate)
 		} else {
@@ -130,12 +134,12 @@ jr run --templateFileName ~/.jr/templates/net-device.tpl
 			}
 		}
 
-		if output == "stdout" {
-			producer = &console.ConsoleProducer{OutTemplate: outTemplate}
-		}
-
 		if output == "redis" {
 			producer = createRedisProducer(redisTtl)
+		}
+
+		if output == "mongo" {
+			log.Fatal("Not yet implemented")
 		}
 
 		functions.Random.Seed(seed)
@@ -269,7 +273,7 @@ func init() {
 	runCmd.Flags().StringP("topic", "t", "test", "Kafka topic name")
 
 	runCmd.Flags().Bool("kcat", false, "If you want to pipe jr with kcat, use this flag: it is equivalent to --output stdout --outputTemplate '{{key}},{{value}}' --oneline")
-	runCmd.Flags().StringP("output", "o", "stdout", "can be stdout or kafka")
+	runCmd.Flags().StringP("output", "o", "stdout", "can be one of stdout, kafka, redis, mongo")
 	runCmd.Flags().String("outputTemplate", "{{.V}}\n", "Formatting of K,V on standard output")
 	runCmd.Flags().BoolP("oneline", "l", false, "strips /n from output, for example to be pipelined to tools like kcat")
 	runCmd.Flags().BoolP("autocreate", "a", false, "if enabled, autocreate topics")

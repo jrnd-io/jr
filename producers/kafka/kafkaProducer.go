@@ -128,31 +128,7 @@ func (k *KafkaManager) ReadConfig(configFile string) map[string]string {
 
 func (k *KafkaManager) Produce(key []byte, data []byte) {
 
-	go func() {
-		for e := range k.producer.Events() {
-			switch ev := e.(type) {
-			case *kafka.Message:
-				m := ev
-				if m.TopicPartition.Error != nil {
-					log.Printf("Delivery failed: %v\n", m.TopicPartition.Error)
-				} else {
-					//fmt.Printf("Delivered message to topic %s [%d] at offset %v\n", *m.TopicPartition.Topic, m.TopicPartition.Partition, m.TopicPartition.Offset)
-				}
-			case kafka.Error:
-				log.Printf("Error: %v\n", ev)
-			case *kafka.Stats:
-				// https://github.com/confluentinc/librdkafka/blob/master/STATISTICS.md
-				var stats map[string]interface{}
-				err := json.Unmarshal([]byte(e.String()), &stats)
-				if err != nil {
-					return
-				}
-				log.Printf("%9.f bytes produced to Kafka\n", stats["txmsg_bytes"])
-			default:
-				log.Printf("Ignored event: %s\n", ev)
-			}
-		}
-	}()
+	go listenToEventsFrom(k.producer)
 
 	var ser serde.Serializer
 
@@ -204,6 +180,34 @@ func (k *KafkaManager) Produce(key []byte, data []byte) {
 			//continue
 		}
 		log.Printf("Failed to produce message: %v\n", err)
+	}
+
+}
+
+func listenToEventsFrom(k *kafka.Producer) {
+
+	for e := range k.Events() {
+		switch ev := e.(type) {
+		case *kafka.Message:
+			m := ev
+			if m.TopicPartition.Error != nil {
+				log.Printf("Delivery failed: %v\n", m.TopicPartition.Error)
+			} else {
+				//fmt.Printf("Delivered message to topic %s [%d] at offset %v\n", *m.TopicPartition.Topic, m.TopicPartition.Partition, m.TopicPartition.Offset)
+			}
+		case kafka.Error:
+			log.Printf("Error: %v\n", ev)
+		case *kafka.Stats:
+			// https://github.com/confluentinc/librdkafka/blob/master/STATISTICS.md
+			var stats map[string]interface{}
+			err := json.Unmarshal([]byte(e.String()), &stats)
+			if err != nil {
+				return
+			}
+			log.Printf("%9.f bytes produced to Kafka\n", stats["txmsg_bytes"])
+		default:
+			log.Printf("Ignored event: %s\n", ev)
+		}
 	}
 
 }

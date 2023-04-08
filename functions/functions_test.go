@@ -101,7 +101,7 @@ func TestCache(t *testing.T) {
 	if v != false || f != nil {
 		t.Error("cache should be full, no errors")
 	}
-	v, f = cache("wines")
+	_, f = cache("wines")
 	if f == nil {
 		t.Error("no cacheable, should get error")
 	}

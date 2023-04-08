@@ -28,7 +28,7 @@ import (
 	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
 	"github.com/spf13/cobra"
 	"github.com/ugol/jr/functions"
-	"github.com/ugol/jr/producers"
+	kafka2 "github.com/ugol/jr/producers/kafka"
 	"log"
 	"os"
 	"os/signal"
@@ -86,17 +86,17 @@ jr run --templateFileName ~/.jr/templates/net-device.tpl
 		var err error
 
 		if functions.Contains(output, "kafka") {
-			producer, err = producers.Initialize(kafkaConfig)
+			producer, err = kafka2.Initialize(kafkaConfig)
 			if err != nil {
 				log.Fatal(err)
 			}
 
 			if autocreate {
-				producers.CreateTopic(topic)
+				kafka2.CreateTopic(topic)
 			}
 
 			if schemaRegistry {
-				_ = producers.InitializeSchemaRegistry(registryConfig)
+				_ = kafka2.InitializeSchemaRegistry(registryConfig)
 				if kcat {
 					log.Println("Ignoring kcat when schemaRegistry is enabled")
 				}
@@ -179,7 +179,7 @@ jr run --templateFileName ~/.jr/templates/net-device.tpl
 		}
 
 		if functions.Contains(output, "kafka") {
-			producers.Close(producer)
+			kafka2.Close(producer)
 		}
 
 		time.Sleep(100 * time.Millisecond)
@@ -242,7 +242,7 @@ func printOutput(key string, value string, p *kafka.Producer, topic string, outp
 		fmt.Print(outBuffer.String())
 	}
 	if functions.Contains(output, "kafka") {
-		producers.Produce(p, []byte(key), []byte(value), topic, serializer, templateType)
+		kafka2.Produce(p, []byte(key), []byte(value), topic, serializer, templateType)
 	}
 }
 

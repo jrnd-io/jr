@@ -10,11 +10,11 @@ import (
 	"time"
 )
 
-type Producer struct {
+type RedisProducer struct {
 	client redis.Client
 }
 
-func (p Producer) Initialize(configFile string) error {
+func (p *RedisProducer) Initialize(configFile string) error {
 	var options redis.Options
 
 	data, err := os.ReadFile(configFile)
@@ -31,14 +31,14 @@ func (p Producer) Initialize(configFile string) error {
 	return err
 }
 
-func (p Producer) Close() {
+func (p *RedisProducer) Close() {
 	err := p.client.Close()
 	if err != nil {
 		log.Fatalf("Failed to close Redis connection:\n%s", err)
 	}
 }
 
-func (p Producer) Produce(params ...interface{}) {
+func (p *RedisProducer) Produce(params ...interface{}) {
 	ctx := context.Background()
 	key, ok := params[0].(string)
 	if !ok {

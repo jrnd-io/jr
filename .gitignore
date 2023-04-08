@@ -46,4 +46,5 @@ _testmain.go
 # Specific project files
 releases
 build
-kafka/*.properties
+producers/kafka/*.properties
+producers/redis/config.json

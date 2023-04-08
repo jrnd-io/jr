@@ -39,7 +39,7 @@ help: hello
 	@echo ''
 
 copy_templates:
-	mkdir -p ~/.jr && cp -r templates ~/.jr/
+	mkdir -p ~/.jr/kafka && cp -r templates ~/.jr/ && cp -r producers/kafka/*.properties.example ~/.jr/kafka/
 
 install:
 	install build/jr /usr/local/bin

@@ -1,8 +1,7 @@
-package producers
+package redis
 
 import (
 	"fmt"
-	"github.com/ugol/jr/producers/redis"
 	"log"
 )
 
@@ -17,7 +16,7 @@ func ProducerFactory(producerType string) (Producer, error) {
 	//	case "kafka":
 	//		return kafka.Producer{}, nil
 	case "redis":
-		return redis.Producer{}, nil
+		return &RedisProducer{}, nil
 	default:
 		return nil, fmt.Errorf("Invalid producer type: %s", producerType)
 	}

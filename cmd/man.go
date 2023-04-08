@@ -24,7 +24,7 @@ package cmd
 import (
 	"fmt"
 	"github.com/spf13/cobra"
-	"github.com/ugol/jr/jr"
+	"github.com/ugol/jr/functions"
 	"os"
 	"os/exec"
 	"strings"
@@ -44,18 +44,18 @@ var manCmd = &cobra.Command{
 		run, _ := cmd.Flags().GetBool("run")
 
 		if list {
-			for k, _ := range jr.FunctionsMap() {
+			for k, _ := range functions.FunctionsMap() {
 				printFunction(k)
 			}
 			return
 		} else if category {
-			for k, v := range jr.DescriptionMap() {
+			for k, v := range functions.DescriptionMap() {
 				if strings.Contains(v.Category, args[0]) {
 					printFunction(k)
 				}
 			}
 		} else if find {
-			for k, v := range jr.DescriptionMap() {
+			for k, v := range functions.DescriptionMap() {
 				if strings.Contains(v.Description, args[0]) || strings.Contains(v.Name, args[0]) {
 					printFunction(k)
 				}
@@ -81,12 +81,12 @@ var manCmd = &cobra.Command{
 	},
 }
 
-func printFunction(name string) (jr.FunctionDescription, bool) {
+func printFunction(name string) (functions.FunctionDescription, bool) {
 
 	var Reset = "\033[0m"
 	var Cyan = "\033[36m"
 
-	f, found := jr.Description(name)
+	f, found := functions.Description(name)
 	if found {
 		fmt.Println()
 		fmt.Printf("%sName: %s%s\n", Cyan, Reset, f.Name)

@@ -27,7 +27,8 @@ import (
 	"fmt"
 	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
 	"github.com/spf13/cobra"
-	"github.com/ugol/jr/jr"
+	"github.com/ugol/jr/functions"
+	"github.com/ugol/jr/producers"
 	"log"
 	"os"
 	"os/signal"
@@ -84,18 +85,18 @@ jr run --templateFileName ~/.jr/templates/net-device.tpl
 		var valueTemplate []byte
 		var err error
 
-		if jr.Contains(output, "kafka") {
-			producer, err = jr.Initialize(kafkaConfig)
+		if functions.Contains(output, "kafka") {
+			producer, err = producers.Initialize(kafkaConfig)
 			if err != nil {
 				log.Fatal(err)
 			}
 
 			if autocreate {
-				jr.CreateTopic(topic)
+				producers.CreateTopic(topic)
 			}
 
 			if schemaRegistry {
-				_ = jr.InitializeSchemaRegistry(registryConfig)
+				_ = producers.InitializeSchemaRegistry(registryConfig)
 				if kcat {
 					log.Println("Ignoring kcat when schemaRegistry is enabled")
 				}
@@ -110,11 +111,11 @@ jr run --templateFileName ~/.jr/templates/net-device.tpl
 			valueTemplate = []byte(args[0])
 		} else if templateFileName {
 			valueTemplate, err = os.ReadFile(os.ExpandEnv(args[0]))
-			jr.JrContext.TemplateType = args[0]
+			functions.JrContext.TemplateType = args[0]
 		} else {
 			templatePath := fmt.Sprintf("%s/%s.tpl", templateDir, args[0])
 			valueTemplate, err = os.ReadFile(templatePath)
-			jr.JrContext.TemplateType = args[0]
+			functions.JrContext.TemplateType = args[0]
 		}
 		if err != nil {
 			log.Fatal(err)
@@ -125,24 +126,24 @@ jr run --templateFileName ~/.jr/templates/net-device.tpl
 			log.Fatal(err)
 		}
 
-		key, err := template.New("key").Funcs(jr.FunctionsMap()).Parse(keyTemplate)
+		key, err := template.New("key").Funcs(functions.FunctionsMap()).Parse(keyTemplate)
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		value, err := template.New("value").Funcs(jr.FunctionsMap()).Parse(string(valueTemplate))
+		value, err := template.New("value").Funcs(functions.FunctionsMap()).Parse(string(valueTemplate))
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		jr.Random.Seed(seed)
+		functions.Random.Seed(seed)
 
-		jr.JrContext.Num = num
-		jr.JrContext.Range = make([]int, num)
-		jr.JrContext.Frequency = frequency
-		jr.JrContext.Locales = locales
-		jr.JrContext.Seed = seed
-		jr.JrContext.TemplateDir = templateDir
+		functions.JrContext.Num = num
+		functions.JrContext.Range = make([]int, num)
+		functions.JrContext.Frequency = frequency
+		functions.JrContext.Locales = locales
+		functions.JrContext.Seed = seed
+		functions.JrContext.TemplateDir = templateDir
 
 		infinite := true
 		if duration > 0 {
@@ -161,9 +162,9 @@ jr run --templateFileName ~/.jr/templates/net-device.tpl
 			for ok := true; ok; ok = infinite {
 				select {
 				case <-time.After(frequency):
-					for range jr.JrContext.Range {
+					for range functions.JrContext.Range {
 						k, v, _ := executeTemplate(key, value, oneline)
-						printOutput(k, v, producer, topic, output, outTemplate, serializer, jr.JrContext.TemplateType)
+						printOutput(k, v, producer, topic, output, outTemplate, serializer, functions.JrContext.TemplateType)
 					}
 				case <-ctx.Done():
 					stop()
@@ -171,14 +172,14 @@ jr run --templateFileName ~/.jr/templates/net-device.tpl
 				}
 			}
 		} else {
-			for range jr.JrContext.Range {
+			for range functions.JrContext.Range {
 				k, v, _ := executeTemplate(key, value, oneline)
-				printOutput(k, v, producer, topic, output, outTemplate, serializer, jr.JrContext.TemplateType)
+				printOutput(k, v, producer, topic, output, outTemplate, serializer, functions.JrContext.TemplateType)
 			}
 		}
 
-		if jr.Contains(output, "kafka") {
-			jr.Close(producer)
+		if functions.Contains(output, "kafka") {
+			producers.Close(producer)
 		}
 
 		time.Sleep(100 * time.Millisecond)
@@ -189,11 +190,11 @@ jr run --templateFileName ~/.jr/templates/net-device.tpl
 
 func writeStats() {
 	_, _ = fmt.Fprintln(os.Stderr)
-	elapsed := time.Since(jr.JrContext.StartTime)
+	elapsed := time.Since(functions.JrContext.StartTime)
 	_, _ = fmt.Fprintf(os.Stderr, "Elapsed time: %v\n", elapsed.Round(1*time.Second))
-	_, _ = fmt.Fprintf(os.Stderr, "Data Generated (Objects): %d\n", jr.JrContext.GeneratedObjects)
-	_, _ = fmt.Fprintf(os.Stderr, "Data Generated (bytes): %d\n", jr.JrContext.GeneratedBytes)
-	_, _ = fmt.Fprintf(os.Stderr, "Throughput (bytes per second): %9.f\n", float64(jr.JrContext.GeneratedBytes)/elapsed.Seconds())
+	_, _ = fmt.Fprintf(os.Stderr, "Data Generated (Objects): %d\n", functions.JrContext.GeneratedObjects)
+	_, _ = fmt.Fprintf(os.Stderr, "Data Generated (bytes): %d\n", functions.JrContext.GeneratedBytes)
+	_, _ = fmt.Fprintf(os.Stderr, "Throughput (bytes per second): %9.f\n", float64(functions.JrContext.GeneratedBytes)/elapsed.Seconds())
 	_, _ = fmt.Fprintln(os.Stderr)
 }
 
@@ -202,12 +203,12 @@ func executeTemplate(key *template.Template, value *template.Template, oneline b
 	var kBuffer, vBuffer bytes.Buffer
 	var err error
 
-	if err = key.Execute(&kBuffer, jr.JrContext); err != nil {
+	if err = key.Execute(&kBuffer, functions.JrContext); err != nil {
 		log.Println(err)
 	}
 	k := kBuffer.String()
 
-	if err = value.Execute(&vBuffer, jr.JrContext); err != nil {
+	if err = value.Execute(&vBuffer, functions.JrContext); err != nil {
 		log.Println(err)
 	}
 	v := vBuffer.String()
@@ -217,15 +218,15 @@ func executeTemplate(key *template.Template, value *template.Template, oneline b
 		v = re.ReplaceAllString(v, "")
 	}
 
-	jr.JrContext.GeneratedObjects++
-	jr.JrContext.GeneratedBytes += int64(len(v))
+	functions.JrContext.GeneratedObjects++
+	functions.JrContext.GeneratedBytes += int64(len(v))
 
 	return k, v, err
 }
 
 func printOutput(key string, value string, p *kafka.Producer, topic string, output []string, outputTemplateScript *template.Template, serializer string, templateType string) {
 
-	if jr.Contains(output, "stdout") {
+	if functions.Contains(output, "stdout") {
 
 		var outBuffer bytes.Buffer
 		var err error
@@ -240,20 +241,20 @@ func printOutput(key string, value string, p *kafka.Producer, topic string, outp
 		}
 		fmt.Print(outBuffer.String())
 	}
-	if jr.Contains(output, "kafka") {
-		jr.Produce(p, []byte(key), []byte(value), topic, serializer, templateType)
+	if functions.Contains(output, "kafka") {
+		producers.Produce(p, []byte(key), []byte(value), topic, serializer, templateType)
 	}
 }
 
 func init() {
 	rootCmd.AddCommand(runCmd)
-	runCmd.Flags().IntP("num", "n", jr.JrContext.Num, "Number of elements to create for each pass")
+	runCmd.Flags().IntP("num", "n", functions.JrContext.Num, "Number of elements to create for each pass")
 	runCmd.Flags().DurationP("frequency", "f", 0, "how much time to wait for next generation pass")
 	runCmd.Flags().DurationP("duration", "d", 0, "If frequency is enabled, with Duration you can set a finite amount of time")
 
-	runCmd.Flags().Int64("seed", jr.JrContext.Seed, "Seed to init pseudorandom generator")
+	runCmd.Flags().Int64("seed", functions.JrContext.Seed, "Seed to init pseudorandom generator")
 
-	runCmd.Flags().String("templateDir", jr.JrContext.TemplateDir, "directory containing templates")
+	runCmd.Flags().String("templateDir", functions.JrContext.TemplateDir, "directory containing templates")
 	runCmd.Flags().StringP("kafkaConfig", "F", "./kafka/config.properties", "Kafka configuration")
 	runCmd.Flags().String("registryConfig", "./kafka/registry.properties", "Kafka configuration")
 	runCmd.Flags().Bool("templateFileName", false, "If enabled, [template] must be a template file")
@@ -267,7 +268,7 @@ func init() {
 	runCmd.Flags().String("outputTemplate", "{{.V}}\n", "Formatting of K,V on standard output")
 	runCmd.Flags().BoolP("oneline", "l", false, "strips /n from output, for example to be pipelined to tools like kcat")
 	runCmd.Flags().BoolP("autocreate", "a", false, "if enabled, autocreate topics")
-	runCmd.Flags().StringSlice("locales", jr.JrContext.Locales, "List of locales")
+	runCmd.Flags().StringSlice("locales", functions.JrContext.Locales, "List of locales")
 
 	runCmd.Flags().BoolP("schemaRegistry", "s", false, "If you want to use Confluent Schema Registry")
 	runCmd.Flags().String("serializer", "json-schema", "Type of serializer: json-schema, avro-generic, avro, protobuf")

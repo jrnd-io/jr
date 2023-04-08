@@ -1,8 +1,8 @@
-package storage
+package producers
 
 import (
 	"fmt"
-	"github.com/ugol/jr/storage/redis"
+	"github.com/ugol/jr/producers/redis"
 	"log"
 )
 

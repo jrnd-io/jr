@@ -5,7 +5,7 @@ JR is a CLI program that helps you to create quality random data for your applic
 [![img.png](images/goreport.png)](https://goreportcard.com/report/github.com/ugol/jr)
 ![Build](https://github.com/ugol/jr/actions/workflows/go.yml/badge.svg)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
+[![Go Reference](https://pkg.go.dev/badge/github.com/ugol/jr.svg)](https://pkg.go.dev/github.com/ugol/jr)
 
 ![JR-simple](https://user-images.githubusercontent.com/89472/229626362-70ddc95d-1090-4746-a20a-fbffba4193cd.gif)
 

@@ -19,38 +19,50 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-package cmd
+package functions
 
 import (
-	"github.com/spf13/cobra"
-	"github.com/ugol/jr/producers"
-	"log"
+	"github.com/google/uuid"
 )
 
-// createTopicCmd represents the createTopic command
-var createTopicCmd = &cobra.Command{
-	Use:   "createTopic [topic]",
-	Short: "simple command to create a Kafka Topic",
-	Long:  "simple command to create a Kafka Topic",
-	Args:  cobra.ExactArgs(1),
-	Run: func(cmd *cobra.Command, args []string) {
-		kafkaConfig, _ := cmd.Flags().GetString("kafkaConfig")
-
-		_, err := producers.Initialize(kafkaConfig)
-		if err != nil {
-			log.Fatal(err)
-		}
-		partitions, _ := cmd.Flags().GetInt("partitions")
-		replica, _ := cmd.Flags().GetInt("replica")
-		producers.CreateTopicFull(args[0], partitions, replica)
-
-	},
+func counter(c string, start, step int) int {
+	val, exists := JrContext.Counters[c]
+	if exists {
+		JrContext.Counters[c] = val + step
+		return JrContext.Counters[c]
+	} else {
+		JrContext.Counters[c] = start
+		return start
+	}
 }
 
-func init() {
-	rootCmd.AddCommand(createTopicCmd)
-	createTopicCmd.Flags().IntP("partitions", "p", 6, "Number of partitions")
-	createTopicCmd.Flags().IntP("replica", "r", 3, "Replica Factor")
-	createTopicCmd.Flags().StringP("kafkaConfig", "F", "./kafka/config.properties", "Kafka configuration")
+func uniqueId() string {
+	return uuid.New().String()
+}
 
+func randomBool() string {
+	b := Random.Intn(2)
+	if b == 0 {
+		return "false"
+	} else {
+		return "true"
+	}
+}
+
+func yesOrNo() string {
+	b := Random.Intn(2)
+	if b == 0 {
+		return "no"
+	} else {
+		return "yes"
+	}
+}
+
+func Contains(s []string, str string) bool {
+	for _, v := range s {
+		if v == str {
+			return true
+		}
+	}
+	return false
 }

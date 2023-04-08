@@ -1,6 +1,6 @@
 //Adapted for JR from https://github.com/lucasjones/reggen
 
-package jr
+package functions
 
 import (
 	"fmt"

@@ -19,38 +19,49 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-package cmd
+package functions
 
 import (
-	"github.com/spf13/cobra"
-	"github.com/ugol/jr/producers"
-	"log"
+	"os"
+	"time"
 )
 
-// createTopicCmd represents the createTopic command
-var createTopicCmd = &cobra.Command{
-	Use:   "createTopic [topic]",
-	Short: "simple command to create a Kafka Topic",
-	Long:  "simple command to create a Kafka Topic",
-	Args:  cobra.ExactArgs(1),
-	Run: func(cmd *cobra.Command, args []string) {
-		kafkaConfig, _ := cmd.Flags().GetString("kafkaConfig")
+var JrContext Context
 
-		_, err := producers.Initialize(kafkaConfig)
-		if err != nil {
-			log.Fatal(err)
-		}
-		partitions, _ := cmd.Flags().GetInt("partitions")
-		replica, _ := cmd.Flags().GetInt("replica")
-		producers.CreateTopicFull(args[0], partitions, replica)
+const NUM = 1
+const FREQUENCY = 0
+const DURATION = 0
+const TEMPLATEDIR = "$HOME/.jr/templates"
 
-	},
+type Context struct {
+	StartTime        time.Time
+	TemplateDir      string
+	TemplateType     string
+	GeneratedObjects int64
+	GeneratedBytes   int64
+	Num              int
+	Range            []int
+	Frequency        time.Duration
+	Duration         time.Duration
+	Locales          []string
+	Seed             int64
+	Counters         map[string]int
 }
 
 func init() {
-	rootCmd.AddCommand(createTopicCmd)
-	createTopicCmd.Flags().IntP("partitions", "p", 6, "Number of partitions")
-	createTopicCmd.Flags().IntP("replica", "r", 3, "Replica Factor")
-	createTopicCmd.Flags().StringP("kafkaConfig", "F", "./kafka/config.properties", "Kafka configuration")
 
+	JrContext = Context{
+		StartTime:        time.Now(),
+		TemplateDir:      os.ExpandEnv(TEMPLATEDIR),
+		TemplateType:     "",
+		GeneratedBytes:   0,
+		GeneratedObjects: 0,
+		Num:              NUM,
+		Range:            make([]int, NUM),
+		Frequency:        FREQUENCY,
+		Duration:         DURATION,
+		Locales:          []string{"us"},
+		Seed:             time.Now().UTC().UnixNano(),
+		Counters:         make(map[string]int),
+	}
 }

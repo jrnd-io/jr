@@ -1,6 +1,6 @@
 // modified from https://golang.org/doc%2Fcodewalk%2Fmarkov.go
 
-package jr
+package functions
 
 import (
 	"bufio"

@@ -1,4 +1,25 @@
-package jr
+/*
+Copyright © 2022 Ugo Landini <ugo.landini@gmail.com>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+*/
+package producers
 
 import (
 	"bufio"
@@ -9,7 +30,7 @@ import (
 	"github.com/confluentinc/confluent-kafka-go/v2/schemaregistry/serde"
 	"github.com/confluentinc/confluent-kafka-go/v2/schemaregistry/serde/avro"
 	"github.com/confluentinc/confluent-kafka-go/v2/schemaregistry/serde/jsonschema"
-	"github.com/ugol/jr/jr/types"
+	types2 "github.com/ugol/jr/types"
 	"log"
 	"os"
 	"strings"
@@ -184,8 +205,8 @@ func Produce(p *kafka.Producer, key []byte, data []byte, topic string, serialize
 
 func getType(templateType string) interface{} {
 
-	var netDevice types.NetDevice
-	var user types.User
+	var netDevice types2.NetDevice
+	var user types2.User
 
 	switch templateType {
 	case "net-device":

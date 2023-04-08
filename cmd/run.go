@@ -171,7 +171,7 @@ jr run --templateFileName ~/.jr/templates/net-device.tpl
 		ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
 		defer stop()
 
-		if frequency != 0 {
+		if frequency != -1 {
 		Infinite:
 			for ok := true; ok; ok = infinite {
 				select {
@@ -243,7 +243,7 @@ func printOutput(key string, value string, p Producer) {
 func init() {
 	rootCmd.AddCommand(runCmd)
 	runCmd.Flags().IntP("num", "n", functions.JrContext.Num, "Number of elements to create for each pass")
-	runCmd.Flags().DurationP("frequency", "f", 0, "how much time to wait for next generation pass")
+	runCmd.Flags().DurationP("frequency", "f", -1, "how much time to wait for next generation pass")
 	runCmd.Flags().DurationP("duration", "d", 0, "If frequency is enabled, with Duration you can set a finite amount of time")
 
 	runCmd.Flags().Int64("seed", functions.JrContext.Seed, "Seed to init pseudorandom generator")

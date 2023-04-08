@@ -28,7 +28,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/ugol/jr/functions"
 	"github.com/ugol/jr/producers/console"
-	kafka2 "github.com/ugol/jr/producers/kafka"
+	"github.com/ugol/jr/producers/kafka"
 	"log"
 	"os"
 	"os/signal"
@@ -120,7 +120,7 @@ jr run --templateFileName ~/.jr/templates/net-device.tpl
 		}
 
 		if output == "kafka" {
-			kManager := &kafka2.KafkaManager{}
+			kManager := &kafka.KafkaManager{}
 			kManager.Serializer = serializer
 			kManager.Topic = topic
 			kManager.TemplateType = functions.JrContext.TemplateType

@@ -277,6 +277,6 @@ func init() {
 
 	runCmd.Flags().BoolP("schemaRegistry", "s", false, "If you want to use Confluent Schema Registry")
 	runCmd.Flags().String("serializer", "json-schema", "Type of serializer: json-schema, avro-generic, avro, protobuf")
-	runCmd.Flags().Duration("redis.ttl", 1000, "If output is redis, ttl of the object")
+	runCmd.Flags().Duration("redis.ttl", 1*time.Minute, "If output is redis, ttl of the object")
 
 }

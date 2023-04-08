@@ -25,9 +25,9 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
 	"github.com/spf13/cobra"
 	"github.com/ugol/jr/functions"
+	"github.com/ugol/jr/producers/console"
 	kafka2 "github.com/ugol/jr/producers/kafka"
 	"log"
 	"os"
@@ -36,6 +36,11 @@ import (
 	"text/template"
 	"time"
 )
+
+type Producer interface {
+	Close()
+	Produce(k []byte, v []byte)
+}
 
 var runCmd = &cobra.Command{
 	Use:   "run [template]",
@@ -56,7 +61,7 @@ jr run --templateFileName ~/.jr/templates/net-device.tpl
 		embeddedTemplate, _ := cmd.Flags().GetBool("template")
 		templateFileName, _ := cmd.Flags().GetBool("templateFileName")
 		kcat, _ := cmd.Flags().GetBool("kcat")
-		output, _ := cmd.Flags().GetStringSlice("output")
+		output, _ := cmd.Flags().GetString("output")
 		oneline, _ := cmd.Flags().GetBool("oneline")
 		locales, _ := cmd.Flags().GetStringSlice("locales")
 
@@ -77,35 +82,13 @@ jr run --templateFileName ~/.jr/templates/net-device.tpl
 
 		if kcat {
 			oneline = true
-			output = []string{"stdout"}
+			output = "stdout"
 			outputTemplate = "{{.K}},{{.V}}\n"
 		}
 
-		var producer *kafka.Producer
+		var producer Producer
 		var valueTemplate []byte
 		var err error
-
-		if functions.Contains(output, "kafka") {
-			producer, err = kafka2.Initialize(kafkaConfig)
-			if err != nil {
-				log.Fatal(err)
-			}
-
-			if autocreate {
-				kafka2.CreateTopic(topic)
-			}
-
-			if schemaRegistry {
-				_ = kafka2.InitializeSchemaRegistry(registryConfig)
-				if kcat {
-					log.Println("Ignoring kcat when schemaRegistry is enabled")
-				}
-			}
-		} else {
-			if schemaRegistry {
-				log.Println("Ignoring schemaRegistry and/or serializer when output not set to kafka")
-			}
-		}
 
 		if embeddedTemplate {
 			valueTemplate = []byte(args[0])
@@ -136,8 +119,40 @@ jr run --templateFileName ~/.jr/templates/net-device.tpl
 			log.Fatal(err)
 		}
 
-		functions.Random.Seed(seed)
+		if output == "kafka" {
+			kManager := &kafka2.KafkaManager{}
+			kManager.Serializer = serializer
+			kManager.Topic = topic
+			kManager.TemplateType = functions.JrContext.TemplateType
 
+			err = kManager.Initialize(kafkaConfig)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			if autocreate {
+				kManager.CreateTopic(topic)
+			}
+
+			if schemaRegistry {
+				_ = kManager.InitializeSchemaRegistry(registryConfig)
+				if kcat {
+					log.Println("Ignoring kcat when schemaRegistry is enabled")
+				}
+			}
+
+			producer = kManager
+		} else {
+			if schemaRegistry {
+				log.Println("Ignoring schemaRegistry and/or serializer when output not set to kafka")
+			}
+		}
+
+		if output == "stdout" {
+			producer = &console.ConsoleProducer{OutTemplate: outTemplate}
+		}
+
+		functions.Random.Seed(seed)
 		functions.JrContext.Num = num
 		functions.JrContext.Range = make([]int, num)
 		functions.JrContext.Frequency = frequency
@@ -164,7 +179,7 @@ jr run --templateFileName ~/.jr/templates/net-device.tpl
 				case <-time.After(frequency):
 					for range functions.JrContext.Range {
 						k, v, _ := executeTemplate(key, value, oneline)
-						printOutput(k, v, producer, topic, output, outTemplate, serializer, functions.JrContext.TemplateType)
+						printOutput(k, v, producer)
 					}
 				case <-ctx.Done():
 					stop()
@@ -174,13 +189,11 @@ jr run --templateFileName ~/.jr/templates/net-device.tpl
 		} else {
 			for range functions.JrContext.Range {
 				k, v, _ := executeTemplate(key, value, oneline)
-				printOutput(k, v, producer, topic, output, outTemplate, serializer, functions.JrContext.TemplateType)
+				printOutput(k, v, producer)
 			}
 		}
 
-		if functions.Contains(output, "kafka") {
-			kafka2.Close(producer)
-		}
+		producer.Close()
 
 		time.Sleep(100 * time.Millisecond)
 		writeStats()
@@ -224,26 +237,8 @@ func executeTemplate(key *template.Template, value *template.Template, oneline b
 	return k, v, err
 }
 
-func printOutput(key string, value string, p *kafka.Producer, topic string, output []string, outputTemplateScript *template.Template, serializer string, templateType string) {
-
-	if functions.Contains(output, "stdout") {
-
-		var outBuffer bytes.Buffer
-		var err error
-
-		data := struct {
-			K string
-			V string
-		}{key, value}
-
-		if err = outputTemplateScript.Execute(&outBuffer, data); err != nil {
-			log.Println(err)
-		}
-		fmt.Print(outBuffer.String())
-	}
-	if functions.Contains(output, "kafka") {
-		kafka2.Produce(p, []byte(key), []byte(value), topic, serializer, templateType)
-	}
+func printOutput(key string, value string, p Producer) {
+	p.Produce([]byte(key), []byte(value))
 }
 
 func init() {
@@ -264,7 +259,7 @@ func init() {
 	runCmd.Flags().StringP("topic", "t", "test", "Kafka topic name")
 
 	runCmd.Flags().Bool("kcat", false, "If you want to pipe jr with kcat, use this flag: it is equivalent to --output stdout --outputTemplate '{{key}},{{value}}' --oneline")
-	runCmd.Flags().StringSliceP("output", "o", []string{"stdout"}, "can be stdout or kafka")
+	runCmd.Flags().StringP("output", "o", "stdout", "can be stdout or kafka")
 	runCmd.Flags().String("outputTemplate", "{{.V}}\n", "Formatting of K,V on standard output")
 	runCmd.Flags().BoolP("oneline", "l", false, "strips /n from output, for example to be pipelined to tools like kcat")
 	runCmd.Flags().BoolP("autocreate", "a", false, "if enabled, autocreate topics")

@@ -19,39 +19,34 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-package cmd
+package console
 
 import (
-	"github.com/spf13/cobra"
-	"github.com/ugol/jr/producers/kafka"
+	"bytes"
+	"fmt"
 	"log"
+	"text/template"
 )
 
-// createTopicCmd represents the createTopic command
-var createTopicCmd = &cobra.Command{
-	Use:   "createTopic [topic]",
-	Short: "simple command to create a Kafka Topic",
-	Long:  "simple command to create a Kafka Topic",
-	Args:  cobra.ExactArgs(1),
-	Run: func(cmd *cobra.Command, args []string) {
-		kafkaConfig, _ := cmd.Flags().GetString("kafkaConfig")
-
-		kManager := &kafka.KafkaManager{}
-		err := kManager.Initialize(kafkaConfig)
-		if err != nil {
-			log.Fatal(err)
-		}
-		partitions, _ := cmd.Flags().GetInt("partitions")
-		replica, _ := cmd.Flags().GetInt("replica")
-		kManager.CreateTopicFull(args[0], partitions, replica)
-
-	},
+type ConsoleProducer struct {
+	OutTemplate *template.Template
 }
 
-func init() {
-	rootCmd.AddCommand(createTopicCmd)
-	createTopicCmd.Flags().IntP("partitions", "p", 6, "Number of partitions")
-	createTopicCmd.Flags().IntP("replica", "r", 3, "Replica Factor")
-	createTopicCmd.Flags().StringP("kafkaConfig", "F", "./kafka/config.properties", "Kafka configuration")
+func (c *ConsoleProducer) Close() {
+	// no need to close
+}
 
+func (c *ConsoleProducer) Produce(key []byte, value []byte) {
+	var outBuffer bytes.Buffer
+	var err error
+
+	data := struct {
+		K string
+		V string
+	}{string(key), string(value)}
+
+	if err = c.OutTemplate.Execute(&outBuffer, data); err != nil {
+		log.Println(err)
+	}
+	fmt.Print(outBuffer.String())
 }

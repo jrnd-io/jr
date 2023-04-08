@@ -14,7 +14,7 @@ type Producer interface {
 func ProducerFactory(producerType string) (Producer, error) {
 	switch producerType {
 	//	case "kafka":
-	//		return kafka.Producer{}, nil
+	//		return &kafka.Producer{}, nil
 	case "redis":
 		return &RedisProducer{}, nil
 	default:

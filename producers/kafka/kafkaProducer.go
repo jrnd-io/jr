@@ -37,27 +37,32 @@ import (
 	"time"
 )
 
-var adminClient *kafka.AdminClient
-var schemaClient schemaregistry.Client
-var schemaRegistry bool
+type KafkaManager struct {
+	producer       *kafka.Producer
+	admin          *kafka.AdminClient
+	schema         schemaregistry.Client
+	schemaRegistry bool
+	Topic          string
+	Serializer     string
+	TemplateType   string
+}
 
-func Initialize(configFile string) (*kafka.Producer, error) {
+func (k *KafkaManager) Initialize(configFile string) error {
 
 	var err error
-	conf := convertInKafkaConfig(ReadConfig(configFile))
-
-	adminClient, err = kafka.NewAdminClient(&conf)
+	conf := k.convertInKafkaConfig(k.ReadConfig(configFile))
+	k.admin, err = kafka.NewAdminClient(&conf)
 	if err != nil {
 		log.Fatalf("Failed to create admin client: %s", err)
 	}
-	p, err := kafka.NewProducer(&conf)
+	k.producer, err = kafka.NewProducer(&conf)
 	if err != nil {
 		log.Fatalf("Failed to create producer: %s", err)
 	}
-	return p, err
+	return err
 }
 
-func convertInKafkaConfig(m map[string]string) kafka.ConfigMap {
+func (k *KafkaManager) convertInKafkaConfig(m map[string]string) kafka.ConfigMap {
 	var conf kafka.ConfigMap
 	conf = make(map[string]kafka.ConfigValue)
 	for k, v := range m {
@@ -66,11 +71,11 @@ func convertInKafkaConfig(m map[string]string) kafka.ConfigMap {
 	return conf
 }
 
-func InitializeSchemaRegistry(configFile string) error {
+func (k *KafkaManager) InitializeSchemaRegistry(configFile string) error {
 	var err error
-	conf := ReadConfig(configFile)
+	conf := k.ReadConfig(configFile)
 
-	schemaClient, err = schemaregistry.NewClient(schemaregistry.NewConfigWithAuthentication(
+	k.schema, err = schemaregistry.NewClient(schemaregistry.NewConfigWithAuthentication(
 		conf["schemaRegistryURL"],
 		conf["schemaRegistryUser"],
 		conf["schemaRegistryPassword"]))
@@ -79,17 +84,17 @@ func InitializeSchemaRegistry(configFile string) error {
 		log.Fatalf("Failed to create schema registry client: %s", err)
 	}
 
-	schemaRegistry = true
+	k.schemaRegistry = true
 	return err
 }
 
-func Close(p *kafka.Producer) {
-	// Wait for all messages to be delivered
-	p.Flush(15 * 1000)
-	p.Close()
+func (k *KafkaManager) Close() {
+	k.admin.Close()
+	k.producer.Flush(15 * 1000)
+	k.producer.Close()
 }
 
-func ReadConfig(configFile string) map[string]string {
+func (k *KafkaManager) ReadConfig(configFile string) map[string]string {
 
 	m := make(map[string]string)
 
@@ -121,10 +126,10 @@ func ReadConfig(configFile string) map[string]string {
 	return m
 }
 
-func Produce(p *kafka.Producer, key []byte, data []byte, topic string, serializer string, templateType string) {
+func (k *KafkaManager) Produce(key []byte, data []byte) {
 
 	go func() {
-		for e := range p.Events() {
+		for e := range k.producer.Events() {
 			switch ev := e.(type) {
 			case *kafka.Message:
 				m := ev
@@ -151,31 +156,31 @@ func Produce(p *kafka.Producer, key []byte, data []byte, topic string, serialize
 
 	var ser serde.Serializer
 
-	if schemaRegistry {
+	if k.schemaRegistry {
 		var err error
-		if serializer == "avro" {
-			//ser, err = avro.NewSpecificSerializer(schemaClient, serde.ValueSerde, avro.NewSerializerConfig())
+		if k.Serializer == "avro" {
+			//ser, err = avro.NewSpecificSerializer(schema, serde.ValueSerde, avro.NewSerializerConfig())
 			log.Fatal("Avro not yet implemented")
-		} else if serializer == "avro-generic" {
-			ser, err = avro.NewGenericSerializer(schemaClient, serde.ValueSerde, avro.NewSerializerConfig())
-		} else if serializer == "protobuf" {
-			//ser, err = protobuf.NewSerializer(schemaClient, serde.ValueSerde, protobuf.NewSerializerConfig())
+		} else if k.Serializer == "avro-generic" {
+			ser, err = avro.NewGenericSerializer(k.schema, serde.ValueSerde, avro.NewSerializerConfig())
+		} else if k.Serializer == "protobuf" {
+			//ser, err = protobuf.NewSerializer(schema, serde.ValueSerde, protobuf.NewSerializerConfig())
 			log.Fatal("Protobuf not yet implemented")
-		} else if serializer == "json-schema" {
-			ser, err = jsonschema.NewSerializer(schemaClient, serde.ValueSerde, jsonschema.NewSerializerConfig())
+		} else if k.Serializer == "json-schema" {
+			ser, err = jsonschema.NewSerializer(k.schema, serde.ValueSerde, jsonschema.NewSerializerConfig())
 		}
 		if err != nil {
 			log.Fatalf("Error creating serializer: %s\n", err)
 		} else {
 
-			t := getType(templateType)
+			t := k.getType(k.TemplateType)
 			err := json.Unmarshal(data, t)
 
 			if err != nil {
 				log.Fatalf("Failed to unmarshal data: %s\n", err)
 			}
 
-			payload, err := ser.Serialize(topic, t)
+			payload, err := ser.Serialize(k.Topic, t)
 			if err != nil {
 				log.Fatalf("Failed to serialize payload: %s\n", err)
 			} else {
@@ -184,8 +189,8 @@ func Produce(p *kafka.Producer, key []byte, data []byte, topic string, serialize
 		}
 	}
 
-	err := p.Produce(&kafka.Message{
-		TopicPartition: kafka.TopicPartition{Topic: &topic, Partition: kafka.PartitionAny},
+	err := k.producer.Produce(&kafka.Message{
+		TopicPartition: kafka.TopicPartition{Topic: &k.Topic, Partition: kafka.PartitionAny},
 		Key:            key,
 		Value:          data,
 		//Headers:        []kafka.Header{{Key: "myTestHeader", Value: []byte("header values are binary")}},
@@ -203,7 +208,7 @@ func Produce(p *kafka.Producer, key []byte, data []byte, topic string, serialize
 
 }
 
-func getType(templateType string) interface{} {
+func (k *KafkaManager) getType(templateType string) interface{} {
 
 	var netDevice types2.NetDevice
 	var user types2.User
@@ -217,11 +222,11 @@ func getType(templateType string) interface{} {
 	return nil
 }
 
-func CreateTopic(topic string) {
-	CreateTopicFull(topic, 6, 3)
+func (k *KafkaManager) CreateTopic(topic string) {
+	k.CreateTopicFull(topic, 6, 3)
 }
 
-func CreateTopicFull(topic string, partitions int, rf int) {
+func (k *KafkaManager) CreateTopicFull(topic string, partitions int, rf int) {
 
 	// Contexts are used to abort or limit the amount of time
 	// the Admin call blocks waiting for a result.
@@ -232,7 +237,7 @@ func CreateTopicFull(topic string, partitions int, rf int) {
 	// Set Admin options to wait for the operation to finish (or at most 60s)
 	maxDuration, _ := time.ParseDuration("60s")
 
-	results, err := adminClient.CreateTopics(ctx,
+	results, err := k.admin.CreateTopics(ctx,
 		[]kafka.TopicSpecification{{
 			Topic:             topic,
 			NumPartitions:     partitions,
@@ -251,6 +256,6 @@ func CreateTopicFull(topic string, partitions int, rf int) {
 		}
 	}
 
-	adminClient.Close()
+	k.admin.Close()
 
 }

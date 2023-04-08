@@ -18,6 +18,7 @@ type regexState struct {
 	limit int
 }
 
+//gocyclo:ignore
 func generate(s *regexState, re *syntax.Regexp) string {
 	//fmt.Println("re:", re, "sub:", re.Sub)
 	op := re.Op

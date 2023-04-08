@@ -85,7 +85,6 @@ jr run --templateFileName ~/.jr/templates/net-device.tpl
 			outputTemplate = "{{.K}},{{.V}}\n"
 		}
 
-		var producer Producer
 		var valueTemplate []byte
 		var err error
 
@@ -118,29 +117,10 @@ jr run --templateFileName ~/.jr/templates/net-device.tpl
 			log.Fatal(err)
 		}
 
+		var producer Producer
+
 		if output == "kafka" {
-			kManager := &kafka.KafkaManager{}
-			kManager.Serializer = serializer
-			kManager.Topic = topic
-			kManager.TemplateType = functions.JrContext.TemplateType
-
-			err = kManager.Initialize(kafkaConfig)
-			if err != nil {
-				log.Fatal(err)
-			}
-
-			if autocreate {
-				kManager.CreateTopic(topic)
-			}
-
-			if schemaRegistry {
-				_ = kManager.InitializeSchemaRegistry(registryConfig)
-				if kcat {
-					log.Println("Ignoring kcat when schemaRegistry is enabled")
-				}
-			}
-
-			producer = kManager
+			producer = createKafkaProducer(serializer, topic, kafkaConfig, schemaRegistry, registryConfig, kcat, autocreate)
 		} else {
 			if schemaRegistry {
 				log.Println("Ignoring schemaRegistry and/or serializer when output not set to kafka")
@@ -178,7 +158,7 @@ jr run --templateFileName ~/.jr/templates/net-device.tpl
 				case <-time.After(frequency):
 					for range functions.JrContext.Range {
 						k, v, _ := executeTemplate(key, value, oneline)
-						printOutput(k, v, producer)
+						producer.Produce([]byte(k), []byte(v))
 					}
 				case <-ctx.Done():
 					stop()
@@ -188,7 +168,8 @@ jr run --templateFileName ~/.jr/templates/net-device.tpl
 		} else {
 			for range functions.JrContext.Range {
 				k, v, _ := executeTemplate(key, value, oneline)
-				printOutput(k, v, producer)
+				producer.Produce([]byte(k), []byte(v))
+
 			}
 		}
 
@@ -198,6 +179,27 @@ jr run --templateFileName ~/.jr/templates/net-device.tpl
 		writeStats()
 
 	},
+}
+
+func createKafkaProducer(serializer string, topic string, kafkaConfig string, schemaRegistry bool, registryConfig string, kcat bool, autocreate bool) *kafka.KafkaManager {
+	kManager := &kafka.KafkaManager{
+		Serializer:   serializer,
+		Topic:        topic,
+		TemplateType: functions.JrContext.TemplateType,
+	}
+
+	kManager.Initialize(kafkaConfig)
+
+	if schemaRegistry {
+		kManager.InitializeSchemaRegistry(registryConfig)
+		if kcat {
+			log.Println("Ignoring kcat when schemaRegistry is enabled")
+		}
+	}
+	if autocreate {
+		kManager.CreateTopic(topic)
+	}
+	return kManager
 }
 
 func writeStats() {
@@ -234,10 +236,6 @@ func executeTemplate(key *template.Template, value *template.Template, oneline b
 	functions.JrContext.GeneratedBytes += int64(len(v))
 
 	return k, v, err
-}
-
-func printOutput(key string, value string, p Producer) {
-	p.Produce([]byte(key), []byte(value))
 }
 
 func init() {

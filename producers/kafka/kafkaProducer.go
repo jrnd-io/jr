@@ -46,7 +46,7 @@ type KafkaManager struct {
 	TemplateType   string
 }
 
-func (k *KafkaManager) Initialize(configFile string) error {
+func (k *KafkaManager) Initialize(configFile string) {
 
 	var err error
 	conf := k.convertInKafkaConfig(k.ReadConfig(configFile))
@@ -58,7 +58,6 @@ func (k *KafkaManager) Initialize(configFile string) error {
 	if err != nil {
 		log.Fatalf("Failed to create producer: %s", err)
 	}
-	return err
 }
 
 func (k *KafkaManager) convertInKafkaConfig(m map[string]string) kafka.ConfigMap {
@@ -70,7 +69,7 @@ func (k *KafkaManager) convertInKafkaConfig(m map[string]string) kafka.ConfigMap
 	return conf
 }
 
-func (k *KafkaManager) InitializeSchemaRegistry(configFile string) error {
+func (k *KafkaManager) InitializeSchemaRegistry(configFile string) {
 	var err error
 	conf := k.ReadConfig(configFile)
 
@@ -84,7 +83,6 @@ func (k *KafkaManager) InitializeSchemaRegistry(configFile string) error {
 	}
 
 	k.schemaRegistry = true
-	return err
 }
 
 func (k *KafkaManager) Close() {

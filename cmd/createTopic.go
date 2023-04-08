@@ -23,7 +23,6 @@ package cmd
 import (
 	"github.com/spf13/cobra"
 	"github.com/ugol/jr/producers/kafka"
-	"log"
 )
 
 // createTopicCmd represents the createTopic command
@@ -36,10 +35,7 @@ var createTopicCmd = &cobra.Command{
 		kafkaConfig, _ := cmd.Flags().GetString("kafkaConfig")
 
 		kManager := &kafka.KafkaManager{}
-		err := kManager.Initialize(kafkaConfig)
-		if err != nil {
-			log.Fatal(err)
-		}
+		kManager.Initialize(kafkaConfig)
 		partitions, _ := cmd.Flags().GetInt("partitions")
 		replica, _ := cmd.Flags().GetInt("replica")
 		kManager.CreateTopicFull(args[0], partitions, replica)

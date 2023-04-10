@@ -5,10 +5,12 @@ TIME=$(shell date)
 hello:
 	@echo "JR,the JSON Random Generator"
 
+generate:
+	go generate types/generate.go
+
 compile:
 	@echo "Compiling"
 	go build -v -ldflags="-X 'github.com/ugol/jr/cmd.Version=$(VERSION)' -X 'github.com/ugol/jr/cmd.BuildUser=$(USER)' -X 'github.com/ugol/jr/cmd.BuildTime=$(TIME)'" -o build/jr jr.go
-	
 
 run: compile
 	./build/jr
@@ -44,4 +46,6 @@ copy_templates:
 install:
 	install build/jr /usr/local/bin
 
-all: hello compile
+all: hello generate compile
+
+

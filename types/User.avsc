@@ -1,0 +1,19 @@
+{
+  "type" : "record",
+  "namespace" : "jr",
+  "name" : "User",
+  "fields" : [
+    { "name" : "guid" , "type" : "string" },
+    { "name" : "isActive" , "type" : "boolean"},
+    { "name" : "balance" , "type" : "double" },
+    { "name" : "age" , "type" : "int" },
+    { "name" : "eyeColor" , "type" : "string" },
+    { "name" : "name" , "type" : "string" },
+    { "name" : "company" , "type" : "string" },
+    { "name" : "email" , "type" : "string" },
+    { "name" : "alt_email" , "type" : "string" },
+    { "name" : "about" , "type" : "string" },
+    { "name" : "latitude" , "type" : "float" },
+    { "name" : "longitude" , "type" : "float" }
+  ]
+}

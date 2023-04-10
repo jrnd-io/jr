@@ -243,7 +243,7 @@ jr createTopic mynewtopic -p 10 -r 2
 ### Confluent Schema Registry support
 
 There is also support for Confluent Schema Registry. 
-At the moment only `json-schema` and `avro-generic` are directly supported.
+At the moment `json-schema`, `avro-generic` and `avro` are all supported.
 
 To use Confluent Schema registry you need first to fill the `registry.properties` provided example with the needed link and user/pwd:
 
@@ -264,8 +264,7 @@ jr run net-device -o kafka -t topic2 -s --serializer json-schema
 ```
 Remember that once you run these commands, `topic1` will be associated with an avro generic schema representing an user 
 object, and `topic2` with a json-schema representing a net-device object. 
-
-
+You can manage/evolve the schemas directly into [Confluent Cloud]("https://confluent.cloud/")
 
 ### Using JR to pipe data to **KCAT**
 

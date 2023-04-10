@@ -91,12 +91,11 @@ func (k *KafkaManager) Produce(key []byte, data []byte) {
 	if k.schemaRegistry {
 		var err error
 		if k.Serializer == "avro" {
-			//ser, err = avro.NewSpecificSerializer(schema, serde.ValueSerde, avro.NewSerializerConfig())
-			log.Fatal("Avro not yet implemented")
+			ser, err = avro.NewSpecificSerializer(k.schema, serde.ValueSerde, avro.NewSerializerConfig())
 		} else if k.Serializer == "avro-generic" {
 			ser, err = avro.NewGenericSerializer(k.schema, serde.ValueSerde, avro.NewSerializerConfig())
 		} else if k.Serializer == "protobuf" {
-			//ser, err = protobuf.NewSerializer(schema, serde.ValueSerde, protobuf.NewSerializerConfig())
+			//ser, err = protobuf.NewSerializer(k.schema, serde.ValueSerde, protobuf.NewSerializerConfig())
 			log.Fatal("Protobuf not yet implemented")
 		} else if k.Serializer == "json-schema" {
 			ser, err = jsonschema.NewSerializer(k.schema, serde.ValueSerde, jsonschema.NewSerializerConfig())

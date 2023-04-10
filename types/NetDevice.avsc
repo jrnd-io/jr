@@ -1,0 +1,23 @@
+{
+  "type" : "record",
+  "namespace" : "jr",
+  "name" : "NetDevice",
+  "fields" : [
+    { "name" : "VLAN" , "type" : "string" },
+    { "name" : "IPV4_SRC_ADDR" , "type" : "string"},
+    { "name" : "IPV4_DST_ADDR" , "type" : "string" },
+    { "name" : "IN_BYTES" , "type" : "int" },
+    { "name" : "FIRST_SWITCHED" , "type" : "long" },
+    { "name" : "LAST_SWITCHED" , "type" : "long" },
+    { "name" : "L4_SRC_PORT" , "type" : "int" },
+    { "name" : "L4_DST_PORT" , "type" : "int" },
+    { "name" : "TCP_FLAGS" , "type" : "int" },
+    { "name" : "PROTOCOL" , "type" : "int" },
+    { "name" : "SRC_TOS" , "type" : "int" },
+    { "name" : "SRC_AS" , "type" : "int" },
+    { "name" : "DST_AS" , "type" : "int" },
+    { "name" : "L7_PROTO" , "type" : "int" },
+    { "name" : "L7_PROTO_NAME" , "type" : "string" },
+    { "name" : "L7_PROTO_CATEGORY" , "type" : "string" }
+  ]
+}

@@ -21,8 +21,6 @@ jobs:
         go-version: 1.20.2
     - name: Install dependencies
       run: go get .
-    - name: Install gogen-avro
-      run: go install github.com/actgardner/gogen-avro/v10/cmd/...@latest
     - name: Run build script
       run: ./make_install.sh
       shell: bash

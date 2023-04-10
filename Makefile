@@ -6,6 +6,7 @@ hello:
 	@echo "JR,the JSON Random Generator"
 
 generate:
+	go install github.com/actgardner/gogen-avro/v10/cmd/...@latest
 	go generate types/generate.go
 
 compile:

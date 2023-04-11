@@ -59,19 +59,19 @@ var fmap = map[string]interface{}{
 	"atoi":                     strconv.Atoi,
 	"split":                    strings.Split,
 	"markov":                   Nonsense,
-	"Lorem":                    Lorem,
-	"Sentence":                 Sentence,
+	"lorem":                    Lorem,
+	"sentence":                 Sentence,
 	"sentence_prefix":          SentencePrefix,
-	"Regex":                    Regex,
+	"regex":                    Regex,
 	"random":                   func(s []string) string { return s[Random.Intn(len(s))] },
 	"randoms":                  func(s string) string { a := strings.Split(s, "|"); return a[Random.Intn(len(a))] },
-	"Counter":                  Counter,
+	"counter":                  Counter,
 	"random_string":            RandomString,
 	"random_string_vocabulary": RandomStringVocabulary,
-	"from":                     word,
-	"from_at":                  wordAt,
-	"from_shuffle":             wordShuffle,
-	"from_n":                   wordShuffleN,
+	"from":                     Word,
+	"from_at":                  WordAt,
+	"from_shuffle":             WordShuffle,
+	"from_n":                   WordShuffleN,
 
 	// math utilities
 	"add":       func(a, b int) int { return a + b },
@@ -86,33 +86,33 @@ var fmap = map[string]interface{}{
 	"floating":  func(min, max float32) float32 { return min + Random.Float32()*(max-min) },
 
 	// networking and time utilities
-	"Ip":                Ip,
-	"Ipv6":              Ipv6,
-	"Mac":               Mac,
+	"ip":                Ip,
+	"ipv6":              Ipv6,
+	"mac":               Mac,
 	"http_method":       HttpMethod,
 	"ip_known_protocol": IpKnownProtocol,
 	"ip_known_port":     IpKnownPort,
-	"Password":          Password,
+	"password":          Password,
 	"useragent":         UserAgent,
 	"unix_time_stamp":   UnixTimeStamp,
 
 	// people related utilities
-	"Name":           Name,
+	"name":           Name,
 	"name_m":         NameM,
 	"name_f":         NameF,
-	"Middlename":     Middlename,
-	"Surname":        Surname,
-	"Username":       Username,
-	"Address":        Address,
-	"Capital":        Capital,
+	"middlename":     Middlename,
+	"surname":        Surname,
+	"username":       Username,
+	"address":        Address,
+	"capital":        Capital,
 	"capital_at":     CapitalAt,
-	"State":          State,
+	"state":          State,
 	"state_at":       StateAt,
 	"state_short":    StateShort,
 	"state_short_at": StateShortAt,
-	"Zip":            Zip,
+	"zip":            Zip,
 	"zip_at":         ZipAt,
-	"Company":        Company,
+	"company":        Company,
 	"email_provider": EmailProvider,
 
 	// generic utilities
@@ -146,8 +146,8 @@ func initialize(filename string) []string {
 	return words
 }
 
-// word returns a random string from a list of strings in a file.
-func word(name string) string {
+// Word returns a random string from a list of strings in a file.
+func Word(name string) string {
 	_, err := cache(name)
 	if err != nil {
 		return ""
@@ -156,8 +156,8 @@ func word(name string) string {
 	return words[Random.Intn(len(words))]
 }
 
-// wordAt returns a string at a given position in a list of strings in a file.
-func wordAt(name string, index int) string {
+// WordAt returns a string at a given position in a list of strings in a file.
+func WordAt(name string, index int) string {
 	_, err := cache(name)
 	if err != nil {
 		return ""
@@ -166,18 +166,18 @@ func wordAt(name string, index int) string {
 	return words[index]
 }
 
-// wordShuffle returns a shuffled list of strings in a file.
-func wordShuffle(name string) []string {
+// WordShuffle returns a shuffled list of strings in a file.
+func WordShuffle(name string) []string {
 	_, err := cache(name)
 	if err != nil {
 		return []string{""}
 	}
 	words := data[name]
-	return wordShuffleN(name, len(words))
+	return WordShuffleN(name, len(words))
 }
 
 // wordShuffleN return a subset of n elements in a list of string in a file.
-func wordShuffleN(name string, n int) []string {
+func WordShuffleN(name string, n int) []string {
 	_, err := cache(name)
 	if err != nil {
 		return []string{""}

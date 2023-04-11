@@ -121,7 +121,7 @@ func TestFrom(t *testing.T) {
 
 func TestPassword(t *testing.T) {
 
-	tpl := `{{Password 5 true "PwD" "!?!"}}`
+	tpl := `{{password 5 true "PwD" "!?!"}}`
 	if err := runt(tpl, "PwDalYza!?!"); err != nil {
 		t.Error(err)
 	}
@@ -129,7 +129,7 @@ func TestPassword(t *testing.T) {
 
 func TestIPv6(t *testing.T) {
 
-	tpl := `{{Ipv6}}`
+	tpl := `{{ipv6}}`
 	if err := runt(tpl, "face:bf42:e25e:8b14:eafc:81ea:e0d0:f2c"); err != nil {
 		t.Error(err)
 	}
@@ -137,7 +137,7 @@ func TestIPv6(t *testing.T) {
 
 func TestIP(t *testing.T) {
 
-	tpl := `{{Ip "10.2.0.0/16"}}`
+	tpl := `{{ip "10.2.0.0/16"}}`
 	if err := runt(tpl, "10.2.238.223"); err != nil {
 		t.Error(err)
 	}
@@ -153,7 +153,7 @@ func TestUseragent(t *testing.T) {
 
 func TestCounter(t *testing.T) {
 
-	tpl := `{{Counter "A" 0 1}},{{Counter "B" 2 2}},{{Counter "C" -4 1}},{{Counter "D" 0 -1}}`
+	tpl := `{{counter "A" 0 1}},{{counter "B" 2 2}},{{counter "C" -4 1}},{{counter "D" 0 -1}}`
 
 	if err := runt(tpl, "0,2,-4,0"); err != nil {
 		t.Error(err)
@@ -192,7 +192,7 @@ func runt(tpl, expect string) error {
 
 func TestRegex(t *testing.T) {
 
-	tpl := `{{Regex "Z{2,5}"}}`
+	tpl := `{{regex "Z{2,5}"}}`
 	if err := runt(tpl, "ZZ"); err != nil {
 		t.Error(err)
 	}

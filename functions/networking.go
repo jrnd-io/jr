@@ -26,6 +26,7 @@ import (
 	"time"
 )
 
+// unixTimeStamp returns a random unix timestamp not older than the given number of days
 func unixTimeStamp(days int) int64 {
 	unixEpoch := time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC)
 	now := time.Now()
@@ -34,21 +35,25 @@ func unixTimeStamp(days int) int64 {
 	return Random.Int63n(int64(last-first)) + int64(first)
 }
 
+// ipKnownPort returns a random known port number
 func ipKnownPort() string {
 	ports := []string{"80", "81", "443", "22", "631"}
 	return ports[Random.Intn(len(ports))]
 }
 
+// ipKnownProtocol returns a random known protocol
 func ipKnownProtocol() string {
 	protocols := []string{"TCP", "UDP", "ICMP", "FTP", "HTTP", "SFTP"}
 	return protocols[Random.Intn(len(protocols))]
 }
 
+// httpMethod returns a random http method
 func httpMethod() string {
 	method := []string{"GET", "POST", "PUT", "DELETE", "PATCH"}
 	return method[Random.Intn(len(method))]
 }
 
+// ipv6 returns a random ipv6 address
 func ipv6() string {
 	ip := make(net.IP, net.IPv6len)
 	for i := 0; i < net.IPv6len; i++ {
@@ -59,6 +64,7 @@ func ipv6() string {
 	return ip.String()
 }
 
+// mac returns a random mac address
 func mac() string {
 	mac := make(net.HardwareAddr, 6)
 	Random.Read(mac)
@@ -67,6 +73,7 @@ func mac() string {
 	return mac.String()
 }
 
+// ip returns a random ip address matching the given cidr
 func ip(cidr string) string {
 
 GENERATE:
@@ -99,6 +106,7 @@ GENERATE:
 	return ip.String()
 }
 
+// password returns a random password of given length, memorable, and with prefix and suffix
 func password(length int, memorable bool, prefix string, suffix string) string {
 
 	const (
@@ -134,6 +142,7 @@ func password(length int, memorable bool, prefix string, suffix string) string {
 	return prefix + string(password) + suffix
 }
 
+// userAgent returns a random user agent
 func userAgent() string {
 
 	var desktopOperatingSystems = []string{

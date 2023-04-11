@@ -183,20 +183,24 @@ func sentencePrefix(prefixLen, numWords int) string {
 	return nonsense(prefixLen, numWords, alice)
 }
 
+// sentence generates a random sentence of numWords words
 func sentence(numWords int) string {
 	return sentencePrefix(2, numWords)
 }
 
+// nonsense generates a random sentence of numWords wordsm using a prefixLen and a baseText to start from
 func nonsense(prefixLen, numWords int, baseText string) string {
 	c := NewChain(prefixLen)
 	c.Build(strings.NewReader(baseText))
 	return c.Generate(numWords)
 }
 
+// randomString returns a random string long between min and max characters
 func randomString(min, max int) string {
 	return randomStringVocabulary(min, max, alphabet)
 }
 
+// randomStringVocabulary returns a random string long between min and max characters using a vocabulary
 func randomStringVocabulary(min, max int, source string) string {
 	textb := make([]byte, min+Random.Intn(max-min))
 	for i := range textb {

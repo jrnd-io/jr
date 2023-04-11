@@ -43,10 +43,9 @@ var data = map[string][]string{}
 var fmap = map[string]interface{}{
 
 	// text utilities
-	"upper": strings.ToUpper,
-	"lower": strings.ToLower,
-	"title": cases.Title(language.English).String,
-	//	"title":                    func(s string) string {return cases.Title(language.English).String(s)},
+	"upper":                    strings.ToUpper,
+	"lower":                    strings.ToLower,
+	"title":                    cases.Title(language.English).String,
 	"trim":                     strings.TrimSpace,
 	"squeeze":                  func(s string) string { return strings.ReplaceAll(s, " ", "") },
 	"substr":                   func(start, length int, s string) string { return s[start:length] },
@@ -74,7 +73,7 @@ var fmap = map[string]interface{}{
 	"from_shuffle":             wordShuffle,
 	"from_n":                   wordShuffleN,
 
-	//math utilities
+	// math utilities
 	"add":       func(a, b int) int { return a + b },
 	"sub":       func(a, b int) int { return a - b },
 	"div":       func(a, b int) int { return a / b },
@@ -86,7 +85,7 @@ var fmap = map[string]interface{}{
 	"integer64": func(min, max int64) int64 { return min + Random.Int63n(max-min) },
 	"floating":  func(min, max float32) float32 { return min + Random.Float32()*(max-min) },
 
-	//networking and time utilities
+	// networking and time utilities
 	"ip":                ip,
 	"ipv6":              ipv6,
 	"mac":               mac,
@@ -97,7 +96,7 @@ var fmap = map[string]interface{}{
 	"useragent":         userAgent,
 	"unix_time_stamp":   unixTimeStamp,
 
-	//people
+	// people related utilities
 	"name":           name,
 	"name_m":         nameM,
 	"name_f":         nameF,
@@ -116,7 +115,7 @@ var fmap = map[string]interface{}{
 	"company":        company,
 	"email_provider": emailProvider,
 
-	//generic
+	// generic utilities
 	"key":     func(name string, n int) string { return fmt.Sprintf("%s%d", name, Random.Intn(n)) },
 	"seed":    func(rndSeed int64) string { Random.Seed(rndSeed); return "" },
 	"uuid":    uniqueId,
@@ -147,6 +146,7 @@ func initialize(filename string) []string {
 	return words
 }
 
+// word returns a random string from a list of strings in a file.
 func word(name string) string {
 	_, err := cache(name)
 	if err != nil {
@@ -156,6 +156,7 @@ func word(name string) string {
 	return words[Random.Intn(len(words))]
 }
 
+// wordAt returns a string at a given position in a list of strings in a file.
 func wordAt(name string, index int) string {
 	_, err := cache(name)
 	if err != nil {
@@ -165,6 +166,7 @@ func wordAt(name string, index int) string {
 	return words[index]
 }
 
+// wordShuffle returns a shuffled list of strings in a file.
 func wordShuffle(name string) []string {
 	_, err := cache(name)
 	if err != nil {
@@ -174,6 +176,7 @@ func wordShuffle(name string) []string {
 	return wordShuffleN(name, len(words))
 }
 
+// wordShuffleN return a subset of n elements in a list of string in a file.
 func wordShuffleN(name string, n int) []string {
 	_, err := cache(name)
 	if err != nil {
@@ -186,6 +189,7 @@ func wordShuffleN(name string, n int) []string {
 	return words[:n]
 }
 
+// cache is used to internally cache data from word files
 func cache(name string) (bool, error) {
 
 	v := data[name]

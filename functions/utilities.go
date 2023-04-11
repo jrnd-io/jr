@@ -35,10 +35,12 @@ func counter(c string, start, step int) int {
 	}
 }
 
+// uniqueId returns a random uuid
 func uniqueId() string {
 	return uuid.New().String()
 }
 
+// randomBool returns a random boolean
 func randomBool() string {
 	b := Random.Intn(2)
 	if b == 0 {
@@ -48,6 +50,7 @@ func randomBool() string {
 	}
 }
 
+// yesOrNo returns a random yes or no
 func yesOrNo() string {
 	b := Random.Intn(2)
 	if b == 0 {
@@ -57,6 +60,7 @@ func yesOrNo() string {
 	}
 }
 
+// Contains checks if the str string is present in an array of string []string
 func Contains(s []string, str string) bool {
 	for _, v := range s {
 		if v == str {

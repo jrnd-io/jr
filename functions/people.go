@@ -34,6 +34,7 @@ type City struct {
 	State string
 }
 
+// name returns a random name (male/female)
 func name() string {
 	s := Random.Intn(2)
 	if s == 0 {
@@ -43,69 +44,85 @@ func name() string {
 	}
 }
 
+// nameM returns a random male name
 func nameM() string {
 	return word("nameM")
 }
 
+// nameF returns a random female name
 func nameF() string {
 	return word("nameF")
 }
 
+// surname returns a random surname
 func surname() string {
 	return word("surname")
 }
 
+// middlename returns a random middlename
 func middlename() string {
 	middles := []string{"M", "J", "K", "P", "T", "S"}
 	return middles[Random.Intn(len(middles))]
 }
 
+// address returns a random address
 func address() string {
 	//TODO: implement
 	addresses := []string{""}
 	return addresses[Random.Intn(len(addresses))]
 }
 
+// state returns a random state
 func state() string {
 	return word("state")
 }
 
+// stateAt returns state at given index
 func stateAt(index int) string {
 	return wordAt("state", index)
 }
 
+// stateShort returns a random short state
 func stateShort() string {
 	return word("state_short")
 }
 
+// stateShortAt returns short state at given index
 func stateShortAt(index int) string {
 	return wordAt("state_short", index)
 }
 
+// capital returns a random capital
 func capital() string {
 	return word("capital")
 }
 
+// capitalAt returns capital at given index
 func capitalAt(index int) string {
 	return wordAt("capital", index)
 }
 
+// zip returns a random zip code
 func zip() string {
 	return word("zip")
 }
 
+// zipAt returns zip code at given index
 func zipAt(index int) string {
 	return wordAt("zip", index)
 }
 
+// company returns a random company name
 func company() string {
 	return word("company")
 }
 
+// emailProvider returns a random mail provider
 func emailProvider() string {
 	return word("mail_provider")
 }
 
+// username returns a random username using name, surname and a length
 func username(firstName string, lastName string, size int) string {
 
 	var name string

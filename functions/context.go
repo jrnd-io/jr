@@ -32,6 +32,7 @@ const FREQUENCY = 0
 const DURATION = 0
 const TEMPLATEDIR = "$HOME/.jr/templates"
 
+// Context is the object passed on the templates which contains all the needed details.
 type Context struct {
 	StartTime        time.Time
 	TemplateDir      string

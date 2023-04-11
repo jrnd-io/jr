@@ -32,7 +32,7 @@ var c = []testCase{
 func TestGenerate(t *testing.T) {
 	for _, test := range c {
 		for i := 0; i < 10; i++ {
-			r, err := regex(test.regex)
+			r, err := Regex(test.regex)
 			if err != nil {
 				t.Fatal("Error creating generator: ", err)
 			}
@@ -42,10 +42,10 @@ func TestGenerate(t *testing.T) {
 			}
 			re, err := regexp.Compile(test.regex)
 			if err != nil {
-				t.Fatal("Invalid test case. regex: ", test.regex, " failed to compile:", err)
+				t.Fatal("Invalid test case. Regex: ", test.regex, " failed to compile:", err)
 			}
 			if !re.MatchString(r) {
-				t.Error("Generated data does not match regex. Regex: ", test.regex, " output: ", r)
+				t.Error("Generated data does not match Regex. Regex: ", test.regex, " output: ", r)
 			}
 		}
 	}

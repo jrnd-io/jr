@@ -166,8 +166,8 @@ func generate(s *regexState, re *syntax.Regexp) string {
 	return ""
 }
 
-// regex returns a random string matching the given regex parameter
-func regex(regex string) (string, error) {
+// Regex returns a random string matching the given Regex parameter
+func Regex(regex string) (string, error) {
 	re, err := syntax.Parse(regex, syntax.Perl)
 	if err != nil {
 		return "", err

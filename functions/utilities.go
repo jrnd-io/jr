@@ -24,7 +24,8 @@ import (
 	"github.com/google/uuid"
 )
 
-func counter(c string, start, step int) int {
+// Counter creates a counter named c, starting from start and incrementing by step
+func Counter(c string, start, step int) int {
 	val, exists := JrContext.Counters[c]
 	if exists {
 		JrContext.Counters[c] = val + step
@@ -35,13 +36,13 @@ func counter(c string, start, step int) int {
 	}
 }
 
-// uniqueId returns a random uuid
-func uniqueId() string {
+// UniqueId returns a random uuid
+func UniqueId() string {
 	return uuid.New().String()
 }
 
-// randomBool returns a random boolean
-func randomBool() string {
+// RandomBool returns a random boolean
+func RandomBool() string {
 	b := Random.Intn(2)
 	if b == 0 {
 		return "false"
@@ -50,8 +51,8 @@ func randomBool() string {
 	}
 }
 
-// yesOrNo returns a random yes or no
-func yesOrNo() string {
+// YesOrNo returns a random yes or no
+func YesOrNo() string {
 	b := Random.Intn(2)
 	if b == 0 {
 		return "no"

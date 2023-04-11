@@ -26,8 +26,8 @@ import (
 	"time"
 )
 
-// unixTimeStamp returns a random unix timestamp not older than the given number of days
-func unixTimeStamp(days int) int64 {
+// UnixTimeStamp returns a random unix timestamp not older than the given number of days
+func UnixTimeStamp(days int) int64 {
 	unixEpoch := time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC)
 	now := time.Now()
 	first := now.AddDate(0, 0, -days).Sub(unixEpoch).Seconds()
@@ -35,26 +35,26 @@ func unixTimeStamp(days int) int64 {
 	return Random.Int63n(int64(last-first)) + int64(first)
 }
 
-// ipKnownPort returns a random known port number
-func ipKnownPort() string {
+// IpKnownPort returns a random known port number
+func IpKnownPort() string {
 	ports := []string{"80", "81", "443", "22", "631"}
 	return ports[Random.Intn(len(ports))]
 }
 
-// ipKnownProtocol returns a random known protocol
-func ipKnownProtocol() string {
+// IpKnownProtocol returns a random known protocol
+func IpKnownProtocol() string {
 	protocols := []string{"TCP", "UDP", "ICMP", "FTP", "HTTP", "SFTP"}
 	return protocols[Random.Intn(len(protocols))]
 }
 
-// httpMethod returns a random http method
-func httpMethod() string {
+// HttpMethod returns a random http method
+func HttpMethod() string {
 	method := []string{"GET", "POST", "PUT", "DELETE", "PATCH"}
 	return method[Random.Intn(len(method))]
 }
 
-// ipv6 returns a random ipv6 address
-func ipv6() string {
+// Ipv6 returns a random Ipv6 Address
+func Ipv6() string {
 	ip := make(net.IP, net.IPv6len)
 	for i := 0; i < net.IPv6len; i++ {
 		ip[i] = byte(Random.Intn(256))
@@ -64,8 +64,8 @@ func ipv6() string {
 	return ip.String()
 }
 
-// mac returns a random mac address
-func mac() string {
+// Mac returns a random Mac Address
+func Mac() string {
 	mac := make(net.HardwareAddr, 6)
 	Random.Read(mac)
 	mac[0] &= 0xfe // Set the "locally administered" flag
@@ -73,8 +73,8 @@ func mac() string {
 	return mac.String()
 }
 
-// ip returns a random ip address matching the given cidr
-func ip(cidr string) string {
+// Ip returns a random Ip Address matching the given cidr
+func Ip(cidr string) string {
 
 GENERATE:
 
@@ -100,25 +100,25 @@ GENERATE:
 	}
 	ip = net.IPv4(r[0], r[1], r[2], r[3])
 
-	if ip.Equal(ipnet.IP) /*|| ip.Equal(broadcast) */ {
+	if ip.Equal(ipnet.IP) /*|| Ip.Equal(broadcast) */ {
 		goto GENERATE
 	}
 	return ip.String()
 }
 
-// password returns a random password of given length, memorable, and with prefix and suffix
-func password(length int, memorable bool, prefix string, suffix string) string {
+// Password returns a random Password of given length, memorable, and with prefix and suffix
+func Password(length int, memorable bool, prefix string, suffix string) string {
 
 	const (
-		// Define the set of vowels and consonants that can be used to generate the password.
+		// Define the set of vowels and consonants that can be used to generate the Password.
 		vowels     = "aeiouyAEIOUY"
 		consonants = "bcdfghjklmnpqrstvwxzBCDFGHJKLMNPQRSTVWXZ"
 	)
 
-	// Generate a memorable password of the specified length.
+	// Generate a memorable Password of the specified length.
 	password := make([]byte, length)
 	if memorable {
-		// Generate a memorable password.
+		// Generate a memorable Password.
 		for i := range password {
 			if i%2 == 0 {
 				// Use a vowel.
@@ -131,7 +131,7 @@ func password(length int, memorable bool, prefix string, suffix string) string {
 			}
 		}
 	} else {
-		// Generate a random password using the full charset.
+		// Generate a random Password using the full charset.
 		charset := vowels + consonants + "0123456789!@#$%^&*()_+{}:\"<>?,./;'[]\\-=`~"
 		for i := range password {
 			char := charset[Random.Intn(len(charset))]
@@ -142,8 +142,8 @@ func password(length int, memorable bool, prefix string, suffix string) string {
 	return prefix + string(password) + suffix
 }
 
-// userAgent returns a random user agent
-func userAgent() string {
+// UserAgent returns a random user agent
+func UserAgent() string {
 
 	var desktopOperatingSystems = []string{
 		"Windows NT 10.0", "Windows NT 6.3", "Macintosh; Intel Mac OS X 10_15_7", "Macintosh; Intel Mac OS X 10_14_5", "X11; Linux x86_64",

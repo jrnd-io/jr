@@ -34,96 +34,96 @@ type City struct {
 	State string
 }
 
-// name returns a random name (male/female)
-func name() string {
+// Name returns a random Name (male/female)
+func Name() string {
 	s := Random.Intn(2)
 	if s == 0 {
-		return nameM()
+		return NameM()
 	} else {
-		return nameF()
+		return NameF()
 	}
 }
 
-// nameM returns a random male name
-func nameM() string {
-	return word("nameM")
+// NameM returns a random male Name
+func NameM() string {
+	return word("NameM")
 }
 
-// nameF returns a random female name
-func nameF() string {
-	return word("nameF")
+// NameF returns a random female Name
+func NameF() string {
+	return word("NameF")
 }
 
-// surname returns a random surname
-func surname() string {
-	return word("surname")
+// Surname returns a random Surname
+func Surname() string {
+	return word("Surname")
 }
 
-// middlename returns a random middlename
-func middlename() string {
+// Middlename returns a random Middlename
+func Middlename() string {
 	middles := []string{"M", "J", "K", "P", "T", "S"}
 	return middles[Random.Intn(len(middles))]
 }
 
-// address returns a random address
-func address() string {
+// Address returns a random Address
+func Address() string {
 	//TODO: implement
 	addresses := []string{""}
 	return addresses[Random.Intn(len(addresses))]
 }
 
-// state returns a random state
-func state() string {
-	return word("state")
+// State returns a random State
+func State() string {
+	return word("State")
 }
 
-// stateAt returns state at given index
-func stateAt(index int) string {
-	return wordAt("state", index)
+// StateAt returns State at given index
+func StateAt(index int) string {
+	return wordAt("State", index)
 }
 
-// stateShort returns a random short state
-func stateShort() string {
+// StateShort returns a random short State
+func StateShort() string {
 	return word("state_short")
 }
 
-// stateShortAt returns short state at given index
-func stateShortAt(index int) string {
+// StateShortAt returns short State at given index
+func StateShortAt(index int) string {
 	return wordAt("state_short", index)
 }
 
-// capital returns a random capital
-func capital() string {
-	return word("capital")
+// Capital returns a random Capital
+func Capital() string {
+	return word("Capital")
 }
 
-// capitalAt returns capital at given index
-func capitalAt(index int) string {
-	return wordAt("capital", index)
+// CapitalAt returns Capital at given index
+func CapitalAt(index int) string {
+	return wordAt("Capital", index)
 }
 
-// zip returns a random zip code
-func zip() string {
-	return word("zip")
+// Zip returns a random Zip code
+func Zip() string {
+	return word("Zip")
 }
 
-// zipAt returns zip code at given index
-func zipAt(index int) string {
-	return wordAt("zip", index)
+// ZipAt returns Zip code at given index
+func ZipAt(index int) string {
+	return wordAt("Zip", index)
 }
 
-// company returns a random company name
-func company() string {
-	return word("company")
+// Company returns a random Company Name
+func Company() string {
+	return word("Company")
 }
 
-// emailProvider returns a random mail provider
-func emailProvider() string {
+// EmailProvider returns a random mail provider
+func EmailProvider() string {
 	return word("mail_provider")
 }
 
-// username returns a random username using name, surname and a length
-func username(firstName string, lastName string, size int) string {
+// Username returns a random Username using Name, Surname and a length
+func Username(firstName string, lastName string, size int) string {
 
 	var name string
 

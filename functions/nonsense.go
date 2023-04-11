@@ -76,13 +76,14 @@ func (c *Chain) Generate(n int) string {
 	return strings.Join(words, " ")
 }
 
-func lorem(size int) string {
+// Lorem generates a 'lorem ipsum' text of size words
+func Lorem(size int) string {
 	lorem := "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ullamcorper non eros eget porta. Aliquam erat " +
 		"volutpat. Mauris molestie lobortis dolor et cursus. Cras vulputate vitae urna et tristique. Nullam iaculis fringilla est, " +
 		"vitae vulputate felis viverra suscipit. Nullam laoreet ornare tristique. Mauris porta, nisi sed laoreet scelerisque, nisi " +
 		"velit eleifend nulla, sit amet pharetra mauris tortor cursus ipsum. Nulla dignissim nunc vel felis convallis ullamcorper. " +
 		"Aliquam convallis nunc mi, ut tempor nibh efficitur eu.Nam aliquet elit ac eros facilisis, ac commodo magna porttitor. " +
-		"Nunc ut lorem sit amet justo pulvinar aliquet accumsan sit amet turpis. Pellentesque habitant morbi tristique senectus et netus " +
+		"Nunc ut Lorem sit amet justo pulvinar aliquet accumsan sit amet turpis. Pellentesque habitant morbi tristique senectus et netus " +
 		"et malesuada fames ac turpis egestas. In scelerisque maximus neque. Nunc in sapien vitae nunc eleifend pulvinar. Pellentesque " +
 		"faucibus massa vel mauris molestie, non aliquam est maximus. Nam hendrerit purus a justo iaculis elementum. Aliquam interdum " +
 		"scelerisque convallis. Vestibulum fringilla nunc ac sem ullamcorper, ac iaculis nulla posuere. Vivamus quis consequat ipsum. " +
@@ -90,11 +91,11 @@ func lorem(size int) string {
 		"quam lacinia, porttitor urna ac, efficitur arcu. Suspendisse potenti. Lorem ipsum dolor sit amet, consectetur adipiscing elit." +
 		"Fusce elit magna, lobortis nec semper non, aliquam at nisl. Vestibulum elementum suscipit justo et commodo. Etiam ultrices sem " +
 		"non tellus molestie, ac elementum felis sollicitudin. Nam aliquet magna non nisi malesuada, ac varius mi mattis. Fusce ultricies " +
-		"lorem id dolor malesuada, vitae tincidunt turpis finibus. Curabitur efficitur varius aliquam. Cras facilisis ultrices pellentesque. " +
+		"Lorem id dolor malesuada, vitae tincidunt turpis finibus. Curabitur efficitur varius aliquam. Cras facilisis ultrices pellentesque. " +
 		"Vivamus molestie nibh tincidunt, aliquet velit sed, ultrices magna. Suspendisse potenti.In dapibus, mauris ac lacinia ultricies, " +
 		"nibh orci rhoncus felis, molestie pharetra urna justo non mauris. Praesent dignissim ex id lacinia ullamcorper. Donec varius eros " +
 		"ex, at mollis magna imperdiet id. Cras non tristique tortor, eget placerat purus. Pellentesque quis enim interdum, blandit tortor " +
-		"sit amet, laoreet ligula. Curabitur id nisl ut lorem commodo fringilla. Sed dapibus a libero a viverra. In odio ligula, tristique " +
+		"sit amet, laoreet ligula. Curabitur id nisl ut Lorem commodo fringilla. Sed dapibus a libero a viverra. In odio ligula, tristique " +
 		"a leo quis, imperdiet finibus mauris. Integer imperdiet justo vel mollis efficitur. Curabitur non felis accumsan ipsum vulputate " +
 		"pharetra eu nec urna. Donec in mi sed libero dapibus pulvinar et sed tortor. Cras et accumsan risus, vitae porttitor felis." +
 		"Aliquam bibendum, mi a tristique commodo, dolor orci blandit orci, id faucibus nisi neque eu erat. Nulla facilisi. Phasellus " +
@@ -104,10 +105,11 @@ func lorem(size int) string {
 		"Nam vitae rhoncus odio, vitae scelerisque augue. Maecenas elementum lacus vel sem pharetra, sed consectetur ipsum congue. " +
 		"Proin nec diam purus. In sollicitudin feugiat sodales. Donec elementum volutpat nunc, sed ultricies diam mattis et. " +
 		"Vivamus accumsan neque neque, et porta turpis finibus id."
-	return nonsense(2, size, lorem)
+	return Nonsense(2, size, lorem)
 }
 
-func sentencePrefix(prefixLen, numWords int) string {
+// SentencePrefix generates an 'alice in wonderland' text of size words with given prefixLen
+func SentencePrefix(prefixLen, numWords int) string {
 	alice := "Alice was beginning to get very tired of sitting by her sister on the bank, and of having nothing to do: " +
 		"once or twice she had peeped into the book her sister was reading, but it had no pictures or conversations in it, " +
 		"“and what is the use of a book,” thought Alice “without pictures or conversations?”" +
@@ -137,7 +139,7 @@ func sentencePrefix(prefixLen, numWords int) string {
 		"was, or Longitude either, but thought they were nice grand words to say.)" +
 		"Presently she began again. “I wonder if I shall fall right through the earth! How funny it’ll seem to come out among the people " +
 		"that walk with their heads downward! The Antipathies, I think—” (she was rather glad there was no one listening, this time, as it " +
-		"didn’t sound at all the right word) “—but I shall have to ask them what the name of the country is, you know. Please, Ma’am, is " +
+		"didn’t sound at all the right word) “—but I shall have to ask them what the Name of the country is, you know. Please, Ma’am, is " +
 		"this New Zealand or Australia?” (and she tried to curtsey as she spoke—fancy curtseying as you’re falling through the air! " +
 		"Do you think you could manage it?) “And what an ignorant little girl she’ll think me for asking! No, it’ll never do to ask: " +
 		"perhaps I shall see it written up somewhere.”" +
@@ -180,28 +182,28 @@ func sentencePrefix(prefixLen, numWords int) string {
 		"However, this bottle was not marked “poison,” so Alice ventured to taste it, and finding it very nice, (it had, in fact" +
 		"a sort of mixed flavour of cherry-tart, custard, pine-apple, roast turkey, toffee, and hot buttered toast,) she very soon" +
 		"finished it off."
-	return nonsense(prefixLen, numWords, alice)
+	return Nonsense(prefixLen, numWords, alice)
 }
 
-// sentence generates a random sentence of numWords words
-func sentence(numWords int) string {
-	return sentencePrefix(2, numWords)
+// Sentence generates an 'alice in wonderland' text of size words
+func Sentence(numWords int) string {
+	return SentencePrefix(2, numWords)
 }
 
-// nonsense generates a random sentence of numWords wordsm using a prefixLen and a baseText to start from
-func nonsense(prefixLen, numWords int, baseText string) string {
+// Nonsense generates a random Sentence of numWords wordsm using a prefixLen and a baseText to start from
+func Nonsense(prefixLen, numWords int, baseText string) string {
 	c := NewChain(prefixLen)
 	c.Build(strings.NewReader(baseText))
 	return c.Generate(numWords)
 }
 
-// randomString returns a random string long between min and max characters
-func randomString(min, max int) string {
-	return randomStringVocabulary(min, max, alphabet)
+// RandomString returns a random string long between min and max characters
+func RandomString(min, max int) string {
+	return RandomStringVocabulary(min, max, alphabet)
 }
 
-// randomStringVocabulary returns a random string long between min and max characters using a vocabulary
-func randomStringVocabulary(min, max int, source string) string {
+// RandomStringVocabulary returns a random string long between min and max characters using a vocabulary
+func RandomStringVocabulary(min, max int, source string) string {
 	textb := make([]byte, min+Random.Intn(max-min))
 	for i := range textb {
 		textb[i] = source[Random.Intn(len(source))]

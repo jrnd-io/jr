@@ -30,7 +30,7 @@ COPY --from=builder /etc/passwd /etc/passwd
 COPY --from=builder /etc/group /etc/group
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=builder /go/src/github.com/ugol/jr/templates/ /home/jr/.jr/templates/
-COPY --from=builder /go/src/github.com/ugol/jr/kafka/ /home/jr/.jr/kafka/
+COPY --from=builder /go/src/github.com/ugol/jr/producers/kafka/*.examples /home/jr/.jr/kafka/
 COPY --from=builder /go/src/github.com/ugol/jr/build/jr /bin
 
 USER jr-user:jr-user

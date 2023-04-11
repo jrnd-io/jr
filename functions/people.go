@@ -46,17 +46,17 @@ func Name() string {
 
 // NameM returns a random male Name
 func NameM() string {
-	return word("NameM")
+	return word("nameM")
 }
 
 // NameF returns a random female Name
 func NameF() string {
-	return word("NameF")
+	return word("nameF")
 }
 
 // Surname returns a random Surname
 func Surname() string {
-	return word("Surname")
+	return word("nurname")
 }
 
 // Middlename returns a random Middlename
@@ -74,12 +74,12 @@ func Address() string {
 
 // State returns a random State
 func State() string {
-	return word("State")
+	return word("state")
 }
 
 // StateAt returns State at given index
 func StateAt(index int) string {
-	return wordAt("State", index)
+	return wordAt("state", index)
 }
 
 // StateShort returns a random short State
@@ -94,27 +94,27 @@ func StateShortAt(index int) string {
 
 // Capital returns a random Capital
 func Capital() string {
-	return word("Capital")
+	return word("capital")
 }
 
 // CapitalAt returns Capital at given index
 func CapitalAt(index int) string {
-	return wordAt("Capital", index)
+	return wordAt("capital", index)
 }
 
 // Zip returns a random Zip code
 func Zip() string {
-	return word("Zip")
+	return word("zip")
 }
 
 // ZipAt returns Zip code at given index
 func ZipAt(index int) string {
-	return wordAt("Zip", index)
+	return wordAt("zip", index)
 }
 
 // Company returns a random Company Name
 func Company() string {
-	return word("Company")
+	return word("company")
 }
 
 // EmailProvider returns a random mail provider

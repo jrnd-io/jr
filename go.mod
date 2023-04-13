@@ -3,6 +3,7 @@ module github.com/ugol/jr
 go 1.20
 
 require (
+	github.com/actgardner/gogen-avro/v10 v10.2.1
 	github.com/confluentinc/confluent-kafka-go/v2 v2.1.0
 	github.com/google/uuid v1.3.0
 	github.com/redis/go-redis/v9 v9.0.2

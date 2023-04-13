@@ -13,6 +13,7 @@ import (
 	"github.com/actgardner/gogen-avro/v10/compiler"
 	"github.com/actgardner/gogen-avro/v10/vm"
 	"github.com/actgardner/gogen-avro/v10/vm/types"
+	"github.com/ugol/jr/types/registry"
 )
 
 var _ = fmt.Printf
@@ -464,4 +465,8 @@ func (r *User) UnmarshalJSON(data []byte) error {
 		return fmt.Errorf("no value specified for longitude")
 	}
 	return nil
+}
+
+func init() {
+	registry.Register("user", &User{})
 }

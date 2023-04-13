@@ -13,6 +13,7 @@ import (
 	"github.com/actgardner/gogen-avro/v10/compiler"
 	"github.com/actgardner/gogen-avro/v10/vm"
 	"github.com/actgardner/gogen-avro/v10/vm/types"
+	"github.com/ugol/jr/types/registry"
 )
 
 var _ = fmt.Printf
@@ -580,4 +581,8 @@ func (r *NetDevice) UnmarshalJSON(data []byte) error {
 		return fmt.Errorf("no value specified for L7_PROTO_CATEGORY")
 	}
 	return nil
+}
+
+func init() {
+	registry.Register("net-device", &NetDevice{})
 }

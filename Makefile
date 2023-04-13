@@ -7,6 +7,7 @@ hello:
 
 generate:
 	go install github.com/actgardner/gogen-avro/v10/cmd/...@latest
+	go install cmd/register/register.go
 	go generate types/generate.go
 
 compile:

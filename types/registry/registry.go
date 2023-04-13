@@ -1,8 +1,8 @@
 package registry
 
-var typeMap map[string]interface{}
+var typeMap = make(map[string]interface{})
 
-func RegisterType(name string, t interface{}) {
+func Register(name string, t interface{}) {
 	typeMap[name] = t
 }
 

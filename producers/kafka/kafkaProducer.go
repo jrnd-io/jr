@@ -24,16 +24,19 @@ import (
 	"bufio"
 	"context"
 	"encoding/json"
+	"log"
+	"os"
+	"strings"
+	"time"
+
 	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
 	"github.com/confluentinc/confluent-kafka-go/v2/schemaregistry"
 	"github.com/confluentinc/confluent-kafka-go/v2/schemaregistry/serde"
 	"github.com/confluentinc/confluent-kafka-go/v2/schemaregistry/serde/avro"
 	"github.com/confluentinc/confluent-kafka-go/v2/schemaregistry/serde/jsonschema"
-	"github.com/ugol/jr/types"
-	"log"
-	"os"
-	"strings"
-	"time"
+
+	_ "github.com/ugol/jr/types"
+	"github.com/ugol/jr/types/registry"
 )
 
 type KafkaManager struct {
@@ -104,7 +107,7 @@ func (k *KafkaManager) Produce(key []byte, data []byte) {
 			log.Fatalf("Error creating serializer: %s\n", err)
 		} else {
 
-			t := getType(k.TemplateType)
+			t := registry.GetType(k.TemplateType)
 			err := json.Unmarshal(data, t)
 
 			if err != nil {
@@ -203,20 +206,6 @@ func listenToEventsFrom(k *kafka.Producer) {
 		}
 	}
 
-}
-
-func getType(templateType string) interface{} {
-
-	var netDevice types.NetDevice
-	var user types.User
-
-	switch templateType {
-	case "net-device":
-		return &netDevice
-	case "user":
-		return &user
-	}
-	return nil
 }
 
 func readConfig(configFile string) map[string]string {

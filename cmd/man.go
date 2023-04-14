@@ -43,7 +43,7 @@ var manCmd = &cobra.Command{
 		run, _ := cmd.Flags().GetBool("run")
 
 		if list {
-			for k, _ := range functions.FunctionsMap() {
+			for k := range functions.FunctionsMap() {
 				printFunction(k)
 			}
 			return

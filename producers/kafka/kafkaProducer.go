@@ -104,8 +104,8 @@ func (k *KafkaManager) Produce(key []byte, data []byte) {
 			log.Fatalf("Error creating serializer: %s\n", err)
 		} else {
 
-			t := getType(k.TemplateType)
-			err := json.Unmarshal(data, t)
+			t := types.GetType(k.TemplateType)
+			err := json.Unmarshal(data, &t)
 
 			if err != nil {
 				log.Fatalf("Failed to unmarshal data: %s\n", err)
@@ -203,20 +203,6 @@ func listenToEventsFrom(k *kafka.Producer) {
 		}
 	}
 
-}
-
-func getType(templateType string) interface{} {
-
-	var netDevice types.NetDevice
-	var user types.User
-
-	switch templateType {
-	case "net-device":
-		return &netDevice
-	case "user":
-		return &user
-	}
-	return nil
 }
 
 func readConfig(configFile string) map[string]string {

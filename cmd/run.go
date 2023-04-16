@@ -51,7 +51,7 @@ jr run net-device
   With the --template flag, [template] is a string containing a full template. Example:
 jr run --template "{{name}}"
  With the -templateFileName flag [template] is a file name with a template. Example:
-jr run --templateFileName ~/.jr/templates/net-device.tpl
+jr run --templateFileName ~/.jr/templates/net_device.tpl
 `,
 	Args: cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {

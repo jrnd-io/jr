@@ -46,10 +46,10 @@ Templates with parsing issues are showed in <font color='red'>red</font>, Templa
 
 ### Create random data from one of the provided templates
 
-Use for example the predefined `net-device` template to generate a random JSON network device
+Use for example the predefined `net_device` template to generate a random JSON network device
 
 ```bash
-jr run net-device
+jr run net_device
 ````
 
 ### Other options for templates
@@ -76,23 +76,23 @@ jr run --template "name:{{name}}"
 ### Create more random data 
 
 Using `-n` option you can create more data in each pass. 
-This example creates 3 net-device objects at once:
+This example creates 3 net_device objects at once:
 
 ```bash
-jr run net-device -n 3
+jr run net_device -n 3
 ```
 ### Continuous streaming data
 
 Using `--frequency` option you can repeat the creation every `f` milliseconds
 
-This example creates 2 net-device every second, for ever:
+This example creates 2 net_device every second, for ever:
 ```bash
-jr run net-device -n 2 -f 1s 
+jr run net_device -n 2 -f 1s 
 ```
 Using `--duration` option you can time bound the entire object creation.
-This example creates 2 net-device every 100ms for 1 minute:
+This example creates 2 net_device every 100ms for 1 minute:
 ```bash
-jr run net-device -n 2 -f 100ms -d 1m 
+jr run net_device -n 2 -f 100ms -d 1m 
 ```
 
 Results are by default written on standard out (`--output "stdout"`) with this output template:
@@ -205,7 +205,7 @@ compression.level=9
 Just use the `--output kafka` flag and `--topic` flag to indicate the topic name:
 
 ```bash
-jr run net-device -n 5 -f 500ms -o kafka -t test
+jr run net_device -n 5 -f 500ms -o kafka -t test
 ```
 
 If you don't specify a key, the string "key" will be used for each record. 
@@ -213,11 +213,11 @@ Using `--key` you can use a template for the key, embedding it directly in the c
 
 For example:
 ```bash
-jr run -k '{{key "KEY" 20}}' -f 1s -d 10s net-device -o kafka -t test
+jr run -k '{{key "KEY" 20}}' -f 1s -d 10s net_device -o kafka -t test
 ```
 Another example:
 ```bash 
-jr run -k '{{randoms "ONE|TWO|THREE"}}' -f 1s -d 10s net-device -o kafka -t test
+jr run -k '{{randoms "ONE|TWO|THREE"}}' -f 1s -d 10s net_device -o kafka -t test
 ```
 
 ### Autocreate topics
@@ -226,7 +226,7 @@ Topics autocreation is disabled in Confluent Cloud.
 If you are really lazy you can use the `-a` option, so JR will create the topic for you. 
 
 ```bash
-jr run -a -k '{{randoms "ONE|TWO|THREE"}}' -f 1s -d 10s net-device -o kafka -t mynewtopic
+jr run -a -k '{{randoms "ONE|TWO|THREE"}}' -f 1s -d 10s net_device -o kafka -t mynewtopic
 ```
 
 Alternatively, you can also create it explicitly from JR:
@@ -260,10 +260,10 @@ jr run user -o kafka -t topic1 -s --serializer avro-generic
 ```
 or 
 ```bash
-jr run net-device -o kafka -t topic2 -s --serializer json-schema
+jr run net_device -o kafka -t topic2 -s --serializer json-schema
 ```
 Remember that once you run these commands, `topic1` will be associated with an avro generic schema representing an user 
-object, and `topic2` with a json-schema representing a net-device object. 
+object, and `topic2` with a json-schema representing a net_device object. 
 You can manage/evolve the schemas directly into [Confluent Cloud]("https://confluent.cloud/")
 
 ### Using JR to pipe data to **KCAT**
@@ -275,7 +275,7 @@ JR supports **kcat** out of the box. Using the `--kcat` flag the standard output
 
 
 ```bash
-jr run -k '{{randoms "ONE|TWO|THREE"}}' -f 1s -d 5s net-device --kcat | kcat -F kafka/config.properties -K , -P -t test
+jr run -k '{{randoms "ONE|TWO|THREE"}}' -f 1s -d 5s net_device --kcat | kcat -F kafka/config.properties -K , -P -t test
 ```
 
 
@@ -297,6 +297,6 @@ docker buildx build --platform linux/arm64/v8,linux/amd64  --build-arg=USER="$(w
 It is possible to mount config files from your local environment and use them with jr docker image.
 
 ```
-docker run -it -v $(pwd)/configs:/home/jr-user/configs --rm ugol/jr:latest jr run net-device -n 5 -f 500ms -o kafka -t net-device -F /home/jr-user/configs/kafka.client.properties -s --serializer json-schema --registryConfig /home/jr-user/configs/registry.client.properties
+docker run -it -v $(pwd)/configs:/home/jr-user/configs --rm ugol/jr:latest jr run net_device -n 5 -f 500ms -o kafka -t net_device -F /home/jr-user/configs/kafka.client.properties -s --serializer json-schema --registryConfig /home/jr-user/configs/registry.client.properties
 ```
 ![docker](https://user-images.githubusercontent.com/89472/230502463-cb6faaf8-fcf1-48c4-a571-031d46725cc1.gif)

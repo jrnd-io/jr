@@ -34,8 +34,7 @@ jobs:
         release_name: ${{ github.ref }} linux amd64
         tag_name: ${{ github.ref }}
         body_path: ReleaseNotes.txt
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
     - name: upload linux artifact
       uses: actions/upload-release-asset@v1
       env:

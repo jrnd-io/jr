@@ -4,6 +4,7 @@ package types
 var net_device NetDevice
 var user User
 
+//gocyclo:ignore
 func GetType(templateType string) interface{} {
 
 	switch templateType {

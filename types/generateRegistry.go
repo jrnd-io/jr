@@ -31,6 +31,8 @@ func main() {
 
 		{{range .TypesList}}
 		var {{.}} {{camel .}}{{end}}
+
+        //gocyclo:ignore
 		func GetType(templateType string) interface{} {
 
 			switch templateType {

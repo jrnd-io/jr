@@ -72,6 +72,11 @@ func Address() string {
 	return addresses[Random.Intn(len(addresses))]
 }
 
+// Country returns a random ISO 3166 Country
+func Country() string {
+	return Word("country")
+}
+
 // State returns a random State
 func State() string {
 	return Word("state")

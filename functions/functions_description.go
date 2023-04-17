@@ -582,6 +582,16 @@ var funcDesc = map[string]FunctionDescription{
 		Example:     "jr run --template '{{Address}}'",
 		Output:      "1234 Main Street",
 	},
+	"Country": {
+		Name:        "Country",
+		Category:    "people",
+		Description: "returns a random ISO 3166 Country code",
+		Parameters:  "",
+		Localizable: true,
+		Return:      "string",
+		Example:     "jr run --template '{{Country}}'",
+		Output:      "IT",
+	},
 	"Capital": {
 		Name:        "Capital",
 		Category:    "people",

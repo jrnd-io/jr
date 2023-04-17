@@ -104,6 +104,7 @@ var fmap = map[string]interface{}{
 	"surname":        Surname,
 	"username":       Username,
 	"address":        Address,
+	"country":        Country,
 	"capital":        Capital,
 	"capital_at":     CapitalAt,
 	"state":          State,

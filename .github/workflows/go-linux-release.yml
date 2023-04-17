@@ -6,8 +6,7 @@ name: Go-linux-release
 on:
   push:
     tags:
-      - "TO BE FIXED"
-#      - "v*"
+      - "v*"
 
 jobs:
 
@@ -26,24 +25,9 @@ jobs:
       run: ./make_install.sh
       shell: bash
 
-    - name: release
-      id: create_release
-      uses: actions/create-release@v1.1.4
+    - uses: "marvinpinto/action-automatic-releases@latest"
       with:
-        draft: false
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
         prerelease: false
-        release_name: ${{ github.ref }} linux amd64
-        tag_name: ${{ github.ref }}
-        body_path: ReleaseNotes.md
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: upload linux artifact
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./bin/jr
-        asset_name: jr
-        asset_content_type: application/bin
+        files: |
+          build/jr

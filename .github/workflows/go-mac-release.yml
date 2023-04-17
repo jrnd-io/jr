@@ -12,7 +12,7 @@ jobs:
 
   build:
     name: "Automatic releasing"
-    runs-on: ubuntu-latest
+    runs-on: macos-12
     steps:
     - uses: actions/checkout@v3
     - name: Set up Go

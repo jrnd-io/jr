@@ -24,11 +24,14 @@ jobs:
     - name: Run build script
       run: ./make_install.sh
       shell: bash
-
-    - uses: "marvinpinto/action-automatic-releases@latest"
-        with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          prerelease: false
-          files: |
-            build/jr
-            templates
+     - name: release
+       uses: actions/create-release@v1
+       id: create_release
+       with:
+         draft: false
+         prerelease: false
+         release_name: ${{ steps.version.outputs.version }}
+         tag_name: ${{ github.ref }}
+         body_path: CHANGELOG.md
+       env:
+         GITHUB_TOKEN: ${{ github.token }}

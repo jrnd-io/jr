@@ -24,6 +24,7 @@ jobs:
     - name: Run build script
       run: ./make_install.sh
       shell: bash
+
     - name: release
       uses: actions/create-release@v1
       id: create_release
@@ -35,3 +36,12 @@ jobs:
         body_path: CHANGELOG.md
       env:
         GITHUB_TOKEN: ${{ github.token }}
+    - name: upload linux artifact
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      with:
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
+      asset_path: ./bin/jr
+      asset_name: jr
+      asset_content_type: application/bin

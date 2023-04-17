@@ -26,12 +26,12 @@ jobs:
       shell: bash
 
     - name: release
-      uses: actions/create-release@v1
       id: create_release
+      uses: actions/create-release@v1
       with:
         draft: false
         prerelease: false
-        release_name: ${{ github.ref }}
+        release_name: ${{ github.ref }} linux amd64
         tag_name: ${{ github.ref }}
         body_path: CHANGELOG.md
       env:

@@ -24,6 +24,7 @@ jobs:
     - name: Run build script
       run: ./make_install.sh
       shell: bash
+
     - uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"

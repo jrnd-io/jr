@@ -31,3 +31,4 @@ jobs:
         prerelease: false
         files: |
           build/jr
+          templates

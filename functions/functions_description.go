@@ -202,8 +202,8 @@ var funcDesc = map[string]FunctionDescription{
 		Example:     "jr run --template '{{markov 10 \"hello world\"}}'",
 		Output:      "hello world",
 	},
-	"Lorem": {
-		Name:        "Lorem",
+	"lorem": {
+		Name:        "lorem",
 		Category:    "text utilities",
 		Description: "generates a Lorem ipsum string",
 		Parameters:  "int",
@@ -212,8 +212,8 @@ var funcDesc = map[string]FunctionDescription{
 		Example:     "jr run --template '{{Lorem 10}}'",
 		Output:      "Lorem ipsum dolor sit amet, consectetur adipiscing elit.Fusce elit magna.",
 	},
-	"Sentence": {
-		Name:        "Sentence",
+	"sentence": {
+		Name:        "sentence",
 		Category:    "text utilities",
 		Description: "generates a random Sentence of n words",
 		Parameters:  "string int",
@@ -232,8 +232,8 @@ var funcDesc = map[string]FunctionDescription{
 		Example:     "jr run --template '{{sentence_prefix 3 15}}'",
 		Output:      "Alice was beginning to get very tired of sitting by her sister on the bank.",
 	},
-	"Regex": {
-		Name:        "Regex",
+	"regex": {
+		Name:        "regex",
 		Category:    "text utilities",
 		Description: "returns a random string matching the Regex",
 		Parameters:  "string",
@@ -422,8 +422,8 @@ var funcDesc = map[string]FunctionDescription{
 		Example:     "jr run --template '{{floating 10 20}}'",
 		Output:      "13.123",
 	},
-	"Ip": {
-		Name:        "Ip",
+	"ip": {
+		Name:        "ip",
 		Category:    "network",
 		Description: "returns a random Ip Address matching the given cidr",
 		Parameters:  "string",
@@ -432,8 +432,8 @@ var funcDesc = map[string]FunctionDescription{
 		Example:     "jr run --template '{{Ip \"10.2.0.0/16\"}}'",
 		Output:      "10.2.55.217",
 	},
-	"Ipv6": {
-		Name:        "Ipv6",
+	"ipv6": {
+		Name:        "ipv6",
 		Category:    "network",
 		Description: "returns a random Ipv6 Address",
 		Parameters:  "string",
@@ -442,8 +442,8 @@ var funcDesc = map[string]FunctionDescription{
 		Example:     "jr run --template '{{Ipv6}}'",
 		Output:      "2001:db8:85a3:8d3:1319:8a2e:370:7348",
 	},
-	"Mac": {
-		Name:        "Mac",
+	"mac": {
+		Name:        "mac",
 		Category:    "network",
 		Description: "returns a random Mac Address",
 		Parameters:  "string",
@@ -482,8 +482,8 @@ var funcDesc = map[string]FunctionDescription{
 		Example:     "jr run --template '{{ip_known_port}}'",
 		Output:      "80",
 	},
-	"Password": {
-		Name:        "Password",
+	"password": {
+		Name:        "password",
 		Category:    "security",
 		Description: "returns a random Password of given length, memorable, and with prefix and suffix",
 		Parameters:  "int bool string string",
@@ -512,8 +512,8 @@ var funcDesc = map[string]FunctionDescription{
 		Example:     "jr run --template '{{unix_time_stamp 10}}'",
 		Output:      "1679703304",
 	},
-	"Name": {
-		Name:        "Name",
+	"name": {
+		Name:        "name",
 		Category:    "people",
 		Description: "returns a random Name",
 		Parameters:  "",
@@ -552,8 +552,8 @@ var funcDesc = map[string]FunctionDescription{
 		Example:     "jr run --template '{{middle_name}}'",
 		Output:      "J",
 	},
-	"Surname": {
-		Name:        "Surname",
+	"surname": {
+		Name:        "surname",
 		Category:    "people",
 		Description: "returns a random Surname",
 		Parameters:  "",
@@ -562,8 +562,8 @@ var funcDesc = map[string]FunctionDescription{
 		Example:     "jr run --template '{{Surname}}'",
 		Output:      "Wright",
 	},
-	"Username": {
-		Name:        "Username",
+	"username": {
+		Name:        "username",
 		Category:    "people",
 		Description: "returns a random Username using Name, Surname and a length",
 		Parameters:  "string string int",
@@ -572,8 +572,8 @@ var funcDesc = map[string]FunctionDescription{
 		Example:     "jr run --template '{{Username \"barack\" \"obama\" 12 }}'",
 		Output:      "barackobama75",
 	},
-	"Address": {
-		Name:        "Address",
+	"address": {
+		Name:        "address",
 		Category:    "people",
 		Description: "returns a random Address",
 		Parameters:  "",
@@ -582,8 +582,8 @@ var funcDesc = map[string]FunctionDescription{
 		Example:     "jr run --template '{{Address}}'",
 		Output:      "1234 Main Street",
 	},
-	"Country": {
-		Name:        "Country",
+	"country": {
+		Name:        "country",
 		Category:    "people",
 		Description: "returns a random ISO 3166 Country code",
 		Parameters:  "",
@@ -592,8 +592,8 @@ var funcDesc = map[string]FunctionDescription{
 		Example:     "jr run --template '{{Country}}'",
 		Output:      "IT",
 	},
-	"Capital": {
-		Name:        "Capital",
+	"capital": {
+		Name:        "capital",
 		Category:    "people",
 		Description: "returns a random Capital",
 		Parameters:  "",
@@ -612,8 +612,8 @@ var funcDesc = map[string]FunctionDescription{
 		Example:     "jr run --template '{{capital_at 4}}'",
 		Output:      "Sacramento",
 	},
-	"State": {
-		Name:        "State",
+	"state": {
+		Name:        "state",
 		Category:    "people",
 		Description: "returns a random State",
 		Parameters:  "",
@@ -652,8 +652,8 @@ var funcDesc = map[string]FunctionDescription{
 		Example:     "jr run --template '{{state_short_at 3}}'",
 		Output:      "AR",
 	},
-	"Zip": {
-		Name:        "Zip",
+	"zip": {
+		Name:        "zip",
 		Category:    "people",
 		Description: "returns a random Zip code",
 		Parameters:  "",
@@ -672,8 +672,8 @@ var funcDesc = map[string]FunctionDescription{
 		Example:     "jr run --template '{{zip_at 3}}'",
 		Output:      "72201",
 	},
-	"Company": {
-		Name:        "Company",
+	"company": {
+		Name:        "company",
 		Category:    "people",
 		Description: "returns a random Company Name",
 		Parameters:  "",
@@ -742,8 +742,8 @@ var funcDesc = map[string]FunctionDescription{
 		Example:     "jr run --template '{{array 5}}'",
 		Output:      "[0,0,0,0,0]",
 	},
-	"Counter": {
-		Name:        "Counter",
+	"counter": {
+		Name:        "counter",
 		Category:    "utilities",
 		Description: "returns a Counter with a Name, starting at n incrementing by i",
 		Parameters:  "string int int",

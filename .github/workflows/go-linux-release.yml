@@ -36,7 +36,6 @@ jobs:
         body_path: ReleaseNotes.txt
       env:
         GITHUB_TOKEN: ${{ github.token }}
-        ACTIONS_RUNNER_DEBUG: true
     - name: upload linux artifact
       uses: actions/upload-release-asset@v1
       env:

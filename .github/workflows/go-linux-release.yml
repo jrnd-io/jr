@@ -33,7 +33,7 @@ jobs:
         prerelease: false
         release_name: ${{ github.ref }} linux amd64
         tag_name: ${{ github.ref }}
-        body_path: ReleaseNotes.txt
+        body_path: ReleaseNotes.md
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

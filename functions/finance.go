@@ -22,16 +22,20 @@ package functions
 
 import (
 	"strconv"
+	"strings"
 )
 
 // Cusip returns a valid 9 characters Cusip code
 func Cusip() string {
-	return "TBD"
+	cusip, _ := Regex("^[0-9]{3}[0-9A-Z]{5}")
+	check := cusipCheckDigit(cusip)
+	return cusip + check
 }
 
 // Valor returns a valid 5-9 digits Valor code
 func Valor() string {
-	return "TBD"
+	valor, _ := Regex("[0-9a-zA-Z]{5,9}")
+	return valor
 }
 
 // Isin returns a valid 12 characters Isin code
@@ -41,12 +45,14 @@ func Isin() string {
 
 // returns a valid 7 characters sedol code
 func Sedol() string {
-	return "TBD"
+	sedol, _ := Regex("[0-9a-zA-Z]{6}")
+	return sedol
 }
 
 // returns a valid 6 characters wkn code
 func Wkn() string {
-	return "TBD"
+	wkn, _ := Regex("[0-9a-zA-Z]{6}")
+	return wkn
 }
 
 // CreditCard returns a valid credit card
@@ -70,18 +76,54 @@ func CreditCard(issuer string) string {
 	return card + check
 }
 
-func luhnCheckDigit(number string) string {
-	sum := 0
-	l := len(number)
+func cusipCheckDigit(code string) string {
+	var sum, v int
+
+	if len(code) != 8 {
+		return ""
+	}
+
+	code = strings.ToUpper(code)
+
+	for i := 0; i < 8; i++ {
+		c := code[i]
+		if c >= 48 && c <= 57 {
+			v = int(c - 48)
+		} else if c == 42 {
+			v = 36
+		} else if c == 64 {
+			v = 37
+		} else if c == 35 {
+			v = 38
+		} else if c >= 65 && c <= 90 {
+			v = int(c - 55)
+		}
+		if (7-i)%2 == 0 {
+			v = v * 2
+		}
+		sum += (v / 10) + v%10
+	}
+	return strconv.Itoa((10 - sum%10) % 10)
+
+}
+
+func luhnCheckDigit(code string) string {
+	var sum, v int
+	l := len(code)
 	for i := 0; i < l; i++ {
-		digit, _ := strconv.Atoi(string(number[l-i-1]))
+		c := code[l-i-1]
+		if c >= 48 && c <= 57 {
+			v = int(c - 48)
+		} else {
+			v = int(c - 55)
+		}
 		if i%2 == 0 {
-			digit = digit * 2
-			if digit > 9 {
-				digit = digit - 9
+			v = v * 2
+			if v > 9 {
+				v = v - 9
 			}
 		}
-		sum += digit
+		sum += v
 	}
 	return strconv.Itoa((10 - sum%10) % 10)
 

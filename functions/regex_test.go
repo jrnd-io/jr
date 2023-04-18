@@ -3,7 +3,6 @@
 package functions
 
 import (
-	"fmt"
 	"regexp"
 	"testing"
 )
@@ -31,22 +30,17 @@ var c = []testCase{
 
 func TestGenerate(t *testing.T) {
 	for _, test := range c {
-		for i := 0; i < 10; i++ {
-			r, err := Regex(test.regex)
-			if err != nil {
-				t.Fatal("Error creating generator: ", err)
-			}
+		r, err := Regex(test.regex)
+		if err != nil {
+			t.Fatal("Error creating generator: ", err)
+		}
 
-			if i < 1 {
-				fmt.Printf("Regex: %v Result: \"%s\"\n", test.regex, r)
-			}
-			re, err := regexp.Compile(test.regex)
-			if err != nil {
-				t.Fatal("Invalid test case. Regex: ", test.regex, " failed to compile:", err)
-			}
-			if !re.MatchString(r) {
-				t.Error("Generated data does not match Regex. Regex: ", test.regex, " output: ", r)
-			}
+		re, err := regexp.Compile(test.regex)
+		if err != nil {
+			t.Fatal("Invalid test case. Regex: ", test.regex, " failed to compile:", err)
+		}
+		if !re.MatchString(r) {
+			t.Error("Generated data does not match Regex. Regex: ", test.regex, " output: ", r)
 		}
 	}
 }

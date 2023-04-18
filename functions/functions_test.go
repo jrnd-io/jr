@@ -186,10 +186,6 @@ func TestArray(t *testing.T) {
 	}
 }
 
-func runt(tpl, expect string) error {
-	return runtv(tpl, expect, "")
-}
-
 func TestRegex(t *testing.T) {
 
 	tpl := `{{regex "Z{2,5}"}}`
@@ -202,6 +198,11 @@ func TestRegex(t *testing.T) {
 	//	t.Error(err)
 	//}
 }
+
+func runt(tpl, expect string) error {
+	return runtv(tpl, expect, "")
+}
+
 func runtv(tpl, expect string, vars interface{}) error {
 
 	t := template.Must(template.New("test").Funcs(FunctionsMap()).Parse(tpl))

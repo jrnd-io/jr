@@ -116,6 +116,14 @@ var fmap = map[string]interface{}{
 	"company":        Company,
 	"email_provider": EmailProvider,
 
+	//finance
+	"isin":  Isin,
+	"cusip": Cusip,
+	"sedol": Sedol,
+	"valor": Valor,
+	"wkn":   Wkn,
+	"card":  CreditCard,
+
 	// generic utilities
 	"key":     func(name string, n int) string { return fmt.Sprintf("%s%d", name, Random.Intn(n)) },
 	"seed":    func(rndSeed int64) string { Random.Seed(rndSeed); return "" },

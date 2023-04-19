@@ -32,21 +32,22 @@ func Cusip() string {
 	return cusip + check
 }
 
-// Valor returns a valid 5-9 digits Valor code
-func Valor() string {
-	valor, _ := Regex("[0-9a-zA-Z]{5,9}")
-	return valor
-}
-
 // Isin returns a valid 12 characters Isin code
-func Isin() string {
-	return "TBD"
+func Isin(country string) string {
+	c := country + Cusip()
+	return c + isinCheckDigit(c)
 }
 
 // returns a valid 7 characters sedol code
 func Sedol() string {
 	sedol, _ := Regex("[0-9a-zA-Z]{6}")
 	return sedol
+}
+
+// Valor returns a valid 5-9 digits Valor code
+func Valor() string {
+	valor, _ := Regex("[0-9a-zA-Z]{5,9}")
+	return valor
 }
 
 // returns a valid 6 characters wkn code
@@ -76,6 +77,7 @@ func CreditCard(issuer string) string {
 	return card + check
 }
 
+// cusipCheckDigit returns a valid cusip check digit
 func cusipCheckDigit(code string) string {
 	var sum, v int
 
@@ -87,18 +89,18 @@ func cusipCheckDigit(code string) string {
 
 	for i := 0; i < 8; i++ {
 		c := code[i]
-		if c >= 48 && c <= 57 {
-			v = int(c - 48)
-		} else if c == 42 {
+		if c >= '0' && c <= '9' {
+			v = int(c - '0')
+		} else if c == '*' {
 			v = 36
-		} else if c == 64 {
+		} else if c == '@' {
 			v = 37
-		} else if c == 35 {
+		} else if c == '#' {
 			v = 38
-		} else if c >= 65 && c <= 90 {
-			v = int(c - 55)
+		} else if c >= 'A' && c <= 'Z' {
+			v = int(c - 'A' + 10)
 		}
-		if (7-i)%2 == 0 {
+		if i%2 != 0 {
 			v = v * 2
 		}
 		sum += (v / 10) + v%10
@@ -107,15 +109,16 @@ func cusipCheckDigit(code string) string {
 
 }
 
+// luhnCheckDigit returns a valid luhn check digit
 func luhnCheckDigit(code string) string {
 	var sum, v int
 	l := len(code)
 	for i := 0; i < l; i++ {
 		c := code[l-i-1]
-		if c >= 48 && c <= 57 {
-			v = int(c - 48)
-		} else {
-			v = int(c - 55)
+		if c >= '0' && c <= '9' {
+			v = int(c - '0')
+		} else if c >= 'A' && c <= 'Z' {
+			v = int(c - 'A' + 10)
 		}
 		if i%2 == 0 {
 			v = v * 2
@@ -127,4 +130,8 @@ func luhnCheckDigit(code string) string {
 	}
 	return strconv.Itoa((10 - sum%10) % 10)
 
+}
+
+func isinCheckDigit(code string) string {
+	return "TBD"
 }

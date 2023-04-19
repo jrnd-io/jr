@@ -115,6 +115,8 @@ var fmap = map[string]interface{}{
 	"zip_at":         ZipAt,
 	"company":        Company,
 	"email_provider": EmailProvider,
+	"ssn":            Ssn,
+	"cf":             CodiceFiscale,
 
 	//finance
 	"isin":  Isin,

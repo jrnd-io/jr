@@ -20,7 +20,10 @@
 
 package functions
 
-import "strconv"
+import (
+	"fmt"
+	"strconv"
+)
 
 type Person struct {
 	Name    string
@@ -125,6 +128,19 @@ func Company() string {
 // EmailProvider returns a random mail provider
 func EmailProvider() string {
 	return Word("mail_provider")
+}
+
+// CodiceFiscale return a valid Italian Codice Fiscale
+func CodiceFiscale(name string, surname string, sex string, birth string, city string) string {
+	return "TBD"
+}
+
+// Ssn return a valid Social Security Number id
+func Ssn() string {
+	first := Random.Intn(899) + 1
+	second := Random.Intn(99) + 1
+	third := Random.Intn(9999) + 1
+	return fmt.Sprintf("%03d-%02d-%04d", first, second, third)
 }
 
 // Username returns a random Username using Name, Surname and a length

@@ -207,6 +207,9 @@ func cache(name string) (bool, error) {
 	if v == nil {
 		locale := JrContext.Locales[Random.Intn(len(JrContext.Locales))]
 		filename := fmt.Sprintf("%s/data/%s/%s", JrContext.TemplateDir, locale, name)
+		if locale != "US" && !(fileExists(filename)) {
+			filename = fmt.Sprintf("%s/data/%s/%s", JrContext.TemplateDir, "US", name)
+		}
 		data[name] = initialize(filename)
 		if len(data[name]) == 0 {
 			return false, fmt.Errorf("no words found in %s", filename)
@@ -215,4 +218,12 @@ func cache(name string) (bool, error) {
 		}
 	}
 	return false, nil
+}
+
+func fileExists(filename string) bool {
+	if _, err := os.Stat(filename); err == nil {
+		return true
+	} else {
+		return false
+	}
 }

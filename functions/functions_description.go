@@ -862,4 +862,14 @@ var funcDesc = map[string]FunctionDescription{
 		Example:     "jr run --template '{{swift}}'",
 		Output:      "KZMTMP84448",
 	},
+	"bitcoin": {
+		Name:        "bitcoin",
+		Category:    "finance",
+		Description: "Bitcoin returns a bitcoin address",
+		Parameters:  "",
+		Localizable: false,
+		Return:      "string",
+		Example:     "jr run --template '{{bitcoin}}'",
+		Output:      "12KuG8lNm42zkk3aKd4sC0uuFM",
+	},
 }

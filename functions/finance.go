@@ -58,6 +58,12 @@ func Swift() string {
 
 }
 
+// Bitcoin returns a bitcoin address
+func Bitcoin() string {
+	bc, _ := Regex("^(bc1|[13])[a-zA-HJ-NP-Z0-9]{25,39}$")
+	return bc
+}
+
 // Cusip returns a valid 9 characters Cusip code
 func Cusip() string {
 	cusip, _ := Regex("^[0-9]{3}[0-9A-Z]{5}")

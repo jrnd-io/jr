@@ -128,6 +128,7 @@ var fmap = map[string]interface{}{
 	"account": Account,
 	"amount":  Amount,
 	"swift":   Swift,
+	"bitcoin": Bitcoin,
 
 	// generic utilities
 	"key":     func(name string, n int) string { return fmt.Sprintf("%s%d", name, Random.Intn(n)) },

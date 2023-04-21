@@ -852,4 +852,14 @@ var funcDesc = map[string]FunctionDescription{
 		Example:     "jr run --template '{{account 10 1000 \"$\"}}'",
 		Output:      "$7409.66",
 	},
+	"swift": {
+		Name:        "swift",
+		Category:    "finance",
+		Description: "Swift returns a swift/bic code",
+		Parameters:  "",
+		Localizable: false,
+		Return:      "string",
+		Example:     "jr run --template '{{swift}}'",
+		Output:      "KZMTMP84448",
+	},
 }

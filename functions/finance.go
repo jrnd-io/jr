@@ -22,6 +22,7 @@ package functions
 
 import (
 	"fmt"
+	"math/rand"
 	"strconv"
 	"strings"
 )
@@ -39,6 +40,22 @@ func Account(length int) string {
 func Amount(min float32, max float32, currency string) string {
 	amount := min + Random.Float32()*(max-min)
 	return fmt.Sprintf("%s%.2f", currency, amount)
+}
+
+// Swift returns a swift/bic code
+func Swift() string {
+	const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+	bankCode := make([]byte, 4)
+	for i := range bankCode {
+		bankCode[i] = letters[rand.Intn(len(letters))]
+	}
+	country := Word("country")
+	location := rand.Intn(100)
+	branch := rand.Intn(1000)
+
+	return string(bankCode) + string(country) + fmt.Sprintf("%02d", location) + fmt.Sprintf("%03d", branch)
+
 }
 
 // Cusip returns a valid 9 characters Cusip code

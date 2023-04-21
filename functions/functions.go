@@ -127,6 +127,7 @@ var fmap = map[string]interface{}{
 	"card":    CreditCard,
 	"account": Account,
 	"amount":  Amount,
+	"swift":   Swift,
 
 	// generic utilities
 	"key":     func(name string, n int) string { return fmt.Sprintf("%s%d", name, Random.Intn(n)) },

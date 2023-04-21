@@ -25,7 +25,6 @@ import (
 	"github.com/squeeze69/generacodicefiscale"
 	"log"
 	"strconv"
-	"unicode"
 )
 
 type Person struct {
@@ -145,20 +144,6 @@ func CodiceFiscale(name string, surname string, sex string, birth string, city s
 		log.Fatal(erg)
 	}
 	return cf
-}
-
-// IsVowel reports whether the rune is an ASCII and vowel case letter.
-func isVowel(s rune) bool {
-	switch unicode.ToUpper(s) {
-	case 'A', 'E', 'I', 'O', 'U':
-		return true
-	default:
-		return false
-	}
-}
-
-func isConsonant(s rune) bool {
-	return !isVowel(s)
 }
 
 // Ssn return a valid Social Security Number id

@@ -21,9 +21,25 @@
 package functions
 
 import (
+	"fmt"
 	"strconv"
 	"strings"
 )
+
+// Account returns a random account number of given length
+func Account(length int) string {
+	account := make([]byte, length)
+	for i := range account {
+		account[i] = digits[Random.Intn(len(digits))]
+	}
+	return string(account)
+}
+
+// Amount returns an amount of money between min and max, and given currency
+func Amount(min float32, max float32, currency string) string {
+	amount := min + Random.Float32()*(max-min)
+	return fmt.Sprintf("%s%.2f", currency, amount)
+}
 
 // Cusip returns a valid 9 characters Cusip code
 func Cusip() string {

@@ -10,6 +10,7 @@ import (
 )
 
 const alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+const digits = "0123456789"
 
 // Prefix is a Markov chain prefix of one or more words.
 type Prefix []string

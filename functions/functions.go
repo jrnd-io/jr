@@ -133,12 +133,14 @@ var fmap = map[string]interface{}{
 	"ethereum": Ethereum,
 
 	// generic utilities
-	"key":     func(name string, n int) string { return fmt.Sprintf("%s%d", name, Random.Intn(n)) },
-	"seed":    func(rndSeed int64) string { Random.Seed(rndSeed); return "" },
-	"uuid":    UniqueId,
-	"bool":    RandomBool,
-	"yesorno": YesOrNo,
-	"array":   func(count int) []int { return make([]int, count) },
+	"key":      func(name string, n int) string { return fmt.Sprintf("%s%d", name, Random.Intn(n)) },
+	"seed":     func(rndSeed int64) string { Random.Seed(rndSeed); return "" },
+	"uuid":     UniqueId,
+	"bool":     RandomBool,
+	"yesorno":  YesOrNo,
+	"array":    func(count int) []int { return make([]int, count) },
+	"image":    Image,
+	"image_of": ImageOf,
 }
 
 func initialize(filename string) []string {

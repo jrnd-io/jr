@@ -21,6 +21,7 @@
 package functions
 
 import (
+	"fmt"
 	"github.com/google/uuid"
 )
 
@@ -59,6 +60,21 @@ func YesOrNo() string {
 	} else {
 		return "yes"
 	}
+}
+
+// Image generates a random Image url of given width, height and type
+func Image(width int, height int) string {
+	imageType := []string{"abstract", "animals", "business", "cats", "city", "fashion", "food", "nature", "nightlife", "people", "sport", "technics", "transport"}
+	return ImageOf(
+		width,
+		height,
+		imageType[Random.Intn(len(imageType))],
+	)
+}
+
+// ImageOf generates a random Image url of given width, height and type
+func ImageOf(width int, height int, imageType string) string {
+	return fmt.Sprintf("https://loremflickr.com/%d/%d/%s", width, height, imageType)
 }
 
 // Contains checks if the str string is present in an array of string []string

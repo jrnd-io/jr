@@ -810,7 +810,7 @@ var funcDesc = map[string]FunctionDescription{
 		Localizable: false,
 		Return:      "issuer string",
 		Example:     "jr run --template '{{card \"amex\"}}'",
-		Output:      "",
+		Output:      "376794009305701",
 	},
 	"cf": {
 		Name:        "cf",
@@ -819,8 +819,8 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "name string, surname string, gender string, birthdate string, birthcity string",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{cf \"Mario\" \"Rossi\" \"M\" \"30011970\" \"Roma\"}}'",
-		Output:      "",
+		Example:     "jr run --template '{{cf \"Mario\" \"Rossi\" \"M\" \"1970-01-30\" \"Roma\"}}'",
+		Output:      "RSSMRA70A30H501W",
 	},
 	"ssn": {
 		Name:        "ssn",
@@ -830,7 +830,7 @@ var funcDesc = map[string]FunctionDescription{
 		Localizable: false,
 		Return:      "string",
 		Example:     "jr run --template '{{ssn}}'",
-		Output:      "",
+		Output:      "834-76-1234",
 	},
 	"account": {
 		Name:        "account",
@@ -840,7 +840,7 @@ var funcDesc = map[string]FunctionDescription{
 		Localizable: false,
 		Return:      "string",
 		Example:     "jr run --template '{{account 10}}'",
-		Output:      "",
+		Output:      "6192117146",
 	},
 	"amount": {
 		Name:        "amount",
@@ -850,6 +850,6 @@ var funcDesc = map[string]FunctionDescription{
 		Localizable: false,
 		Return:      "string",
 		Example:     "jr run --template '{{account 10 1000 \"$\"}}'",
-		Output:      "",
+		Output:      "$7409.66",
 	},
 }

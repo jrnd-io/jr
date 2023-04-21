@@ -882,4 +882,14 @@ var funcDesc = map[string]FunctionDescription{
 		Example:     "jr run --template '{{bitcoin}}'",
 		Output:      "12KuG8lNm42zkk3aKd4sC0uuFM",
 	},
+	"ethereum": {
+		Name:        "ethereum",
+		Category:    "finance",
+		Description: "returns an ethereum address",
+		Parameters:  "",
+		Localizable: false,
+		Return:      "string",
+		Example:     "jr run --template '{{ethereum}}'",
+		Output:      "0xb0c2fa65e1C39bD0ADeE9c2EDfC260af81aF62f8",
+	},
 }

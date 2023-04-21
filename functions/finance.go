@@ -64,6 +64,12 @@ func Bitcoin() string {
 	return bc
 }
 
+// Ethereum returns an ethereum address
+func Ethereum() string {
+	eth, _ := Regex("^0x[a-fA-F0-9]{40}$")
+	return eth
+}
+
 // Cusip returns a valid 9 characters Cusip code
 func Cusip() string {
 	cusip, _ := Regex("^[0-9]{3}[0-9A-Z]{5}")

@@ -116,6 +116,15 @@ func CreditCard(issuer string) string {
 	return card + check
 }
 
+// CreditCardCVV returns a random credit card CVV of given length
+func CreditCardCVV(length int) string {
+	cvv := make([]byte, length)
+	for i := range cvv {
+		cvv[i] = digits[rand.Intn(len(digits))]
+	}
+	return string(cvv)
+}
+
 // cusipCheckDigit returns a valid cusip check digit
 func cusipCheckDigit(code string) string {
 	var sum, v int

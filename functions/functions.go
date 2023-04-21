@@ -125,6 +125,7 @@ var fmap = map[string]interface{}{
 	"valor":   Valor,
 	"wkn":     Wkn,
 	"card":    CreditCard,
+	"cardCVV": CreditCardCVV,
 	"account": Account,
 	"amount":  Amount,
 	"swift":   Swift,

@@ -808,9 +808,19 @@ var funcDesc = map[string]FunctionDescription{
 		Description: "returns a random credit card number",
 		Parameters:  "issuer string",
 		Localizable: false,
-		Return:      "issuer string",
+		Return:      "string",
 		Example:     "jr run --template '{{card \"amex\"}}'",
 		Output:      "376794009305701",
+	},
+	"cardCVV": {
+		Name:        "cardCVV",
+		Category:    "finance",
+		Description: "returns a random credit card CVV of given length",
+		Parameters:  "length int",
+		Localizable: false,
+		Return:      "string",
+		Example:     "jr run --template '{{cardCVV 3}}'",
+		Output:      "072",
 	},
 	"cf": {
 		Name:        "cf",
@@ -835,7 +845,7 @@ var funcDesc = map[string]FunctionDescription{
 	"account": {
 		Name:        "account",
 		Category:    "finance",
-		Description: "Account returns a random account number of given length",
+		Description: "returns a random account number of given length",
 		Parameters:  "length int",
 		Localizable: false,
 		Return:      "string",
@@ -845,7 +855,7 @@ var funcDesc = map[string]FunctionDescription{
 	"amount": {
 		Name:        "amount",
 		Category:    "finance",
-		Description: "Amount returns an amount of money between min and max, and given currency",
+		Description: "returns an amount of money between min and max, and given currency",
 		Parameters:  "min float32, max float32, currency string",
 		Localizable: false,
 		Return:      "string",
@@ -855,7 +865,7 @@ var funcDesc = map[string]FunctionDescription{
 	"swift": {
 		Name:        "swift",
 		Category:    "finance",
-		Description: "Swift returns a swift/bic code",
+		Description: "returns a swift/bic code",
 		Parameters:  "",
 		Localizable: false,
 		Return:      "string",
@@ -865,7 +875,7 @@ var funcDesc = map[string]FunctionDescription{
 	"bitcoin": {
 		Name:        "bitcoin",
 		Category:    "finance",
-		Description: "Bitcoin returns a bitcoin address",
+		Description: "returns a bitcoin address",
 		Parameters:  "",
 		Localizable: false,
 		Return:      "string",

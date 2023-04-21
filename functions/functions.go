@@ -94,7 +94,6 @@ var fmap = map[string]interface{}{
 	"ip_known_port":     IpKnownPort,
 	"password":          Password,
 	"useragent":         UserAgent,
-	"unix_time_stamp":   UnixTimeStamp,
 
 	// people related utilities
 	"name":           Name,
@@ -131,6 +130,12 @@ var fmap = map[string]interface{}{
 	"swift":    Swift,
 	"bitcoin":  Bitcoin,
 	"ethereum": Ethereum,
+
+	//time and dates
+	"unix_time_stamp": UnixTimeStamp,
+	"date_between":    DateBetween,
+	"dates_between":   DatesBetween,
+	"birthdate":       BirthDate,
 
 	// generic utilities
 	"key":      func(name string, n int) string { return fmt.Sprintf("%s%d", name, Random.Intn(n)) },

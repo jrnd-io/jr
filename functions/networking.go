@@ -23,17 +23,7 @@ package functions
 import (
 	"fmt"
 	"net"
-	"time"
 )
-
-// UnixTimeStamp returns a random unix timestamp not older than the given number of days
-func UnixTimeStamp(days int) int64 {
-	unixEpoch := time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC)
-	now := time.Now()
-	first := now.AddDate(0, 0, -days).Sub(unixEpoch).Seconds()
-	last := now.Sub(unixEpoch).Seconds()
-	return Random.Int63n(int64(last-first)) + int64(first)
-}
 
 // IpKnownPort returns a random known port number
 func IpKnownPort() string {

@@ -982,4 +982,14 @@ var funcDesc = map[string]FunctionDescription{
 		Example:     "jr run --template '{{soon 15}}'",
 		Output:      "2023-04-25",
 	},
+	"imei": {
+		Name:        "imei",
+		Category:    "phone",
+		Description: "returns a random imei number of 15 digits",
+		Parameters:  "",
+		Localizable: false,
+		Return:      "string",
+		Example:     "jr run --template '{{imei}}'",
+		Output:      "334238791972527",
+	},
 }

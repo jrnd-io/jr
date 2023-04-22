@@ -141,6 +141,9 @@ var fmap = map[string]interface{}{
 	"recent":          Recent,
 	"soon":            Soon,
 
+	//phone
+	"imei": Imei,
+
 	// generic utilities
 	"key":      func(name string, n int) string { return fmt.Sprintf("%s%d", name, Random.Intn(n)) },
 	"seed":     func(rndSeed int64) string { Random.Seed(rndSeed); return "" },

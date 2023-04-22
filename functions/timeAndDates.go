@@ -78,3 +78,43 @@ func BirthDate(minAge int, maxAge int) string {
 	d := time.Date(birthYear, time.Month(birthMonth), birthDay, 0, 0, 0, 0, time.UTC)
 	return d.Format(time.DateOnly)
 }
+
+// Past returns a date in the past not before the given years
+func Past(years int) string {
+	now := time.Now().UTC()
+	start := now.AddDate(-years, 0, 0)
+	delta := now.Sub(start).Nanoseconds()
+	randNsec := Random.Int63n(delta)
+	d := start.Add(time.Duration(randNsec))
+	return d.Format(time.DateOnly)
+}
+
+// Future returns a date in the future not after the given years
+func Future(years int) string {
+	now := time.Now().UTC()
+	start := now.AddDate(years, 0, 0)
+	delta := start.Sub(now).Nanoseconds()
+	randNsec := Random.Int63n(delta)
+	d := now.Add(time.Duration(randNsec))
+	return d.Format(time.DateOnly)
+}
+
+// Recent returns a date in the past not before the given days
+func Recent(days int) string {
+	now := time.Now().UTC()
+	start := now.AddDate(0, 0, -days)
+	delta := now.Sub(start).Nanoseconds()
+	randNsec := Random.Int63n(delta)
+	d := start.Add(time.Duration(randNsec))
+	return d.Format(time.DateOnly)
+}
+
+// Soon returns a date in the future not after the given days
+func Soon(days int) string {
+	now := time.Now().UTC()
+	start := now.AddDate(0, 0, days)
+	delta := start.Sub(now).Nanoseconds()
+	randNsec := Random.Int63n(delta)
+	d := now.Add(time.Duration(randNsec))
+	return d.Format(time.DateOnly)
+}

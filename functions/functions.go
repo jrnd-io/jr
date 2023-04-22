@@ -136,6 +136,10 @@ var fmap = map[string]interface{}{
 	"date_between":    DateBetween,
 	"dates_between":   DatesBetween,
 	"birthdate":       BirthDate,
+	"past":            Past,
+	"future":          Future,
+	"recent":          Recent,
+	"soon":            Soon,
 
 	// generic utilities
 	"key":      func(name string, n int) string { return fmt.Sprintf("%s%d", name, Random.Intn(n)) },

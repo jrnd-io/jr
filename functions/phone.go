@@ -42,10 +42,28 @@ func CountryCodeAt(index int) string {
 
 // LandPrefix returns a random land prefix
 func LandPrefix() string {
-	return Word("land_prefix")
+	l := Word("land_prefix")
+	lp, _ := Regex(l)
+	return lp
 }
 
 // LandPrefixAt returns a land prefix at a given index
 func LandPrefixAt(index int) string {
-	return WordAt("land_prefix_at", index)
+	l := WordAt("land_prefix", index)
+	lp, _ := Regex(l)
+	return lp
+}
+
+// MobilePhone returns a random mobile phone
+func MobilePhone() string {
+	m := Word("mobile_prefix")
+	mp, _ := Regex(m)
+	return mp
+}
+
+// MobilePhoneAt returns a mobile phone at a given index
+func MobilePhoneAt(index int) string {
+	m := WordAt("mobile_prefix", index)
+	mp, _ := Regex(m)
+	return mp
 }

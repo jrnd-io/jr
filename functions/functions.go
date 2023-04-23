@@ -150,6 +150,8 @@ var fmap = map[string]interface{}{
 	"country_code_at": CountryCodeAt,
 	"land_prefix":     LandPrefix,
 	"land_prefix_at":  LandPrefixAt,
+	"mobile_phone":    MobilePhone,
+	"mobile_phone_at": MobilePhoneAt,
 
 	// generic utilities
 	"key":      func(name string, n int) string { return fmt.Sprintf("%s%d", name, Random.Intn(n)) },

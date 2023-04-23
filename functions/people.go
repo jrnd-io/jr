@@ -70,6 +70,11 @@ func Country() string {
 	return Word("country")
 }
 
+// CountryAt returns an ISO 3166 Country at a given index
+func CountryAt(index int) string {
+	return WordAt("country", index)
+}
+
 // State returns a random State
 func State() string {
 	return Word("state")

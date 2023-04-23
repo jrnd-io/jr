@@ -29,3 +29,23 @@ func Imei() string {
 	first14 := string(account)
 	return first14 + luhnCheckDigit(first14)
 }
+
+// CountryCode returns a random Country Code prefix
+func CountryCode() string {
+	return Word("country_code")
+}
+
+// CountryCodeAt returns a Country Code prefix at a given index
+func CountryCodeAt(index int) string {
+	return WordAt("country_code", index)
+}
+
+// LandPrefix returns a random land prefix
+func LandPrefix() string {
+	return Word("land_prefix")
+}
+
+// LandPrefixAt returns a land prefix at a given index
+func LandPrefixAt(index int) string {
+	return WordAt("land_prefix_at", index)
+}

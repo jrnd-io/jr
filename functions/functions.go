@@ -104,6 +104,7 @@ var fmap = map[string]interface{}{
 	"username":       Username,
 	"address":        Address,
 	"country":        Country,
+	"country_at":     CountryAt,
 	"capital":        Capital,
 	"capital_at":     CapitalAt,
 	"city":           City,
@@ -144,7 +145,11 @@ var fmap = map[string]interface{}{
 	"soon":            Soon,
 
 	//phone
-	"imei": Imei,
+	"imei":            Imei,
+	"country_code":    CountryCode,
+	"country_code_at": CountryCodeAt,
+	"land_prefix":     LandPrefix,
+	"land_prefix_at":  LandPrefixAt,
 
 	// generic utilities
 	"key":      func(name string, n int) string { return fmt.Sprintf("%s%d", name, Random.Intn(n)) },

@@ -27,18 +27,6 @@ import (
 	"strconv"
 )
 
-type Person struct {
-	Name    string
-	Surname string
-	Gender  string
-}
-
-type City struct {
-	Name  string
-	Zip   string
-	State string
-}
-
 // Name returns a random Name (male/female)
 func Name() string {
 	s := Random.Intn(2)
@@ -112,14 +100,28 @@ func CapitalAt(index int) string {
 	return WordAt("capital", index)
 }
 
+// City returns a random City
+func City() string {
+	return Word("city")
+}
+
+// CityAt returns City at given index
+func CityAt(index int) string {
+	return WordAt("city", index)
+}
+
 // Zip returns a random Zip code
 func Zip() string {
-	return Word("zip")
+	z := Word("zip")
+	zip, _ := Regex(z)
+	return zip
 }
 
 // ZipAt returns Zip code at given index
 func ZipAt(index int) string {
-	return WordAt("zip", index)
+	z := WordAt("zip", index)
+	zip, _ := Regex(z)
+	return zip
 }
 
 // Company returns a random Company Name

@@ -106,6 +106,8 @@ var fmap = map[string]interface{}{
 	"country":        Country,
 	"capital":        Capital,
 	"capital_at":     CapitalAt,
+	"city":           City,
+	"city_at":        CityAt,
 	"state":          State,
 	"state_at":       StateAt,
 	"state_short":    StateShort,

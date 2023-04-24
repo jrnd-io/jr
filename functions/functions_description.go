@@ -545,7 +545,7 @@ var funcDesc = map[string]FunctionDescription{
 		Output:      "06",
 	},
 	"land_prefix_at": {
-		Name:        "country_code_at",
+		Name:        "land_prefix_at",
 		Category:    "phone",
 		Description: "returns a land prefix at a given index",
 		Parameters:  "index int",

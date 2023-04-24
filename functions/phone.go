@@ -56,14 +56,14 @@ func LandPrefixAt(index int) string {
 
 // MobilePhone returns a random mobile phone
 func MobilePhone() string {
-	m := Word("mobile_prefix")
+	m := Word("mobile_phone")
 	mp, _ := Regex(m)
 	return mp
 }
 
 // MobilePhoneAt returns a mobile phone at a given index
 func MobilePhoneAt(index int) string {
-	m := WordAt("mobile_prefix", index)
+	m := WordAt("mobile_phone", index)
 	mp, _ := Regex(m)
 	return mp
 }

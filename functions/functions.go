@@ -102,6 +102,12 @@ var fmap = map[string]interface{}{
 	"middlename":     Middlename,
 	"surname":        Surname,
 	"username":       Username,
+	"company":        Company,
+	"email_provider": EmailProvider,
+	"ssn":            Ssn,
+	"cf":             CodiceFiscale,
+
+	// address
 	"address":        Address,
 	"country":        Country,
 	"country_at":     CountryAt,
@@ -115,10 +121,11 @@ var fmap = map[string]interface{}{
 	"state_short_at": StateShortAt,
 	"zip":            Zip,
 	"zip_at":         ZipAt,
-	"company":        Company,
-	"email_provider": EmailProvider,
-	"ssn":            Ssn,
-	"cf":             CodiceFiscale,
+	"building":       BuildingNumber,
+	"cardinal":       Cardinal,
+	"latitude":       Latitude,
+	"longitude":      Longitude,
+	"nearby_gps":     NearbyGPS,
 
 	//finance
 	"isin":     Isin,

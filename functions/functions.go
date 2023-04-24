@@ -52,13 +52,15 @@ var fmap = map[string]interface{}{
 	"from_shuffle":             WordShuffle,
 	"from_n":                   WordShuffleN,
 	"join":                     strings.Join,
+	"len":                      Len,
 	"lower":                    strings.ToLower,
 	"lorem":                    Lorem,
 	"markov":                   Nonsense,
-	"random_string":            RandomString,
-	"random_string_vocabulary": RandomStringVocabulary,
 	"random":                   func(s []string) string { return s[Random.Intn(len(s))] },
 	"randoms":                  func(s string) string { a := strings.Split(s, "|"); return a[Random.Intn(len(a))] },
+	"random_index":             RandomIndex,
+	"random_string":            RandomString,
+	"random_string_vocabulary": RandomStringVocabulary,
 	"regex":                    Regex,
 	"repeat":                   strings.Repeat,
 	"replaceall":               strings.ReplaceAll,
@@ -191,6 +193,26 @@ func initialize(filename string) []string {
 	}
 
 	return words
+}
+
+// Len returns number of words (lines) in a word file
+func Len(name string) string {
+	_, err := cache(name)
+	if err != nil {
+		return ""
+	}
+	l := len(data[name])
+	return strconv.Itoa(l)
+}
+
+// RandomIndex returns a random index in a word file
+func RandomIndex(name string) string {
+	_, err := cache(name)
+	if err != nil {
+		return ""
+	}
+	words := data[name]
+	return strconv.Itoa(Random.Intn(len(words)))
 }
 
 // Word returns a random string from a list of strings in a file.

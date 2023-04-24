@@ -564,6 +564,16 @@ var funcDesc = map[string]FunctionDescription{
 		Example:     "jr run --template '{{latitude}}'",
 		Output:      "",
 	},
+	"len": {
+		Name:        "len",
+		Category:    "text utilities",
+		Parameters:  "set string",
+		Localizable: true,
+		Description: "returns the length a list of strings in a file. Files are in '$HOME/.jr/data/locale'",
+		Return:      "string",
+		Example:     "jr run --template '{{len \"city\"}}'",
+		Output:      "46",
+	},
 	"longitude": {
 		Name:        "longitude",
 		Category:    "address",
@@ -773,6 +783,16 @@ var funcDesc = map[string]FunctionDescription{
 		Return:      "string",
 		Example:     "jr run --template '{{randoms \"ALPHA|BETA|GAMMA|DELTA\"}}'",
 		Output:      "BETA",
+	},
+	"random_index": {
+		Name:        "random_index",
+		Category:    "text utilities",
+		Parameters:  "set string",
+		Localizable: true,
+		Description: "returns a random index from a list of strings in a file. Files are in '$HOME/.jr/data/locale'",
+		Return:      "string",
+		Example:     "jr run --template '{{random_index \"city\"}}'",
+		Output:      "12",
 	},
 	"random_string": {
 		Name:        "random_string",

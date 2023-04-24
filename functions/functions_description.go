@@ -959,7 +959,7 @@ var funcDesc = map[string]FunctionDescription{
 		Category:    "address",
 		Description: "returns a random street",
 		Parameters:  "",
-		Localizable: false,
+		Localizable: true,
 		Return:      "string",
 		Example:     "jr run --template '{{street}}'",
 		Output:      "Union Street",

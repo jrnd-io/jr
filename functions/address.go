@@ -101,6 +101,11 @@ func ZipAt(index int) string {
 	return zip
 }
 
+// Street returns a random street
+func Street() string {
+	return Word("street")
+}
+
 // BuildingNumber generates a random building number
 func BuildingNumber() string {
 	building := make([]byte, Random.Intn(4)+1)

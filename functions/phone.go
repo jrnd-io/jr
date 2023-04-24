@@ -20,16 +20,6 @@
 
 package functions
 
-// Imei returns a random imei number of 15 digits
-func Imei() string {
-	account := make([]byte, 14)
-	for i := range account {
-		account[i] = digits[Random.Intn(len(digits))]
-	}
-	first14 := string(account)
-	return first14 + luhnCheckDigit(first14)
-}
-
 // CountryCode returns a random Country Code prefix
 func CountryCode() string {
 	return Word("country_code")
@@ -38,6 +28,16 @@ func CountryCode() string {
 // CountryCodeAt returns a Country Code prefix at a given index
 func CountryCodeAt(index int) string {
 	return WordAt("country_code", index)
+}
+
+// Imei returns a random imei number of 15 digits
+func Imei() string {
+	account := make([]byte, 14)
+	for i := range account {
+		account[i] = digits[Random.Intn(len(digits))]
+	}
+	first14 := string(account)
+	return first14 + luhnCheckDigit(first14)
 }
 
 // LandPrefix returns a random land prefix

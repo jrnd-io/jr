@@ -25,42 +25,10 @@ import (
 	"net"
 )
 
-// IpKnownPort returns a random known port number
-func IpKnownPort() string {
-	ports := []string{"80", "81", "443", "22", "631"}
-	return ports[Random.Intn(len(ports))]
-}
-
-// IpKnownProtocol returns a random known protocol
-func IpKnownProtocol() string {
-	protocols := []string{"TCP", "UDP", "ICMP", "FTP", "HTTP", "SFTP"}
-	return protocols[Random.Intn(len(protocols))]
-}
-
 // HttpMethod returns a random http method
 func HttpMethod() string {
 	method := []string{"GET", "POST", "PUT", "DELETE", "PATCH"}
 	return method[Random.Intn(len(method))]
-}
-
-// Ipv6 returns a random Ipv6 Address
-func Ipv6() string {
-	ip := make(net.IP, net.IPv6len)
-	for i := 0; i < net.IPv6len; i++ {
-		ip[i] = byte(Random.Intn(256))
-	}
-	ip[0] &= 0xfe // Set the "locally administered" flag
-	ip[0] |= 0x02 // Set the "unicast" flag
-	return ip.String()
-}
-
-// Mac returns a random Mac Address
-func Mac() string {
-	mac := make(net.HardwareAddr, 6)
-	Random.Read(mac)
-	mac[0] &= 0xfe // Set the "locally administered" flag
-	mac[0] |= 0x02 // Set the "unicast" flag
-	return mac.String()
 }
 
 // Ip returns a random Ip Address matching the given cidr
@@ -94,6 +62,38 @@ GENERATE:
 		goto GENERATE
 	}
 	return ip.String()
+}
+
+// IpKnownPort returns a random known port number
+func IpKnownPort() string {
+	ports := []string{"80", "81", "443", "22", "631"}
+	return ports[Random.Intn(len(ports))]
+}
+
+// IpKnownProtocol returns a random known protocol
+func IpKnownProtocol() string {
+	protocols := []string{"TCP", "UDP", "ICMP", "FTP", "HTTP", "SFTP"}
+	return protocols[Random.Intn(len(protocols))]
+}
+
+// Ipv6 returns a random Ipv6 Address
+func Ipv6() string {
+	ip := make(net.IP, net.IPv6len)
+	for i := 0; i < net.IPv6len; i++ {
+		ip[i] = byte(Random.Intn(256))
+	}
+	ip[0] &= 0xfe // Set the "locally administered" flag
+	ip[0] |= 0x02 // Set the "unicast" flag
+	return ip.String()
+}
+
+// Mac returns a random Mac Address
+func Mac() string {
+	mac := make(net.HardwareAddr, 6)
+	Random.Read(mac)
+	mac[0] &= 0xfe // Set the "locally administered" flag
+	mac[0] |= 0x02 // Set the "unicast" flag
+	return mac.String()
 }
 
 // Password returns a random Password of given length, memorable, and with prefix and suffix

@@ -37,31 +37,6 @@ func Counter(c string, start, step int) int {
 	}
 }
 
-// UniqueId returns a random uuid
-func UniqueId() string {
-	return uuid.New().String()
-}
-
-// RandomBool returns a random boolean
-func RandomBool() string {
-	b := Random.Intn(2)
-	if b == 0 {
-		return "false"
-	} else {
-		return "true"
-	}
-}
-
-// YesOrNo returns a random yes or no
-func YesOrNo() string {
-	b := Random.Intn(2)
-	if b == 0 {
-		return "no"
-	} else {
-		return "yes"
-	}
-}
-
 // Image generates a random Image url of given width, height and type
 func Image(width int, height int) string {
 	imageType := []string{"abstract", "animals", "business", "cats", "city", "fashion", "food", "nature", "nightlife", "people", "sport", "technics", "transport"}
@@ -75,6 +50,31 @@ func Image(width int, height int) string {
 // ImageOf generates a random Image url of given width, height and type
 func ImageOf(width int, height int, imageType string) string {
 	return fmt.Sprintf("https://loremflickr.com/%d/%d/%s", width, height, imageType)
+}
+
+// RandomBool returns a random boolean
+func RandomBool() string {
+	b := Random.Intn(2)
+	if b == 0 {
+		return "false"
+	} else {
+		return "true"
+	}
+}
+
+// UniqueId returns a random uuid
+func UniqueId() string {
+	return uuid.New().String()
+}
+
+// YesOrNo returns a random yes or no
+func YesOrNo() string {
+	b := Random.Intn(2)
+	if b == 0 {
+		return "no"
+	} else {
+		return "yes"
+	}
 }
 
 // Contains checks if the str string is present in an array of string []string

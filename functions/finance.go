@@ -42,32 +42,10 @@ func Amount(min float32, max float32, currency string) string {
 	return fmt.Sprintf("%s%.2f", currency, amount)
 }
 
-// Swift returns a swift/bic code
-func Swift() string {
-	const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-
-	bankCode := make([]byte, 4)
-	for i := range bankCode {
-		bankCode[i] = letters[rand.Intn(len(letters))]
-	}
-	country := Word("country")
-	location := rand.Intn(100)
-	branch := rand.Intn(1000)
-
-	return string(bankCode) + string(country) + fmt.Sprintf("%02d", location) + fmt.Sprintf("%03d", branch)
-
-}
-
 // Bitcoin returns a bitcoin address
 func Bitcoin() string {
 	bc, _ := Regex("^(bc1|[13])[a-zA-HJ-NP-Z0-9]{25,39}$")
 	return bc
-}
-
-// Ethereum returns an ethereum address
-func Ethereum() string {
-	eth, _ := Regex("^0x[a-fA-F0-9]{40}$")
-	return eth
 }
 
 // Cusip returns a valid 9 characters Cusip code
@@ -77,28 +55,13 @@ func Cusip() string {
 	return cusip + check
 }
 
-// Isin returns a valid 12 characters Isin code
-func Isin(country string) string {
-	c := country + Cusip()
-	return c + isinCheckDigit(c)
-}
-
-// returns a valid 7 characters sedol code
-func Sedol() string {
-	sedol, _ := Regex("[0-9a-zA-Z]{6}")
-	return sedol
-}
-
-// Valor returns a valid 5-9 digits Valor code
-func Valor() string {
-	valor, _ := Regex("[0-9a-zA-Z]{5,9}")
-	return valor
-}
-
-// returns a valid 6 characters wkn code
-func Wkn() string {
-	wkn, _ := Regex("[0-9a-zA-Z]{6}")
-	return wkn
+// CreditCardCVV returns a random credit card CVV of given length
+func CreditCardCVV(length int) string {
+	cvv := make([]byte, length)
+	for i := range cvv {
+		cvv[i] = digits[rand.Intn(len(digits))]
+	}
+	return string(cvv)
 }
 
 // CreditCard returns a valid credit card
@@ -122,13 +85,50 @@ func CreditCard(issuer string) string {
 	return card + check
 }
 
-// CreditCardCVV returns a random credit card CVV of given length
-func CreditCardCVV(length int) string {
-	cvv := make([]byte, length)
-	for i := range cvv {
-		cvv[i] = digits[rand.Intn(len(digits))]
+// Ethereum returns an ethereum address
+func Ethereum() string {
+	eth, _ := Regex("^0x[a-fA-F0-9]{40}$")
+	return eth
+}
+
+// Isin returns a valid 12 characters Isin code
+func Isin(country string) string {
+	c := country + Cusip()
+	return c + isinCheckDigit(c)
+}
+
+// returns a valid 7 characters sedol code
+func Sedol() string {
+	sedol, _ := Regex("[0-9a-zA-Z]{6}")
+	return sedol
+}
+
+// Swift returns a swift/bic code
+func Swift() string {
+	const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+	bankCode := make([]byte, 4)
+	for i := range bankCode {
+		bankCode[i] = letters[rand.Intn(len(letters))]
 	}
-	return string(cvv)
+	country := Word("country")
+	location := rand.Intn(100)
+	branch := rand.Intn(1000)
+
+	return string(bankCode) + string(country) + fmt.Sprintf("%02d", location) + fmt.Sprintf("%03d", branch)
+
+}
+
+// Valor returns a valid 5-9 digits Valor code
+func Valor() string {
+	valor, _ := Regex("[0-9a-zA-Z]{5,9}")
+	return valor
+}
+
+// returns a valid 6 characters wkn code
+func Wkn() string {
+	wkn, _ := Regex("[0-9a-zA-Z]{6}")
+	return wkn
 }
 
 // cusipCheckDigit returns a valid cusip check digit

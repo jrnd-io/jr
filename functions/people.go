@@ -27,6 +27,36 @@ import (
 	"strconv"
 )
 
+// CodiceFiscale return a valid Italian Codice Fiscale
+func CodiceFiscale(name string, surname string, sex string, birth string, city string) string {
+
+	codicecitta, erc := generacodicefiscale.CercaComune(city)
+	if erc != nil {
+		log.Fatal(erc)
+	}
+	cf, erg := generacodicefiscale.Genera(surname, name, sex, codicecitta.Codice, birth)
+	if erg != nil {
+		log.Fatal(erg)
+	}
+	return cf
+}
+
+// Company returns a random Company Name
+func Company() string {
+	return Word("company")
+}
+
+// EmailProvider returns a random mail provider
+func EmailProvider() string {
+	return Word("mail_provider")
+}
+
+// Middlename returns a random Middlename
+func Middlename() string {
+	middles := []string{"M", "J", "K", "P", "T", "S"}
+	return middles[Random.Intn(len(middles))]
+}
+
 // Name returns a random Name (male/female)
 func Name() string {
 	s := Random.Intn(2)
@@ -47,47 +77,17 @@ func NameF() string {
 	return Word("nameF")
 }
 
-// Surname returns a random Surname
-func Surname() string {
-	return Word("surname")
-}
-
-// Middlename returns a random Middlename
-func Middlename() string {
-	middles := []string{"M", "J", "K", "P", "T", "S"}
-	return middles[Random.Intn(len(middles))]
-}
-
-// Company returns a random Company Name
-func Company() string {
-	return Word("company")
-}
-
-// EmailProvider returns a random mail provider
-func EmailProvider() string {
-	return Word("mail_provider")
-}
-
-// CodiceFiscale return a valid Italian Codice Fiscale
-func CodiceFiscale(name string, surname string, sex string, birth string, city string) string {
-
-	codicecitta, erc := generacodicefiscale.CercaComune(city)
-	if erc != nil {
-		log.Fatal(erc)
-	}
-	cf, erg := generacodicefiscale.Genera(surname, name, sex, codicecitta.Codice, birth)
-	if erg != nil {
-		log.Fatal(erg)
-	}
-	return cf
-}
-
 // Ssn return a valid Social Security Number id
 func Ssn() string {
 	first := Random.Intn(899) + 1
 	second := Random.Intn(99) + 1
 	third := Random.Intn(9999) + 1
 	return fmt.Sprintf("%03d-%02d-%04d", first, second, third)
+}
+
+// Surname returns a random Surname
+func Surname() string {
+	return Word("surname")
 }
 
 // Username returns a random Username using Name, Surname and a length

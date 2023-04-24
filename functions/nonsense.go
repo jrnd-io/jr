@@ -186,11 +186,6 @@ func SentencePrefix(prefixLen, numWords int) string {
 	return Nonsense(prefixLen, numWords, alice)
 }
 
-// Sentence generates an 'alice in wonderland' text of size words
-func Sentence(numWords int) string {
-	return SentencePrefix(2, numWords)
-}
-
 // Nonsense generates a random Sentence of numWords wordsm using a prefixLen and a baseText to start from
 func Nonsense(prefixLen, numWords int, baseText string) string {
 	c := NewChain(prefixLen)
@@ -210,4 +205,9 @@ func RandomStringVocabulary(min, max int, source string) string {
 		textb[i] = source[Random.Intn(len(source))]
 	}
 	return string(textb)
+}
+
+// Sentence generates an 'alice in wonderland' text of size words
+func Sentence(numWords int) string {
+	return SentencePrefix(2, numWords)
 }

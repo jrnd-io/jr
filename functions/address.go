@@ -30,9 +30,9 @@ const (
 	degreesPerMeter = 1.0 / earthRadius * 180.0 / math.Pi
 )
 
-// BuildingNumber generates a random building number
-func BuildingNumber() string {
-	building := make([]byte, Random.Intn(4)+1)
+// BuildingNumber generates a random building number of max n digits
+func BuildingNumber(n int) string {
+	building := make([]byte, Random.Intn(n)+1)
 	for i := range building {
 		building[i] = digits[Random.Intn(len(digits))]
 	}

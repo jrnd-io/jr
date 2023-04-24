@@ -125,11 +125,11 @@ var funcDesc = map[string]FunctionDescription{
 	"building": {
 		Name:        "building",
 		Category:    "address",
-		Description: "returns a random building number",
-		Parameters:  "",
+		Description: "returns a random building number of max n digits",
+		Parameters:  "n int",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{building}}'",
+		Example:     "jr run --template '{{building 3}}'",
 		Output:      "982",
 	},
 	"capital": {

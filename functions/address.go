@@ -30,41 +30,13 @@ const (
 	degreesPerMeter = 1.0 / earthRadius * 180.0 / math.Pi
 )
 
-// Address returns a random Address
-func Address() string {
-	//TODO: implement
-	addresses := []string{""}
-	return addresses[Random.Intn(len(addresses))]
-}
-
-// Country returns a random ISO 3166 Country
-func Country() string {
-	return Word("country")
-}
-
-// CountryAt returns an ISO 3166 Country at a given index
-func CountryAt(index int) string {
-	return WordAt("country", index)
-}
-
-// State returns a random State
-func State() string {
-	return Word("state")
-}
-
-// StateAt returns State at given index
-func StateAt(index int) string {
-	return WordAt("state", index)
-}
-
-// StateShort returns a random short State
-func StateShort() string {
-	return Word("state_short")
-}
-
-// StateShortAt returns short State at given index
-func StateShortAt(index int) string {
-	return WordAt("state_short", index)
+// BuildingNumber generates a random building number
+func BuildingNumber() string {
+	building := make([]byte, Random.Intn(4)+1)
+	for i := range building {
+		building[i] = digits[Random.Intn(len(digits))]
+	}
+	return string(building)
 }
 
 // Capital returns a random Capital
@@ -77,6 +49,17 @@ func CapitalAt(index int) string {
 	return WordAt("capital", index)
 }
 
+// Cardinal return a random cardinal direction, in long or short form
+func Cardinal(short bool) string {
+	if short {
+		directions := []string{"N", "S", "E", "O", "NE", "NO", "SE", "SO"}
+		return directions[Random.Intn(len(directions))]
+	} else {
+		directions := []string{"North", "South", "East", "Ovest", "North-East", "North-Ovest", "South-East", "South-Ovest"}
+		return directions[Random.Intn(len(directions))]
+	}
+}
+
 // City returns a random City
 func City() string {
 	return Word("city")
@@ -87,43 +70,14 @@ func CityAt(index int) string {
 	return WordAt("city", index)
 }
 
-// Zip returns a random Zip code
-func Zip() string {
-	z := Word("zip")
-	zip, _ := Regex(z)
-	return zip
+// Country returns a random ISO 3166 Country
+func Country() string {
+	return Word("country")
 }
 
-// ZipAt returns Zip code at given index
-func ZipAt(index int) string {
-	z := WordAt("zip", index)
-	zip, _ := Regex(z)
-	return zip
-}
-
-// Street returns a random street
-func Street() string {
-	return Word("street")
-}
-
-// BuildingNumber generates a random building number
-func BuildingNumber() string {
-	building := make([]byte, Random.Intn(4)+1)
-	for i := range building {
-		building[i] = digits[Random.Intn(len(digits))]
-	}
-	return string(building)
-}
-
-// Cardinal return a random cardinal direction, in long or short form
-func Cardinal(short bool) string {
-	if short {
-		directions := []string{"N", "S", "E", "O", "NE", "NO", "SE", "SO"}
-		return directions[Random.Intn(len(directions))]
-	} else {
-		directions := []string{"North", "South", "East", "Ovest", "North-East", "North-Ovest", "South-East", "South-Ovest"}
-		return directions[Random.Intn(len(directions))]
-	}
+// CountryAt returns an ISO 3166 Country at a given index
+func CountryAt(index int) string {
+	return WordAt("country", index)
 }
 
 // Latitude returns a random latitude between -90 and 90
@@ -157,4 +111,43 @@ func NearbyGPS(latitude float64, longitude float64, radius int) string {
 
 	return fmt.Sprintf("%.4f %.4f", newLatitude, newLongitude)
 
+}
+
+// State returns a random State
+func State() string {
+	return Word("state")
+}
+
+// StateAt returns State at given index
+func StateAt(index int) string {
+	return WordAt("state", index)
+}
+
+// StateShort returns a random short State
+func StateShort() string {
+	return Word("state_short")
+}
+
+// StateShortAt returns short State at given index
+func StateShortAt(index int) string {
+	return WordAt("state_short", index)
+}
+
+// Street returns a random street
+func Street() string {
+	return Word("street")
+}
+
+// Zip returns a random Zip code
+func Zip() string {
+	z := Word("zip")
+	zip, _ := Regex(z)
+	return zip
+}
+
+// ZipAt returns Zip code at given index
+func ZipAt(index int) string {
+	z := WordAt("zip", index)
+	zip, _ := Regex(z)
+	return zip
 }

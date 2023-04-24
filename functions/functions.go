@@ -108,7 +108,6 @@ var fmap = map[string]interface{}{
 	"username":       Username,
 
 	// address
-	"address":        Address,
 	"building":       BuildingNumber,
 	"cardinal":       Cardinal,
 	"capital":        Capital,

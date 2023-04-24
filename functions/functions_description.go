@@ -62,16 +62,6 @@ var funcDesc = map[string]FunctionDescription{
 		Example:     "jr run --template '{{add 1 2}}'",
 		Output:      "3",
 	},
-	"address": {
-		Name:        "address",
-		Category:    "address",
-		Description: "returns a random address",
-		Parameters:  "",
-		Localizable: true,
-		Return:      "string",
-		Example:     "jr run --template '{{address}}'",
-		Output:      "1234 Main Street",
-	},
 	"amount": {
 		Name:        "amount",
 		Category:    "finance",

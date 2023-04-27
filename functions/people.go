@@ -88,10 +88,10 @@ func Email() string {
 	company := JrContext.Ctx["company"]
 
 	if name == "" {
-		name = Name()
+		name = strings.ToLower(Name())
 	}
 	if surname == "" {
-		surname = Surname()
+		surname = strings.ToLower(Surname())
 	}
 	if company == "" {
 		company = strings.ToLower(Company())

@@ -43,6 +43,8 @@ var listCmd = &cobra.Command{
 		templateDir, _ := cmd.Flags().GetString("templateDir")
 		templateDir = os.ExpandEnv(templateDir)
 
+		functions.JrContext.Ctx = make(map[string]string)
+
 		if _, err := os.Stat(templateDir); os.IsNotExist(err) {
 			return
 		}
@@ -56,7 +58,8 @@ var listCmd = &cobra.Command{
 				fullPath, _ := cmd.Flags().GetBool("fullPath")
 
 				t, _ := os.ReadFile(path)
-				if isValidTemplate(t) {
+				valid, err := isValidTemplate(t)
+				if valid {
 					fmt.Print(Green)
 				} else {
 					fmt.Print(Red)
@@ -66,7 +69,12 @@ var listCmd = &cobra.Command{
 					fmt.Println(path)
 				} else {
 					name, _ := strings.CutSuffix(info.Name(), ".tpl")
-					fmt.Println(name)
+					fmt.Print(name)
+					if err != nil {
+						fmt.Println(" -> ", err)
+					} else {
+						fmt.Println()
+					}
 				}
 			}
 			return nil
@@ -80,19 +88,19 @@ var listCmd = &cobra.Command{
 	},
 }
 
-func isValidTemplate(t []byte) bool {
+func isValidTemplate(t []byte) (bool, error) {
 
 	tt, err := template.New("test").Funcs(functions.FunctionsMap()).Parse(string(t))
 	if err != nil {
-		return false
+		return false, err
 	}
 
 	var buf bytes.Buffer
 	if err = tt.Execute(&buf, nil); err != nil {
-		return false
+		return false, err
 	}
 
-	return true
+	return true, err
 
 }
 

@@ -64,7 +64,7 @@ func TestMin(t *testing.T) {
 
 func TestUSState(t *testing.T) {
 
-	hawaii := "{{capital_at 10}} {{state_at 10}} {{state_short_at 10}} {{zip_at 10}}"
+	hawaii := "{{seed 0}}{{capital_at 10}} {{state_at 10}} {{state_short_at 10}} {{zip_at 10}}"
 	massachussets := `{{capital_at 20}} {{state_at 20}} {{state_short_at 20}} {{zip_at 20}}`
 	newyork := `{{capital_at 31}} {{state_at 31}} {{state_short_at 31}} {{zip_at 31}}`
 	texas := `{{capital_at 42}} {{state_at 42}} {{state_short_at 42}} {{zip_at 42}}`
@@ -109,8 +109,8 @@ func TestCache(t *testing.T) {
 
 func TestFrom(t *testing.T) {
 
-	tpl := `{{from "actor"}}`
-	if err := runt(tpl, "Angelina Jolie"); err != nil {
+	tpl := `{{seed 0}}{{from "actor"}}`
+	if err := runt(tpl, "Julie Andrews"); err != nil {
 		t.Error(err)
 	}
 	tpl = `{{from "actors"}}`
@@ -121,32 +121,32 @@ func TestFrom(t *testing.T) {
 
 func TestPassword(t *testing.T) {
 
-	tpl := `{{password 5 true "PwD" "!?!"}}`
-	if err := runt(tpl, "PwDalYza!?!"); err != nil {
+	tpl := `{{seed 0}}{{password 5 true "PwD" "!?!"}}`
+	if err := runt(tpl, "PwDASeJY!?!"); err != nil {
 		t.Error(err)
 	}
 }
 
 func TestIPv6(t *testing.T) {
 
-	tpl := `{{ipv6}}`
-	if err := runt(tpl, "face:bf42:e25e:8b14:eafc:81ea:e0d0:f2c"); err != nil {
+	tpl := `{{seed 0}}{{ipv6}}`
+	if err := runt(tpl, "fa12:f92a:fbe0:f85:8d0:e83b:ab9c:f8ce"); err != nil {
 		t.Error(err)
 	}
 }
 
 func TestIP(t *testing.T) {
 
-	tpl := `{{ip "10.2.0.0/16"}}`
-	if err := runt(tpl, "10.2.238.223"); err != nil {
+	tpl := `{{seed 0}}{{ip "10.2.0.0/16"}}`
+	if err := runt(tpl, "10.2.253.194"); err != nil {
 		t.Error(err)
 	}
 }
 
 func TestUseragent(t *testing.T) {
 
-	tpl := `{{useragent}}`
-	if err := runt(tpl, "Mozilla/5.0 (Windows NT 10.0) AppleWebKit/549.15 (KHTML, like Gecko) Edge/8.3.0.0 Mobile Safari/8.5"); err != nil {
+	tpl := `{{seed 0}}{{useragent}}`
+	if err := runt(tpl, "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/577.89 (KHTML, like Gecko) Opera/6.5.6.7 Mobile Safari/9.9"); err != nil {
 		t.Error(err)
 	}
 }
@@ -188,8 +188,8 @@ func TestArray(t *testing.T) {
 
 func TestRegex(t *testing.T) {
 
-	tpl := `{{regex "Z{2,5}"}}`
-	if err := runt(tpl, "ZZ"); err != nil {
+	tpl := `{{seed 0}}{{regex "Z{2,5}"}}`
+	if err := runt(tpl, "ZZZZ"); err != nil {
 		t.Error(err)
 	}
 	//123[0-2]+.*\w{3}

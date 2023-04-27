@@ -46,10 +46,9 @@ var showCmd = &cobra.Command{
 		templateDir = os.ExpandEnv(templateDir)
 		templatePath := fmt.Sprintf("%s/%s.tpl", templateDir, args[0])
 		templateScript, err := os.ReadFile(templatePath)
+		valid, err := isValidTemplate([]byte(templateScript))
 		templateString := string(templateScript)
-		if err != nil {
-			log.Fatal(err)
-		}
+
 		var Reset = "\033[0m"
 		if runtime.GOOS != "windows" && !nocolor {
 			var Cyan = "\033[36m"
@@ -60,6 +59,9 @@ var showCmd = &cobra.Command{
 		}
 		fmt.Println(templateString)
 		fmt.Print(Reset)
+		if !valid {
+			log.Println(err)
+		}
 	},
 }
 

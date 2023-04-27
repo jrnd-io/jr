@@ -26,28 +26,24 @@ import (
 
 func TestRightTemplate(t *testing.T) {
 	tpl := `{{"fooo" | substr 0 3 }}`
-	if !isValidTemplate([]byte(tpl)) {
-		t.Error("Template should be valid")
+	valid, err := isValidTemplate([]byte(tpl))
+	if !valid {
+		t.Error(err)
 	}
 }
 
 func TestRightTemplate2(t *testing.T) {
 	tpl := `{"fooo" | substr 0 3 }}`
-	if !isValidTemplate([]byte(tpl)) {
-		t.Error("Template should be valid")
-	}
-}
-
-func TestRightTemplate3(t *testing.T) {
-	tpl := `{"fooo" | subsTr 0 3 }}`
-	if !isValidTemplate([]byte(tpl)) {
-		t.Error("Template should be valid")
+	valid, err := isValidTemplate([]byte(tpl))
+	if !valid {
+		t.Error(err)
 	}
 }
 
 func TestWrongTemplate(t *testing.T) {
 	tpl := `{{"fooo" | subsTr 0 3 }}`
-	if isValidTemplate([]byte(tpl)) {
-		t.Error("Template should be invalid")
+	valid, err := isValidTemplate([]byte(tpl))
+	if valid {
+		t.Error(err)
 	}
 }

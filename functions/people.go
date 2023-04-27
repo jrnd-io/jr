@@ -88,16 +88,16 @@ func Email() string {
 	company := JrContext.Ctx["company"]
 
 	if name == "" {
-		name = strings.ToLower(Name())
+		name = Name()
 	}
 	if surname == "" {
-		surname = strings.ToLower(Surname())
+		surname = Surname()
 	}
 	if company == "" {
-		company = strings.ToLower(Company())
+		company = Company()
 	}
-	strings.ReplaceAll(company, " ", "")
-	return fmt.Sprintf("%s.%s@%s.com", name, surname, company)
+	company = strings.ReplaceAll(company, " ", "")
+	return fmt.Sprintf("%s.%s@%s.com", strings.ToLower(name), strings.ToLower(surname), strings.ToLower(company))
 }
 
 // EmailProvider returns a random email provider

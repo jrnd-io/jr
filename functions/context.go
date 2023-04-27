@@ -67,5 +67,9 @@ func init() {
 		Locale:           "us",
 		Seed:             time.Now().UTC().UnixNano(),
 		Counters:         make(map[string]int),
+		Ctx:              make(map[string]string),
+		LastIndex:        -1,
+		CountryIndex:     -1,
+		CityIndex:        -1,
 	}
 }

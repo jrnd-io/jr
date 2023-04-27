@@ -151,10 +151,6 @@ jr run --templateFileName ~/.jr/templates/net_device.tpl
 		functions.JrContext.Locale = strings.ToLower(locale)
 		functions.JrContext.Seed = seed
 		functions.JrContext.TemplateDir = templateDir
-		functions.JrContext.Ctx = make(map[string]string)
-		functions.JrContext.LastIndex = -1
-		functions.JrContext.CityIndex = -1
-		functions.JrContext.CountryIndex = -1
 
 		infinite := true
 		if duration > 0 {

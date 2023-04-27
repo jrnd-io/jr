@@ -43,8 +43,6 @@ var listCmd = &cobra.Command{
 		templateDir, _ := cmd.Flags().GetString("templateDir")
 		templateDir = os.ExpandEnv(templateDir)
 
-		functions.JrContext.Ctx = make(map[string]string)
-
 		if _, err := os.Stat(templateDir); os.IsNotExist(err) {
 			return
 		}

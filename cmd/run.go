@@ -33,6 +33,7 @@ import (
 	"os"
 	"os/signal"
 	"regexp"
+	"strings"
 	"text/template"
 	"time"
 )
@@ -147,7 +148,7 @@ jr run --templateFileName ~/.jr/templates/net_device.tpl
 		functions.JrContext.Num = num
 		functions.JrContext.Range = make([]int, num)
 		functions.JrContext.Frequency = frequency
-		functions.JrContext.Locale = locale
+		functions.JrContext.Locale = strings.ToLower(locale)
 		functions.JrContext.Seed = seed
 		functions.JrContext.TemplateDir = templateDir
 		functions.JrContext.Ctx = make(map[string]string)
@@ -284,7 +285,7 @@ func init() {
 	runCmd.Flags().String("outputTemplate", "{{.V}}\n", "Formatting of K,V on standard output")
 	runCmd.Flags().BoolP("oneline", "l", false, "strips /n from output, for example to be pipelined to tools like kcat")
 	runCmd.Flags().BoolP("autocreate", "a", false, "if enabled, autocreate topics")
-	runCmd.Flags().String("locale", functions.JrContext.Locale, "List of locales")
+	runCmd.Flags().String("locale", functions.JrContext.Locale, "Locale")
 
 	runCmd.Flags().BoolP("schemaRegistry", "s", false, "If you want to use Confluent Schema Registry")
 	runCmd.Flags().String("serializer", "json-schema", "Type of serializer: json-schema, avro-generic, avro, protobuf")

@@ -269,7 +269,7 @@ func cache(name string) (bool, error) {
 	if v == nil {
 		locale := JrContext.Locale
 		filename := fmt.Sprintf("%s/data/%s/%s", JrContext.TemplateDir, locale, name)
-		if locale != "US" && !(fileExists(filename)) {
+		if locale != "us" && !(fileExists(filename)) {
 			filename = fmt.Sprintf("%s/data/%s/%s", JrContext.TemplateDir, "US", name)
 		}
 		data[name] = initialize(filename)

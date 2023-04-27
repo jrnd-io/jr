@@ -64,7 +64,7 @@ func init() {
 		Range:            make([]int, NUM),
 		Frequency:        FREQUENCY,
 		Duration:         DURATION,
-		Locale:           "US",
+		Locale:           "us",
 		Seed:             time.Now().UTC().UnixNano(),
 		Counters:         make(map[string]int),
 	}

@@ -25,6 +25,7 @@ import (
 	"github.com/squeeze69/generacodicefiscale"
 	"log"
 	"strconv"
+	"strings"
 )
 
 // CodiceFiscale return a valid Italian Codice Fiscale
@@ -93,9 +94,9 @@ func Email() string {
 		surname = Surname()
 	}
 	if company == "" {
-		company = Company()
+		company = strings.ToLower(Company())
 	}
-
+	strings.ReplaceAll(company, " ", "")
 	return fmt.Sprintf("%s.%s@%s.com", name, surname, company)
 }
 

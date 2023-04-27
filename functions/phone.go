@@ -22,7 +22,12 @@ package functions
 
 // CountryCode returns a random Country Code prefix
 func CountryCode() string {
-	return Word("country_code")
+	countryIndex := JrContext.CountryIndex
+	if countryIndex == -1 {
+		return Word("country_code")
+	} else {
+		return WordAt("country_code", countryIndex)
+	}
 }
 
 // CountryCodeAt returns a Country Code prefix at a given index
@@ -42,9 +47,15 @@ func Imei() string {
 
 // LandPrefix returns a random land prefix
 func LandPrefix() string {
-	l := Word("land_prefix")
-	lp, _ := Regex(l)
-	return lp
+	cityIndex := JrContext.CityIndex
+	if cityIndex == -1 {
+		l := Word("land_prefix")
+		lp, _ := Regex(l)
+		return lp
+	} else {
+		return LandPrefixAt(cityIndex)
+	}
+
 }
 
 // LandPrefixAt returns a land prefix at a given index
@@ -56,9 +67,14 @@ func LandPrefixAt(index int) string {
 
 // MobilePhone returns a random mobile phone
 func MobilePhone() string {
-	m := Word("mobile_phone")
-	mp, _ := Regex(m)
-	return mp
+	countryIndex := JrContext.CountryIndex
+	if countryIndex == -1 {
+		m := Word("mobile_phone")
+		mp, _ := Regex(m)
+		return mp
+	} else {
+		return MobilePhoneAt(countryIndex)
+	}
 }
 
 // MobilePhoneAt returns a mobile phone at a given index

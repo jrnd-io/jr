@@ -28,13 +28,45 @@ import (
 )
 
 // CodiceFiscale return a valid Italian Codice Fiscale
-func CodiceFiscale(name string, surname string, sex string, birth string, city string) string {
+func CodiceFiscale() string {
+
+	name := JrContext.Ctx["name"]
+	surname := JrContext.Ctx["surname"]
+	gender := JrContext.Ctx["gender"]
+	birthdate := JrContext.Ctx["birthdate"]
+	city := JrContext.Ctx["city"]
+
+	if name == "" {
+		name = Name()
+	}
+	if surname == "" {
+		surname = Surname()
+	}
+	if gender == "" {
+		gender = Gender()
+	}
+	if birthdate == "" {
+		birthdate = BirthDate(18, 75)
+	}
+	if city == "" {
+		city = City()
+	}
+
+	if city == "Bolzano" {
+		city = "Bolzano/Bozen"
+	}
+	if city == "Reggio Emilia" {
+		city = "Reggio nell'Emilia"
+	}
+	if city == "Reggio Calabria" {
+		city = "Reggio di Calabria"
+	}
 
 	codicecitta, erc := generacodicefiscale.CercaComune(city)
 	if erc != nil {
 		log.Fatal(erc)
 	}
-	cf, erg := generacodicefiscale.Genera(surname, name, sex, codicecitta.Codice, birth)
+	cf, erg := generacodicefiscale.Genera(surname, name, gender, codicecitta.Codice, birthdate)
 	if erg != nil {
 		log.Fatal(erg)
 	}
@@ -43,12 +75,44 @@ func CodiceFiscale(name string, surname string, sex string, birth string, city s
 
 // Company returns a random Company Name
 func Company() string {
-	return Word("company")
+	c := Word("company")
+	JrContext.Ctx["company"] = c
+	return c
 }
 
-// EmailProvider returns a random mail provider
+// Email returns a random email.
+func Email() string {
+	name := JrContext.Ctx["name"]
+	surname := JrContext.Ctx["surname"]
+	company := JrContext.Ctx["company"]
+
+	if name == "" {
+		name = Name()
+	}
+	if surname == "" {
+		surname = Surname()
+	}
+	if company == "" {
+		company = Company()
+	}
+
+	return fmt.Sprintf("%s.%s@%s.com", name, surname, company)
+}
+
+// EmailProvider returns a random email provider
 func EmailProvider() string {
 	return Word("mail_provider")
+}
+
+// Gender returns a random gender. Note: it gets the gender context automatically setup by previous name calls
+func Gender() string {
+	g := JrContext.Ctx["gender"]
+	if g == "" {
+		gender := []string{"M", "F"}
+		g = gender[Random.Intn(len(gender))]
+		JrContext.Ctx["gender"] = g
+	}
+	return g
 }
 
 // Middlename returns a random Middlename
@@ -69,12 +133,18 @@ func Name() string {
 
 // NameM returns a random male Name
 func NameM() string {
-	return Word("nameM")
+	name := Word("nameM")
+	JrContext.Ctx["name"] = name
+	JrContext.Ctx["gender"] = "M"
+	return name
 }
 
 // NameF returns a random female Name
 func NameF() string {
-	return Word("nameF")
+	name := Word("nameF")
+	JrContext.Ctx["name"] = name
+	JrContext.Ctx["gender"] = "F"
+	return name
 }
 
 // Ssn return a valid Social Security Number id
@@ -87,7 +157,9 @@ func Ssn() string {
 
 // Surname returns a random Surname
 func Surname() string {
-	return Word("surname")
+	s := Word("surname")
+	JrContext.Ctx["surname"] = s
+	return s
 }
 
 // Username returns a random Username using Name, Surname and a length

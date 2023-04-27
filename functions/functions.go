@@ -100,7 +100,9 @@ var fmap = map[string]interface{}{
 	// people related utilities
 	"cf":             CodiceFiscale,
 	"company":        Company,
+	"email":          Email,
 	"email_provider": EmailProvider,
+	"gender":         Gender,
 	"middlename":     Middlename,
 	"name":           Name,
 	"name_m":         NameM,
@@ -212,7 +214,8 @@ func RandomIndex(name string) string {
 		return ""
 	}
 	words := data[name]
-	return strconv.Itoa(Random.Intn(len(words)))
+	JrContext.LastIndex = Random.Intn(len(words))
+	return strconv.Itoa(JrContext.LastIndex)
 }
 
 // Word returns a random string from a list of strings in a file.
@@ -222,7 +225,8 @@ func Word(name string) string {
 		return ""
 	}
 	words := data[name]
-	return words[Random.Intn(len(words))]
+	JrContext.LastIndex = Random.Intn(len(words))
+	return words[JrContext.LastIndex]
 }
 
 // WordAt returns a string at a given position in a list of strings in a file.
@@ -263,7 +267,7 @@ func cache(name string) (bool, error) {
 
 	v := data[name]
 	if v == nil {
-		locale := JrContext.Locales[Random.Intn(len(JrContext.Locales))]
+		locale := JrContext.Locale
 		filename := fmt.Sprintf("%s/data/%s/%s", JrContext.TemplateDir, locale, name)
 		if locale != "US" && !(fileExists(filename)) {
 			filename = fmt.Sprintf("%s/data/%s/%s", JrContext.TemplateDir, "US", name)

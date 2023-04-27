@@ -62,7 +62,10 @@ func Cardinal(short bool) string {
 
 // City returns a random City
 func City() string {
-	return Word("city")
+	c := Word("city")
+	JrContext.Ctx["city"] = c
+	JrContext.CityIndex = JrContext.LastIndex
+	return c
 }
 
 // CityAt returns City at given index
@@ -115,7 +118,10 @@ func NearbyGPS(latitude float64, longitude float64, radius int) string {
 
 // State returns a random State
 func State() string {
-	return Word("state")
+	s := Word("state")
+	JrContext.Ctx["state"] = s
+	JrContext.CountryIndex = JrContext.LastIndex
+	return s
 }
 
 // StateAt returns State at given index
@@ -140,9 +146,15 @@ func Street() string {
 
 // Zip returns a random Zip code
 func Zip() string {
-	z := Word("zip")
-	zip, _ := Regex(z)
-	return zip
+	cityIndex := JrContext.CityIndex
+
+	if cityIndex == -1 {
+		z := Word("zip")
+		zip, _ := Regex(z)
+		return zip
+	} else {
+		return ZipAt(cityIndex)
+	}
 }
 
 // ZipAt returns Zip code at given index

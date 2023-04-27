@@ -43,9 +43,13 @@ type Context struct {
 	Range            []int
 	Frequency        time.Duration
 	Duration         time.Duration
-	Locales          []string
+	Locale           string
 	Seed             int64
 	Counters         map[string]int
+	Ctx              map[string]string
+	LastIndex        int
+	CountryIndex     int
+	CityIndex        int
 }
 
 func init() {
@@ -60,7 +64,7 @@ func init() {
 		Range:            make([]int, NUM),
 		Frequency:        FREQUENCY,
 		Duration:         DURATION,
-		Locales:          []string{"us"},
+		Locale:           "US",
 		Seed:             time.Now().UTC().UnixNano(),
 		Counters:         make(map[string]int),
 	}

@@ -63,7 +63,7 @@ jr run --templateFileName ~/.jr/templates/net_device.tpl
 		kcat, _ := cmd.Flags().GetBool("kcat")
 		output, _ := cmd.Flags().GetString("output")
 		oneline, _ := cmd.Flags().GetBool("oneline")
-		locales, _ := cmd.Flags().GetStringSlice("locales")
+		locale, _ := cmd.Flags().GetString("locale")
 
 		num, _ := cmd.Flags().GetInt("num")
 		frequency, _ := cmd.Flags().GetDuration("frequency")
@@ -147,9 +147,13 @@ jr run --templateFileName ~/.jr/templates/net_device.tpl
 		functions.JrContext.Num = num
 		functions.JrContext.Range = make([]int, num)
 		functions.JrContext.Frequency = frequency
-		functions.JrContext.Locales = locales
+		functions.JrContext.Locale = locale
 		functions.JrContext.Seed = seed
 		functions.JrContext.TemplateDir = templateDir
+		functions.JrContext.Ctx = make(map[string]string)
+		functions.JrContext.LastIndex = -1
+		functions.JrContext.CityIndex = -1
+		functions.JrContext.CountryIndex = -1
 
 		infinite := true
 		if duration > 0 {
@@ -280,7 +284,7 @@ func init() {
 	runCmd.Flags().String("outputTemplate", "{{.V}}\n", "Formatting of K,V on standard output")
 	runCmd.Flags().BoolP("oneline", "l", false, "strips /n from output, for example to be pipelined to tools like kcat")
 	runCmd.Flags().BoolP("autocreate", "a", false, "if enabled, autocreate topics")
-	runCmd.Flags().StringSlice("locales", functions.JrContext.Locales, "List of locales")
+	runCmd.Flags().String("locale", functions.JrContext.Locale, "List of locales")
 
 	runCmd.Flags().BoolP("schemaRegistry", "s", false, "If you want to use Confluent Schema Registry")
 	runCmd.Flags().String("serializer", "json-schema", "Type of serializer: json-schema, avro-generic, avro, protobuf")

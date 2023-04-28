@@ -169,21 +169,14 @@ jr run --templateFileName ~/.jr/templates/net_device.tpl
 			for ok := true; ok; ok = infinite {
 				select {
 				case <-time.After(frequency):
-					for range functions.JrContext.Range {
-						k, v, _ := executeTemplate(key, value, oneline)
-						producer.Produce([]byte(k), []byte(v))
-					}
+					generatorLoop(key, value, oneline, producer)
 				case <-ctx.Done():
 					stop()
 					break Infinite
 				}
 			}
 		} else {
-			for range functions.JrContext.Range {
-				k, v, _ := executeTemplate(key, value, oneline)
-				producer.Produce([]byte(k), []byte(v))
-
-			}
+			generatorLoop(key, value, oneline, producer)
 		}
 
 		producer.Close()
@@ -192,6 +185,13 @@ jr run --templateFileName ~/.jr/templates/net_device.tpl
 		writeStats()
 
 	},
+}
+
+func generatorLoop(key *template.Template, value *template.Template, oneline bool, producer Producer) {
+	for range functions.JrContext.Range {
+		k, v, _ := executeTemplate(key, value, oneline)
+		producer.Produce([]byte(k), []byte(v))
+	}
 }
 
 func createRedisProducer(ttl time.Duration, redisConfig string) Producer {

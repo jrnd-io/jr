@@ -70,3 +70,11 @@ func TestCusip(t *testing.T) {
 		}
 	}
 }
+
+func TestSedol(t *testing.T) {
+	sedol := "026349"
+	check := sedolCheckDigit(sedol)
+	if check != "4" {
+		t.Error("Cusip digit for", sedol, " is not right, it's ", check, " should be ", "4")
+	}
+}

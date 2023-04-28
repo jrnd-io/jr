@@ -99,8 +99,8 @@ func Isin(country string) string {
 
 // returns a valid 7 characters sedol code
 func Sedol() string {
-	sedol, _ := Regex("[0-9a-zA-Z]{6}")
-	return sedol
+	sedol, _ := Regex("[0-9BCDFGHJKLMNPQRSTVWXYZ]]{6}")
+	return sedol + sedolCheckDigit(sedol)
 }
 
 // Swift returns a swift/bic code
@@ -119,19 +119,19 @@ func Swift() string {
 
 }
 
-// Valor returns a valid 5-9 digits Valor code
+// Valor returns a valid 6-9 digits Valor code
 func Valor() string {
-	valor, _ := Regex("[0-9a-zA-Z]{5,9}")
+	valor, _ := Regex("[0-9]{6,9}")
 	return valor
 }
 
 // returns a valid 6 characters wkn code
 func Wkn() string {
-	wkn, _ := Regex("[0-9a-zA-Z]{6}")
+	wkn, _ := Regex("[ABCDEFGHLMNPQRSTUVXYZ]{6}")
 	return wkn
 }
 
-// cusipCheckDigit returns a valid cusip check digit
+// cusipCheckDigit calculates cusip check digit
 func cusipCheckDigit(code string) string {
 	var sum, v int
 
@@ -163,7 +163,7 @@ func cusipCheckDigit(code string) string {
 
 }
 
-// luhnCheckDigit returns a valid luhn check digit
+// luhnCheckDigit calculates luhn check digit
 func luhnCheckDigit(code string) string {
 	var sum, v int
 	l := len(code)
@@ -184,6 +184,18 @@ func luhnCheckDigit(code string) string {
 	}
 	return strconv.Itoa((10 - sum%10) % 10)
 
+}
+
+// sedolCheckDigit calculates sedol check digit
+func sedolCheckDigit(code string) string {
+	weight := [6]int{1, 3, 1, 7, 3, 9}
+	sum := 0
+	for i := 0; i < len(code); i++ {
+		sum += weight[i] * int(code[i]-'0')
+	}
+
+	check := (10 - sum%10) % 10
+	return strconv.Itoa(check)
 }
 
 func isinCheckDigit(code string) string {

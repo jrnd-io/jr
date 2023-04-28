@@ -1127,12 +1127,12 @@ var funcDesc = map[string]FunctionDescription{
 	"valor": {
 		Name:        "valor",
 		Category:    "finance",
-		Description: "returns a valid 5-9 digits valor code",
+		Description: "returns a valid 6-9 digits valor code",
 		Parameters:  "",
 		Localizable: false,
 		Return:      "string",
 		Example:     "jr run --template '{{valor}}'",
-		Output:      "",
+		Output:      "0832047",
 	},
 	"wkn": {
 		Name:        "wkn",
@@ -1142,7 +1142,7 @@ var funcDesc = map[string]FunctionDescription{
 		Localizable: false,
 		Return:      "string",
 		Example:     "jr run --template '{{wkn}}'",
-		Output:      "",
+		Output:      "UFJKSNM",
 	},
 	"yesorno": {
 		Name:        "yesorno",

@@ -198,6 +198,21 @@ func sedolCheckDigit(code string) string {
 	return strconv.Itoa(check)
 }
 
+// isinCheckDigit calculates an isin check digit
 func isinCheckDigit(code string) string {
-	return "TBD"
+
+	weights := [11]int{2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2}
+	var sum int
+
+	for i, c := range code[:10] {
+		digit := int(c - '0')
+		weighted := digit * weights[i]
+		if weighted >= 10 {
+			weighted = (weighted / 10) + (weighted % 10)
+		}
+		sum += weighted
+	}
+
+	checkDigit := (10 - (sum % 10)) % 10
+	return strconv.Itoa(checkDigit)
 }

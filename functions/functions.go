@@ -289,3 +289,14 @@ func fileExists(filename string) bool {
 		return false
 	}
 }
+
+func ExtractMetaFrom(outTemplate string) (string, string) {
+	start := strings.LastIndex(outTemplate, "_meta")
+	if start == -1 {
+		return "", outTemplate
+	}
+	end := strings.Index(outTemplate, "},")
+	meta := outTemplate[start+7 : end+1]
+	tpl := outTemplate[0:start-1] + outTemplate[end+2:]
+	return meta, tpl
+}

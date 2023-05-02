@@ -28,6 +28,7 @@ import (
 var JrContext Context
 
 const NUM = 1
+const NUM_TEMPLATES = 5
 const FREQUENCY = 0
 const DURATION = 0
 const TEMPLATEDIR = "$HOME/.jr/templates"
@@ -36,7 +37,7 @@ const TEMPLATEDIR = "$HOME/.jr/templates"
 type Context struct {
 	StartTime        time.Time
 	TemplateDir      string
-	TemplateType     string
+	TemplateType     []string
 	GeneratedObjects int64
 	GeneratedBytes   int64
 	Num              int
@@ -57,7 +58,7 @@ func init() {
 	JrContext = Context{
 		StartTime:        time.Now(),
 		TemplateDir:      os.ExpandEnv(TEMPLATEDIR),
-		TemplateType:     "",
+		TemplateType:     make([]string, NUM_TEMPLATES),
 		GeneratedBytes:   0,
 		GeneratedObjects: 0,
 		Num:              NUM,

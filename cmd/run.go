@@ -23,6 +23,7 @@ package cmd
 import (
 	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
 	"github.com/spf13/cobra"
 	"github.com/ugol/jr/functions"
@@ -43,6 +44,19 @@ type Producer interface {
 	Produce(k []byte, v []byte)
 }
 
+type MetaData struct {
+	Topic         string             `json:"topic"`
+	Key           string             `json:"key"`
+	Relationships []RelationshipMeta `json:"relationships,omitempty"`
+}
+
+type RelationshipMeta struct {
+	Topic       string `json:"topic"`
+	ParentField string `json:"parent_field"`
+	ChildField  string `json:"child_field"`
+	RecordsPer  int    `json:"records_per"`
+}
+
 var runCmd = &cobra.Command{
 	Use:   "run [template]",
 	Short: "Execute a template",
@@ -54,7 +68,7 @@ jr run --template "{{name}}"
  With the -templateFileName flag [template] is a file name with a template. Example:
 jr run --templateFileName ~/.jr/templates/net_device.tpl
 `,
-	Args: cobra.ExactArgs(1),
+	Args: cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 
 		keyTemplate, _ := cmd.Flags().GetString("key")
@@ -72,7 +86,7 @@ jr run --templateFileName ~/.jr/templates/net_device.tpl
 		seed, _ := cmd.Flags().GetInt64("seed")
 		kafkaConfig, _ := cmd.Flags().GetString("kafkaConfig")
 		registryConfig, _ := cmd.Flags().GetString("registryConfig")
-		topic, _ := cmd.Flags().GetString("topic")
+		topic, _ := cmd.Flags().GetStringSlice("topic")
 
 		templateDir, _ := cmd.Flags().GetString("templateDir")
 		templateDir = os.ExpandEnv(templateDir)
@@ -90,18 +104,23 @@ jr run --templateFileName ~/.jr/templates/net_device.tpl
 			outputTemplate = "{{.K}},{{.V}}\n"
 		}
 
-		var valueTemplate []byte
+		valueTemplate := make([][]byte, len(args))
+
 		var err error
 
 		if embeddedTemplate {
-			valueTemplate = []byte(args[0])
+			valueTemplate[0] = []byte(args[0])
 		} else if templateFileName {
-			valueTemplate, err = os.ReadFile(os.ExpandEnv(args[0]))
-			functions.JrContext.TemplateType = args[0]
+			for i := range args {
+				valueTemplate[i], err = os.ReadFile(os.ExpandEnv(args[i]))
+				functions.JrContext.TemplateType[i] = args[i]
+			}
 		} else {
-			templatePath := fmt.Sprintf("%s/%s.tpl", templateDir, args[0])
-			valueTemplate, err = os.ReadFile(templatePath)
-			functions.JrContext.TemplateType = args[0]
+			for i := range args {
+				templatePath := fmt.Sprintf("%s/%s.tpl", templateDir, args[i])
+				valueTemplate[i], err = os.ReadFile(templatePath)
+				functions.JrContext.TemplateType[i] = args[i]
+			}
 		}
 		if err != nil {
 			log.Fatal(err)
@@ -117,19 +136,39 @@ jr run --templateFileName ~/.jr/templates/net_device.tpl
 			log.Fatal(err)
 		}
 
-		value, err := template.New("value").Funcs(functions.FunctionsMap()).Parse(string(valueTemplate))
-		if err != nil {
-			log.Fatal(err)
-		}
+		value := make([]*template.Template, len(args))
+		for i := range args {
+			m, v := functions.ExtractMetaFrom(string(valueTemplate[i]))
 
-		var producer Producer
+			var meta MetaData
+			if m != "" {
+				err = json.Unmarshal([]byte(m), &meta)
+				if err != nil {
+					log.Fatal(err)
+				}
+			}
+			value[i], err = template.New("value").Funcs(functions.FunctionsMap()).Parse(v)
+			if err != nil {
+				log.Fatal(err)
+			}
+		}
+		producer := make([]Producer, len(args))
 
 		if output == "stdout" {
-			producer = &console.ConsoleProducer{OutTemplate: outTemplate}
+			for i := range args {
+				producer[i] = &console.ConsoleProducer{OutTemplate: outTemplate}
+			}
 		}
 
 		if output == "kafka" {
-			producer = createKafkaProducer(serializer, topic, kafkaConfig, schemaRegistry, registryConfig, kcat, autocreate)
+			if len(args) != len(topic) {
+				log.Println(args)
+				log.Println(topic)
+				log.Fatalf("There are %d templates and %d topics, every templates must have its own topic. \nFor example: jr run user net-device -o kafka -t \"test\",\"test1\"", len(args), len(topic))
+			}
+			for i := range args {
+				producer[i] = createKafkaProducer(serializer, topic, i, kafkaConfig, schemaRegistry, registryConfig, kcat, autocreate)
+			}
 		} else {
 			if schemaRegistry {
 				log.Println("Ignoring schemaRegistry and/or serializer when output not set to kafka")
@@ -137,7 +176,9 @@ jr run --templateFileName ~/.jr/templates/net_device.tpl
 		}
 
 		if output == "redis" {
-			producer = createRedisProducer(redisTtl, redisConfig)
+			for i := range args {
+				producer[i] = createRedisProducer(redisTtl, redisConfig)
+			}
 		}
 
 		if output == "mongo" {
@@ -169,17 +210,23 @@ jr run --templateFileName ~/.jr/templates/net_device.tpl
 			for ok := true; ok; ok = infinite {
 				select {
 				case <-time.After(frequency):
-					generatorLoop(key, value, oneline, producer)
+					for i := range args {
+						generatorLoop(key, value[i], oneline, producer[i])
+					}
 				case <-ctx.Done():
 					stop()
 					break Infinite
 				}
 			}
 		} else {
-			generatorLoop(key, value, oneline, producer)
+			for i := range args {
+				generatorLoop(key, value[i], oneline, producer[i])
+			}
 		}
 
-		producer.Close()
+		for i := range args {
+			producer[i].Close()
+		}
 
 		time.Sleep(100 * time.Millisecond)
 		writeStats()
@@ -202,11 +249,12 @@ func createRedisProducer(ttl time.Duration, redisConfig string) Producer {
 	return rProducer
 }
 
-func createKafkaProducer(serializer string, topic string, kafkaConfig string, schemaRegistry bool, registryConfig string, kcat bool, autocreate bool) *kafka.KafkaManager {
+func createKafkaProducer(serializer string, topic []string, index int, kafkaConfig string, schemaRegistry bool, registryConfig string, kcat bool, autocreate bool) *kafka.KafkaManager {
+
 	kManager := &kafka.KafkaManager{
 		Serializer:   serializer,
-		Topic:        topic,
-		TemplateType: functions.JrContext.TemplateType,
+		Topic:        topic[index],
+		TemplateType: functions.JrContext.TemplateType[index],
 	}
 
 	kManager.Initialize(kafkaConfig)
@@ -218,7 +266,9 @@ func createKafkaProducer(serializer string, topic string, kafkaConfig string, sc
 		}
 	}
 	if autocreate {
-		kManager.CreateTopic(topic)
+		for i := range topic {
+			kManager.CreateTopic(topic[i])
+		}
 	}
 	return kManager
 }
@@ -274,7 +324,7 @@ func init() {
 	runCmd.Flags().Bool("template", false, "If enabled, [template] must be a string containing a template, to be embedded directly in the script")
 
 	runCmd.Flags().StringP("key", "k", "key", "A template to generate a key")
-	runCmd.Flags().StringP("topic", "t", "test", "Kafka topic name")
+	runCmd.Flags().StringSliceP("topic", "t", []string{"test"}, "Kafka topic name")
 
 	runCmd.Flags().Bool("kcat", false, "If you want to pipe jr with kcat, use this flag: it is equivalent to --output stdout --outputTemplate '{{key}},{{value}}' --oneline")
 	runCmd.Flags().StringP("output", "o", "stdout", "can be one of stdout, kafka, redis, mongo")

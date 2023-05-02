@@ -41,6 +41,7 @@ type Context struct {
 	GeneratedObjects int64
 	GeneratedBytes   int64
 	Num              int
+	NumTemplates     int
 	Range            []int
 	Frequency        time.Duration
 	Duration         time.Duration
@@ -62,6 +63,7 @@ func init() {
 		GeneratedBytes:   0,
 		GeneratedObjects: 0,
 		Num:              NUM,
+		NumTemplates:     NUM_TEMPLATES,
 		Range:            make([]int, NUM),
 		Frequency:        FREQUENCY,
 		Duration:         DURATION,

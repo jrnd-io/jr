@@ -115,12 +115,14 @@ jr run --templateFileName ~/.jr/templates/net_device.tpl
 				valueTemplate[i], err = os.ReadFile(os.ExpandEnv(args[i]))
 				functions.JrContext.TemplateType[i] = args[i]
 			}
+			functions.JrContext.NumTemplates = len(args)
 		} else {
 			for i := range args {
 				templatePath := fmt.Sprintf("%s/%s.tpl", templateDir, args[i])
 				valueTemplate[i], err = os.ReadFile(templatePath)
 				functions.JrContext.TemplateType[i] = args[i]
 			}
+			functions.JrContext.NumTemplates = len(args)
 		}
 		if err != nil {
 			log.Fatal(err)
@@ -279,6 +281,7 @@ func writeStats() {
 	_, _ = fmt.Fprintf(os.Stderr, "Elapsed time: %v\n", elapsed.Round(1*time.Second))
 	_, _ = fmt.Fprintf(os.Stderr, "Data Generated (Objects): %d\n", functions.JrContext.GeneratedObjects)
 	_, _ = fmt.Fprintf(os.Stderr, "Data Generated (bytes): %d\n", functions.JrContext.GeneratedBytes)
+	_, _ = fmt.Fprintf(os.Stderr, "Number of templates (Objects): %d\n", functions.JrContext.NumTemplates)
 	_, _ = fmt.Fprintf(os.Stderr, "Throughput (bytes per second): %9.f\n", float64(functions.JrContext.GeneratedBytes)/elapsed.Seconds())
 	_, _ = fmt.Fprintln(os.Stderr)
 }

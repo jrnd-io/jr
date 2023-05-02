@@ -16,10 +16,8 @@ ENV BUILD_DEPS zlib zstd lz4 openssl curl
 RUN microdnf install -y git \
     && microdnf install -y ca-certificates \
     && microdnf install -y gcc \ 
+    && microdnf install -y $BUILD_DEPS \
     && microdnf clean all
-
-RUN echo Installing ; \
-  microdnf install -y $BUILD_DEPS
 
 RUN adduser \
     --home-dir "/home/jr" \

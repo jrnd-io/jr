@@ -1,11 +1,14 @@
 {
   "_meta":{
+                      "name": "user",
                       "topic": "users",
-                      "key": "id",
+                      "key": "guid",
+                      "autocreate": true,
+                      "schema": "user.avsc",
                       "relationships": [
                           {
-                              "topic": "purchases",
-                              "parent_field": "id",
+                              "name": "purchase",
+                              "parent_field": "guid",
                               "child_field": "user_id",
                               "records_per": 4
                           }

@@ -45,13 +45,16 @@ type Producer interface {
 }
 
 type MetaData struct {
+	Name          string             `json:"name"`
 	Topic         string             `json:"topic"`
 	Key           string             `json:"key"`
+	AutoCreate    bool               `json:"autocreate"`
+	Schema        string             `json:"schema"`
 	Relationships []RelationshipMeta `json:"relationships,omitempty"`
 }
 
 type RelationshipMeta struct {
-	Topic       string `json:"topic"`
+	Name        string `json:"name"`
 	ParentField string `json:"parent_field"`
 	ChildField  string `json:"child_field"`
 	RecordsPer  int    `json:"records_per"`
@@ -137,14 +140,21 @@ jr run --templateFileName ~/.jr/templates/net_device.tpl
 		if err != nil {
 			log.Fatal(err)
 		}
-
+		meta := make([]*MetaData, len(args))
+		metaT := make([]*template.Template, len(args))
 		value := make([]*template.Template, len(args))
 		for i := range args {
-			m, v := functions.ExtractMetaFrom(string(valueTemplate[i]))
 
-			var meta MetaData
+			m, v := functions.ExtractMetaFrom(string(valueTemplate[i]))
+			metaT[i], err = template.New("value").Funcs(functions.FunctionsMap()).Parse(m)
+			var buffer bytes.Buffer
+			err := metaT[i].Execute(&buffer, functions.JrContext)
+			if err != nil {
+				log.Println(err)
+			}
+
 			if m != "" {
-				err = json.Unmarshal([]byte(m), &meta)
+				err = json.Unmarshal(buffer.Bytes(), &meta[i])
 				if err != nil {
 					log.Fatal(err)
 				}

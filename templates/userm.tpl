@@ -10,7 +10,7 @@
                               "name": "purchase",
                               "parent_field": "guid",
                               "child_field": "user_id",
-                              "records_per": 4
+                              "records_per": {{integer 1 5}}
                           }
                       ]
                   },

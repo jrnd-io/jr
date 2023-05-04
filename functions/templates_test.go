@@ -105,6 +105,59 @@ func TestComplexNested(t *testing.T) {
 
 }
 
+func TestNestedPassingContext(t *testing.T) {
+	a := `{{template "sub" .}}`
+	s := `{{.C}}`
+
+	aggregate := template.Must(template.New("aggregate").Parse(a))
+	_, err := aggregate.New("sub").Parse(s)
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	var b bytes.Buffer
+
+	//*
+	data := struct {
+		C string
+	}{"10"}
+	//*/
+
+	err = aggregate.Execute(&b, data)
+	if err != nil {
+		t.Error(err)
+	}
+
+	expect := "10"
+	if expect != b.String() {
+		t.Errorf("Expected '%s', got '%s'", expect, b.String())
+	}
+}
+
+func TestRelationship(t *testing.T) {
+	a := `{{set "id" "10"}}{{template "sub" .}}`
+	s := `{{get "id"}}`
+
+	aggregate := template.Must(template.New("aggregate").Funcs(FunctionsMap()).Parse(a))
+	_, err := aggregate.New("sub").Parse(s)
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	var b bytes.Buffer
+
+	err = aggregate.Execute(&b, nil)
+	if err != nil {
+		t.Error(err)
+	}
+
+	expect := "10"
+	if expect != b.String() {
+		t.Errorf("Expected '%s', got '%s'", expect, b.String())
+	}
+}
 func TestExtractMeta(t *testing.T) {
 	tpl := `01234"_meta:"{............................},56789`
 	m, v := ExtractMetaFrom(tpl)

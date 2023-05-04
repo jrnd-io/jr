@@ -45,6 +45,8 @@ var fmap = map[string]interface{}{
 	// text utilities
 	"atoi":                     strconv.Atoi,
 	"counter":                  Counter,
+	"set":                      func(s string, v string) string { JrContext.Ctx[s] = v; return "" },
+	"get":                      func(s string) string { return JrContext.Ctx[s] },
 	"first":                    func(s string) string { return s[:1] },
 	"firstword":                func(s string) string { return strings.Split(s, " ")[0] },
 	"from":                     Word,

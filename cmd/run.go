@@ -143,7 +143,12 @@ jr run --templateFileName ~/.jr/templates/net_device.tpl
 		}
 
 		value := make([]*template.Template, len(args))
-
+		for i := range args {
+			value[i], err = template.New("value").Funcs(functions.FunctionsMap()).Parse(string(valueTemplate[i]))
+			if err != nil {
+				log.Fatal(err)
+			}
+		}
 		/*
 			meta := make([]*MetaData, len(args))
 			metaT := make([]*template.Template, len(args))

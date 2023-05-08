@@ -43,6 +43,7 @@ type Producer interface {
 	Produce(k []byte, v []byte)
 }
 
+/*
 type MetaData struct {
 	Name          string             `json:"name"`
 	Topic         string             `json:"topic"`
@@ -58,6 +59,7 @@ type RelationshipMeta struct {
 	ChildField  string `json:"child_field"`
 	RecordsPer  int    `json:"records_per"`
 }
+*/
 
 var runCmd = &cobra.Command{
 	Use:   "run [template]",

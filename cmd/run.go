@@ -23,7 +23,6 @@ package cmd
 import (
 	"bytes"
 	"context"
-	"encoding/json"
 	"fmt"
 	"github.com/spf13/cobra"
 	"github.com/ugol/jr/functions"
@@ -140,30 +139,35 @@ jr run --templateFileName ~/.jr/templates/net_device.tpl
 		if err != nil {
 			log.Fatal(err)
 		}
-		meta := make([]*MetaData, len(args))
-		metaT := make([]*template.Template, len(args))
+
 		value := make([]*template.Template, len(args))
-		for i := range args {
 
-			m, v := functions.ExtractMetaFrom(string(valueTemplate[i]))
-			metaT[i], err = template.New("value").Funcs(functions.FunctionsMap()).Parse(m)
-			var buffer bytes.Buffer
-			err := metaT[i].Execute(&buffer, functions.JrContext)
-			if err != nil {
-				log.Println(err)
-			}
+		/*
+			meta := make([]*MetaData, len(args))
+			metaT := make([]*template.Template, len(args))
+			for i := range args {
 
-			if m != "" {
-				err = json.Unmarshal(buffer.Bytes(), &meta[i])
+				m, v := functions.ExtractMetaFrom(string(valueTemplate[i]))
+				metaT[i], err = template.New("value").Funcs(functions.FunctionsMap()).Parse(m)
+				var buffer bytes.Buffer
+				err := metaT[i].Execute(&buffer, functions.JrContext)
+				if err != nil {
+					log.Println(err)
+				}
+
+				if m != "" {
+					err = json.Unmarshal(buffer.Bytes(), &meta[i])
+					if err != nil {
+						log.Fatal(err)
+					}
+				}
+				value[i], err = template.New("value").Funcs(functions.FunctionsMap()).Parse(v)
 				if err != nil {
 					log.Fatal(err)
 				}
 			}
-			value[i], err = template.New("value").Funcs(functions.FunctionsMap()).Parse(v)
-			if err != nil {
-				log.Fatal(err)
-			}
-		}
+		*/
+
 		producer := make([]Producer, len(args))
 
 		if output == "stdout" {

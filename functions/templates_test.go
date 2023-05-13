@@ -140,7 +140,7 @@ func TestRelationship(t *testing.T) {
 	s := `{{get "id"}}`
 
 	aggregate := template.Must(template.New("aggregate").Funcs(FunctionsMap()).Parse(a))
-	_, err := aggregate.New("sub").Parse(s)
+	sub, err := aggregate.New("sub").Parse(s)
 
 	if err != nil {
 		t.Error(err)
@@ -156,6 +156,22 @@ func TestRelationship(t *testing.T) {
 	expect := "10"
 	if expect != b.String() {
 		t.Errorf("Expected '%s', got '%s'", expect, b.String())
+	}
+
+	b.Reset()
+
+	err = sub.Execute(&b, nil)
+	if err != nil {
+		t.Error(err)
+	}
+	if expect != b.String() {
+		t.Errorf("Expected '%s', got '%s'", expect, b.String())
+	}
+
+	templates := aggregate.Templates()
+
+	if len(templates) != 2 {
+		t.Errorf("Expected 2 templates, got %d", len(templates))
 	}
 }
 func TestExtractMeta(t *testing.T) {

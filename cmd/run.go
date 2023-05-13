@@ -33,6 +33,7 @@ import (
 	"os"
 	"os/signal"
 	"regexp"
+	"strconv"
 	"strings"
 	"text/template"
 	"time"
@@ -142,9 +143,14 @@ jr run --templateFileName ~/.jr/templates/net_device.tpl
 			log.Fatal(err)
 		}
 
-		value := make([]*template.Template, len(args))
-		for i := range args {
-			value[i], err = template.New("value").Funcs(functions.FunctionsMap()).Parse(string(valueTemplate[i]))
+		//value := make([]*template.Template, len(args))
+
+		value, err := template.New("value").Funcs(functions.FunctionsMap()).Parse(string(valueTemplate[0]))
+		if err != nil {
+			log.Fatal(err)
+		}
+		for i := 1; i < len(args); i++ {
+			_, err = value.New(strconv.Itoa(i)).Parse(string(valueTemplate[i]))
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -234,7 +240,7 @@ jr run --templateFileName ~/.jr/templates/net_device.tpl
 				select {
 				case <-time.After(frequency):
 					for i := range args {
-						generatorLoop(key, value[i], oneline, producer[i])
+						generatorLoop(key, value.Templates()[i], oneline, producer[i])
 					}
 				case <-ctx.Done():
 					stop()
@@ -243,7 +249,7 @@ jr run --templateFileName ~/.jr/templates/net_device.tpl
 			}
 		} else {
 			for i := range args {
-				generatorLoop(key, value[i], oneline, producer[i])
+				generatorLoop(key, value.Templates()[i], oneline, producer[i])
 			}
 		}
 

@@ -143,11 +143,8 @@ jr run --templateFileName ~/.jr/templates/net_device.tpl
 			log.Fatal(err)
 		}
 
-		value, err := template.New("value").Funcs(functions.FunctionsMap()).Parse(string(valueTemplate[0]))
-		if err != nil {
-			log.Fatal(err)
-		}
-		for i := 1; i < len(args); i++ {
+		value := template.New("value").Funcs(functions.FunctionsMap())
+		for i := 0; i < len(args); i++ {
 			_, err = value.New(strconv.Itoa(i)).Parse(string(valueTemplate[i]))
 			if err != nil {
 				log.Fatal(err)
@@ -232,13 +229,22 @@ jr run --templateFileName ~/.jr/templates/net_device.tpl
 		ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
 		defer stop()
 
+		parsedTemplates := make([]*template.Template, len(args))
+		orderedParsedTemplates := make([]*template.Template, len(args))
+		copy(parsedTemplates, value.Templates())
+
+		for i := range args {
+			index, _ := strconv.Atoi(parsedTemplates[i].Name())
+			orderedParsedTemplates[index] = parsedTemplates[i]
+		}
+
 		if frequency != -1 {
 		Infinite:
 			for ok := true; ok; ok = infinite {
 				select {
 				case <-time.After(frequency):
 					for i := range args {
-						generatorLoop(key, value.Templates()[i], oneline, producer[i])
+						generatorLoop(key, orderedParsedTemplates[i], oneline, producer[i])
 					}
 				case <-ctx.Done():
 					stop()
@@ -247,7 +253,7 @@ jr run --templateFileName ~/.jr/templates/net_device.tpl
 			}
 		} else {
 			for i := range args {
-				generatorLoop(key, value.Templates()[i], oneline, producer[i])
+				generatorLoop(key, orderedParsedTemplates[i], oneline, producer[i])
 			}
 		}
 

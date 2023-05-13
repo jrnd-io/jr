@@ -47,8 +47,9 @@ type Context struct {
 	Duration         time.Duration
 	Locale           string
 	Seed             int64
-	Counters         map[string]int
+	CtxCounters      map[string]int
 	Ctx              map[string]string
+	CtxList          map[string][]string
 	LastIndex        int
 	CountryIndex     int
 	CityIndex        int
@@ -69,8 +70,9 @@ func init() {
 		Duration:         DURATION,
 		Locale:           "us",
 		Seed:             time.Now().UTC().UnixNano(),
-		Counters:         make(map[string]int),
+		CtxCounters:      make(map[string]int),
 		Ctx:              make(map[string]string),
+		CtxList:          make(map[string][]string),
 		LastIndex:        -1,
 		CountryIndex:     -1,
 		CityIndex:        -1,

@@ -27,12 +27,12 @@ import (
 
 // Counter creates a counter named c, starting from start and incrementing by step
 func Counter(c string, start, step int) int {
-	val, exists := JrContext.Counters[c]
+	val, exists := JrContext.CtxCounters[c]
 	if exists {
-		JrContext.Counters[c] = val + step
-		return JrContext.Counters[c]
+		JrContext.CtxCounters[c] = val + step
+		return JrContext.CtxCounters[c]
 	} else {
-		JrContext.Counters[c] = start
+		JrContext.CtxCounters[c] = start
 		return start
 	}
 }

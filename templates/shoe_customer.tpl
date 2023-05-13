@@ -1,5 +1,5 @@
-{
-  "id": "{{uuid}}",
+{{$id:=uuid}}{{add_v_to_list "customers_id_list" $id}}{
+  "id": "{{$id}}",
   "first_name": "{{name}}",
   "last_name": "{{surname}}",
   "email": "{{email}}",

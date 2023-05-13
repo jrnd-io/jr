@@ -45,8 +45,6 @@ var fmap = map[string]interface{}{
 	// text utilities
 	"atoi":                     strconv.Atoi,
 	"counter":                  Counter,
-	"set":                      func(s string, v string) string { JrContext.Ctx[s] = v; return "" },
-	"get":                      func(s string) string { return JrContext.Ctx[s] },
 	"first":                    func(s string) string { return s[:1] },
 	"firstword":                func(s string) string { return strings.Split(s, " ")[0] },
 	"from":                     Word,
@@ -178,6 +176,12 @@ var fmap = map[string]interface{}{
 	"seed":     func(rndSeed int64) string { Random.Seed(rndSeed); return "" },
 	"uuid":     UniqueId,
 	"yesorno":  YesOrNo,
+
+	// context utilities
+	"add_v_to_list":      AddValueToList,
+	"random_v_from_list": RandomValueFromList,
+	"get_v":              func(s string) string { return JrContext.Ctx[s] },
+	"set_v":              func(s string, v string) string { JrContext.Ctx[s] = v; return "" },
 }
 
 func initialize(filename string) []string {
@@ -202,6 +206,11 @@ func initialize(filename string) []string {
 	return words
 }
 
+func AddValueToList(s string, v string) string {
+	JrContext.CtxList[s] = append(JrContext.CtxList[s], v)
+	return ""
+}
+
 // Len returns number of words (lines) in a word file
 func Len(name string) string {
 	_, err := cache(name)
@@ -221,6 +230,12 @@ func RandomIndex(name string) string {
 	words := data[name]
 	JrContext.LastIndex = Random.Intn(len(words))
 	return strconv.Itoa(JrContext.LastIndex)
+}
+
+func RandomValueFromList(s string) string {
+	list := JrContext.CtxList[s]
+	l := len(list)
+	return list[Random.Intn(l)]
 }
 
 // Word returns a random string from a list of strings in a file.

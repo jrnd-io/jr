@@ -22,6 +22,8 @@ package functions
 
 import (
 	"bytes"
+	"log"
+	"strconv"
 	"testing"
 	"text/template"
 )
@@ -136,8 +138,8 @@ func TestNestedPassingContext(t *testing.T) {
 }
 
 func TestRelationship(t *testing.T) {
-	a := `{{set "id" "10"}}{{template "sub" .}}`
-	s := `{{get "id"}}`
+	a := `{{set_v "id" "10"}}{{template "sub" .}}`
+	s := `{{get_v "id"}}`
 
 	aggregate := template.Must(template.New("aggregate").Funcs(FunctionsMap()).Parse(a))
 	sub, err := aggregate.New("sub").Parse(s)
@@ -174,6 +176,121 @@ func TestRelationship(t *testing.T) {
 		t.Errorf("Expected 2 templates, got %d", len(templates))
 	}
 }
+
+func Test2TemplatesWithCommonId(t *testing.T) {
+	userTemplate := `{{set_v "id" (uuid)}}"id":"{{get_v "id"}}`
+	orderTemplate := `"id":"{{get_v "id"}}`
+
+	v := template.New("aggregate").Funcs(FunctionsMap())
+
+	user, err := v.New("user").Parse(userTemplate)
+	if err != nil {
+		log.Fatal(err)
+	}
+	order, err := v.New("order").Parse(orderTemplate)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var expectUser bytes.Buffer
+
+	err = user.Execute(&expectUser, nil)
+	if err != nil {
+		t.Error(err)
+	}
+
+	var expectOrder bytes.Buffer
+
+	err = order.Execute(&expectOrder, nil)
+	if err != nil {
+		t.Error(err)
+	}
+	if expectUser.String() != expectOrder.String() {
+		t.Errorf("Different IDs, should be equal: '%s' '%s'", expectUser.String(), expectOrder.String())
+	}
+
+}
+
+func Test2TemplatesWithValueFromList(t *testing.T) {
+	userTemplate := `{{$id:=uuid}}{{add_v_to_list "id_list" $id}}{{$id}}`
+	userTemplate2 := `{{$id:=uuid}}{{add_v_to_list "id_list" $id}}{{$id}}`
+	orderTemplate := `{{random_v_from_list "id_list"}}`
+
+	v := template.New("aggregate").Funcs(FunctionsMap())
+
+	user, err := v.New("user").Parse(userTemplate)
+	if err != nil {
+		log.Fatal(err)
+	}
+	user2, err := v.New("user").Parse(userTemplate2)
+	if err != nil {
+		log.Fatal(err)
+	}
+	order, err := v.New("order").Parse(orderTemplate)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var expectUser bytes.Buffer
+
+	err = user.Execute(&expectUser, nil)
+	if err != nil {
+		t.Error(err)
+	}
+
+	var expectUser2 bytes.Buffer
+
+	err = user2.Execute(&expectUser2, nil)
+	if err != nil {
+		t.Error(err)
+	}
+
+	var expectOrder bytes.Buffer
+
+	err = order.Execute(&expectOrder, nil)
+	if err != nil {
+		t.Error(err)
+	}
+	if expectUser.String() != expectOrder.String() && expectUser2.String() != expectOrder.String() {
+		t.Errorf("Different IDs, should be equal to one of these: '%s' '%s' but was '%s'", expectUser.String(), expectUser2.String(), expectOrder.String())
+	}
+
+}
+
+func TestManyTemplates(t *testing.T) {
+
+	v := make([]string, 3)
+	v[0] = "{{integer 0 1}}"
+	v[1] = "{{integer 1 2}}"
+	v[2] = "{{integer 2 3}}"
+
+	tpl := template.New("value").Funcs(FunctionsMap())
+
+	for i := 0; i < len(v); i++ {
+		_, err := tpl.New(strconv.Itoa(i)).Parse((v[i]))
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+
+	v1 := tpl.Templates()
+	if len(v1) != len(v) {
+		t.Errorf("Expected %d templates, got %d", len(v), len(v1))
+	}
+
+	var b bytes.Buffer
+
+	for i := 0; i < len(v); i++ {
+		_ = tpl.ExecuteTemplate(&b, strconv.Itoa(i), nil)
+		result, _ := strconv.Atoi(b.String())
+		if i != result {
+			t.Errorf("Expected %d, got %d", i, result)
+		}
+		b.Reset()
+	}
+
+}
+
 func TestExtractMeta(t *testing.T) {
 	tpl := `01234"_meta:"{............................},56789`
 	m, v := ExtractMetaFrom(tpl)

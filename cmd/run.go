@@ -143,8 +143,6 @@ jr run --templateFileName ~/.jr/templates/net_device.tpl
 			log.Fatal(err)
 		}
 
-		//value := make([]*template.Template, len(args))
-
 		value, err := template.New("value").Funcs(functions.FunctionsMap()).Parse(string(valueTemplate[0]))
 		if err != nil {
 			log.Fatal(err)

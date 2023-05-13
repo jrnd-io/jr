@@ -63,7 +63,7 @@ func Cardinal(short bool) string {
 // City returns a random City
 func City() string {
 	c := Word("city")
-	JrContext.Ctx["city"] = c
+	JrContext.Ctx["_city"] = c
 	JrContext.CityIndex = JrContext.LastIndex
 	return c
 }
@@ -119,7 +119,7 @@ func NearbyGPS(latitude float64, longitude float64, radius int) string {
 // State returns a random State
 func State() string {
 	s := Word("state")
-	JrContext.Ctx["state"] = s
+	JrContext.Ctx["_state"] = s
 	JrContext.CountryIndex = JrContext.LastIndex
 	return s
 }

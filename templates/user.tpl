@@ -8,6 +8,7 @@
   "name": "{{name}} {{surname}}",
   "gender": "{{gender}}",
   "company": "{{company}}",
+  "work_email": "{{email_work}}",
   "email": "{{email}}",
   "about": "{{lorem 20}}",
   "address": "{{city}}, {{street}} {{building 2}}, {{zip}}",

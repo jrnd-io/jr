@@ -78,16 +78,17 @@ var fmap = map[string]interface{}{
 	"upper":                    strings.ToUpper,
 
 	// math utilities
-	"add":       func(a, b int) int { return a + b },
-	"div":       func(a, b int) int { return a / b },
-	"integer":   func(min, max int) int { return min + Random.Intn(max-min) },
-	"integer64": func(min, max int64) int64 { return min + Random.Int63n(max-min) },
-	"floating":  func(min, max float32) float32 { return min + Random.Float32()*(max-min) },
-	"sub":       func(a, b int) int { return a - b },
-	"max":       math.Max,
-	"min":       math.Min,
-	"mod":       func(a, b int) int { return a % b },
-	"mul":       func(a, b int) int { return a * b },
+	"add":          func(a, b int) int { return a + b },
+	"div":          func(a, b int) int { return a / b },
+	"format_float": func(f string, v float32) string { return fmt.Sprintf(f, v) },
+	"integer":      func(min, max int) int { return min + Random.Intn(max-min) },
+	"integer64":    func(min, max int64) int64 { return min + Random.Int63n(max-min) },
+	"floating":     func(min, max float32) float32 { return min + Random.Float32()*(max-min) },
+	"sub":          func(a, b int) int { return a - b },
+	"max":          math.Max,
+	"min":          math.Min,
+	"mod":          func(a, b int) int { return a % b },
+	"mul":          func(a, b int) int { return a * b },
 
 	// networking and time utilities
 	"http_method":       HttpMethod,
@@ -104,6 +105,7 @@ var fmap = map[string]interface{}{
 	"company":        Company,
 	"email":          Email,
 	"email_provider": EmailProvider,
+	"email_work":     WorkEmail,
 	"gender":         Gender,
 	"middlename":     Middlename,
 	"name":           Name,
@@ -111,6 +113,7 @@ var fmap = map[string]interface{}{
 	"name_f":         NameF,
 	"ssn":            Ssn,
 	"surname":        Surname,
+	"user":           User,
 	"username":       Username,
 
 	// address

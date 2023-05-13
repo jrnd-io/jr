@@ -31,11 +31,11 @@ import (
 // CodiceFiscale return a valid Italian Codice Fiscale
 func CodiceFiscale() string {
 
-	name := JrContext.Ctx["name"]
-	surname := JrContext.Ctx["surname"]
-	gender := JrContext.Ctx["gender"]
-	birthdate := JrContext.Ctx["birthdate"]
-	city := JrContext.Ctx["city"]
+	name := JrContext.Ctx["_name"]
+	surname := JrContext.Ctx["_surname"]
+	gender := JrContext.Ctx["_gender"]
+	birthdate := JrContext.Ctx["_birthdate"]
+	city := JrContext.Ctx["_city"]
 
 	if name == "" {
 		name = Name()
@@ -77,15 +77,15 @@ func CodiceFiscale() string {
 // Company returns a random Company Name
 func Company() string {
 	c := Word("company")
-	JrContext.Ctx["company"] = c
+	JrContext.Ctx["_company"] = c
 	return c
 }
 
-// Email returns a random email.
-func Email() string {
-	name := JrContext.Ctx["name"]
-	surname := JrContext.Ctx["surname"]
-	company := JrContext.Ctx["company"]
+// WorkEmail returns a random work email.
+func WorkEmail() string {
+	name := JrContext.Ctx["_name"]
+	surname := JrContext.Ctx["_surname"]
+	company := JrContext.Ctx["_company"]
 
 	if name == "" {
 		name = Name()
@@ -100,6 +100,22 @@ func Email() string {
 	return fmt.Sprintf("%s.%s@%s.com", strings.ToLower(name), strings.ToLower(surname), strings.ToLower(company))
 }
 
+// Email returns a random email.
+func Email() string {
+	name := JrContext.Ctx["_name"]
+	surname := JrContext.Ctx["_surname"]
+	provider := Word("mail_provider")
+
+	if name == "" {
+		name = Name()
+	}
+	if surname == "" {
+		surname = Surname()
+	}
+
+	return fmt.Sprintf("%s.%s@%s", strings.ToLower(name), strings.ToLower(surname), strings.ToLower(provider))
+}
+
 // EmailProvider returns a random email provider
 func EmailProvider() string {
 	return Word("mail_provider")
@@ -107,11 +123,11 @@ func EmailProvider() string {
 
 // Gender returns a random gender. Note: it gets the gender context automatically setup by previous name calls
 func Gender() string {
-	g := JrContext.Ctx["gender"]
+	g := JrContext.Ctx["_gender"]
 	if g == "" {
 		gender := []string{"M", "F"}
 		g = gender[Random.Intn(len(gender))]
-		JrContext.Ctx["gender"] = g
+		JrContext.Ctx["_gender"] = g
 	}
 	return g
 }
@@ -135,16 +151,16 @@ func Name() string {
 // NameM returns a random male Name
 func NameM() string {
 	name := Word("nameM")
-	JrContext.Ctx["name"] = name
-	JrContext.Ctx["gender"] = "M"
+	JrContext.Ctx["_name"] = name
+	JrContext.Ctx["_gender"] = "M"
 	return name
 }
 
 // NameF returns a random female Name
 func NameF() string {
 	name := Word("nameF")
-	JrContext.Ctx["name"] = name
-	JrContext.Ctx["gender"] = "F"
+	JrContext.Ctx["_name"] = name
+	JrContext.Ctx["_gender"] = "F"
 	return name
 }
 
@@ -159,12 +175,40 @@ func Ssn() string {
 // Surname returns a random Surname
 func Surname() string {
 	s := Word("surname")
-	JrContext.Ctx["surname"] = s
+	JrContext.Ctx["_surname"] = s
 	return s
 }
 
-// Username returns a random Username using Name, Surname and a length
-func Username(firstName string, lastName string, size int) string {
+// Username returns a random Username using Name, Surname
+func Username(firstName string, lastName string) string {
+
+	firstName = strings.ToLower(firstName)
+	lastName = strings.ToLower(lastName)
+
+	separators := []string{".", "-", "", "_", "."}
+	separator := separators[Random.Intn(len(separators))]
+	onlyInitialForName := (Random.Intn(2)) != 0
+	onlyInitialForSurname := (Random.Intn(2)) != 0
+	useSurname := (Random.Intn(2)) != 0
+
+	if onlyInitialForName {
+		firstName = firstName[:1]
+		onlyInitialForSurname = false
+		useSurname = true
+	}
+	if onlyInitialForSurname {
+		lastName = lastName[:1]
+	}
+	if !(useSurname) {
+		lastName = ""
+		separator = ""
+	}
+	return fmt.Sprintf("%s%s%s", firstName, separator, lastName)
+
+}
+
+// User returns a random Username using Name, Surname and a length
+func User(firstName string, lastName string, size int) string {
 
 	var name string
 

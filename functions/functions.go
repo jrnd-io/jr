@@ -206,8 +206,9 @@ func initialize(filename string) []string {
 	return words
 }
 
-func AddValueToList(s string, v string) string {
-	JrContext.CtxList[s] = append(JrContext.CtxList[s], v)
+// AddValueToList adds value v to Context list l
+func AddValueToList(l string, v string) string {
+	JrContext.CtxList[l] = append(JrContext.CtxList[l], v)
 	return ""
 }
 
@@ -232,6 +233,7 @@ func RandomIndex(name string) string {
 	return strconv.Itoa(JrContext.LastIndex)
 }
 
+// RandomValueFromList returns a random value from Context list l
 func RandomValueFromList(s string) string {
 	list := JrContext.CtxList[s]
 	l := len(list)

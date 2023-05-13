@@ -235,7 +235,11 @@ func RandomIndex(name string) string {
 func RandomValueFromList(s string) string {
 	list := JrContext.CtxList[s]
 	l := len(list)
-	return list[Random.Intn(l)]
+	if l != 0 {
+		return list[Random.Intn(l)]
+	} else {
+		return ""
+	}
 }
 
 // Word returns a random string from a list of strings in a file.

@@ -178,10 +178,11 @@ var fmap = map[string]interface{}{
 	"yesorno":  YesOrNo,
 
 	// context utilities
-	"add_v_to_list":      AddValueToList,
-	"random_v_from_list": RandomValueFromList,
-	"get_v":              func(s string) string { return JrContext.Ctx[s] },
-	"set_v":              func(s string, v string) string { JrContext.Ctx[s] = v; return "" },
+	"add_v_to_list":        AddValueToList,
+	"random_v_from_list":   RandomValueFromList,
+	"random_n_v_from_list": RandomNValuesFromList,
+	"get_v":                func(s string) string { return JrContext.Ctx[s] },
+	"set_v":                func(s string, v string) string { JrContext.Ctx[s] = v; return "" },
 }
 
 func initialize(filename string) []string {
@@ -241,6 +242,19 @@ func RandomValueFromList(s string) string {
 		return list[Random.Intn(l)]
 	} else {
 		return ""
+	}
+}
+
+// RandomNValuesFromList returns a random value from Context list l
+func RandomNValuesFromList(s string, n int) []string {
+	list := JrContext.CtxList[s]
+	l := len(list)
+	results := make([]string, n)
+	if l != 0 {
+		//TODO
+		return results
+	} else {
+		return []string{""}
 	}
 }
 

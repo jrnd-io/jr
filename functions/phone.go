@@ -49,7 +49,7 @@ func Imei() string {
 func Phone() string {
 	cityIndex := JrContext.CityIndex
 	if cityIndex == -1 {
-		l := Word("land_prefix")
+		l := Word("phone")
 		lp, _ := Regex(l)
 		return lp
 	} else {
@@ -60,7 +60,7 @@ func Phone() string {
 
 // PhoneAt returns a land prefix at a given index
 func PhoneAt(index int) string {
-	l := WordAt("land_prefix", index)
+	l := WordAt("phone", index)
 	lp, _ := Regex(l)
 	return lp
 }

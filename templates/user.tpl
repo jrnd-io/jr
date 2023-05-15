@@ -13,6 +13,7 @@
   "about": "{{lorem 20}}",
   "address": "{{city}}, {{street}} {{building 2}}, {{zip}}",
   "phone_number": "{{phone}}",
+  "mobile": "{{mobile_phone}}"
   "latitude": {{latitude}},
   "longitude": {{longitude}}
 }

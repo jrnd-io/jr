@@ -44,6 +44,33 @@ type Producer interface {
 	Produce(k []byte, v []byte)
 }
 
+type Configuration struct {
+	templateNames    []string
+	keyTemplate      string
+	outputTemplate   string
+	embeddedTemplate bool
+	templateFileName bool
+	kcat             bool
+	output           string
+	oneline          bool
+	locale           string
+	num              int
+	frequency        time.Duration
+	duration         time.Duration
+	seed             int64
+	kafkaConfig      string
+	registryConfig   string
+	topic            []string
+	preload          []string
+	preloadSize      []int
+	templateDir      string
+	autocreate       bool
+	schemaRegistry   bool
+	serializer       string
+	redisTtl         time.Duration
+	redisConfig      string
+}
+
 var runCmd = &cobra.Command{
 	Use:   "run [template]",
 	Short: "Execute a template",
@@ -74,8 +101,8 @@ jr run --templateFileName ~/.jr/templates/net_device.tpl
 		kafkaConfig, _ := cmd.Flags().GetString("kafkaConfig")
 		registryConfig, _ := cmd.Flags().GetString("registryConfig")
 		topic, _ := cmd.Flags().GetStringSlice("topic")
-		//preload, _ := cmd.Flags().GetStringSlice("preload")
-		//preloadSize, _ := cmd.Flags().GetIntSlice("preloadSize")
+		preload, _ := cmd.Flags().GetStringSlice("preload")
+		preloadSize, _ := cmd.Flags().GetIntSlice("preloadSize")
 
 		templateDir, _ := cmd.Flags().GetString("templateDir")
 		templateDir = os.ExpandEnv(templateDir)
@@ -93,121 +120,149 @@ jr run --templateFileName ~/.jr/templates/net_device.tpl
 			outputTemplate = "{{.K}},{{.V}}\n"
 		}
 
-		valueTemplate := make([][]byte, len(args))
-
-		var err error
-
-		if embeddedTemplate {
-			valueTemplate[0] = []byte(args[0])
-		} else if templateFileName {
-			for i := range args {
-				valueTemplate[i], err = os.ReadFile(os.ExpandEnv(args[i]))
-				functions.JrContext.TemplateType[i] = args[i]
-			}
-			functions.JrContext.NumTemplates = len(args)
-		} else {
-			for i := range args {
-				templatePath := fmt.Sprintf("%s/%s.tpl", templateDir, args[i])
-				valueTemplate[i], err = os.ReadFile(templatePath)
-				functions.JrContext.TemplateType[i] = args[i]
-			}
-			functions.JrContext.NumTemplates = len(args)
+		conf := Configuration{
+			templateNames:    args,
+			keyTemplate:      keyTemplate,
+			outputTemplate:   outputTemplate,
+			embeddedTemplate: embeddedTemplate,
+			templateFileName: templateFileName,
+			kcat:             kcat,
+			output:           output,
+			topic:            topic,
+			oneline:          oneline,
+			locale:           locale,
+			num:              num,
+			frequency:        frequency,
+			duration:         duration,
+			seed:             seed,
+			kafkaConfig:      kafkaConfig,
+			registryConfig:   registryConfig,
+			templateDir:      templateDir,
+			autocreate:       autocreate,
+			schemaRegistry:   schemaRegistry,
+			serializer:       serializer,
+			redisTtl:         redisTtl,
+			redisConfig:      redisConfig,
+			preload:          preload,
+			preloadSize:      preloadSize,
 		}
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		outTemplate, err := template.New("out").Parse(outputTemplate)
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		key, err := template.New("key").Funcs(functions.FunctionsMap()).Parse(keyTemplate)
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		value := template.New("value").Funcs(functions.FunctionsMap())
-		for i := 0; i < len(args); i++ {
-			_, err = value.New(strconv.Itoa(i)).Parse(string(valueTemplate[i]))
-			if err != nil {
-				log.Fatal(err)
-			}
-		}
-
-		producer := make([]Producer, len(args))
-
-		if output == "stdout" {
-			for i := range args {
-				producer[i] = &console.ConsoleProducer{OutTemplate: outTemplate}
-			}
-		}
-
-		if output == "kafka" {
-			if len(args) != len(topic) {
-				log.Println(args)
-				log.Println(topic)
-				log.Fatalf("There are %d templates and %d topics, every templates must have its own topic. \nFor example: jr run user net-device -o kafka -t \"test\",\"test1\"", len(args), len(topic))
-			}
-			for i := range args {
-				producer[i] = createKafkaProducer(serializer, topic, i, kafkaConfig, schemaRegistry, registryConfig, kcat, autocreate)
-			}
-		} else {
-			if schemaRegistry {
-				log.Println("Ignoring schemaRegistry and/or serializer when output not set to kafka")
-			}
-		}
-
-		if output == "redis" {
-			for i := range args {
-				producer[i] = createRedisProducer(redisTtl, redisConfig)
-			}
-		}
-
-		if output == "mongo" {
-			log.Fatal("Not yet implemented")
-		}
-
-		configureJrContext(seed, num, frequency, locale, templateDir)
-		orderedParsedTemplates := orderValueTemplates(value, args)
-
-		infinite := true
-		if duration > 0 {
-			timer := time.NewTimer(duration)
-
-			go func() {
-				<-timer.C
-				infinite = false
-			}()
-		}
-		ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
-		defer stop()
-
-		if frequency != -1 {
-		Infinite:
-			for ok := true; ok; ok = infinite {
-				select {
-				case <-time.After(frequency):
-					for i := range args {
-						generatorLoop(key, orderedParsedTemplates[i], oneline, producer[i])
-					}
-				case <-ctx.Done():
-					stop()
-					break Infinite
-				}
-			}
-		} else {
-			for i := range args {
-				generatorLoop(key, orderedParsedTemplates[i], oneline, producer[i])
-			}
-		}
-
-		closeProducers(producer)
-
-		time.Sleep(100 * time.Millisecond)
-		writeStats()
-
+		doTemplates(conf)
 	},
+}
+
+func doTemplates(conf Configuration) {
+
+	valueTemplate := make([][]byte, len(conf.templateNames))
+
+	var err error
+
+	if conf.embeddedTemplate {
+		valueTemplate[0] = []byte(conf.templateNames[0])
+	} else if conf.templateFileName {
+		for i := range conf.templateNames {
+			valueTemplate[i], err = os.ReadFile(os.ExpandEnv(conf.templateNames[i]))
+			functions.JrContext.TemplateType[i] = conf.templateNames[i]
+		}
+		functions.JrContext.NumTemplates = len(conf.templateNames)
+	} else {
+		for i := range conf.templateNames {
+			templatePath := fmt.Sprintf("%s/%s.tpl", conf.templateDir, conf.templateNames[i])
+			valueTemplate[i], err = os.ReadFile(templatePath)
+			functions.JrContext.TemplateType[i] = conf.templateNames[i]
+		}
+		functions.JrContext.NumTemplates = len(conf.templateNames)
+	}
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	outTemplate, err := template.New("out").Parse(conf.outputTemplate)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	key, err := template.New("key").Funcs(functions.FunctionsMap()).Parse(conf.keyTemplate)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	value := template.New("value").Funcs(functions.FunctionsMap())
+	for i := 0; i < len(conf.templateNames); i++ {
+		_, err = value.New(strconv.Itoa(i)).Parse(string(valueTemplate[i]))
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+
+	producer := make([]Producer, len(conf.templateNames))
+
+	if conf.output == "stdout" {
+		for i := range conf.templateNames {
+			producer[i] = &console.ConsoleProducer{OutTemplate: outTemplate}
+		}
+	}
+
+	if conf.output == "kafka" {
+		if len(conf.templateNames) != len(conf.topic) {
+			log.Fatalf("There are %d templates and %d topics, every templates must have its own topic. \nFor example: jr run user net-device -o kafka -t \"test\",\"test1\"", len(conf.templateNames), len(conf.topic))
+		}
+		for i := range conf.templateNames {
+			producer[i] = createKafkaProducer(conf.serializer, conf.topic, i, conf.kafkaConfig, conf.schemaRegistry, conf.registryConfig, conf.kcat, conf.autocreate)
+		}
+	} else {
+		if conf.schemaRegistry {
+			log.Println("Ignoring schemaRegistry and/or serializer when output not set to kafka")
+		}
+	}
+
+	if conf.output == "redis" {
+		for i := range conf.templateNames {
+			producer[i] = createRedisProducer(conf.redisTtl, conf.redisConfig)
+		}
+	}
+
+	if conf.output == "mongo" {
+		log.Fatal("Not yet implemented")
+	}
+
+	configureJrContext(conf.seed, conf.num, conf.frequency, conf.locale, conf.templateDir)
+	orderedParsedTemplates := orderValueTemplates(value, conf.templateNames)
+
+	infinite := true
+	if conf.duration > 0 {
+		timer := time.NewTimer(conf.duration)
+
+		go func() {
+			<-timer.C
+			infinite = false
+		}()
+	}
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
+	defer stop()
+
+	if conf.frequency != -1 {
+	Infinite:
+		for ok := true; ok; ok = infinite {
+			select {
+			case <-time.After(conf.frequency):
+				for i := range conf.templateNames {
+					generatorLoop(key, orderedParsedTemplates[i], conf.oneline, producer[i])
+				}
+			case <-ctx.Done():
+				stop()
+				break Infinite
+			}
+		}
+	} else {
+		for i := range conf.templateNames {
+			generatorLoop(key, orderedParsedTemplates[i], conf.oneline, producer[i])
+		}
+	}
+
+	closeProducers(producer)
+
+	time.Sleep(100 * time.Millisecond)
+	writeStats()
 }
 
 func closeProducers(producer []Producer) {

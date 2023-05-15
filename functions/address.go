@@ -73,8 +73,18 @@ func CityAt(index int) string {
 	return WordAt("city", index)
 }
 
-// Country returns a random ISO 3166 Country
+// Country returns the ISO 3166 Country selected with locale
 func Country() string {
+	countryIndex := JrContext.CountryIndex
+	if countryIndex == -1 {
+		return Word("country")
+	} else {
+		return WordAt("country", countryIndex)
+	}
+}
+
+// CountryRandom returns a random ISO 3166 Country
+func CountryRandom() string {
 	return Word("country")
 }
 

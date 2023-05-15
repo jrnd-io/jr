@@ -11,6 +11,7 @@
   "work_email": "{{email_work}}",
   "email": "{{email}}",
   "about": "{{lorem 20}}",
+  "country": "{{country}}"
   "address": "{{city}}, {{street}} {{building 2}}, {{zip}}",
   "phone_number": "{{phone}}",
   "mobile": "{{mobile_phone}}"

@@ -123,6 +123,7 @@ var fmap = map[string]interface{}{
 	"city":           City,
 	"city_at":        CityAt,
 	"country":        Country,
+	"country_random": CountryRandom,
 	"country_at":     CountryAt,
 	"latitude":       Latitude,
 	"longitude":      Longitude,

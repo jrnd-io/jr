@@ -216,6 +216,7 @@ jr run --templateFileName ~/.jr/templates/net_device.tpl
 		functions.JrContext.Locale = strings.ToLower(locale)
 		functions.JrContext.Seed = seed
 		functions.JrContext.TemplateDir = templateDir
+		functions.JrContext.CountryIndex = functions.IndexOf(strings.ToUpper(locale), "country")
 
 		infinite := true
 		if duration > 0 {

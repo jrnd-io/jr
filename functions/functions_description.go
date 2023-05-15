@@ -245,6 +245,16 @@ var funcDesc = map[string]FunctionDescription{
 	"country": {
 		Name:        "country",
 		Category:    "address",
+		Description: "returns the ISO 3166 country code (selected locale)",
+		Parameters:  "",
+		Localizable: true,
+		Return:      "string",
+		Example:     "jr --locale it run --template '{{country}}'",
+		Output:      "IT",
+	},
+	"country_random": {
+		Name:        "country_random",
+		Category:    "address",
 		Description: "returns a random ISO 3166 country code",
 		Parameters:  "",
 		Localizable: true,

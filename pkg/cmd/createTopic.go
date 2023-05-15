@@ -22,7 +22,7 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"github.com/ugol/jr/producers/kafka"
+	"github.com/ugol/jr/pkg/producers/kafka"
 )
 
 // createTopicCmd represents the createTopic command

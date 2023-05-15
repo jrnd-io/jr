@@ -47,7 +47,9 @@ Using --duration option you can time bound the entire object creation. This exam
 */
 package main
 
-import "github.com/ugol/jr/cmd"
+import (
+	"github.com/ugol/jr/pkg/cmd"
+)
 
 func main() {
 	cmd.Execute()

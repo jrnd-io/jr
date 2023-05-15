@@ -29,7 +29,7 @@ import (
 	"github.com/confluentinc/confluent-kafka-go/v2/schemaregistry/serde"
 	"github.com/confluentinc/confluent-kafka-go/v2/schemaregistry/serde/avro"
 	"github.com/confluentinc/confluent-kafka-go/v2/schemaregistry/serde/jsonschema"
-	"github.com/ugol/jr/types"
+	"github.com/ugol/jr/pkg/types"
 	"log"
 	"os"
 	"strings"

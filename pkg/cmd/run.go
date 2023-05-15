@@ -25,10 +25,10 @@ import (
 	"context"
 	"fmt"
 	"github.com/spf13/cobra"
-	"github.com/ugol/jr/functions"
-	"github.com/ugol/jr/producers/console"
-	"github.com/ugol/jr/producers/kafka"
-	"github.com/ugol/jr/producers/redis"
+	functions2 "github.com/ugol/jr/pkg/functions"
+	"github.com/ugol/jr/pkg/producers/console"
+	"github.com/ugol/jr/pkg/producers/kafka"
+	"github.com/ugol/jr/pkg/producers/redis"
 	"log"
 	"os"
 	"os/signal"
@@ -161,16 +161,16 @@ func doTemplates(conf Configuration) {
 	} else if conf.templateFileName {
 		for i := range conf.templateNames {
 			valueTemplate[i], err = os.ReadFile(os.ExpandEnv(conf.templateNames[i]))
-			functions.JrContext.TemplateType[i] = conf.templateNames[i]
+			functions2.JrContext.TemplateType[i] = conf.templateNames[i]
 		}
-		functions.JrContext.NumTemplates = len(conf.templateNames)
+		functions2.JrContext.NumTemplates = len(conf.templateNames)
 	} else {
 		for i := range conf.templateNames {
 			templatePath := fmt.Sprintf("%s/%s.tpl", conf.templateDir, conf.templateNames[i])
 			valueTemplate[i], err = os.ReadFile(templatePath)
-			functions.JrContext.TemplateType[i] = conf.templateNames[i]
+			functions2.JrContext.TemplateType[i] = conf.templateNames[i]
 		}
-		functions.JrContext.NumTemplates = len(conf.templateNames)
+		functions2.JrContext.NumTemplates = len(conf.templateNames)
 	}
 	if err != nil {
 		log.Fatal(err)
@@ -181,12 +181,12 @@ func doTemplates(conf Configuration) {
 		log.Fatal(err)
 	}
 
-	key, err := template.New("key").Funcs(functions.FunctionsMap()).Parse(conf.keyTemplate)
+	key, err := template.New("key").Funcs(functions2.FunctionsMap()).Parse(conf.keyTemplate)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	value := template.New("value").Funcs(functions.FunctionsMap())
+	value := template.New("value").Funcs(functions2.FunctionsMap())
 	for i := 0; i < len(conf.templateNames); i++ {
 		_, err = value.New(strconv.Itoa(i)).Parse(string(valueTemplate[i]))
 		if err != nil {
@@ -284,18 +284,18 @@ func orderValueTemplates(valueTemplate *template.Template, templateNames []strin
 }
 
 func configureJrContext(seed int64, num int, frequency time.Duration, locale string, templateDir string) {
-	functions.Random.Seed(seed)
-	functions.JrContext.Num = num
-	functions.JrContext.Range = make([]int, num)
-	functions.JrContext.Frequency = frequency
-	functions.JrContext.Locale = strings.ToLower(locale)
-	functions.JrContext.Seed = seed
-	functions.JrContext.TemplateDir = templateDir
-	functions.JrContext.CountryIndex = functions.IndexOf(strings.ToUpper(locale), "country")
+	functions2.Random.Seed(seed)
+	functions2.JrContext.Num = num
+	functions2.JrContext.Range = make([]int, num)
+	functions2.JrContext.Frequency = frequency
+	functions2.JrContext.Locale = strings.ToLower(locale)
+	functions2.JrContext.Seed = seed
+	functions2.JrContext.TemplateDir = templateDir
+	functions2.JrContext.CountryIndex = functions2.IndexOf(strings.ToUpper(locale), "country")
 }
 
 func generatorLoop(key *template.Template, value *template.Template, oneline bool, producer Producer) {
-	for range functions.JrContext.Range {
+	for range functions2.JrContext.Range {
 		k, v, _ := executeTemplate(key, value, oneline)
 		producer.Produce([]byte(k), []byte(v))
 	}
@@ -314,7 +314,7 @@ func createKafkaProducer(serializer string, topic []string, index int, kafkaConf
 	kManager := &kafka.KafkaManager{
 		Serializer:   serializer,
 		Topic:        topic[index],
-		TemplateType: functions.JrContext.TemplateType[index],
+		TemplateType: functions2.JrContext.TemplateType[index],
 	}
 
 	kManager.Initialize(kafkaConfig)
@@ -335,12 +335,12 @@ func createKafkaProducer(serializer string, topic []string, index int, kafkaConf
 
 func writeStats() {
 	_, _ = fmt.Fprintln(os.Stderr)
-	elapsed := time.Since(functions.JrContext.StartTime)
+	elapsed := time.Since(functions2.JrContext.StartTime)
 	_, _ = fmt.Fprintf(os.Stderr, "Elapsed time: %v\n", elapsed.Round(1*time.Second))
-	_, _ = fmt.Fprintf(os.Stderr, "Data Generated (Objects): %d\n", functions.JrContext.GeneratedObjects)
-	_, _ = fmt.Fprintf(os.Stderr, "Data Generated (bytes): %d\n", functions.JrContext.GeneratedBytes)
-	_, _ = fmt.Fprintf(os.Stderr, "Number of templates (Objects): %d\n", functions.JrContext.NumTemplates)
-	_, _ = fmt.Fprintf(os.Stderr, "Throughput (bytes per second): %9.f\n", float64(functions.JrContext.GeneratedBytes)/elapsed.Seconds())
+	_, _ = fmt.Fprintf(os.Stderr, "Data Generated (Objects): %d\n", functions2.JrContext.GeneratedObjects)
+	_, _ = fmt.Fprintf(os.Stderr, "Data Generated (bytes): %d\n", functions2.JrContext.GeneratedBytes)
+	_, _ = fmt.Fprintf(os.Stderr, "Number of templates (Objects): %d\n", functions2.JrContext.NumTemplates)
+	_, _ = fmt.Fprintf(os.Stderr, "Throughput (bytes per second): %9.f\n", float64(functions2.JrContext.GeneratedBytes)/elapsed.Seconds())
 	_, _ = fmt.Fprintln(os.Stderr)
 }
 
@@ -349,12 +349,12 @@ func executeTemplate(key *template.Template, value *template.Template, oneline b
 	var kBuffer, vBuffer bytes.Buffer
 	var err error
 
-	if err = key.Execute(&kBuffer, functions.JrContext); err != nil {
+	if err = key.Execute(&kBuffer, functions2.JrContext); err != nil {
 		log.Println(err)
 	}
 	k := kBuffer.String()
 
-	if err = value.Execute(&vBuffer, functions.JrContext); err != nil {
+	if err = value.Execute(&vBuffer, functions2.JrContext); err != nil {
 		log.Println(err)
 	}
 	v := vBuffer.String()
@@ -364,21 +364,21 @@ func executeTemplate(key *template.Template, value *template.Template, oneline b
 		v = re.ReplaceAllString(v, "")
 	}
 
-	functions.JrContext.GeneratedObjects++
-	functions.JrContext.GeneratedBytes += int64(len(v))
+	functions2.JrContext.GeneratedObjects++
+	functions2.JrContext.GeneratedBytes += int64(len(v))
 
 	return k, v, err
 }
 
 func init() {
 	rootCmd.AddCommand(runCmd)
-	runCmd.Flags().IntP("num", "n", functions.JrContext.Num, "Number of elements to create for each pass")
+	runCmd.Flags().IntP("num", "n", functions2.JrContext.Num, "Number of elements to create for each pass")
 	runCmd.Flags().DurationP("frequency", "f", -1, "how much time to wait for next generation pass")
 	runCmd.Flags().DurationP("duration", "d", 0, "If frequency is enabled, with Duration you can set a finite amount of time")
 
-	runCmd.Flags().Int64("seed", functions.JrContext.Seed, "Seed to init pseudorandom generator")
+	runCmd.Flags().Int64("seed", functions2.JrContext.Seed, "Seed to init pseudorandom generator")
 
-	runCmd.Flags().String("templateDir", functions.JrContext.TemplateDir, "directory containing templates")
+	runCmd.Flags().String("templateDir", functions2.JrContext.TemplateDir, "directory containing templates")
 	runCmd.Flags().StringP("kafkaConfig", "F", "./kafka/config.properties", "Kafka configuration")
 	runCmd.Flags().String("registryConfig", "./kafka/registry.properties", "Kafka configuration")
 	runCmd.Flags().Bool("templateFileName", false, "If enabled, [template] must be a template file")
@@ -395,7 +395,7 @@ func init() {
 	runCmd.Flags().String("outputTemplate", "{{.V}}\n", "Formatting of K,V on standard output")
 	runCmd.Flags().BoolP("oneline", "l", false, "strips /n from output, for example to be pipelined to tools like kcat")
 	runCmd.Flags().BoolP("autocreate", "a", false, "if enabled, autocreate topics")
-	runCmd.Flags().String("locale", functions.JrContext.Locale, "Locale")
+	runCmd.Flags().String("locale", functions2.JrContext.Locale, "Locale")
 
 	runCmd.Flags().BoolP("schemaRegistry", "s", false, "If you want to use Confluent Schema Registry")
 	runCmd.Flags().String("serializer", "json-schema", "Type of serializer: json-schema, avro-generic, avro, protobuf")

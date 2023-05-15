@@ -202,14 +202,18 @@ jr run --templateFileName ~/.jr/templates/net_device.tpl
 			}
 		}
 
-		for i := range args {
-			producer[i].Close()
-		}
+		closeProducers(producer)
 
 		time.Sleep(100 * time.Millisecond)
 		writeStats()
 
 	},
+}
+
+func closeProducers(producer []Producer) {
+	for _, p := range producer {
+		p.Close()
+	}
 }
 
 func orderValueTemplates(valueTemplate *template.Template, templateNames []string) []*template.Template {

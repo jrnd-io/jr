@@ -604,6 +604,16 @@ var funcDesc = map[string]FunctionDescription{
 		Example:     "jr run --template '{{key \"KEY\" 20}}'",
 		Output:      "KEY4",
 	},
+	"index_of": {
+		Name:        "index_of",
+		Category:    "text utilities",
+		Description: "returns the index of s in 'name' file ",
+		Parameters:  "s string, name string",
+		Localizable: false,
+		Return:      "string",
+		Example:     "jr run --template '{{index_of  \"New York\" \"city\"}}'",
+		Output:      "27",
+	},
 	"latitude": {
 		Name:        "latitude",
 		Category:    "address",

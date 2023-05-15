@@ -33,6 +33,33 @@ const FREQUENCY = 0
 const DURATION = 0
 const TEMPLATEDIR = "$HOME/.jr/templates"
 
+type Configuration struct {
+	TemplateNames    []string
+	KeyTemplate      string
+	OutputTemplate   string
+	EmbeddedTemplate bool
+	TemplateFileName bool
+	Kcat             bool
+	Output           string
+	Oneline          bool
+	Locale           string
+	Num              int
+	Frequency        time.Duration
+	Duration         time.Duration
+	Seed             int64
+	KafkaConfig      string
+	RegistryConfig   string
+	Topic            []string
+	Preload          []string
+	PreloadSize      []int
+	TemplateDir      string
+	Autocreate       bool
+	SchemaRegistry   bool
+	Serializer       string
+	RedisTtl         time.Duration
+	RedisConfig      string
+}
+
 // Context is the object passed on the templates which contains all the needed details.
 type Context struct {
 	StartTime        time.Time

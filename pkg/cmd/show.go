@@ -67,6 +67,6 @@ var showCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(showCmd)
-	showCmd.Flags().String("templateDir", "$HOME/.jr/templates", "directory containing templates")
+	showCmd.Flags().String("templateDir", TEMPLATEDIR, "directory containing templates")
 	showCmd.Flags().BoolP("nocolor", "n", false, "disable colorized output")
 }

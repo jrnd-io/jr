@@ -25,6 +25,9 @@ import (
 	"github.com/ugol/jr/pkg/producers/kafka"
 )
 
+const DEFAULT_PARTITIONS = 6
+const DEFAULT_REPLICA = 3
+
 // createTopicCmd represents the createTopic command
 var createTopicCmd = &cobra.Command{
 	Use:   "createTopic [topic]",
@@ -45,8 +48,7 @@ var createTopicCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(createTopicCmd)
-	createTopicCmd.Flags().IntP("partitions", "p", 6, "Number of partitions")
-	createTopicCmd.Flags().IntP("replica", "r", 3, "Replica Factor")
-	createTopicCmd.Flags().StringP("kafkaConfig", "F", "./kafka/config.properties", "Kafka configuration")
-
+	createTopicCmd.Flags().IntP("partitions", "p", DEFAULT_PARTITIONS, "Number of partitions")
+	createTopicCmd.Flags().IntP("replica", "r", DEFAULT_REPLICA, "Replica Factor")
+	createTopicCmd.Flags().StringP("kafkaConfig", "F", KAFKA_CONFIG, "Kafka configuration")
 }

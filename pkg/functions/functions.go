@@ -36,7 +36,7 @@ import (
 )
 
 func FunctionsMap() template.FuncMap {
-	return template.FuncMap(fmap)
+	return fmap
 }
 
 var Random = rand.New(rand.NewSource(0))

@@ -24,7 +24,7 @@ import (
 	"bytes"
 	"fmt"
 	"github.com/spf13/cobra"
-	functions2 "github.com/ugol/jr/pkg/functions"
+	"github.com/ugol/jr/pkg/functions"
 	"os"
 	"path/filepath"
 	"strings"
@@ -88,7 +88,7 @@ var listCmd = &cobra.Command{
 
 func isValidTemplate(t []byte) (bool, error) {
 
-	tt, err := template.New("test").Funcs(functions2.FunctionsMap()).Parse(string(t))
+	tt, err := template.New("test").Funcs(functions.FunctionsMap()).Parse(string(t))
 	if err != nil {
 		return false, err
 	}
@@ -104,6 +104,6 @@ func isValidTemplate(t []byte) (bool, error) {
 
 func init() {
 	rootCmd.AddCommand(listCmd)
-	listCmd.Flags().String("templateDir", functions2.JrContext.TemplateDir, "directory containing templates")
+	listCmd.Flags().String("templateDir", TEMPLATEDIR, "directory containing templates")
 	listCmd.Flags().BoolP("fullPath", "f", false, "Print full path")
 }

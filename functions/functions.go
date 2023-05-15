@@ -162,8 +162,8 @@ var fmap = map[string]interface{}{
 	"country_code":    CountryCode,
 	"country_code_at": CountryCodeAt,
 	"imei":            Imei,
-	"land_prefix":     LandPrefix,
-	"land_prefix_at":  LandPrefixAt,
+	"phone":           Phone,
+	"phone_at":        PhoneAt,
 	"mobile_phone":    MobilePhone,
 	"mobile_phone_at": MobilePhoneAt,
 

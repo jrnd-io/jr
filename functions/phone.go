@@ -45,21 +45,21 @@ func Imei() string {
 	return first14 + luhnCheckDigit(first14)
 }
 
-// LandPrefix returns a random land prefix
-func LandPrefix() string {
+// Phone returns a random land prefix
+func Phone() string {
 	cityIndex := JrContext.CityIndex
 	if cityIndex == -1 {
 		l := Word("land_prefix")
 		lp, _ := Regex(l)
 		return lp
 	} else {
-		return LandPrefixAt(cityIndex)
+		return PhoneAt(cityIndex)
 	}
 
 }
 
-// LandPrefixAt returns a land prefix at a given index
-func LandPrefixAt(index int) string {
+// PhoneAt returns a land prefix at a given index
+func PhoneAt(index int) string {
 	l := WordAt("land_prefix", index)
 	lp, _ := Regex(l)
 	return lp

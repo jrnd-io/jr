@@ -12,7 +12,7 @@
   "email": "{{email}}",
   "about": "{{lorem 20}}",
   "address": "{{city}}, {{street}} {{building 2}}, {{zip}}",
-  "phone_number": "{{land_prefix}} {{regex "[0-9]{7}"}}",
+  "phone_number": "{{phone}}",
   "latitude": {{latitude}},
   "longitude": {{longitude}}
 }

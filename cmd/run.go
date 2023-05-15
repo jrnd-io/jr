@@ -92,6 +92,8 @@ jr run --templateFileName ~/.jr/templates/net_device.tpl
 		kafkaConfig, _ := cmd.Flags().GetString("kafkaConfig")
 		registryConfig, _ := cmd.Flags().GetString("registryConfig")
 		topic, _ := cmd.Flags().GetStringSlice("topic")
+		//preload, _ := cmd.Flags().GetStringSlice("preload")
+		//preloadSize, _ := cmd.Flags().GetIntSlice("preloadSize")
 
 		templateDir, _ := cmd.Flags().GetString("templateDir")
 		templateDir = os.ExpandEnv(templateDir)

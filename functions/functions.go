@@ -86,6 +86,8 @@ var fmap = map[string]interface{}{
 	"sub":          func(a, b int) int { return a - b },
 	"max":          math.Max,
 	"min":          math.Min,
+	"minint":       Minint,
+	"maxint":       Maxint,
 	"mod":          func(a, b int) int { return a % b },
 	"mul":          func(a, b int) int { return a * b },
 
@@ -268,9 +270,12 @@ func RandomValueFromList(s string) string {
 func RandomNValuesFromList(s string, n int) []string {
 	list := JrContext.CtxList[s]
 	l := len(list)
-	results := make([]string, n)
 	if l != 0 {
-		//TODO
+		ints := findNDifferentInts(n, l)
+		results := make([]string, len(ints))
+		for i := range ints {
+			results[i] = list[i]
+		}
 		return results
 	} else {
 		return []string{""}
@@ -341,14 +346,6 @@ func cache(name string) (bool, error) {
 	return false, nil
 }
 
-func fileExists(filename string) bool {
-	if _, err := os.Stat(filename); err == nil {
-		return true
-	} else {
-		return false
-	}
-}
-
 func ExtractMetaFrom(outTemplate string) (string, string) {
 	start := strings.LastIndex(outTemplate, "_meta")
 	if start == -1 {
@@ -358,4 +355,56 @@ func ExtractMetaFrom(outTemplate string) (string, string) {
 	meta := outTemplate[start+7 : end+1]
 	tpl := outTemplate[0:start-1] + outTemplate[end+2:]
 	return meta, tpl
+}
+
+// Minint returns the minimum between two ints
+func Minint(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
+}
+
+// Maxint returns the minimum between two ints
+func Maxint(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
+}
+
+func fileExists(filename string) bool {
+	if _, err := os.Stat(filename); err == nil {
+		return true
+	} else {
+		return false
+	}
+}
+
+// Helper function to generate n different integers from 0 to length
+func findNDifferentInts(n, max int) []int {
+
+	n = Minint(n, max)
+	ints := make([]int, n)
+
+	// Generate n different random indices of maximum length
+	for i := 0; i < n; {
+		index := Random.Intn(max)
+		if !contains(ints, index) {
+			ints[i] = index
+			i++
+		}
+	}
+
+	return ints
+}
+
+// Helper function to check if an int is in a slice of ints
+func contains(values []int, value int) bool {
+	for _, v := range values {
+		if v == value {
+			return true
+		}
+	}
+	return false
 }

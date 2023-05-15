@@ -101,7 +101,7 @@ func init() {
 		Ctx:              make(map[string]string),
 		CtxList:          make(map[string][]string),
 		LastIndex:        -1,
-		CountryIndex:     -1,
+		CountryIndex:     232,
 		CityIndex:        -1,
 	}
 }

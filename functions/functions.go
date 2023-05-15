@@ -190,32 +190,21 @@ var fmap = map[string]interface{}{
 	"set_v":                func(s string, v string) string { JrContext.Ctx[s] = v; return "" },
 }
 
-func initialize(filename string) []string {
-	file, err := os.Open(filename)
-	if err != nil {
-		log.Printf("Failed to open file: %s", err)
-	}
-	defer func(file *os.File) {
-		err := file.Close()
-		if err != nil {
-			log.Printf("Error in closing file: %s", err)
-		}
-	}(file)
-
-	var words []string
-	scanner := bufio.NewScanner(file)
-
-	for scanner.Scan() {
-		words = append(words, scanner.Text())
-	}
-
-	return words
-}
-
 // AddValueToList adds value v to Context list l
 func AddValueToList(l string, v string) string {
 	JrContext.CtxList[l] = append(JrContext.CtxList[l], v)
 	return ""
+}
+
+func ExtractMetaFrom(outTemplate string) (string, string) {
+	start := strings.LastIndex(outTemplate, "_meta")
+	if start == -1 {
+		return "", outTemplate
+	}
+	end := strings.Index(outTemplate, "},")
+	meta := outTemplate[start+7 : end+1]
+	tpl := outTemplate[0:start-1] + outTemplate[end+2:]
+	return meta, tpl
 }
 
 // IndexOf returns the index of the s string in a file
@@ -326,17 +315,6 @@ func WordShuffleN(name string, n int) []string {
 	return words[:n]
 }
 
-func ExtractMetaFrom(outTemplate string) (string, string) {
-	start := strings.LastIndex(outTemplate, "_meta")
-	if start == -1 {
-		return "", outTemplate
-	}
-	end := strings.Index(outTemplate, "},")
-	meta := outTemplate[start+7 : end+1]
-	tpl := outTemplate[0:start-1] + outTemplate[end+2:]
-	return meta, tpl
-}
-
 // Minint returns the minimum between two ints
 func Minint(a, b int) int {
 	if a < b {
@@ -407,4 +385,26 @@ func contains(values []int, value int) bool {
 		}
 	}
 	return false
+}
+
+func initialize(filename string) []string {
+	file, err := os.Open(filename)
+	if err != nil {
+		log.Printf("Failed to open file: %s", err)
+	}
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+			log.Printf("Error in closing file: %s", err)
+		}
+	}(file)
+
+	var words []string
+	scanner := bufio.NewScanner(file)
+
+	for scanner.Scan() {
+		words = append(words, scanner.Text())
+	}
+
+	return words
 }

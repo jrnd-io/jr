@@ -44,24 +44,6 @@ type Producer interface {
 	Produce(k []byte, v []byte)
 }
 
-/*
-type MetaData struct {
-	Name          string             `json:"name"`
-	Topic         string             `json:"topic"`
-	Key           string             `json:"key"`
-	AutoCreate    bool               `json:"autocreate"`
-	Schema        string             `json:"schema"`
-	Relationships []RelationshipMeta `json:"relationships,omitempty"`
-}
-
-type RelationshipMeta struct {
-	Name        string `json:"name"`
-	ParentField string `json:"parent_field"`
-	ChildField  string `json:"child_field"`
-	RecordsPer  int    `json:"records_per"`
-}
-*/
-
 var runCmd = &cobra.Command{
 	Use:   "run [template]",
 	Short: "Execute a template",
@@ -152,31 +134,6 @@ jr run --templateFileName ~/.jr/templates/net_device.tpl
 				log.Fatal(err)
 			}
 		}
-		/*
-			meta := make([]*MetaData, len(args))
-			metaT := make([]*template.Template, len(args))
-			for i := range args {
-
-				m, v := functions.ExtractMetaFrom(string(valueTemplate[i]))
-				metaT[i], err = template.New("value").Funcs(functions.FunctionsMap()).Parse(m)
-				var buffer bytes.Buffer
-				err := metaT[i].Execute(&buffer, functions.JrContext)
-				if err != nil {
-					log.Println(err)
-				}
-
-				if m != "" {
-					err = json.Unmarshal(buffer.Bytes(), &meta[i])
-					if err != nil {
-						log.Fatal(err)
-					}
-				}
-				value[i], err = template.New("value").Funcs(functions.FunctionsMap()).Parse(v)
-				if err != nil {
-					log.Fatal(err)
-				}
-			}
-		*/
 
 		producer := make([]Producer, len(args))
 
@@ -211,14 +168,8 @@ jr run --templateFileName ~/.jr/templates/net_device.tpl
 			log.Fatal("Not yet implemented")
 		}
 
-		functions.Random.Seed(seed)
-		functions.JrContext.Num = num
-		functions.JrContext.Range = make([]int, num)
-		functions.JrContext.Frequency = frequency
-		functions.JrContext.Locale = strings.ToLower(locale)
-		functions.JrContext.Seed = seed
-		functions.JrContext.TemplateDir = templateDir
-		functions.JrContext.CountryIndex = functions.IndexOf(strings.ToUpper(locale), "country")
+		configureJrContext(seed, num, frequency, locale, templateDir)
+		orderedParsedTemplates := orderValueTemplates(value, args)
 
 		infinite := true
 		if duration > 0 {
@@ -231,15 +182,6 @@ jr run --templateFileName ~/.jr/templates/net_device.tpl
 		}
 		ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
 		defer stop()
-
-		parsedTemplates := make([]*template.Template, len(args))
-		orderedParsedTemplates := make([]*template.Template, len(args))
-		copy(parsedTemplates, value.Templates())
-
-		for i := range args {
-			index, _ := strconv.Atoi(parsedTemplates[i].Name())
-			orderedParsedTemplates[index] = parsedTemplates[i]
-		}
 
 		if frequency != -1 {
 		Infinite:
@@ -268,6 +210,29 @@ jr run --templateFileName ~/.jr/templates/net_device.tpl
 		writeStats()
 
 	},
+}
+
+func orderValueTemplates(valueTemplate *template.Template, templateNames []string) []*template.Template {
+	parsedTemplates := make([]*template.Template, len(templateNames))
+	orderedParsedTemplates := make([]*template.Template, len(templateNames))
+	copy(parsedTemplates, valueTemplate.Templates())
+
+	for i := range templateNames {
+		index, _ := strconv.Atoi(parsedTemplates[i].Name())
+		orderedParsedTemplates[index] = parsedTemplates[i]
+	}
+	return orderedParsedTemplates
+}
+
+func configureJrContext(seed int64, num int, frequency time.Duration, locale string, templateDir string) {
+	functions.Random.Seed(seed)
+	functions.JrContext.Num = num
+	functions.JrContext.Range = make([]int, num)
+	functions.JrContext.Frequency = frequency
+	functions.JrContext.Locale = strings.ToLower(locale)
+	functions.JrContext.Seed = seed
+	functions.JrContext.TemplateDir = templateDir
+	functions.JrContext.CountryIndex = functions.IndexOf(strings.ToUpper(locale), "country")
 }
 
 func generatorLoop(key *template.Template, value *template.Template, oneline bool, producer Producer) {

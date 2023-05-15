@@ -105,7 +105,7 @@ func printFunction(name string) (functions.FunctionDescription, bool) {
 func init() {
 	rootCmd.AddCommand(manCmd)
 	manCmd.Flags().BoolP("list", "l", false, "Show all functions")
-	manCmd.Flags().BoolP("category", "c", false, "Search in category")
-	manCmd.Flags().BoolP("find", "f", false, "Search in description and name")
+	manCmd.Flags().BoolP("category", "c", false, "IndexOf in category")
+	manCmd.Flags().BoolP("find", "f", false, "IndexOf in description and name")
 	manCmd.Flags().BoolP("run", "r", false, "Run the example")
 }

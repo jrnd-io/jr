@@ -29,6 +29,7 @@ import (
 	"math"
 	"math/rand"
 	"os"
+	"sort"
 	"strconv"
 	"strings"
 	"text/template"
@@ -172,6 +173,7 @@ var fmap = map[string]interface{}{
 	"bool":     RandomBool,
 	"image":    Image,
 	"image_of": ImageOf,
+	"index_of": IndexOf,
 	"key":      func(name string, n int) string { return fmt.Sprintf("%s%d", name, Random.Intn(n)) },
 	"seed":     func(rndSeed int64) string { Random.Seed(rndSeed); return "" },
 	"uuid":     UniqueId,
@@ -211,6 +213,22 @@ func initialize(filename string) []string {
 func AddValueToList(l string, v string) string {
 	JrContext.CtxList[l] = append(JrContext.CtxList[l], v)
 	return ""
+}
+
+// IndexOf returns the index of the s string in a file
+func IndexOf(s string, name string) int {
+	_, err := cache(name)
+	if err != nil {
+		return -1
+	}
+	words := data[name]
+	index := sort.Search(len(words), func(i int) bool { return strings.ToLower(words[i]) >= strings.ToLower(s) })
+
+	if index < len(words) && words[index] == s {
+		return index
+	} else {
+		return -1
+	}
 }
 
 // Len returns number of words (lines) in a word file

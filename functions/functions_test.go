@@ -64,12 +64,12 @@ func TestMin(t *testing.T) {
 
 func TestUSState(t *testing.T) {
 
-	hawaii := "{{seed 0}}{{capital_at 10}} {{state_at 10}} {{state_short_at 10}} {{zip_at 10}}"
-	massachussets := `{{capital_at 20}} {{state_at 20}} {{state_short_at 20}} {{zip_at 20}}`
-	newyork := `{{capital_at 31}} {{state_at 31}} {{state_short_at 31}} {{zip_at 31}}`
-	texas := `{{capital_at 42}} {{state_at 42}} {{state_short_at 42}} {{zip_at 42}}`
-	virginia := `{{capital_at 45}} {{state_at 45}} {{state_short_at 45}} {{zip_at 45}}`
-	wyoming := `{{capital_at 49}} {{state_at 49}} {{state_short_at 49}} {{zip_at 49}}`
+	hawaii := "{{seed 0}}{{capital_at 22}} {{state_at 10}} {{state_short_at 10}} {{zip_at 10}}"
+	massachussets := `{{capital_at 8}} {{state_at 20}} {{state_short_at 20}} {{zip_at 20}}`
+	newyork := `{{capital_at 0}} {{state_at 31}} {{state_short_at 31}} {{zip_at 31}}`
+	texas := `{{capital_at 4}} {{state_at 42}} {{state_short_at 42}} {{zip_at 42}}`
+	virginia := `{{capital_at 40}} {{state_at 45}} {{state_short_at 45}} {{zip_at 45}}`
+	wyoming := `{{capital_at 11}} {{state_at 49}} {{state_short_at 49}} {{zip_at 49}}`
 	if err := runt(hawaii, "Honolulu Hawaii HI 96813"); err != nil {
 		t.Error(err)
 	}
@@ -110,7 +110,7 @@ func TestCache(t *testing.T) {
 func TestFrom(t *testing.T) {
 
 	tpl := `{{seed 0}}{{from "actor"}}`
-	if err := runt(tpl, "Julie Andrews"); err != nil {
+	if err := runt(tpl, "Sean Connery"); err != nil {
 		t.Error(err)
 	}
 	tpl = `{{from "actors"}}`

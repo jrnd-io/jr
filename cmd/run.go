@@ -358,8 +358,11 @@ func init() {
 	runCmd.Flags().Bool("templateFileName", false, "If enabled, [template] must be a template file")
 	runCmd.Flags().Bool("template", false, "If enabled, [template] must be a string containing a template, to be embedded directly in the script")
 
+	runCmd.Flags().StringSliceP("preload", "p", []string{""}, "Array of templates to preload")
+	runCmd.Flags().IntSlice("preloadSize", []int{}, "Array of template sizes to preload")
+
 	runCmd.Flags().StringP("key", "k", "key", "A template to generate a key")
-	runCmd.Flags().StringSliceP("topic", "t", []string{"test"}, "Kafka topic name")
+	runCmd.Flags().StringSliceP("topic", "t", []string{"test"}, "Array of Kafka topic names")
 
 	runCmd.Flags().Bool("kcat", false, "If you want to pipe jr with kcat, use this flag: it is equivalent to --output stdout --outputTemplate '{{key}},{{value}}' --oneline")
 	runCmd.Flags().StringP("output", "o", "stdout", "can be one of stdout, kafka, redis, mongo")

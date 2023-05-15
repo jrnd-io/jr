@@ -326,26 +326,6 @@ func WordShuffleN(name string, n int) []string {
 	return words[:n]
 }
 
-// cache is used to internally cache data from word files
-func cache(name string) (bool, error) {
-
-	v := data[name]
-	if v == nil {
-		locale := JrContext.Locale
-		filename := fmt.Sprintf("%s/data/%s/%s", JrContext.TemplateDir, locale, name)
-		if locale != "us" && !(fileExists(filename)) {
-			filename = fmt.Sprintf("%s/data/%s/%s", JrContext.TemplateDir, "US", name)
-		}
-		data[name] = initialize(filename)
-		if len(data[name]) == 0 {
-			return false, fmt.Errorf("no words found in %s", filename)
-		} else {
-			return true, nil
-		}
-	}
-	return false, nil
-}
-
 func ExtractMetaFrom(outTemplate string) (string, string) {
 	start := strings.LastIndex(outTemplate, "_meta")
 	if start == -1 {
@@ -371,6 +351,26 @@ func Maxint(a, b int) int {
 		return a
 	}
 	return b
+}
+
+// cache is used to internally cache data from word files
+func cache(name string) (bool, error) {
+
+	v := data[name]
+	if v == nil {
+		locale := JrContext.Locale
+		filename := fmt.Sprintf("%s/data/%s/%s", JrContext.TemplateDir, locale, name)
+		if locale != "us" && !(fileExists(filename)) {
+			filename = fmt.Sprintf("%s/data/%s/%s", JrContext.TemplateDir, "US", name)
+		}
+		data[name] = initialize(filename)
+		if len(data[name]) == 0 {
+			return false, fmt.Errorf("no words found in %s", filename)
+		} else {
+			return true, nil
+		}
+	}
+	return false, nil
 }
 
 func fileExists(filename string) bool {

@@ -29,7 +29,6 @@ import (
 	"strings"
 )
 
-// showCmd represents the show command
 var showCmd = &cobra.Command{
 	Use:   "show [template]",
 	Short: "Show a template",

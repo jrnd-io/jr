@@ -28,7 +28,6 @@ import (
 const DEFAULT_PARTITIONS = 6
 const DEFAULT_REPLICA = 3
 
-// createTopicCmd represents the createTopic command
 var createTopicCmd = &cobra.Command{
 	Use:   "createTopic [topic]",
 	Short: "simple command to create a Kafka Topic",

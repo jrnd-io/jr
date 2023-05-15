@@ -29,7 +29,6 @@ import (
 	"strings"
 )
 
-// manCmd represents the man command
 var manCmd = &cobra.Command{
 	Use:   "man [function]",
 	Short: "describes an available function",

@@ -3,6 +3,44 @@
  * SOURCES:
  *     NetDevice.avsc
  *     User.avsc
+ *     campaign_finance.avsc
+ *     clickstream.avsc
+ *     clickstream_codes.avsc
+ *     clickstream_users.avsc
+ *     credit_cards.avsc
+ *     device_information.avsc
+ *     fleet_mgmt_description.avsc
+ *     fleet_mgmt_location.avsc
+ *     fleet_mgmt_sensors.avsc
+ *     gaming_games.avsc
+ *     gaming_player_activity.avsc
+ *     gaming_players.avsc
+ *     insurance_customer_activity.avsc
+ *     insurance_customers.avsc
+ *     insurance_offers.avsc
+ *     inventory.avsc
+ *     map_dumb_schema.avsc
+ *     orders.avsc
+ *     pageviews.avsc
+ *     payroll_bonus.avsc
+ *     payroll_employee.avsc
+ *     payroll_employee_location.avsc
+ *     pizza_orders.avsc
+ *     pizza_orders_cancelled.avsc
+ *     pizza_orders_completed.avsc
+ *     product.avsc
+ *     purchase.avsc
+ *     ratings.avsc
+ *     shoe_clickstream.avsc
+ *     shoe_customers.avsc
+ *     shoe_orders.avsc
+ *     shoes_product.avsc
+ *     siem_logs.avsc
+ *     stockTrades.avsc
+ *     stores.avsc
+ *     syslog_logs.avsc
+ *     transactions.avsc
+ *     users.avsc
  */
 package types
 

@@ -5,13 +5,14 @@ package main
 import (
 	"bytes"
 	"go/format"
-	"golang.org/x/text/cases"
-	"golang.org/x/text/language"
 	"log"
 	"os"
 	"path/filepath"
 	"strings"
 	"text/template"
+
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 func main() {
@@ -30,8 +31,8 @@ func main() {
 		package {{.Package}}
 
 		{{range .TypesList}}
-		var {{.}} {{camel .}}{{end}}
-
+		var {{.}} {{camel .}}
+		{{end}} 
         //gocyclo:ignore
 		func GetType(templateType string) interface{} {
 
@@ -45,9 +46,16 @@ func main() {
 
 	var typesList []string
 	err = filepath.Walk(cwd, func(path string, info os.FileInfo, err error) error {
-		if !info.IsDir() && isAGoFile(path) && !isAGenerateFile(path) {
+		if !info.IsDir() && isAGoFile(path) && !isAGenerateFile(path) {			
 			name := strings.Split(filepath.Base(path), ".")
-			typesList = append(typesList, name[0])
+
+			if(! (strings.HasPrefix(name[0], "array_") || strings.HasPrefix(name[0], "map_")) ){
+				typesList = append(typesList, name[0])
+			}else{
+				//The naming convention for generated code for Array in gogen-avro is: Array<filename>Wrapper we use Array_<filename>_Wrapper because we use {{camel .}} later in the template
+				typesList = append(typesList, name[0]+ "_wrapper")
+			}
+
 		}
 		return nil
 	})

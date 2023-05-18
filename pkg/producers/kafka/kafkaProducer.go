@@ -120,6 +120,10 @@ func (k *KafkaManager) Produce(key []byte, data []byte) {
 		}
 	}
 
+	if strings.ToLower(string(key)) == "null" {
+		key = nil
+	}
+
 	err := k.producer.Produce(&kafka.Message{
 		TopicPartition: kafka.TopicPartition{Topic: &k.Topic, Partition: kafka.PartitionAny},
 		Key:            key,

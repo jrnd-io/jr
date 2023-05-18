@@ -44,6 +44,7 @@ type Producer interface {
 func DoTemplates(conf Configuration) {
 
 	valueTemplate := make([][]byte, len(conf.TemplateNames))
+	preloadTemplate := make([][]byte, len(conf.Preload))
 
 	var err error
 
@@ -63,6 +64,13 @@ func DoTemplates(conf Configuration) {
 		}
 		JrContext.NumTemplates = len(conf.TemplateNames)
 	}
+
+	for i := range conf.Preload {
+		templatePath := fmt.Sprintf("%s/%s.tpl", conf.TemplateDir, conf.Preload[i])
+		preloadTemplate[i], err = os.ReadFile(templatePath)
+		JrContext.TemplateType[i] = conf.TemplateNames[i]
+	}
+
 	if err != nil {
 		log.Fatal(err)
 	}

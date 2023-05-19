@@ -23,12 +23,13 @@ package cmd
 import (
 	"bytes"
 	"fmt"
-	"github.com/spf13/cobra"
-	"github.com/ugol/jr/pkg/functions"
 	"os"
 	"path/filepath"
 	"strings"
 	"text/template"
+
+	"github.com/spf13/cobra"
+	"github.com/ugol/jr/pkg/functions"
 )
 
 var listCmd = &cobra.Command{
@@ -104,6 +105,6 @@ func isValidTemplate(t []byte) (bool, error) {
 
 func init() {
 	rootCmd.AddCommand(listCmd)
-	listCmd.Flags().String("templateDir", TEMPLATEDIR, "directory containing templates")
+	listCmd.Flags().String("templateDir", functions.TEMPLATEDIR, "directory containing templates")
 	listCmd.Flags().BoolP("fullPath", "f", false, "Print full path")
 }

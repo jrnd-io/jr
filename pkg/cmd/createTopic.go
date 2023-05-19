@@ -22,11 +22,9 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
+	"github.com/ugol/jr/pkg/functions"
 	"github.com/ugol/jr/pkg/producers/kafka"
 )
-
-const DEFAULT_PARTITIONS = 6
-const DEFAULT_REPLICA = 3
 
 var createTopicCmd = &cobra.Command{
 	Use:   "createTopic [topic]",
@@ -47,7 +45,7 @@ var createTopicCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(createTopicCmd)
-	createTopicCmd.Flags().IntP("partitions", "p", DEFAULT_PARTITIONS, "Number of partitions")
-	createTopicCmd.Flags().IntP("replica", "r", DEFAULT_REPLICA, "Replica Factor")
-	createTopicCmd.Flags().StringP("kafkaConfig", "F", KAFKA_CONFIG, "Kafka configuration")
+	createTopicCmd.Flags().IntP("partitions", "p", functions.DEFAULT_PARTITIONS, "Number of partitions")
+	createTopicCmd.Flags().IntP("replica", "r", functions.DEFAULT_REPLICA, "Replica Factor")
+	createTopicCmd.Flags().StringP("kafkaConfig", "F", functions.KAFKA_CONFIG, "Kafka configuration")
 }

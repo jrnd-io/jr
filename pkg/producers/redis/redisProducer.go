@@ -3,10 +3,11 @@ package redis
 import (
 	"context"
 	"encoding/json"
-	"github.com/redis/go-redis/v9"
 	"log"
 	"os"
 	"time"
+
+	"github.com/redis/go-redis/v9"
 )
 
 type RedisProducer struct {
@@ -37,7 +38,7 @@ func (p *RedisProducer) Close() {
 	}
 }
 
-func (p *RedisProducer) Produce(k []byte, v []byte) {
+func (p *RedisProducer) Produce(k []byte, v []byte, o interface{}) {
 	ctx := context.Background()
 	err := p.client.Set(ctx, string(k), string(v), p.Ttl).Err()
 	if err != nil {

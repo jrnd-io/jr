@@ -24,16 +24,17 @@ import (
 	"bufio"
 	"context"
 	"encoding/json"
+	"log"
+	"os"
+	"strings"
+	"time"
+
 	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
 	"github.com/confluentinc/confluent-kafka-go/v2/schemaregistry"
 	"github.com/confluentinc/confluent-kafka-go/v2/schemaregistry/serde"
 	"github.com/confluentinc/confluent-kafka-go/v2/schemaregistry/serde/avro"
 	"github.com/confluentinc/confluent-kafka-go/v2/schemaregistry/serde/jsonschema"
 	"github.com/ugol/jr/pkg/types"
-	"log"
-	"os"
-	"strings"
-	"time"
 )
 
 type KafkaManager struct {
@@ -82,7 +83,7 @@ func (k *KafkaManager) Close() {
 	k.producer.Close()
 }
 
-func (k *KafkaManager) Produce(key []byte, data []byte) {
+func (k *KafkaManager) Produce(key []byte, data []byte, o interface{}) {
 
 	go listenToEventsFrom(k.producer)
 

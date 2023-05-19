@@ -5,24 +5,24 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"text/template"
+	"time"
 
 	"github.com/gorilla/mux"
 	"github.com/spf13/cobra"
-	"github.com/ugol/jr/functions"
+	"github.com/ugol/jr/pkg/functions"
 )
 
-type Configuration struct {
-	URL           string `json:"url"`
-	Template      string `json:"template"`
-	Key           string `json:"key"`
-	TemplateDir   string `json:"templatedir"`
-	Num           int    `json:"num"`
-	valueTemplate *template.Template
-	keyTemplate   *template.Template
+type JsonConfig struct {
+	URL         string `json:"url"`
+	Template    string `json:"template"`
+	Key         string `json:"key"`
+	TemplateDir string `json:"templatedir"`
+	Locale      string `json:"locale"`
+	Num         int    `json:"num"`
 }
 
-var savedConfigurations map[string]Configuration
+var savedConfigurations map[string]functions.Configuration
+var outputTemplate = "{{.K}},{{.V}}\n"
 
 var serverCmd = &cobra.Command{
 	Use:   "server",
@@ -37,7 +37,7 @@ var serverCmd = &cobra.Command{
 	You can do multiple configurations using different URLs and different templates`,
 	Run: func(cmd *cobra.Command, args []string) {
 		//initialise the global map for configurations
-		savedConfigurations = make(map[string]Configuration)
+		savedConfigurations = make(map[string]functions.Configuration)
 		port, err := cmd.Flags().GetInt("port")
 		if err != nil {
 			log.Fatal(err)
@@ -56,39 +56,51 @@ var serverCmd = &cobra.Command{
 
 func handleConfiguration(w http.ResponseWriter, r *http.Request) {
 	// Parse request body
-	var configuration Configuration
-	err := json.NewDecoder(r.Body).Decode(&configuration)
+	var jsonconf JsonConfig
+
+	err := json.NewDecoder(r.Body).Decode(&jsonconf)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
-	if configuration.Key == "" {
-		configuration.Key = "key"
+	if jsonconf.Key == "" {
+		jsonconf.Key = "key"
 	}
 
-	if configuration.TemplateDir == "" {
-		configuration.TemplateDir = functions.JrContext.TemplateDir
+	if jsonconf.TemplateDir == "" {
+		jsonconf.TemplateDir = functions.JrContext.TemplateDir
 	}
 
-	configuration.keyTemplate, err = template.New("key").Funcs(functions.FunctionsMap()).Parse(configuration.Key)
-	if err != nil {
-		log.Println(err.Error())
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
+	if jsonconf.Locale == "" {
+		jsonconf.Locale = functions.LOCALE
 	}
 
-	configuration.valueTemplate, err = template.New("value").Funcs(functions.FunctionsMap()).Parse(string(configuration.Template))
-	if err != nil {
-		log.Println(err.Error())
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
+	if jsonconf.Num == 0 {
+		jsonconf.Num = 1
 	}
 
+	conf := functions.Configuration{
+		TemplateNames:  []string{jsonconf.Template},
+		KeyTemplate:    jsonconf.Key,
+		OutputTemplate: outputTemplate,
+		Output:         "http",
+		Oneline:        true,
+		Locale:         jsonconf.Locale,
+		Num:            jsonconf.Num,
+		Frequency:      -1,
+		Duration:       0,
+		Seed:           time.Now().UTC().UnixNano(),
+		TemplateDir:    jsonconf.TemplateDir,
+		Autocreate:     false,
+		SchemaRegistry: false,
+		Serializer:     functions.DEFAULT_SERIALIZER,
+		Url:            jsonconf.URL,
+	}
 	// Save Configuration in the global map to handle it later
-	savedConfigurations[configuration.URL] = configuration
+	savedConfigurations[jsonconf.URL] = conf
 	// Respond with success message
-	response := fmt.Sprintf("Configuration %s saved successfully", configuration.URL)
+	response := fmt.Sprintf("Configuration %s saved successfully", jsonconf.URL)
 	w.Write([]byte(response))
 }
 
@@ -96,15 +108,10 @@ func handleData(w http.ResponseWriter, r *http.Request) {
 	// Get the URL parameter from the request
 	vars := mux.Vars(r)
 	url := vars["URL"]
-	configuration := savedConfigurations[url]
+	configuration, ok := savedConfigurations[url]
 
-	if configuration != (Configuration{}) {
-		for i := 0; i < configuration.Num; i++ {
-			k, v, _ := functions.ExecuteTemplate(configuration.keyTemplate, configuration.valueTemplate, true)
-			log.Printf("key %s value %s", k, v)
-			w.Write([]byte(k))
-			w.Write([]byte(v))
-		}
+	if ok {
+		functions.DoTemplates(configuration, &w)
 	} else {
 		w.WriteHeader(http.StatusNotFound)
 	}

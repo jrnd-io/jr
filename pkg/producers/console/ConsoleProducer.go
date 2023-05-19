@@ -35,7 +35,7 @@ func (c *ConsoleProducer) Close() {
 	// no need to close
 }
 
-func (c *ConsoleProducer) Produce(key []byte, value []byte) {
+func (c *ConsoleProducer) Produce(key []byte, value []byte, o interface{}) {
 	var outBuffer bytes.Buffer
 	var err error
 

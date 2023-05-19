@@ -2,7 +2,7 @@ package server
 
 import (
 	"bytes"
-	"fmt"
+	"encoding/json"
 	"log"
 	"net/http"
 	"text/template"
@@ -28,9 +28,14 @@ func (c *JsonProducer) Produce(key []byte, value []byte, o interface{}) {
 	if err = c.OutTemplate.Execute(&outBuffer, data); err != nil {
 		log.Println(err)
 	}
+
+	out, err := json.Marshal(outBuffer.String())
+	if err != nil {
+		log.Print(err.Error())
+	}
 	if o != nil {
 		respWriter := o.(*http.ResponseWriter)
-		(*respWriter).Write(outBuffer.Bytes())
+		(*respWriter).Write(out)
 	}
-	fmt.Print(outBuffer.String())
+
 }

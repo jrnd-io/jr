@@ -22,7 +22,7 @@ type JsonConfig struct {
 }
 
 var savedConfigurations map[string]functions.Configuration
-var outputTemplate = "{{.K}},{{.V}}\n"
+var outputTemplate = "{{.K}},{{.V}}"
 
 var serverCmd = &cobra.Command{
 	Use:   "server",
@@ -65,7 +65,7 @@ func handleConfiguration(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if jsonconf.Key == "" {
-		jsonconf.Key = "key"
+		jsonconf.Key = functions.DEFAULT_KEY
 	}
 
 	if jsonconf.TemplateDir == "" {

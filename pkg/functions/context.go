@@ -62,46 +62,48 @@ type Configuration struct {
 
 // Context is the object passed on the templates which contains all the needed details.
 type Context struct {
-	StartTime        time.Time
-	TemplateDir      string
-	TemplateType     []string
-	GeneratedObjects int64
-	GeneratedBytes   int64
-	Num              int
-	NumTemplates     int
-	Range            []int
-	Frequency        time.Duration
-	Duration         time.Duration
-	Locale           string
-	Seed             int64
-	CtxCounters      map[string]int
-	Ctx              map[string]string
-	CtxList          map[string][]string
-	LastIndex        int
-	CountryIndex     int
-	CityIndex        int
+	StartTime           time.Time
+	TemplateDir         string
+	TemplateType        []string
+	PreloadTemplateType []string
+	GeneratedObjects    int64
+	GeneratedBytes      int64
+	Num                 int
+	NumTemplates        int
+	Range               []int
+	Frequency           time.Duration
+	Duration            time.Duration
+	Locale              string
+	Seed                int64
+	CtxCounters         map[string]int
+	Ctx                 map[string]string
+	CtxList             map[string][]string
+	LastIndex           int
+	CountryIndex        int
+	CityIndex           int
 }
 
 func init() {
 
 	JrContext = Context{
-		StartTime:        time.Now(),
-		TemplateDir:      os.ExpandEnv(TEMPLATEDIR),
-		TemplateType:     make([]string, NUM_TEMPLATES),
-		GeneratedBytes:   0,
-		GeneratedObjects: 0,
-		Num:              NUM,
-		NumTemplates:     NUM_TEMPLATES,
-		Range:            make([]int, NUM),
-		Frequency:        FREQUENCY,
-		Duration:         DURATION,
-		Locale:           "us",
-		Seed:             time.Now().UTC().UnixNano(),
-		CtxCounters:      make(map[string]int),
-		Ctx:              make(map[string]string),
-		CtxList:          make(map[string][]string),
-		LastIndex:        -1,
-		CountryIndex:     232,
-		CityIndex:        -1,
+		StartTime:           time.Now(),
+		TemplateDir:         os.ExpandEnv(TEMPLATEDIR),
+		TemplateType:        make([]string, NUM_TEMPLATES),
+		PreloadTemplateType: make([]string, NUM_TEMPLATES),
+		GeneratedBytes:      0,
+		GeneratedObjects:    0,
+		Num:                 NUM,
+		NumTemplates:        NUM_TEMPLATES,
+		Range:               make([]int, NUM),
+		Frequency:           FREQUENCY,
+		Duration:            DURATION,
+		Locale:              "us",
+		Seed:                time.Now().UTC().UnixNano(),
+		CtxCounters:         make(map[string]int),
+		Ctx:                 make(map[string]string),
+		CtxList:             make(map[string][]string),
+		LastIndex:           -1,
+		CountryIndex:        232,
+		CityIndex:           -1,
 	}
 }

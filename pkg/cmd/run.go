@@ -36,6 +36,7 @@ const TEMPLATEDIR = "$HOME/.jr/templates"
 const DEFAULT_KEY = "null"
 const DEFAULT_OUTPUT = "stdout"
 const DEFAULT_OUTPUT_TEMPLATE = "{{.V}}\n"
+const DEFAULT_OUTPUT_KCAT_TEMPLATE = "{{.K}},{{.V}}\n"
 const DEFAULT_SERIALIZER = "json-schema"
 const KAFKA_CONFIG = "./kafka/config.properties"
 const REGISTRY_CONFIG = "./kafka/registry.properties"
@@ -88,7 +89,7 @@ jr run --templateFileName ~/.jr/templates/net_device.tpl
 		if kcat {
 			oneline = true
 			output = "stdout"
-			outputTemplate = "{{.K}},{{.V}}\n"
+			outputTemplate = DEFAULT_OUTPUT_KCAT_TEMPLATE
 		}
 
 		conf := functions.Configuration{

@@ -68,7 +68,7 @@ func DoTemplates(conf Configuration) {
 	for i := range conf.Preload {
 		templatePath := fmt.Sprintf("%s/%s.tpl", conf.TemplateDir, conf.Preload[i])
 		preloadTemplate[i], err = os.ReadFile(templatePath)
-		JrContext.TemplateType[i] = conf.TemplateNames[i]
+		JrContext.PreloadTemplateType[i] = conf.Preload[i]
 	}
 
 	if err != nil {

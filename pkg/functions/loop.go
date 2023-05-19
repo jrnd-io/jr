@@ -24,24 +24,29 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"github.com/ugol/jr/pkg/producers/console"
-	"github.com/ugol/jr/pkg/producers/kafka"
-	"github.com/ugol/jr/pkg/producers/redis"
 	"log"
 	"os"
 	"os/signal"
 	"regexp"
 	"strconv"
+	"strings"
 	"text/template"
 	"time"
+
+	"github.com/ugol/jr/pkg/producers/console"
+	"github.com/ugol/jr/pkg/producers/kafka"
+	"github.com/ugol/jr/pkg/producers/redis"
+	"github.com/ugol/jr/pkg/producers/server"
 )
 
 type Producer interface {
 	Close()
-	Produce(k []byte, v []byte)
+	Produce(k []byte, v []byte, o interface{})
 }
 
-func DoTemplates(conf Configuration) {
+func DoTemplates(conf Configuration, options interface{}) {
+
+	configureJrContext(conf)
 
 	valueTemplate := make([][]byte, len(conf.TemplateNames))
 	preloadTemplate := make([][]byte, len(conf.Preload))
@@ -120,6 +125,12 @@ func DoTemplates(conf Configuration) {
 		}
 	}
 
+	if conf.Output == "http" {
+		for i := range conf.TemplateNames {
+			producer[i] = &server.JsonProducer{OutTemplate: outTemplate}
+		}
+	}
+
 	if conf.Output == "mongo" {
 		log.Fatal("Not yet implemented")
 	}
@@ -144,7 +155,7 @@ func DoTemplates(conf Configuration) {
 			select {
 			case <-time.After(conf.Frequency):
 				for i := range conf.TemplateNames {
-					generatorLoop(key, orderedParsedTemplates[i], conf.Oneline, producer[i])
+					generatorLoop(key, orderedParsedTemplates[i], conf.Oneline, producer[i], options)
 				}
 			case <-ctx.Done():
 				stop()
@@ -153,7 +164,7 @@ func DoTemplates(conf Configuration) {
 		}
 	} else {
 		for i := range conf.TemplateNames {
-			generatorLoop(key, orderedParsedTemplates[i], conf.Oneline, producer[i])
+			generatorLoop(key, orderedParsedTemplates[i], conf.Oneline, producer[i], options)
 		}
 	}
 
@@ -181,10 +192,10 @@ func orderValueTemplates(valueTemplate *template.Template, templateNames []strin
 	return orderedParsedTemplates
 }
 
-func generatorLoop(key *template.Template, value *template.Template, oneline bool, producer Producer) {
+func generatorLoop(key *template.Template, value *template.Template, oneline bool, producer Producer, options interface{}) {
 	for range JrContext.Range {
 		k, v, _ := executeTemplate(key, value, oneline)
-		producer.Produce([]byte(k), []byte(v))
+		producer.Produce([]byte(k), []byte(v), options)
 	}
 }
 
@@ -255,4 +266,15 @@ func executeTemplate(key *template.Template, value *template.Template, oneline b
 	JrContext.GeneratedBytes += int64(len(v))
 
 	return k, v, err
+}
+
+func configureJrContext(conf Configuration) {
+	Random.Seed(conf.Seed)
+	JrContext.Num = conf.Num
+	JrContext.Range = make([]int, conf.Num)
+	JrContext.Frequency = conf.Frequency
+	JrContext.Locale = strings.ToLower(conf.Locale)
+	JrContext.Seed = conf.Seed
+	JrContext.TemplateDir = conf.TemplateDir
+	JrContext.CountryIndex = IndexOf(strings.ToUpper(conf.Locale), "country")
 }

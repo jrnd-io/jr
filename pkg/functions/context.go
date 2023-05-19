@@ -27,12 +27,6 @@ import (
 
 var JrContext Context
 
-const NUM = 1
-const NUM_TEMPLATES = 5
-const FREQUENCY = 0
-const DURATION = 0
-const TEMPLATEDIR = "$HOME/.jr/templates"
-
 type Configuration struct {
 	TemplateNames    []string
 	KeyTemplate      string
@@ -58,6 +52,7 @@ type Configuration struct {
 	Serializer       string
 	RedisTtl         time.Duration
 	RedisConfig      string
+	Url              string
 }
 
 // Context is the object passed on the templates which contains all the needed details.

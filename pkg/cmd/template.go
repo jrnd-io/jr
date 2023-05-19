@@ -21,31 +21,19 @@
 package cmd
 
 import (
+	"fmt"
 	"github.com/spf13/cobra"
-	"github.com/ugol/jr/pkg/functions"
-	"github.com/ugol/jr/pkg/producers/kafka"
 )
 
-var createTopicCmd = &cobra.Command{
-	Use:   "createTopic [topic]",
-	Short: "simple command to create a Kafka Topic",
-	Long:  "simple command to create a Kafka Topic",
-	Args:  cobra.ExactArgs(1),
+var templateCmd = &cobra.Command{
+	Use:   "template",
+	Short: "",
+	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		kafkaConfig, _ := cmd.Flags().GetString("kafkaConfig")
-
-		kManager := &kafka.KafkaManager{}
-		kManager.Initialize(kafkaConfig)
-		partitions, _ := cmd.Flags().GetInt("partitions")
-		replica, _ := cmd.Flags().GetInt("replica")
-		kManager.CreateTopicFull(args[0], partitions, replica)
-
+		fmt.Println("Template Command")
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(createTopicCmd)
-	createTopicCmd.Flags().IntP("partitions", "p", functions.DEFAULT_PARTITIONS, "Number of partitions")
-	createTopicCmd.Flags().IntP("replica", "r", functions.DEFAULT_REPLICA, "Replica Factor")
-	createTopicCmd.Flags().StringP("kafkaConfig", "F", functions.KAFKA_CONFIG, "Kafka configuration")
+	rootCmd.AddCommand(templateCmd)
 }

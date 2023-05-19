@@ -21,17 +21,13 @@
 package cmd
 
 import (
-	"fmt"
 	"github.com/spf13/cobra"
 )
 
 var templateCmd = &cobra.Command{
 	Use:   "template",
-	Short: "",
-	Long:  ``,
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Template Command")
-	},
+	Short: "JR Template resource",
+	Long:  `JR Template resource`,
 }
 
 func init() {

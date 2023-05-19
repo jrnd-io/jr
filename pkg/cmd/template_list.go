@@ -32,7 +32,7 @@ import (
 	"github.com/ugol/jr/pkg/functions"
 )
 
-var listCmd = &cobra.Command{
+var templateListCmd = &cobra.Command{
 	Use:   "list",
 	Short: "List all available templates",
 	Long:  `List all available templates`,
@@ -104,7 +104,7 @@ func isValidTemplate(t []byte) (bool, error) {
 }
 
 func init() {
-	templateCmd.AddCommand(listCmd)
-	listCmd.Flags().String("templateDir", functions.TEMPLATEDIR, "directory containing templates")
-	listCmd.Flags().BoolP("fullPath", "f", false, "Print full path")
+	templateCmd.AddCommand(templateListCmd)
+	templateListCmd.Flags().String("templateDir", functions.TEMPLATEDIR, "directory containing templates")
+	templateListCmd.Flags().BoolP("fullPath", "f", false, "Print full path")
 }

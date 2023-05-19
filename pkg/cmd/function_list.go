@@ -29,24 +29,18 @@ import (
 	"strings"
 )
 
-var manCmd = &cobra.Command{
-	Use:   "man [function]",
-	Short: "describes an available function",
-	Long: "describes an available function. Example usage:\n" +
-		"jr man lorem",
+var functionListCmd = &cobra.Command{
+	Use:   "list",
+	Short: "describes available functions",
+	Long: "describes available functions. Example usage:\n" +
+		"jr function list lorem",
 	Run: func(cmd *cobra.Command, args []string) {
 
-		list, _ := cmd.Flags().GetBool("list")
 		category, _ := cmd.Flags().GetBool("category")
 		find, _ := cmd.Flags().GetBool("find")
 		run, _ := cmd.Flags().GetBool("run")
 
-		if list {
-			for k := range functions.FunctionsMap() {
-				printFunction(k)
-			}
-			return
-		} else if category {
+		if category {
 			for k, v := range functions.DescriptionMap() {
 				if strings.Contains(v.Category, args[0]) {
 					printFunction(k)
@@ -73,7 +67,9 @@ var manCmd = &cobra.Command{
 				printFunction(args[0])
 			}
 		} else {
-			fmt.Println("Missing parameter and/or flags")
+			for k := range functions.FunctionsMap() {
+				printFunction(k)
+			}
 		}
 		fmt.Println()
 	},
@@ -102,9 +98,8 @@ func printFunction(name string) (functions.FunctionDescription, bool) {
 }
 
 func init() {
-	rootCmd.AddCommand(manCmd)
-	manCmd.Flags().BoolP("list", "l", false, "Show all functions")
-	manCmd.Flags().BoolP("category", "c", false, "IndexOf in category")
-	manCmd.Flags().BoolP("find", "f", false, "IndexOf in description and name")
-	manCmd.Flags().BoolP("run", "r", false, "Run the example")
+	functionCmd.AddCommand(functionListCmd)
+	functionListCmd.Flags().BoolP("category", "c", false, "IndexOf in category")
+	functionListCmd.Flags().BoolP("find", "f", false, "IndexOf in description and name")
+	functionListCmd.Flags().BoolP("run", "r", false, "Run the example")
 }

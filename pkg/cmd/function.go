@@ -24,12 +24,12 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var emitterCmd = &cobra.Command{
-	Use:   "emitter",
-	Short: "JR Emitter resource",
-	Long:  `JR Emitter resource`,
+var functionCmd = &cobra.Command{
+	Use:   "function",
+	Short: "JR Function resource",
+	Long:  `JR Function resource`,
 }
 
 func init() {
-	rootCmd.AddCommand(emitterCmd)
+	rootCmd.AddCommand(functionCmd)
 }

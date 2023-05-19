@@ -21,15 +21,26 @@
 package cmd
 
 import (
+	"fmt"
 	"github.com/spf13/cobra"
+	"github.com/ugol/jr/pkg/functions"
 )
 
-var emitterCmd = &cobra.Command{
-	Use:   "emitter",
-	Short: "JR Emitter resource",
-	Long:  `JR Emitter resource`,
+var emitterListCmd = &cobra.Command{
+	Use:   "list",
+	Short: "List all available emitters",
+	Long:  `List all available emitters`,
+	Run: func(cmd *cobra.Command, args []string) {
+
+		fmt.Println()
+		fmt.Println("List of available JR emitters:")
+		fmt.Println()
+
+	},
 }
 
 func init() {
-	rootCmd.AddCommand(emitterCmd)
+	emitterCmd.AddCommand(emitterListCmd)
+	emitterListCmd.Flags().String("templateDir", functions.TEMPLATEDIR, "directory containing templates")
+	emitterListCmd.Flags().BoolP("fullPath", "f", false, "Print full path")
 }

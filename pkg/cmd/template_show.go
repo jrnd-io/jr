@@ -31,7 +31,7 @@ import (
 	"github.com/ugol/jr/pkg/functions"
 )
 
-var showCmd = &cobra.Command{
+var templateShowCmd = &cobra.Command{
 	Use:   "show [template]",
 	Short: "Show a template",
 	Long:  `Show a template. Templates must be in templates directory, which by default is in '$HOME/.jr/templates'`,
@@ -67,7 +67,7 @@ var showCmd = &cobra.Command{
 }
 
 func init() {
-	templateCmd.AddCommand(showCmd)
-	showCmd.Flags().String("templateDir", functions.TEMPLATEDIR, "directory containing templates")
-	showCmd.Flags().BoolP("nocolor", "n", false, "disable colorized output")
+	templateCmd.AddCommand(templateShowCmd)
+	templateShowCmd.Flags().String("templateDir", functions.TEMPLATEDIR, "directory containing templates")
+	templateShowCmd.Flags().BoolP("nocolor", "n", false, "disable colorized output")
 }

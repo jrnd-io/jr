@@ -28,8 +28,8 @@ import (
 
 var createTopicCmd = &cobra.Command{
 	Use:   "createTopic [topic]",
-	Short: "simple command to create a Kafka Topic",
-	Long:  "simple command to create a Kafka Topic",
+	Short: "Create a Kafka Topic",
+	Long:  "Create a Kafka Topic",
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		kafkaConfig, _ := cmd.Flags().GetString("kafkaConfig")

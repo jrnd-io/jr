@@ -37,7 +37,12 @@ var duration time.Duration
 var preload int
 var valueTemplate string
 var keyTemplate string
+
+// var outputTemplate string //@TODO FIX
+var output string
 var topic string
+var kcat bool
+var oneline bool
 
 var emitterCreateCmd = &cobra.Command{
 	Use:   "create",
@@ -46,15 +51,19 @@ var emitterCreateCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 
 		emitter := Emitter{
-			Name:          name,
-			Locale:        locale,
-			Num:           num,
-			Frequency:     frequency,
-			Duration:      duration,
-			Preload:       preload,
-			ValueTemplate: valueTemplate,
-			KeyTemplate:   keyTemplate,
-			Topic:         topic,
+			Name:           name,
+			Locale:         locale,
+			Num:            num,
+			Frequency:      frequency,
+			Duration:       duration,
+			Preload:        preload,
+			ValueTemplate:  valueTemplate,
+			KeyTemplate:    keyTemplate,
+			OutputTemplate: outputTemplate, //@TODO FIX
+			Output:         output,
+			Topic:          topic,
+			Kcat:           kcat,
+			Oneline:        oneline,
 		}
 
 		err := viper.UnmarshalKey("emitters", &emitters)
@@ -85,9 +94,13 @@ func init() {
 	emitterCreateCmd.Flags().StringVar(&name, "name", functions.DEFAULT_EMITTER_NAME, "Emitter name")
 	emitterCreateCmd.Flags().DurationVarP(&frequency, "frequency", "f", functions.FREQUENCY, "how much time to wait for next generation pass")
 	emitterCreateCmd.Flags().DurationVarP(&duration, "duration", "d", functions.DURATION, "If frequency is enabled, with Duration you can set a finite amount of time")
-	emitterCreateCmd.Flags().IntVarP(&preload, "preload", "p", functions.DEFAULT_PRELOAD_SIZE, "Default number of elements to create in preload phase")
+	emitterCreateCmd.Flags().IntVarP(&preload, "preload", "p", functions.DEFAULT_PRELOAD_SIZE, "number of elements to create in preload phase")
 	emitterCreateCmd.Flags().StringVar(&locale, "locale", functions.LOCALE, "Locale")
-	emitterCreateCmd.Flags().StringVar(&valueTemplate, "valueTemplate", functions.DEFAULT_VALUE_TEMPLATE, "Locale")
-	emitterCreateCmd.Flags().StringVar(&keyTemplate, "keyTemplate", functions.DEFAULT_KEY, "Locale")
-	emitterCreateCmd.Flags().StringVar(&topic, "topic", functions.DEFAULT_TOPIC, "Locale")
+	emitterCreateCmd.Flags().StringVar(&valueTemplate, "valueTemplate", functions.DEFAULT_VALUE_TEMPLATE, "template name to use for the value")
+	emitterCreateCmd.Flags().StringVar(&keyTemplate, "keyTemplate", functions.DEFAULT_KEY, "template to use for the key")
+	emitterCreateCmd.Flags().StringVar(&outputTemplate, "outputTemplate", functions.DEFAULT_OUTPUT_TEMPLATE, "Formatting of K,V on standard output")
+	emitterCreateCmd.Flags().StringVarP(&output, "output", "o", functions.DEFAULT_OUTPUT, "can be one of stdout, kafka, redis, mongo")
+	emitterCreateCmd.Flags().StringVar(&topic, "topic", functions.DEFAULT_TOPIC, "Default topic to write to if using output='kafka'")
+	emitterCreateCmd.Flags().BoolVar(&kcat, "kcat", false, "If you want to pipe jr with kcat, use this flag: it is equivalent to --output stdout --outputTemplate '{{key}},{{value}}' --oneline")
+	emitterCreateCmd.Flags().BoolVarP(&oneline, "oneline", "l", false, "strips /n from output, for example to be pipelined to tools like kcat")
 }

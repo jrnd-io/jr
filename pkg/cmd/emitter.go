@@ -26,19 +26,19 @@ import (
 )
 
 type Emitter struct {
-	Name          string        `mapstructure:"name"`
-	Locale        string        `mapstructure:"locale"`
-	Num           int           `mapstructure:"num"`
-	Frequency     time.Duration `mapstructure:"frequency"`
-	Duration      time.Duration `mapstructure:"duration"`
-	Preload       int           `mapstructure:"preload"`
-	ValueTemplate string        `mapstructure:"valueTemplate"`
-	KeyTemplate   string        `mapstructure:"keyTemplate"`
-	Topic         string        `mapstructure:"topic"`
-	//OutputTemplate string
-	//Kcat           bool
-	//Output         string
-	//Oneline        bool
+	Name           string        `mapstructure:"name"`
+	Locale         string        `mapstructure:"locale"`
+	Num            int           `mapstructure:"num"`
+	Frequency      time.Duration `mapstructure:"frequency"`
+	Duration       time.Duration `mapstructure:"duration"`
+	Preload        int           `mapstructure:"preload"`
+	ValueTemplate  string        `mapstructure:"valueTemplate"`
+	KeyTemplate    string        `mapstructure:"keyTemplate"`
+	OutputTemplate string        `mapstructure:"outputTemplate"`
+	Output         string        `mapstructure:"output"`
+	Topic          string        `mapstructure:"topic"`
+	Kcat           bool          `mapstructure:"kcat"`
+	Oneline        bool          `mapstructure:"oneline"`
 }
 
 var emitterCmd = &cobra.Command{
@@ -47,8 +47,6 @@ var emitterCmd = &cobra.Command{
 	Long:    `jr Emitter resource`,
 	GroupID: "resource",
 }
-
-// var emitters = make(map[string][]Emitter)
 
 var emitters []Emitter
 

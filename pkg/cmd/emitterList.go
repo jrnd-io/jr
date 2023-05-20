@@ -23,7 +23,9 @@ package cmd
 import (
 	"fmt"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 	"github.com/ugol/jr/pkg/functions"
+	"log"
 )
 
 var emitterListCmd = &cobra.Command{
@@ -33,8 +35,17 @@ var emitterListCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 
 		fmt.Println()
-		fmt.Println("List of available JR emitters:")
+		fmt.Println("List of JR emitters:")
 		fmt.Println()
+
+		err := viper.UnmarshalKey("emitters", &emitters)
+		if err != nil {
+			log.Println(err)
+		}
+
+		for _, v := range emitters {
+			fmt.Println(v)
+		}
 
 	},
 }
@@ -43,4 +54,5 @@ func init() {
 	emitterCmd.AddCommand(emitterListCmd)
 	emitterListCmd.Flags().String("templateDir", functions.TEMPLATEDIR, "directory containing templates")
 	emitterListCmd.Flags().BoolP("fullPath", "f", false, "Print full path")
+
 }

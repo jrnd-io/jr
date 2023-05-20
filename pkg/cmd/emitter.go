@@ -22,7 +22,24 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
+	"time"
 )
+
+type Emitter struct {
+	Name          string        `mapstructure:"name"`
+	Locale        string        `mapstructure:"locale"`
+	Num           int           `mapstructure:"num"`
+	Frequency     time.Duration `mapstructure:"frequency"`
+	Duration      time.Duration `mapstructure:"duration"`
+	Preload       int           `mapstructure:"preload"`
+	ValueTemplate string        `mapstructure:"valueTemplate"`
+	KeyTemplate   string        `mapstructure:"keyTemplate"`
+	Topic         string        `mapstructure:"topic"`
+	//OutputTemplate string
+	//Kcat           bool
+	//Output         string
+	//Oneline        bool
+}
 
 var emitterCmd = &cobra.Command{
 	Use:     "emitter",
@@ -30,6 +47,10 @@ var emitterCmd = &cobra.Command{
 	Long:    `jr Emitter resource`,
 	GroupID: "resource",
 }
+
+// var emitters = make(map[string][]Emitter)
+
+var emitters []Emitter
 
 func init() {
 	rootCmd.AddCommand(emitterCmd)

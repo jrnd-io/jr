@@ -1,12 +1,26 @@
 {
-  "emitter": [
+  "emitters": [
     {
       "name": "emitter1",
-      "num": 3
+      "locale": "us",
+      "num": 3,
+      "frequency": "10s",
+      "duration": "30s",
+      "preload": 1000,
+      "valueTemplate": "user",
+      "keyTemplate": "null",
+      "topic": "test1"
     },
     {
       "name": "emitter2",
-      "num": 4
+      "locale": "us",
+      "num": 1,
+      "frequency": "100ms",
+      "duration": "-1ms",
+      "preload": 1000,
+      "valueTemplate": "net_device",
+      "keyTemplate": "{{key}}",
+      "topic": "test2"
     }
   ]
 }

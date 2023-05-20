@@ -74,6 +74,7 @@ var emitterCreateCmd = &cobra.Command{
 		// @TODO add the emitter back to the config file
 		// the following doesn't work OOTB
 		// viper.SafeWriteConfigAs("jrconfig.json")
+		// the array must marshaled back to json and added to the config file
 
 	},
 }

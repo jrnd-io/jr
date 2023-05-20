@@ -23,6 +23,7 @@ package cmd
 import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"github.com/ugol/jr/pkg/functions"
 	"log"
 	"os"
 )
@@ -31,14 +32,8 @@ var cfgFile string
 
 var rootCmd = &cobra.Command{
 	Use:   "jr",
-	Short: "JSON RANDOM GENERATOR",
-	Long: `JR is a JSON Random Generator that helps you in generating quality random data for your needs. 
-It may be used in conjunction with kcat to feed Kafka:
-
-> jr run net-device --n 20
-> jr run user --oneline | kcat -F kafka/config.properties -K , -P -t test
-> jr run net-device --f 100 --oneline | kcat -F kafka/config.properties -K , -P -t test
-`,
+	Short: "jr, the data random generator",
+	Long:  `jr is a data random generator that helps you in generating quality random data for your needs.`,
 }
 
 func Execute() {
@@ -50,20 +45,25 @@ func Execute() {
 
 func init() {
 	cobra.OnInitialize(initConfig)
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.jr.yaml)")
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	rootCmd.AddGroup(&cobra.Group{
+		ID:    "resource",
+		Title: "Resources",
+	})
+	rootCmd.AddGroup(&cobra.Group{
+		ID:    "server",
+		Title: "HTTP Server",
+	})
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.jr/jrconfig.json)")
 }
 
 func initConfig() {
 	if cfgFile != "" {
 		viper.SetConfigFile(cfgFile)
 	} else {
-		home, err := os.UserHomeDir()
-		cobra.CheckErr(err)
-
+		home := functions.DEFAULT_HOMEDIR
 		viper.AddConfigPath(home)
-		viper.SetConfigType("yaml")
-		viper.SetConfigName(".jr")
+		viper.SetConfigType("json")
+		viper.SetConfigName("jrconfig")
 	}
 
 	viper.AutomaticEnv() // read in environment variables that match

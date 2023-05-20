@@ -25,9 +25,10 @@ import (
 )
 
 var templateCmd = &cobra.Command{
-	Use:   "template",
-	Short: "JR Template resource",
-	Long:  `JR Template resource`,
+	Use:     "template",
+	Short:   "jr Template resource",
+	Long:    `jr Template resource`,
+	GroupID: "resource",
 }
 
 func init() {

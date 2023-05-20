@@ -25,9 +25,10 @@ import (
 )
 
 var emitterCmd = &cobra.Command{
-	Use:   "emitter",
-	Short: "JR Emitter resource",
-	Long:  `JR Emitter resource`,
+	Use:     "emitter",
+	Short:   "jr Emitter resource",
+	Long:    `jr Emitter resource`,
+	GroupID: "resource",
 }
 
 func init() {

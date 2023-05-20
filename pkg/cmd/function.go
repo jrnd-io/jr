@@ -25,9 +25,10 @@ import (
 )
 
 var functionCmd = &cobra.Command{
-	Use:   "function",
-	Short: "JR Function resource",
-	Long:  `JR Function resource`,
+	Use:     "function",
+	Short:   "jr Function resource",
+	Long:    `jr Function resource`,
+	GroupID: "resource",
 }
 
 func init() {

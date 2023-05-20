@@ -35,6 +35,7 @@ var serverCmd = &cobra.Command{
 	Template: the name of the template to use to generate the data
 	Num: the number of element to create for each http get
 	You can do multiple configurations using different URLs and different templates`,
+	GroupID: "server",
 	Run: func(cmd *cobra.Command, args []string) {
 		//initialise the global map for configurations
 		savedConfigurations = make(map[string]functions.Configuration)

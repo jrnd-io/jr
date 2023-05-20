@@ -33,7 +33,7 @@ var emitterCreateCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 
 		fmt.Println()
-		fmt.Println("List of available JR emitters:")
+		fmt.Println("Emitter created:")
 		fmt.Println()
 
 	},
@@ -41,6 +41,8 @@ var emitterCreateCmd = &cobra.Command{
 
 func init() {
 	emitterCmd.AddCommand(emitterCreateCmd)
-	emitterCreateCmd.Flags().String("templateDir", functions.TEMPLATEDIR, "directory containing templates")
-	emitterCreateCmd.Flags().BoolP("fullPath", "f", false, "Print full path")
+	emitterCreateCmd.Flags().IntP("num", "n", functions.NUM, "Number of elements to create for each pass")
+	emitterCreateCmd.Flags().DurationP("frequency", "f", functions.FREQUENCY, "how much time to wait for next generation pass")
+	emitterCreateCmd.Flags().DurationP("duration", "d", functions.DURATION, "If frequency is enabled, with Duration you can set a finite amount of time")
+	emitterCreateCmd.Flags().IntP("preload", "p", functions.DEFAULT_PRELOAD_SIZE, "Default number of elements to create in preload phase")
 }

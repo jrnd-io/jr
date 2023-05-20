@@ -21,6 +21,7 @@
 package cmd
 
 import (
+	"fmt"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/ugol/jr/pkg/functions"
@@ -62,13 +63,16 @@ func initConfig() {
 	} else {
 		home := functions.DEFAULT_HOMEDIR
 		viper.AddConfigPath(home)
-		viper.SetConfigType("json")
+		//viper.SetConfigType("json")
 		viper.SetConfigName("jrconfig")
+		viper.SetEnvPrefix(functions.DEFAULT_ENV_PREFIX)
+
 	}
 
 	viper.AutomaticEnv() // read in environment variables that match
 
 	if err := viper.ReadInConfig(); err == nil {
 		log.Println("Using config file:", viper.ConfigFileUsed())
+		fmt.Println(viper.AllSettings())
 	}
 }

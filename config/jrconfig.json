@@ -1,0 +1,12 @@
+{
+  "emitter": [
+    {
+      "name": "emitter1",
+      "num": 3
+    },
+    {
+      "name": "emitter2",
+      "num": 4
+    }
+  ]
+}

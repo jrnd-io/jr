@@ -44,6 +44,9 @@ help: hello
 copy_templates:
 	mkdir -p ~/.jr/kafka && cp -r templates ~/.jr/ && cp -r pkg/producers/kafka/*.properties.example ~/.jr/kafka/
 
+copy_config:
+	mkdir -p ~/.jr && cp config/* ~/.jr/
+
 install:
 	install build/jr /usr/local/bin
 

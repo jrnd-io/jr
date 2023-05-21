@@ -29,8 +29,8 @@ import (
 
 var emitterRunCmd = &cobra.Command{
 	Use:   "run",
-	Short: "Run an emitter",
-	Long:  `Run an emitter`,
+	Short: "Run all or selected configured emitters",
+	Long:  `Run all or selected configured emitters`,
 	Run: func(cmd *cobra.Command, args []string) {
 
 		err := viper.UnmarshalKey("emitters", &emitters)

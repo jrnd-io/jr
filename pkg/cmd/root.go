@@ -21,7 +21,6 @@
 package cmd
 
 import (
-	"fmt"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/ugol/jr/pkg/configuration"
@@ -80,5 +79,4 @@ func initConfig() {
 	if err != nil {
 		log.Println(err)
 	}
-	fmt.Println(GlobalCfg)
 }

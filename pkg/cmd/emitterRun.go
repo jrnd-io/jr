@@ -23,6 +23,7 @@ package cmd
 import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"github.com/ugol/jr/pkg/functions"
 	"log"
 )
 
@@ -37,8 +38,16 @@ var emitterRunCmd = &cobra.Command{
 			log.Println(err)
 		}
 
-		for _, v := range emitters {
-			v.Run(GlobalCfg)
+		if len(args) == 0 {
+			for _, v := range emitters {
+				v.Run(GlobalCfg)
+			}
+		} else {
+			for _, v := range emitters {
+				if functions.Contains(args, v.Name) {
+					v.Run(GlobalCfg)
+				}
+			}
 		}
 
 	},

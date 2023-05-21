@@ -24,7 +24,6 @@ import (
 	"fmt"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"github.com/ugol/jr/pkg/constants"
 	"log"
 )
 
@@ -52,7 +51,4 @@ var emitterListCmd = &cobra.Command{
 
 func init() {
 	emitterCmd.AddCommand(emitterListCmd)
-	emitterListCmd.Flags().String("templateDir", constants.TEMPLATEDIR, "directory containing templates")
-	emitterListCmd.Flags().BoolP("fullPath", "f", false, "Print full path")
-
 }

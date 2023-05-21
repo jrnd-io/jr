@@ -27,7 +27,7 @@
   ],
   "global": {
     "seed": 0,
-    "templateDir": "",
+    "templateDir": "$HOME/.jr/templates",
     "kafkaConfig": "",
     "schemaRegistry": false,
     "registryConfig": "",

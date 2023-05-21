@@ -25,6 +25,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/ugol/jr/pkg/constants"
+	"github.com/ugol/jr/pkg/emitter"
 	"log"
 	"time"
 )
@@ -50,7 +51,7 @@ var emitterCreateCmd = &cobra.Command{
 	Long:  `Create an emitter`,
 	Run: func(cmd *cobra.Command, args []string) {
 
-		emitter := Emitter{
+		emitter := emitter.Emitter{
 			Name:           name,
 			Locale:         locale,
 			Num:            num,

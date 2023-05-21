@@ -21,59 +21,9 @@
 package cmd
 
 import (
-	"fmt"
 	"github.com/spf13/cobra"
-	"github.com/ugol/jr/pkg/ctx"
-	"github.com/ugol/jr/pkg/functions"
-	"github.com/ugol/jr/pkg/loop"
-	"github.com/ugol/jr/pkg/producers/console"
-	"github.com/ugol/jr/pkg/tpl"
-	"log"
-	"os"
-	"time"
+	"github.com/ugol/jr/pkg/emitter"
 )
-
-type Emitter struct {
-	Name           string        `mapstructure:"name"`
-	Locale         string        `mapstructure:"locale"`
-	Num            int           `mapstructure:"num"`
-	Frequency      time.Duration `mapstructure:"frequency"`
-	Duration       time.Duration `mapstructure:"duration"`
-	Preload        int           `mapstructure:"preload"`
-	ValueTemplate  string        `mapstructure:"valueTemplate"`
-	KeyTemplate    string        `mapstructure:"keyTemplate"`
-	OutputTemplate string        `mapstructure:"outputTemplate"`
-	Output         string        `mapstructure:"output"`
-	Topic          string        `mapstructure:"topic"`
-	Kcat           bool          `mapstructure:"kcat"`
-	Oneline        bool          `mapstructure:"oneline"`
-}
-
-func (e *Emitter) Run() {
-
-	keyTpl, err := tpl.NewTpl("key", e.KeyTemplate, functions.FunctionsMap(), ctx.JrContext)
-	if err != nil {
-		log.Println(err)
-	}
-	templatePath := fmt.Sprintf("%s/%s.tpl", globalCfg.TemplateDir, e.ValueTemplate)
-	vt, err := os.ReadFile(templatePath)
-	valueTpl, err := tpl.NewTpl("value", string(vt), functions.FunctionsMap(), ctx.JrContext)
-	if err != nil {
-		log.Println(err)
-	}
-
-	producer := e.CreateProducer()
-
-	k := keyTpl.Execute()
-	v := valueTpl.Execute()
-	producer.Produce([]byte(k), []byte(v), nil)
-
-}
-
-func (e *Emitter) CreateProducer() loop.Producer {
-	o, _ := tpl.NewTpl("out", e.OutputTemplate, functions.FunctionsMap(), nil)
-	return &console.KonsoleProducer{OutputTpl: &o}
-}
 
 var emitterCmd = &cobra.Command{
 	Use:     "emitter",
@@ -82,7 +32,7 @@ var emitterCmd = &cobra.Command{
 	GroupID: "resource",
 }
 
-var emitters []Emitter
+var emitters []emitter.Emitter
 
 func init() {
 	rootCmd.AddCommand(emitterCmd)

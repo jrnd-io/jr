@@ -1,6 +1,6 @@
 //Adapted for JR from https://github.com/lucasjones/reggen
 
-package test
+package functions_test
 
 import (
 	"github.com/ugol/jr/pkg/functions"

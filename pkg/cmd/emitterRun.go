@@ -38,7 +38,7 @@ var emitterRunCmd = &cobra.Command{
 		}
 
 		for _, v := range emitters {
-			v.Run()
+			v.Run(GlobalCfg)
 		}
 
 	},

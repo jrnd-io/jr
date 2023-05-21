@@ -22,6 +22,7 @@ package functions
 
 import (
 	"fmt"
+	"github.com/ugol/jr/pkg/ctx"
 	"math"
 )
 
@@ -63,8 +64,8 @@ func Cardinal(short bool) string {
 // City returns a random City
 func City() string {
 	c := Word("city")
-	JrContext.Ctx["_city"] = c
-	JrContext.CityIndex = JrContext.LastIndex
+	ctx.JrContext.Ctx["_city"] = c
+	ctx.JrContext.CityIndex = ctx.JrContext.LastIndex
 	return c
 }
 
@@ -75,7 +76,7 @@ func CityAt(index int) string {
 
 // Country returns the ISO 3166 Country selected with locale
 func Country() string {
-	countryIndex := JrContext.CountryIndex
+	countryIndex := ctx.JrContext.CountryIndex
 	if countryIndex == -1 {
 		return Word("country")
 	} else {
@@ -129,8 +130,8 @@ func NearbyGPS(latitude float64, longitude float64, radius int) string {
 // State returns a random State
 func State() string {
 	s := Word("state")
-	JrContext.Ctx["_state"] = s
-	JrContext.CountryIndex = JrContext.LastIndex
+	ctx.JrContext.Ctx["_state"] = s
+	ctx.JrContext.CountryIndex = ctx.JrContext.LastIndex
 	return s
 }
 
@@ -156,7 +157,7 @@ func Street() string {
 
 // Zip returns a random Zip code
 func Zip() string {
-	cityIndex := JrContext.CityIndex
+	cityIndex := ctx.JrContext.CityIndex
 
 	if cityIndex == -1 {
 		z := Word("zip")

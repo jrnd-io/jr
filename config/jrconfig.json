@@ -9,6 +9,7 @@
       "preload": 1000,
       "valueTemplate": "user",
       "keyTemplate": "null",
+      "outputTemplate": "{{.V}}\n",
       "topic": "test1"
     },
     {
@@ -17,10 +18,23 @@
       "num": 1,
       "frequency": "100ms",
       "duration": "-1ms",
-      "preload": 1000,
+      "preload": 0,
       "valueTemplate": "net_device",
-      "keyTemplate": "{{key}}",
+      "keyTemplate": "{{key \"KEY\" 20}}",
+      "outputTemplate": "{{.V}}\n",
       "topic": "test2"
     }
-  ]
+  ],
+  "global": {
+    "seed": 0,
+    "templateDir": "",
+    "kafkaConfig": "",
+    "schemaRegistry": false,
+    "registryConfig": "",
+    "serializer": "",
+    "autoCreate": false,
+    "redisTtl": "1m",
+    "redisConfig": "",
+    "url": ""
+  }
 }

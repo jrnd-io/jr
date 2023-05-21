@@ -23,16 +23,17 @@ package functions
 import (
 	"fmt"
 	"github.com/google/uuid"
+	"github.com/ugol/jr/pkg/ctx"
 )
 
 // Counter creates a counter named c, starting from start and incrementing by step
 func Counter(c string, start, step int) int {
-	val, exists := JrContext.CtxCounters[c]
+	val, exists := ctx.JrContext.CtxCounters[c]
 	if exists {
-		JrContext.CtxCounters[c] = val + step
-		return JrContext.CtxCounters[c]
+		ctx.JrContext.CtxCounters[c] = val + step
+		return ctx.JrContext.CtxCounters[c]
 	} else {
-		JrContext.CtxCounters[c] = start
+		ctx.JrContext.CtxCounters[c] = start
 		return start
 	}
 }

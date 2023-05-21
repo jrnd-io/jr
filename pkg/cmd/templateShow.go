@@ -22,13 +22,13 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/ugol/jr/pkg/constants"
 	"log"
 	"os"
 	"runtime"
 	"strings"
 
 	"github.com/spf13/cobra"
-	"github.com/ugol/jr/pkg/functions"
 )
 
 var templateShowCmd = &cobra.Command{
@@ -68,6 +68,6 @@ var templateShowCmd = &cobra.Command{
 
 func init() {
 	templateCmd.AddCommand(templateShowCmd)
-	templateShowCmd.Flags().String("templateDir", functions.TEMPLATEDIR, "directory containing templates")
+	templateShowCmd.Flags().String("templateDir", constants.TEMPLATEDIR, "directory containing templates")
 	templateShowCmd.Flags().BoolP("nocolor", "n", false, "disable colorized output")
 }

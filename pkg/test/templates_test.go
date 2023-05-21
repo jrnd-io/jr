@@ -18,10 +18,11 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //THE SOFTWARE.
 
-package functions
+package test
 
 import (
 	"bytes"
+	"github.com/ugol/jr/pkg/functions"
 	"log"
 	"strconv"
 	"testing"
@@ -141,7 +142,7 @@ func TestRelationship(t *testing.T) {
 	a := `{{set_v "id" "10"}}{{template "sub" .}}`
 	s := `{{get_v "id"}}`
 
-	aggregate := template.Must(template.New("aggregate").Funcs(FunctionsMap()).Parse(a))
+	aggregate := template.Must(template.New("aggregate").Funcs(functions.FunctionsMap()).Parse(a))
 	sub, err := aggregate.New("sub").Parse(s)
 
 	if err != nil {
@@ -181,7 +182,7 @@ func Test2TemplatesWithCommonId(t *testing.T) {
 	userTemplate := `{{set_v "id" (uuid)}}"id":"{{get_v "id"}}`
 	orderTemplate := `"id":"{{get_v "id"}}`
 
-	v := template.New("aggregate").Funcs(FunctionsMap())
+	v := template.New("aggregate").Funcs(functions.FunctionsMap())
 
 	user, err := v.New("user").Parse(userTemplate)
 	if err != nil {
@@ -216,7 +217,7 @@ func Test2TemplatesWithValueFromList(t *testing.T) {
 	userTemplate2 := `{{$id:=uuid}}{{add_v_to_list "id_list" $id}}{{$id}}`
 	orderTemplate := `{{random_v_from_list "id_list"}}`
 
-	v := template.New("aggregate").Funcs(FunctionsMap())
+	v := template.New("aggregate").Funcs(functions.FunctionsMap())
 
 	user, err := v.New("user").Parse(userTemplate)
 	if err != nil {
@@ -264,7 +265,7 @@ func TestManyTemplates(t *testing.T) {
 	v[1] = "{{integer 1 2}}"
 	v[2] = "{{integer 2 3}}"
 
-	tpl := template.New("value").Funcs(FunctionsMap())
+	tpl := template.New("value").Funcs(functions.FunctionsMap())
 
 	for i := 0; i < len(v); i++ {
 		_, err := tpl.New(strconv.Itoa(i)).Parse((v[i]))
@@ -293,7 +294,7 @@ func TestManyTemplates(t *testing.T) {
 
 func TestExtractMeta(t *testing.T) {
 	tpl := `01234"_meta:"{............................},56789`
-	m, v := ExtractMetaFrom(tpl)
+	m, v := functions.ExtractMetaFrom(tpl)
 	expect := `0123456789`
 	if expect != v {
 		t.Errorf("Expected '%s', got '%s'", expect, v)
@@ -306,7 +307,7 @@ func TestExtractMeta(t *testing.T) {
 
 func TestExtractEmptyMeta(t *testing.T) {
 	tpl := `0123456789`
-	m, v := ExtractMetaFrom(tpl)
+	m, v := functions.ExtractMetaFrom(tpl)
 	expect := `0123456789`
 	if expect != v {
 		t.Errorf("Expected '%s', got '%s'", expect, v)
@@ -347,7 +348,7 @@ func TestExtractUserMeta(t *testing.T) {
   "latitude": {{latitude}},
   "longitude": {{longitude}}
 }`
-	m, _ := ExtractMetaFrom(tpl)
+	m, _ := functions.ExtractMetaFrom(tpl)
 	expect := `{
                       "topic": "users",
                       "key": "id",

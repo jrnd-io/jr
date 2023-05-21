@@ -2,6 +2,7 @@ package functions
 
 import (
 	"bytes"
+	"github.com/ugol/jr/pkg/ctx"
 	"log"
 	"regexp"
 	"text/template"
@@ -12,12 +13,12 @@ func ExecuteTemplate(key *template.Template, value *template.Template, oneline b
 	var kBuffer, vBuffer bytes.Buffer
 	var err error
 
-	if err = key.Execute(&kBuffer, JrContext); err != nil {
+	if err = key.Execute(&kBuffer, ctx.JrContext); err != nil {
 		log.Println(err)
 	}
 	k := kBuffer.String()
 
-	if err = value.Execute(&vBuffer, JrContext); err != nil {
+	if err = value.Execute(&vBuffer, ctx.JrContext); err != nil {
 		log.Println(err)
 	}
 	v := vBuffer.String()
@@ -27,8 +28,8 @@ func ExecuteTemplate(key *template.Template, value *template.Template, oneline b
 		v = re.ReplaceAllString(v, "")
 	}
 
-	JrContext.GeneratedObjects++
-	JrContext.GeneratedBytes += int64(len(v))
+	ctx.JrContext.GeneratedObjects++
+	ctx.JrContext.GeneratedBytes += int64(len(v))
 
 	return k, v, err
 }

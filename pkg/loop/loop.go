@@ -18,12 +18,15 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //THE SOFTWARE.
 
-package functions
+package loop
 
 import (
 	"bytes"
 	"context"
 	"fmt"
+	"github.com/ugol/jr/pkg/configuration"
+	"github.com/ugol/jr/pkg/ctx"
+	"github.com/ugol/jr/pkg/functions"
 	"log"
 	"os"
 	"os/signal"
@@ -44,7 +47,7 @@ type Producer interface {
 	Produce(k []byte, v []byte, o interface{})
 }
 
-func DoTemplates(conf Configuration, options interface{}) {
+func DoTemplates(conf configuration.Configuration, options interface{}) {
 
 	configureJrContext(conf)
 
@@ -58,22 +61,22 @@ func DoTemplates(conf Configuration, options interface{}) {
 	} else if conf.TemplateFileName {
 		for i := range conf.TemplateNames {
 			valueTemplate[i], err = os.ReadFile(os.ExpandEnv(conf.TemplateNames[i]))
-			JrContext.TemplateType[i] = conf.TemplateNames[i]
+			ctx.JrContext.TemplateType[i] = conf.TemplateNames[i]
 		}
-		JrContext.NumTemplates = len(conf.TemplateNames)
+		ctx.JrContext.NumTemplates = len(conf.TemplateNames)
 	} else {
 		for i := range conf.TemplateNames {
 			templatePath := fmt.Sprintf("%s/%s.tpl", conf.TemplateDir, conf.TemplateNames[i])
 			valueTemplate[i], err = os.ReadFile(templatePath)
-			JrContext.TemplateType[i] = conf.TemplateNames[i]
+			ctx.JrContext.TemplateType[i] = conf.TemplateNames[i]
 		}
-		JrContext.NumTemplates = len(conf.TemplateNames)
+		ctx.JrContext.NumTemplates = len(conf.TemplateNames)
 	}
 
 	for i := range conf.Preload {
 		templatePath := fmt.Sprintf("%s/%s.tpl", conf.TemplateDir, conf.Preload[i])
 		preloadTemplate[i], err = os.ReadFile(templatePath)
-		JrContext.PreloadTemplateType[i] = conf.Preload[i]
+		ctx.JrContext.PreloadTemplateType[i] = conf.Preload[i]
 	}
 
 	if err != nil {
@@ -85,12 +88,12 @@ func DoTemplates(conf Configuration, options interface{}) {
 		log.Fatal(err)
 	}
 
-	key, err := template.New("key").Funcs(FunctionsMap()).Parse(conf.KeyTemplate)
+	key, err := template.New("key").Funcs(functions.FunctionsMap()).Parse(conf.KeyTemplate)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	value := template.New("value").Funcs(FunctionsMap())
+	value := template.New("value").Funcs(functions.FunctionsMap())
 	for i := 0; i < len(conf.TemplateNames); i++ {
 		_, err = value.New(strconv.Itoa(i)).Parse(string(valueTemplate[i]))
 		if err != nil {
@@ -193,7 +196,7 @@ func orderValueTemplates(valueTemplate *template.Template, templateNames []strin
 }
 
 func generatorLoop(key *template.Template, value *template.Template, oneline bool, producer Producer, options interface{}) {
-	for range JrContext.Range {
+	for range ctx.JrContext.Range {
 		k, v, _ := executeTemplate(key, value, oneline)
 		producer.Produce([]byte(k), []byte(v), options)
 	}
@@ -207,12 +210,12 @@ func createRedisProducer(ttl time.Duration, redisConfig string) Producer {
 	return rProducer
 }
 
-func createKafkaProducer(conf Configuration, index int) *kafka.KafkaManager {
+func createKafkaProducer(conf configuration.Configuration, index int) *kafka.KafkaManager {
 
 	kManager := &kafka.KafkaManager{
 		Serializer:   conf.Serializer,
 		Topic:        conf.Topic[index],
-		TemplateType: JrContext.TemplateType[index],
+		TemplateType: ctx.JrContext.TemplateType[index],
 	}
 
 	kManager.Initialize(conf.KafkaConfig)
@@ -233,12 +236,12 @@ func createKafkaProducer(conf Configuration, index int) *kafka.KafkaManager {
 
 func writeStats() {
 	_, _ = fmt.Fprintln(os.Stderr)
-	elapsed := time.Since(JrContext.StartTime)
+	elapsed := time.Since(ctx.JrContext.StartTime)
 	_, _ = fmt.Fprintf(os.Stderr, "Elapsed time: %v\n", elapsed.Round(1*time.Second))
-	_, _ = fmt.Fprintf(os.Stderr, "Data Generated (Objects): %d\n", JrContext.GeneratedObjects)
-	_, _ = fmt.Fprintf(os.Stderr, "Data Generated (bytes): %d\n", JrContext.GeneratedBytes)
-	_, _ = fmt.Fprintf(os.Stderr, "Number of templates (Objects): %d\n", JrContext.NumTemplates)
-	_, _ = fmt.Fprintf(os.Stderr, "Throughput (bytes per second): %9.f\n", float64(JrContext.GeneratedBytes)/elapsed.Seconds())
+	_, _ = fmt.Fprintf(os.Stderr, "Data Generated (Objects): %d\n", ctx.JrContext.GeneratedObjects)
+	_, _ = fmt.Fprintf(os.Stderr, "Data Generated (bytes): %d\n", ctx.JrContext.GeneratedBytes)
+	_, _ = fmt.Fprintf(os.Stderr, "Number of templates (Objects): %d\n", ctx.JrContext.NumTemplates)
+	_, _ = fmt.Fprintf(os.Stderr, "Throughput (bytes per second): %9.f\n", float64(ctx.JrContext.GeneratedBytes)/elapsed.Seconds())
 	_, _ = fmt.Fprintln(os.Stderr)
 }
 
@@ -247,12 +250,12 @@ func executeTemplate(key *template.Template, value *template.Template, oneline b
 	var kBuffer, vBuffer bytes.Buffer
 	var err error
 
-	if err = key.Execute(&kBuffer, JrContext); err != nil {
+	if err = key.Execute(&kBuffer, ctx.JrContext); err != nil {
 		log.Println(err)
 	}
 	k := kBuffer.String()
 
-	if err = value.Execute(&vBuffer, JrContext); err != nil {
+	if err = value.Execute(&vBuffer, ctx.JrContext); err != nil {
 		log.Println(err)
 	}
 	v := vBuffer.String()
@@ -262,19 +265,19 @@ func executeTemplate(key *template.Template, value *template.Template, oneline b
 		v = re.ReplaceAllString(v, "")
 	}
 
-	JrContext.GeneratedObjects++
-	JrContext.GeneratedBytes += int64(len(v))
+	ctx.JrContext.GeneratedObjects++
+	ctx.JrContext.GeneratedBytes += int64(len(v))
 
 	return k, v, err
 }
 
-func configureJrContext(conf Configuration) {
-	Random.Seed(conf.Seed)
-	JrContext.Num = conf.Num
-	JrContext.Range = make([]int, conf.Num)
-	JrContext.Frequency = conf.Frequency
-	JrContext.Locale = strings.ToLower(conf.Locale)
-	JrContext.Seed = conf.Seed
-	JrContext.TemplateDir = conf.TemplateDir
-	JrContext.CountryIndex = IndexOf(strings.ToUpper(conf.Locale), "country")
+func configureJrContext(conf configuration.Configuration) {
+	functions.Random.Seed(conf.Seed)
+	ctx.JrContext.Num = conf.Num
+	ctx.JrContext.Range = make([]int, conf.Num)
+	ctx.JrContext.Frequency = conf.Frequency
+	ctx.JrContext.Locale = strings.ToLower(conf.Locale)
+	ctx.JrContext.Seed = conf.Seed
+	ctx.JrContext.TemplateDir = conf.TemplateDir
+	ctx.JrContext.CountryIndex = functions.IndexOf(strings.ToUpper(conf.Locale), "country")
 }

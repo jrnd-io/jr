@@ -22,30 +22,28 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"github.com/ugol/jr/pkg/constants"
-	"github.com/ugol/jr/pkg/producers/kafka"
+	"github.com/spf13/viper"
+	"log"
 )
 
-var createTopicCmd = &cobra.Command{
-	Use:   "createTopic [topic]",
-	Short: "Create a Kafka Topic",
-	Long:  "Create a Kafka Topic",
-	Args:  cobra.ExactArgs(1),
+var emitterRunCmd = &cobra.Command{
+	Use:   "run",
+	Short: "Run an emitter",
+	Long:  `Run an emitter`,
 	Run: func(cmd *cobra.Command, args []string) {
-		kafkaConfig, _ := cmd.Flags().GetString("kafkaConfig")
 
-		kManager := &kafka.KafkaManager{}
-		kManager.Initialize(kafkaConfig)
-		partitions, _ := cmd.Flags().GetInt("partitions")
-		replica, _ := cmd.Flags().GetInt("replica")
-		kManager.CreateTopicFull(args[0], partitions, replica)
+		err := viper.UnmarshalKey("emitters", &emitters)
+		if err != nil {
+			log.Println(err)
+		}
+
+		for _, v := range emitters {
+			v.Run()
+		}
 
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(createTopicCmd)
-	createTopicCmd.Flags().IntP("partitions", "p", constants.DEFAULT_PARTITIONS, "Number of partitions")
-	createTopicCmd.Flags().IntP("replica", "r", constants.DEFAULT_REPLICA, "Replica Factor")
-	createTopicCmd.Flags().StringP("kafkaConfig", "F", constants.KAFKA_CONFIG, "Kafka configuration")
+	emitterCmd.AddCommand(emitterRunCmd)
 }

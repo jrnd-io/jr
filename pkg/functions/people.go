@@ -23,6 +23,7 @@ package functions
 import (
 	"fmt"
 	"github.com/squeeze69/generacodicefiscale"
+	"github.com/ugol/jr/pkg/ctx"
 	"log"
 	"strconv"
 	"strings"
@@ -31,11 +32,11 @@ import (
 // CodiceFiscale return a valid Italian Codice Fiscale
 func CodiceFiscale() string {
 
-	name := JrContext.Ctx["_name"]
-	surname := JrContext.Ctx["_surname"]
-	gender := JrContext.Ctx["_gender"]
-	birthdate := JrContext.Ctx["_birthdate"]
-	city := JrContext.Ctx["_city"]
+	name := ctx.JrContext.Ctx["_name"]
+	surname := ctx.JrContext.Ctx["_surname"]
+	gender := ctx.JrContext.Ctx["_gender"]
+	birthdate := ctx.JrContext.Ctx["_birthdate"]
+	city := ctx.JrContext.Ctx["_city"]
 
 	if name == "" {
 		name = Name()
@@ -77,15 +78,15 @@ func CodiceFiscale() string {
 // Company returns a random Company Name
 func Company() string {
 	c := Word("company")
-	JrContext.Ctx["_company"] = c
+	ctx.JrContext.Ctx["_company"] = c
 	return c
 }
 
 // WorkEmail returns a random work email.
 func WorkEmail() string {
-	name := JrContext.Ctx["_name"]
-	surname := JrContext.Ctx["_surname"]
-	company := JrContext.Ctx["_company"]
+	name := ctx.JrContext.Ctx["_name"]
+	surname := ctx.JrContext.Ctx["_surname"]
+	company := ctx.JrContext.Ctx["_company"]
 
 	if name == "" {
 		name = Name()
@@ -102,8 +103,8 @@ func WorkEmail() string {
 
 // Email returns a random email.
 func Email() string {
-	name := JrContext.Ctx["_name"]
-	surname := JrContext.Ctx["_surname"]
+	name := ctx.JrContext.Ctx["_name"]
+	surname := ctx.JrContext.Ctx["_surname"]
 	provider := Word("mail_provider")
 
 	if name == "" {
@@ -123,11 +124,11 @@ func EmailProvider() string {
 
 // Gender returns a random gender. Note: it gets the gender context automatically setup by previous name calls
 func Gender() string {
-	g := JrContext.Ctx["_gender"]
+	g := ctx.JrContext.Ctx["_gender"]
 	if g == "" {
 		gender := []string{"M", "F"}
 		g = gender[Random.Intn(len(gender))]
-		JrContext.Ctx["_gender"] = g
+		ctx.JrContext.Ctx["_gender"] = g
 	}
 	return g
 }
@@ -151,16 +152,16 @@ func Name() string {
 // NameM returns a random male Name
 func NameM() string {
 	name := Word("nameM")
-	JrContext.Ctx["_name"] = name
-	JrContext.Ctx["_gender"] = "M"
+	ctx.JrContext.Ctx["_name"] = name
+	ctx.JrContext.Ctx["_gender"] = "M"
 	return name
 }
 
 // NameF returns a random female Name
 func NameF() string {
 	name := Word("nameF")
-	JrContext.Ctx["_name"] = name
-	JrContext.Ctx["_gender"] = "F"
+	ctx.JrContext.Ctx["_name"] = name
+	ctx.JrContext.Ctx["_gender"] = "F"
 	return name
 }
 
@@ -175,7 +176,7 @@ func Ssn() string {
 // Surname returns a random Surname
 func Surname() string {
 	s := Word("surname")
-	JrContext.Ctx["_surname"] = s
+	ctx.JrContext.Ctx["_surname"] = s
 	return s
 }
 

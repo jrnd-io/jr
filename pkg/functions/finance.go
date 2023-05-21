@@ -51,7 +51,7 @@ func Bitcoin() string {
 // Cusip returns a valid 9 characters Cusip code
 func Cusip() string {
 	cusip, _ := Regex("^[0-9]{3}[0-9A-Z]{5}")
-	check := cusipCheckDigit(cusip)
+	check := CusipCheckDigit(cusip)
 	return cusip + check
 }
 
@@ -81,7 +81,7 @@ func CreditCard(issuer string) string {
 		return ""
 	}
 	card, _ := Regex(regex)
-	check := luhnCheckDigit(card)
+	check := LuhnCheckDigit(card)
 	return card + check
 }
 
@@ -94,13 +94,13 @@ func Ethereum() string {
 // Isin returns a valid 12 characters Isin code
 func Isin(country string) string {
 	c := country + Cusip()
-	return c + isinCheckDigit(c)
+	return c + IsinCheckDigit(c)
 }
 
 // returns a valid 7 characters sedol code
 func Sedol() string {
 	sedol, _ := Regex("[0-9BCDFGHJKLMNPQRSTVWXYZ]]{6}")
-	return sedol + sedolCheckDigit(sedol)
+	return sedol + SedolCheckDigit(sedol)
 }
 
 // Swift returns a swift/bic code
@@ -131,8 +131,8 @@ func Wkn() string {
 	return wkn
 }
 
-// cusipCheckDigit calculates cusip check digit
-func cusipCheckDigit(code string) string {
+// CusipCheckDigit calculates cusip check digit
+func CusipCheckDigit(code string) string {
 	var sum, v int
 
 	if len(code) != 8 {
@@ -163,8 +163,8 @@ func cusipCheckDigit(code string) string {
 
 }
 
-// luhnCheckDigit calculates luhn check digit
-func luhnCheckDigit(code string) string {
+// LuhnCheckDigit calculates luhn check digit
+func LuhnCheckDigit(code string) string {
 	var sum, v int
 	l := len(code)
 	for i := 0; i < l; i++ {
@@ -186,8 +186,8 @@ func luhnCheckDigit(code string) string {
 
 }
 
-// sedolCheckDigit calculates sedol check digit
-func sedolCheckDigit(code string) string {
+// SedolCheckDigit calculates sedol check digit
+func SedolCheckDigit(code string) string {
 	weight := [6]int{1, 3, 1, 7, 3, 9}
 	sum := 0
 	for i := 0; i < len(code); i++ {
@@ -198,8 +198,8 @@ func sedolCheckDigit(code string) string {
 	return strconv.Itoa(check)
 }
 
-// isinCheckDigit calculates an isin check digit
-func isinCheckDigit(code string) string {
+// IsinCheckDigit calculates an isin check digit
+func IsinCheckDigit(code string) string {
 
 	weights := [11]int{2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2}
 	var sum int

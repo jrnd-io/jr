@@ -22,7 +22,9 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"github.com/ugol/jr/pkg/functions"
+	"github.com/ugol/jr/pkg/configuration"
+	"github.com/ugol/jr/pkg/constants"
+	"github.com/ugol/jr/pkg/loop"
 	"os"
 	"time"
 )
@@ -73,10 +75,10 @@ jr run --templateFileName ~/.jr/templates/net_device.tpl
 		if kcat {
 			oneline = true
 			output = "stdout"
-			outputTemplate = functions.DEFAULT_OUTPUT_KCAT_TEMPLATE
+			outputTemplate = constants.DEFAULT_OUTPUT_KCAT_TEMPLATE
 		}
 
-		conf := functions.Configuration{
+		conf := configuration.Configuration{
 			TemplateNames:    args,
 			KeyTemplate:      keyTemplate,
 			OutputTemplate:   outputTemplate,
@@ -103,40 +105,40 @@ jr run --templateFileName ~/.jr/templates/net_device.tpl
 			PreloadSize:      preloadSize,
 		}
 
-		functions.DoTemplates(conf, nil)
+		loop.DoTemplates(conf, nil)
 	},
 }
 
 func init() {
 	templateCmd.AddCommand(templateRunCmd)
-	templateRunCmd.Flags().IntP("num", "n", functions.NUM, "Number of elements to create for each pass")
-	templateRunCmd.Flags().DurationP("frequency", "f", functions.FREQUENCY, "how much time to wait for next generation pass")
-	templateRunCmd.Flags().DurationP("duration", "d", functions.DURATION, "If frequency is enabled, with Duration you can set a finite amount of time")
+	templateRunCmd.Flags().IntP("num", "n", constants.NUM, "Number of elements to create for each pass")
+	templateRunCmd.Flags().DurationP("frequency", "f", constants.FREQUENCY, "how much time to wait for next generation pass")
+	templateRunCmd.Flags().DurationP("duration", "d", constants.DURATION, "If frequency is enabled, with Duration you can set a finite amount of time")
 
 	templateRunCmd.Flags().Int64("seed", time.Now().UTC().UnixNano(), "Seed to init pseudorandom generator")
 
-	templateRunCmd.Flags().String("templateDir", os.ExpandEnv(functions.TEMPLATEDIR), "directory containing templates")
-	templateRunCmd.Flags().StringP("kafkaConfig", "F", functions.KAFKA_CONFIG, "Kafka configuration")
-	templateRunCmd.Flags().String("registryConfig", functions.REGISTRY_CONFIG, "Kafka configuration")
+	templateRunCmd.Flags().String("templateDir", os.ExpandEnv(constants.TEMPLATEDIR), "directory containing templates")
+	templateRunCmd.Flags().StringP("kafkaConfig", "F", constants.KAFKA_CONFIG, "Kafka configuration")
+	templateRunCmd.Flags().String("registryConfig", constants.REGISTRY_CONFIG, "Kafka configuration")
 	templateRunCmd.Flags().Bool("templateFileName", false, "If enabled, [template] must be a template file")
 	templateRunCmd.Flags().Bool("template", false, "If enabled, [template] must be a string containing a template, to be embedded directly in the script")
 
 	templateRunCmd.Flags().StringSliceP("preload", "p", []string{""}, "Array of templates to preload")
 	templateRunCmd.Flags().IntSlice("preloadSize", []int{}, "Array of template sizes to preload")
 
-	templateRunCmd.Flags().StringP("key", "k", functions.DEFAULT_KEY, "A template to generate a key")
+	templateRunCmd.Flags().StringP("key", "k", constants.DEFAULT_KEY, "A template to generate a key")
 	templateRunCmd.Flags().StringSliceP("topic", "t", []string{"test"}, "Array of Kafka topic names")
 
 	templateRunCmd.Flags().Bool("kcat", false, "If you want to pipe jr with kcat, use this flag: it is equivalent to --output stdout --outputTemplate '{{key}},{{value}}' --oneline")
-	templateRunCmd.Flags().StringP("output", "o", functions.DEFAULT_OUTPUT, "can be one of stdout, kafka, redis, mongo")
-	templateRunCmd.Flags().String("outputTemplate", functions.DEFAULT_OUTPUT_TEMPLATE, "Formatting of K,V on standard output")
+	templateRunCmd.Flags().StringP("output", "o", constants.DEFAULT_OUTPUT, "can be one of stdout, kafka, redis, mongo")
+	templateRunCmd.Flags().String("outputTemplate", constants.DEFAULT_OUTPUT_TEMPLATE, "Formatting of K,V on standard output")
 	templateRunCmd.Flags().BoolP("oneline", "l", false, "strips /n from output, for example to be pipelined to tools like kcat")
 	templateRunCmd.Flags().BoolP("autocreate", "a", false, "if enabled, autocreate topics")
-	templateRunCmd.Flags().String("locale", functions.LOCALE, "Locale")
+	templateRunCmd.Flags().String("locale", constants.LOCALE, "Locale")
 
 	templateRunCmd.Flags().BoolP("schemaRegistry", "s", false, "If you want to use Confluent Schema Registry")
-	templateRunCmd.Flags().String("serializer", functions.DEFAULT_SERIALIZER, "Type of serializer: json-schema, avro-generic, avro, protobuf")
-	templateRunCmd.Flags().Duration("redis.ttl", functions.REDIS_TTL, "If output is redis, ttl of the object")
-	templateRunCmd.Flags().String("redisConfig", functions.REDIS_CONFIG, "Redis configuration")
+	templateRunCmd.Flags().String("serializer", constants.DEFAULT_SERIALIZER, "Type of serializer: json-schema, avro-generic, avro, protobuf")
+	templateRunCmd.Flags().Duration("redis.ttl", constants.REDIS_TTL, "If output is redis, ttl of the object")
+	templateRunCmd.Flags().String("redisConfig", constants.REDIS_CONFIG, "Redis configuration")
 
 }

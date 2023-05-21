@@ -23,6 +23,7 @@ package cmd
 import (
 	"bytes"
 	"fmt"
+	"github.com/ugol/jr/pkg/constants"
 	"os"
 	"path/filepath"
 	"strings"
@@ -105,6 +106,6 @@ func isValidTemplate(t []byte) (bool, error) {
 
 func init() {
 	templateCmd.AddCommand(templateListCmd)
-	templateListCmd.Flags().String("templateDir", functions.TEMPLATEDIR, "directory containing templates")
+	templateListCmd.Flags().String("templateDir", constants.TEMPLATEDIR, "directory containing templates")
 	templateListCmd.Flags().BoolP("fullPath", "f", false, "Print full path")
 }

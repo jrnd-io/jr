@@ -18,9 +18,10 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //THE SOFTWARE.
 
-package functions
+package test
 
 import (
+	"github.com/ugol/jr/pkg/functions"
 	"testing"
 )
 
@@ -55,7 +56,7 @@ var cusipCheck = []string{"2", "9", "3", "0", "2", "8", "4", "5"}
 
 func TestLuhn(t *testing.T) {
 	for i, test := range cards {
-		d := luhnCheckDigit(test.card)
+		d := functions.LuhnCheckDigit(test.card)
 		if d != luhnCheck[i] {
 			t.Error("Luhn digit for", test.card, " is not right, it's ", d, " should be ", luhnCheck[i])
 		}
@@ -64,7 +65,7 @@ func TestLuhn(t *testing.T) {
 
 func TestCusip(t *testing.T) {
 	for i, test := range cusips {
-		d := cusipCheckDigit(test.card)
+		d := functions.CusipCheckDigit(test.card)
 		if d != cusipCheck[i] {
 			t.Error("Cusip digit for", test.card, " is not right, it's ", d, " should be ", cusipCheck[i])
 		}
@@ -73,7 +74,7 @@ func TestCusip(t *testing.T) {
 
 func TestSedol(t *testing.T) {
 	sedol := "026349"
-	check := sedolCheckDigit(sedol)
+	check := functions.SedolCheckDigit(sedol)
 	if check != "4" {
 		t.Error("Cusip digit for", sedol, " is not right, it's ", check, " should be ", "4")
 	}

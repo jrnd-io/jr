@@ -18,42 +18,15 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //THE SOFTWARE.
 
-package functions
+package ctx
 
 import (
+	"github.com/ugol/jr/pkg/constants"
 	"os"
 	"time"
 )
 
 var JrContext Context
-
-type Configuration struct {
-	TemplateNames    []string
-	KeyTemplate      string
-	OutputTemplate   string
-	EmbeddedTemplate bool
-	TemplateFileName bool
-	Kcat             bool
-	Output           string
-	Oneline          bool
-	Locale           string
-	Num              int
-	Frequency        time.Duration
-	Duration         time.Duration
-	Seed             int64
-	KafkaConfig      string
-	RegistryConfig   string
-	Topic            []string
-	Preload          []string
-	PreloadSize      []int
-	TemplateDir      string
-	Autocreate       bool
-	SchemaRegistry   bool
-	Serializer       string
-	RedisTtl         time.Duration
-	RedisConfig      string
-	Url              string
-}
 
 // Context is the object passed on the templates which contains all the needed details.
 type Context struct {
@@ -82,16 +55,16 @@ func init() {
 
 	JrContext = Context{
 		StartTime:           time.Now(),
-		TemplateDir:         os.ExpandEnv(TEMPLATEDIR),
-		TemplateType:        make([]string, NUM_TEMPLATES),
-		PreloadTemplateType: make([]string, NUM_TEMPLATES),
+		TemplateDir:         os.ExpandEnv(constants.TEMPLATEDIR),
+		TemplateType:        make([]string, constants.NUM_TEMPLATES),
+		PreloadTemplateType: make([]string, constants.NUM_TEMPLATES),
 		GeneratedBytes:      0,
 		GeneratedObjects:    0,
-		Num:                 NUM,
-		NumTemplates:        NUM_TEMPLATES,
-		Range:               make([]int, NUM),
-		Frequency:           FREQUENCY,
-		Duration:            DURATION,
+		Num:                 constants.NUM,
+		NumTemplates:        constants.NUM_TEMPLATES,
+		Range:               make([]int, constants.NUM),
+		Frequency:           constants.FREQUENCY,
+		Duration:            constants.DURATION,
 		Locale:              "us",
 		Seed:                time.Now().UTC().UnixNano(),
 		CtxCounters:         make(map[string]int),

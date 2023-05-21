@@ -1,4 +1,4 @@
-package functions
+package constants
 
 import "time"
 
@@ -20,7 +20,7 @@ const REDIS_CONFIG = "./redis/config.json"
 const NUM_TEMPLATES = 5
 const DEFAULT_PARTITIONS = 6
 const DEFAULT_REPLICA = 3
-const DEFAULT_PRELOAD_SIZE = 100
+const DEFAULT_PRELOAD_SIZE = 0
 const DEFAULT_ENV_PREFIX = "JR"
 const DEFAULT_EMITTER_NAME = "emitter"
 const DEFAULT_VALUE_TEMPLATE = "user"

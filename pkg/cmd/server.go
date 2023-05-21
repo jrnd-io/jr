@@ -3,13 +3,16 @@ package cmd
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/ugol/jr/pkg/configuration"
+	"github.com/ugol/jr/pkg/constants"
+	"github.com/ugol/jr/pkg/ctx"
+	"github.com/ugol/jr/pkg/loop"
 	"log"
 	"net/http"
 	"time"
 
 	"github.com/gorilla/mux"
 	"github.com/spf13/cobra"
-	"github.com/ugol/jr/pkg/functions"
 )
 
 type JsonConfig struct {
@@ -21,7 +24,7 @@ type JsonConfig struct {
 	Num         int    `json:"num"`
 }
 
-var savedConfigurations map[string]functions.Configuration
+var savedConfigurations map[string]configuration.Configuration
 var outputTemplate = "{{.K}},{{.V}}"
 
 var serverCmd = &cobra.Command{
@@ -38,7 +41,7 @@ var serverCmd = &cobra.Command{
 	GroupID: "server",
 	Run: func(cmd *cobra.Command, args []string) {
 		//initialise the global map for configurations
-		savedConfigurations = make(map[string]functions.Configuration)
+		savedConfigurations = make(map[string]configuration.Configuration)
 		port, err := cmd.Flags().GetInt("port")
 		if err != nil {
 			log.Fatal(err)
@@ -66,22 +69,22 @@ func handleConfiguration(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if jsonconf.Key == "" {
-		jsonconf.Key = functions.DEFAULT_KEY
+		jsonconf.Key = constants.DEFAULT_KEY
 	}
 
 	if jsonconf.TemplateDir == "" {
-		jsonconf.TemplateDir = functions.JrContext.TemplateDir
+		jsonconf.TemplateDir = ctx.JrContext.TemplateDir
 	}
 
 	if jsonconf.Locale == "" {
-		jsonconf.Locale = functions.LOCALE
+		jsonconf.Locale = constants.LOCALE
 	}
 
 	if jsonconf.Num == 0 {
 		jsonconf.Num = 1
 	}
 
-	conf := functions.Configuration{
+	conf := configuration.Configuration{
 		TemplateNames:  []string{jsonconf.Template},
 		KeyTemplate:    jsonconf.Key,
 		OutputTemplate: outputTemplate,
@@ -95,7 +98,7 @@ func handleConfiguration(w http.ResponseWriter, r *http.Request) {
 		TemplateDir:    jsonconf.TemplateDir,
 		Autocreate:     false,
 		SchemaRegistry: false,
-		Serializer:     functions.DEFAULT_SERIALIZER,
+		Serializer:     constants.DEFAULT_SERIALIZER,
 		Url:            jsonconf.URL,
 	}
 	// Save Configuration in the global map to handle it later
@@ -112,7 +115,7 @@ func handleData(w http.ResponseWriter, r *http.Request) {
 	configuration, ok := savedConfigurations[url]
 
 	if ok {
-		functions.DoTemplates(configuration, &w)
+		loop.DoTemplates(configuration, &w)
 	} else {
 		w.WriteHeader(http.StatusNotFound)
 	}

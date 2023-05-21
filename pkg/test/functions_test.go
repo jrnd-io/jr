@@ -18,11 +18,12 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //THE SOFTWARE.
 
-package functions
+package test
 
 import (
 	"bytes"
 	"fmt"
+	"github.com/ugol/jr/pkg/functions"
 	"testing"
 	"text/template"
 )
@@ -92,16 +93,16 @@ func TestUSState(t *testing.T) {
 
 func TestCache(t *testing.T) {
 
-	v, f := cache("wine")
+	v, f := functions.Cache("wine")
 
 	if v != true || f != nil {
 		t.Error("cache should be empty, no errors")
 	}
-	v, f = cache("wine")
+	v, f = functions.Cache("wine")
 	if v != false || f != nil {
 		t.Error("cache should be full, no errors")
 	}
-	_, f = cache("wines")
+	_, f = functions.Cache("wines")
 	if f == nil {
 		t.Error("no cacheable, should get error")
 	}
@@ -205,7 +206,7 @@ func runt(tpl, expect string) error {
 
 func runtv(tpl, expect string, vars interface{}) error {
 
-	t := template.Must(template.New("test").Funcs(FunctionsMap()).Parse(tpl))
+	t := template.Must(template.New("test").Funcs(functions.FunctionsMap()).Parse(tpl))
 	var b bytes.Buffer
 	err := t.Execute(&b, vars)
 	if err != nil {

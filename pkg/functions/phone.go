@@ -20,9 +20,11 @@
 
 package functions
 
+import "github.com/ugol/jr/pkg/ctx"
+
 // CountryCode returns a random Country Code prefix
 func CountryCode() string {
-	countryIndex := JrContext.CountryIndex
+	countryIndex := ctx.JrContext.CountryIndex
 	if countryIndex == -1 {
 		return Word("country_code")
 	} else {
@@ -42,12 +44,12 @@ func Imei() string {
 		account[i] = digits[Random.Intn(len(digits))]
 	}
 	first14 := string(account)
-	return first14 + luhnCheckDigit(first14)
+	return first14 + LuhnCheckDigit(first14)
 }
 
 // Phone returns a random land prefix
 func Phone() string {
-	cityIndex := JrContext.CityIndex
+	cityIndex := ctx.JrContext.CityIndex
 	if cityIndex == -1 {
 		l := Word("phone")
 		lp, _ := Regex(l)
@@ -67,7 +69,7 @@ func PhoneAt(index int) string {
 
 // MobilePhone returns a random mobile phone
 func MobilePhone() string {
-	countryIndex := JrContext.CountryIndex
+	countryIndex := ctx.JrContext.CountryIndex
 	if countryIndex == -1 {
 		m := Word("mobile_phone")
 		mp, _ := Regex(m)

@@ -23,6 +23,7 @@ package functions
 import (
 	"bufio"
 	"fmt"
+	"github.com/ugol/jr/pkg/ctx"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 	"log"
@@ -186,13 +187,13 @@ var fmap = map[string]interface{}{
 	"add_v_to_list":        AddValueToList,
 	"random_v_from_list":   RandomValueFromList,
 	"random_n_v_from_list": RandomNValuesFromList,
-	"get_v":                func(s string) string { return JrContext.Ctx[s] },
-	"set_v":                func(s string, v string) string { JrContext.Ctx[s] = v; return "" },
+	"get_v":                func(s string) string { return ctx.JrContext.Ctx[s] },
+	"set_v":                func(s string, v string) string { ctx.JrContext.Ctx[s] = v; return "" },
 }
 
 // AddValueToList adds value v to Context list l
 func AddValueToList(l string, v string) string {
-	JrContext.CtxList[l] = append(JrContext.CtxList[l], v)
+	ctx.JrContext.CtxList[l] = append(ctx.JrContext.CtxList[l], v)
 	return ""
 }
 
@@ -209,7 +210,7 @@ func ExtractMetaFrom(outTemplate string) (string, string) {
 
 // IndexOf returns the index of the s string in a file
 func IndexOf(s string, name string) int {
-	_, err := cache(name)
+	_, err := Cache(name)
 	if err != nil {
 		return -1
 	}
@@ -225,7 +226,7 @@ func IndexOf(s string, name string) int {
 
 // Len returns number of words (lines) in a word file
 func Len(name string) string {
-	_, err := cache(name)
+	_, err := Cache(name)
 	if err != nil {
 		return ""
 	}
@@ -235,18 +236,18 @@ func Len(name string) string {
 
 // RandomIndex returns a random index in a word file
 func RandomIndex(name string) string {
-	_, err := cache(name)
+	_, err := Cache(name)
 	if err != nil {
 		return ""
 	}
 	words := data[name]
-	JrContext.LastIndex = Random.Intn(len(words))
-	return strconv.Itoa(JrContext.LastIndex)
+	ctx.JrContext.LastIndex = Random.Intn(len(words))
+	return strconv.Itoa(ctx.JrContext.LastIndex)
 }
 
 // RandomValueFromList returns a random value from Context list l
 func RandomValueFromList(s string) string {
-	list := JrContext.CtxList[s]
+	list := ctx.JrContext.CtxList[s]
 	l := len(list)
 	if l != 0 {
 		return list[Random.Intn(l)]
@@ -257,7 +258,7 @@ func RandomValueFromList(s string) string {
 
 // RandomNValuesFromList returns a random value from Context list l
 func RandomNValuesFromList(s string, n int) []string {
-	list := JrContext.CtxList[s]
+	list := ctx.JrContext.CtxList[s]
 	l := len(list)
 	if l != 0 {
 		ints := findNDifferentInts(n, l)
@@ -273,18 +274,18 @@ func RandomNValuesFromList(s string, n int) []string {
 
 // Word returns a random string from a list of strings in a file.
 func Word(name string) string {
-	_, err := cache(name)
+	_, err := Cache(name)
 	if err != nil {
 		return ""
 	}
 	words := data[name]
-	JrContext.LastIndex = Random.Intn(len(words))
-	return words[JrContext.LastIndex]
+	ctx.JrContext.LastIndex = Random.Intn(len(words))
+	return words[ctx.JrContext.LastIndex]
 }
 
 // WordAt returns a string at a given position in a list of strings in a file.
 func WordAt(name string, index int) string {
-	_, err := cache(name)
+	_, err := Cache(name)
 	if err != nil {
 		return ""
 	}
@@ -294,7 +295,7 @@ func WordAt(name string, index int) string {
 
 // WordShuffle returns a shuffled list of strings in a file.
 func WordShuffle(name string) []string {
-	_, err := cache(name)
+	_, err := Cache(name)
 	if err != nil {
 		return []string{""}
 	}
@@ -304,7 +305,7 @@ func WordShuffle(name string) []string {
 
 // wordShuffleN return a subset of n elements in a list of string in a file.
 func WordShuffleN(name string, n int) []string {
-	_, err := cache(name)
+	_, err := Cache(name)
 	if err != nil {
 		return []string{""}
 	}
@@ -331,15 +332,15 @@ func Maxint(a, b int) int {
 	return b
 }
 
-// cache is used to internally cache data from word files
-func cache(name string) (bool, error) {
+// Cache is used to internally Cache data from word files
+func Cache(name string) (bool, error) {
 
 	v := data[name]
 	if v == nil {
-		locale := JrContext.Locale
-		filename := fmt.Sprintf("%s/data/%s/%s", JrContext.TemplateDir, locale, name)
+		locale := ctx.JrContext.Locale
+		filename := fmt.Sprintf("%s/data/%s/%s", ctx.JrContext.TemplateDir, locale, name)
 		if locale != "us" && !(fileExists(filename)) {
-			filename = fmt.Sprintf("%s/data/%s/%s", JrContext.TemplateDir, "US", name)
+			filename = fmt.Sprintf("%s/data/%s/%s", ctx.JrContext.TemplateDir, "US", name)
 		}
 		data[name] = initialize(filename)
 		if len(data[name]) == 0 {

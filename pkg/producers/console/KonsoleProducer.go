@@ -18,34 +18,28 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //THE SOFTWARE.
 
-package cmd
+package console
 
 import (
-	"github.com/spf13/cobra"
-	"github.com/ugol/jr/pkg/constants"
-	"github.com/ugol/jr/pkg/producers/kafka"
+	"fmt"
+	"github.com/ugol/jr/pkg/tpl"
 )
 
-var createTopicCmd = &cobra.Command{
-	Use:   "createTopic [topic]",
-	Short: "Create a Kafka Topic",
-	Long:  "Create a Kafka Topic",
-	Args:  cobra.ExactArgs(1),
-	Run: func(cmd *cobra.Command, args []string) {
-		kafkaConfig, _ := cmd.Flags().GetString("kafkaConfig")
-
-		kManager := &kafka.KafkaManager{}
-		kManager.Initialize(kafkaConfig)
-		partitions, _ := cmd.Flags().GetInt("partitions")
-		replica, _ := cmd.Flags().GetInt("replica")
-		kManager.CreateTopicFull(args[0], partitions, replica)
-
-	},
+type KonsoleProducer struct {
+	OutputTpl *tpl.Tpl
 }
 
-func init() {
-	rootCmd.AddCommand(createTopicCmd)
-	createTopicCmd.Flags().IntP("partitions", "p", constants.DEFAULT_PARTITIONS, "Number of partitions")
-	createTopicCmd.Flags().IntP("replica", "r", constants.DEFAULT_REPLICA, "Replica Factor")
-	createTopicCmd.Flags().StringP("kafkaConfig", "F", constants.KAFKA_CONFIG, "Kafka configuration")
+func (k *KonsoleProducer) Close() {
+	// no need to close
+}
+
+func (k *KonsoleProducer) Produce(key []byte, value []byte, o interface{}) {
+
+	data := struct {
+		K string
+		V string
+	}{string(key), string(value)}
+
+	out := k.OutputTpl.ExecuteWith(data)
+	fmt.Print(out)
 }

@@ -21,14 +21,17 @@
 package cmd
 
 import (
+	"fmt"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"github.com/ugol/jr/pkg/functions"
+	"github.com/ugol/jr/pkg/configuration"
+	"github.com/ugol/jr/pkg/constants"
 	"log"
 	"os"
 )
 
 var cfgFile string
+var globalCfg configuration.GlobalConfiguration
 
 var rootCmd = &cobra.Command{
 	Use:   "jr",
@@ -60,11 +63,11 @@ func initConfig() {
 	if cfgFile != "" {
 		viper.SetConfigFile(cfgFile)
 	} else {
-		home := functions.DEFAULT_HOMEDIR
+		home := constants.DEFAULT_HOMEDIR
 		viper.AddConfigPath(home)
 		viper.SetConfigType("json")
 		viper.SetConfigName("jrconfig")
-		viper.SetEnvPrefix(functions.DEFAULT_ENV_PREFIX)
+		viper.SetEnvPrefix(constants.DEFAULT_ENV_PREFIX)
 
 	}
 
@@ -73,4 +76,9 @@ func initConfig() {
 	if err := viper.ReadInConfig(); err == nil {
 		log.Println("Using config file:", viper.ConfigFileUsed())
 	}
+	err := viper.UnmarshalKey("global", &globalCfg)
+	if err != nil {
+		log.Println(err)
+	}
+	fmt.Println(globalCfg)
 }

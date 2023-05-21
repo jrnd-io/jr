@@ -1,8 +1,9 @@
 //Adapted for JR from https://github.com/lucasjones/reggen
 
-package functions
+package test
 
 import (
+	"github.com/ugol/jr/pkg/functions"
 	"regexp"
 	"testing"
 )
@@ -30,7 +31,7 @@ var c = []testCase{
 
 func TestGenerate(t *testing.T) {
 	for _, test := range c {
-		r, err := Regex(test.regex)
+		r, err := functions.Regex(test.regex)
 		if err != nil {
 			t.Fatal("Error creating generator: ", err)
 		}

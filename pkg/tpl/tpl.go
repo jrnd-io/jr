@@ -18,34 +18,39 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //THE SOFTWARE.
 
-package cmd
+package tpl
 
 import (
-	"github.com/spf13/cobra"
-	"github.com/ugol/jr/pkg/constants"
-	"github.com/ugol/jr/pkg/producers/kafka"
+	"bytes"
+	"log"
+	"text/template"
 )
 
-var createTopicCmd = &cobra.Command{
-	Use:   "createTopic [topic]",
-	Short: "Create a Kafka Topic",
-	Long:  "Create a Kafka Topic",
-	Args:  cobra.ExactArgs(1),
-	Run: func(cmd *cobra.Command, args []string) {
-		kafkaConfig, _ := cmd.Flags().GetString("kafkaConfig")
-
-		kManager := &kafka.KafkaManager{}
-		kManager.Initialize(kafkaConfig)
-		partitions, _ := cmd.Flags().GetInt("partitions")
-		replica, _ := cmd.Flags().GetInt("replica")
-		kManager.CreateTopicFull(args[0], partitions, replica)
-
-	},
+type Tpl struct {
+	Context  any
+	Template *template.Template
 }
 
-func init() {
-	rootCmd.AddCommand(createTopicCmd)
-	createTopicCmd.Flags().IntP("partitions", "p", constants.DEFAULT_PARTITIONS, "Number of partitions")
-	createTopicCmd.Flags().IntP("replica", "r", constants.DEFAULT_REPLICA, "Replica Factor")
-	createTopicCmd.Flags().StringP("kafkaConfig", "F", constants.KAFKA_CONFIG, "Kafka configuration")
+func NewTpl(name string, t string, fmap map[string]interface{}, ctx any) (Tpl, error) {
+
+	tp, err := template.New(name).Funcs(fmap).Parse(t)
+
+	tpl := Tpl{
+		Context:  ctx,
+		Template: tp,
+	}
+	return tpl, err
+}
+
+func (t *Tpl) Execute() string {
+	return t.ExecuteWith(t.Context)
+}
+
+func (t *Tpl) ExecuteWith(data any) string {
+	var buffer bytes.Buffer
+	err := t.Template.Execute(&buffer, data)
+	if err != nil {
+		log.Println(err)
+	}
+	return buffer.String()
 }

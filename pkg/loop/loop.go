@@ -131,7 +131,7 @@ func DoTemplates(conf configuration.Configuration, options interface{}) {
 
 	if conf.Output == "mongo" ||  conf.Output == "mongodb" {
     		for i := range conf.TemplateNames {
-    			producer[i] = createRedisProducer(conf.RedisTtl, conf.RedisConfig)
+    			producer[i] = createMongoProducer(conf.MongoConfig)
     		}
     	}
 

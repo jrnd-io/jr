@@ -142,5 +142,6 @@ func init() {
 	templateRunCmd.Flags().String("serializer", constants.DEFAULT_SERIALIZER, "Type of serializer: json-schema, avro-generic, avro, protobuf")
 	templateRunCmd.Flags().Duration("redis.ttl", constants.REDIS_TTL, "If output is redis, ttl of the object")
 	templateRunCmd.Flags().String("redisConfig", constants.REDIS_CONFIG, "Redis configuration")
+	templateRunCmd.Flags().String("mongoConfig", constants.MONGO_CONFIG, "MongoDB configuration")
 
 }

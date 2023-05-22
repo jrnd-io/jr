@@ -12,6 +12,7 @@ type GlobalConfiguration struct {
 	AutoCreate     bool
 	RedisTtl       time.Duration
 	RedisConfig    string
+	MongoConfig    string
 	Url            string
 }
 
@@ -40,5 +41,6 @@ type Configuration struct {
 	Serializer       string
 	RedisTtl         time.Duration
 	RedisConfig      string
+	MongoConfig      string
 	Url              string
 }

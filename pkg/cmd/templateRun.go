@@ -71,6 +71,7 @@ jr template run --templateFileName ~/.jr/templates/net_device.tpl
 
 		redisTtl, _ := cmd.Flags().GetDuration("redis.ttl")
 		redisConfig, _ := cmd.Flags().GetString("redisConfig")
+		mongoConfig, _ := cmd.Flags().GetString("mongoConfig")
 
 		if kcat {
 			oneline = true
@@ -101,6 +102,7 @@ jr template run --templateFileName ~/.jr/templates/net_device.tpl
 			Serializer:       serializer,
 			RedisTtl:         redisTtl,
 			RedisConfig:      redisConfig,
+			MongoConfig:      mongoConfig,
 			Preload:          preload,
 			PreloadSize:      preloadSize,
 		}
@@ -140,5 +142,6 @@ func init() {
 	templateRunCmd.Flags().String("serializer", constants.DEFAULT_SERIALIZER, "Type of serializer: json-schema, avro-generic, avro, protobuf")
 	templateRunCmd.Flags().Duration("redis.ttl", constants.REDIS_TTL, "If output is redis, ttl of the object")
 	templateRunCmd.Flags().String("redisConfig", constants.REDIS_CONFIG, "Redis configuration")
+	templateRunCmd.Flags().String("mongoConfig", constants.MONGO_CONFIG, "MongoDB configuration")
 
 }

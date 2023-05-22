@@ -39,6 +39,7 @@ import (
 	"github.com/ugol/jr/pkg/producers/console"
 	"github.com/ugol/jr/pkg/producers/kafka"
 	"github.com/ugol/jr/pkg/producers/redis"
+	"github.com/ugol/jr/pkg/producers/mongoDB"
 	"github.com/ugol/jr/pkg/producers/server"
 )
 
@@ -128,14 +129,16 @@ func DoTemplates(conf configuration.Configuration, options interface{}) {
 		}
 	}
 
+	if conf.Output == "mongo" ||  conf.Output == "mongodb" {
+    		for i := range conf.TemplateNames {
+    			producer[i] = createMongoProducer(conf.MongoConfig)
+    		}
+    	}
+
 	if conf.Output == "http" {
 		for i := range conf.TemplateNames {
 			producer[i] = &server.JsonProducer{OutTemplate: outTemplate}
 		}
-	}
-
-	if conf.Output == "mongo" {
-		log.Fatal("Not yet implemented")
 	}
 
 	orderedParsedTemplates := orderValueTemplates(value, conf.TemplateNames)
@@ -208,6 +211,13 @@ func createRedisProducer(ttl time.Duration, redisConfig string) Producer {
 	}
 	rProducer.Initialize(redisConfig)
 	return rProducer
+}
+
+func createMongoProducer(mongoConfig string) Producer {
+	mProducer := &mongoDB.MongoProducer{}
+	mProducer.Initialize(mongoConfig)
+
+	return mProducer
 }
 
 func createKafkaProducer(conf configuration.Configuration, index int) *kafka.KafkaManager {

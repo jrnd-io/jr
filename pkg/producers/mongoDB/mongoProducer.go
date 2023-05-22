@@ -24,11 +24,6 @@ type MongoProducer struct {
 	collection string
 }
 
-type MongoData struct {
-    ID   string
-    Data []byte
-}
-
 func (p *MongoProducer) Initialize(configFile string) {
     var config Config
     file, err := ioutil.ReadFile(configFile)
@@ -61,12 +56,13 @@ func (p *MongoProducer) Produce(k []byte, v []byte, o interface{})  {
 
     collection := p.client.Database(p.database).Collection(p.collection)
 
-    doc := MongoData{
-        ID:   string(k),
-        Data: v,
+    var dev map[string]interface{}
+    err := json.Unmarshal(v, &dev)
+    if err != nil {
+    	log.Fatalf("Failed to unmarshal json:\n%s", err)
     }
 
-    _, err := collection.InsertOne(context.Background(), doc)
+    _, err = collection.InsertOne(context.Background(), dev)
     if err != nil {
     	log.Fatalf("Failed to write data in Mongo:\n%s", err)
     }

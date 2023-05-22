@@ -1,28 +1,52 @@
 {
   "emitters": [
     {
-      "name": "emitter1",
+      "name": "shoe",
       "locale": "us",
-      "num": 3,
-      "frequency": "10s",
-      "duration": "30s",
-      "preload": 1000,
-      "valueTemplate": "user",
+      "num": 0,
+      "frequency": "0s",
+      "duration": "1h",
+      "preload": 100,
+      "valueTemplate": "shoe",
       "keyTemplate": "null",
       "outputTemplate": "{{.V}}\n",
-      "topic": "test1"
+      "topic": "shoes"
     },
     {
-      "name": "emitter2",
+      "name": "shoe_customer",
+      "locale": "us",
+      "num": 1,
+      "frequency": "10s",
+      "duration": "1h",
+      "preload": 20,
+      "valueTemplate": "shoe_customer",
+      "keyTemplate": "null",
+      "outputTemplate": "{{.V}}\n",
+      "topic": "shoe_customers"
+    },
+    {
+      "name": "shoe_order",
+      "locale": "us",
+      "num": 1,
+      "frequency": "1s",
+      "duration": "1h",
+      "preload": 0,
+      "valueTemplate": "shoe_order",
+      "keyTemplate": "null",
+      "outputTemplate": "{{.V}}\n",
+      "topic": "shoe_orders"
+    },
+    {
+      "name": "shoe_clickstream",
       "locale": "us",
       "num": 1,
       "frequency": "100ms",
-      "duration": "-1ms",
+      "duration": "1h",
       "preload": 0,
-      "valueTemplate": "net_device",
-      "keyTemplate": "{{key \"KEY\" 20}}",
+      "valueTemplate": "shoe_clickstream",
+      "keyTemplate": "null",
       "outputTemplate": "{{.V}}\n",
-      "topic": "test2"
+      "topic": "shoe_clickstream"
     }
   ],
   "global": {

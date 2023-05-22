@@ -43,7 +43,7 @@ var emitterListCmd = &cobra.Command{
 		}
 
 		for _, v := range emitters {
-			fmt.Println(v)
+			fmt.Printf("%s -> %+v \n", v.Name, v)
 		}
 
 	},

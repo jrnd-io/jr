@@ -64,9 +64,17 @@ func (e *Emitter) Run(conf configuration.GlobalConfiguration) {
 
 	producer := e.CreateProducer()
 
-	k := keyTpl.Execute()
-	v := valueTpl.Execute()
-	producer.Produce([]byte(k), []byte(v), nil)
+	for i := 0; i < e.Preload; i++ {
+		k := keyTpl.Execute()
+		v := valueTpl.Execute()
+		producer.Produce([]byte(k), []byte(v), nil)
+	}
+
+	for i := 0; i < e.Num; i++ {
+		k := keyTpl.Execute()
+		v := valueTpl.Execute()
+		producer.Produce([]byte(k), []byte(v), nil)
+	}
 
 }
 

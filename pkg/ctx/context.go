@@ -23,6 +23,7 @@ package ctx
 import (
 	"github.com/ugol/jr/pkg/constants"
 	"os"
+	"sync"
 	"time"
 )
 
@@ -44,8 +45,11 @@ type Context struct {
 	Locale              string
 	Seed                int64
 	CtxCounters         map[string]int
+	CtxCountersLock     sync.RWMutex
 	Ctx                 map[string]string
+	CtxLock             sync.RWMutex
 	CtxList             map[string][]string
+	CtxListLock         sync.RWMutex
 	LastIndex           int
 	CountryIndex        int
 	CityIndex           int
@@ -68,8 +72,11 @@ func init() {
 		Locale:              "us",
 		Seed:                time.Now().UTC().UnixNano(),
 		CtxCounters:         make(map[string]int),
+		CtxCountersLock:     sync.RWMutex{},
 		Ctx:                 make(map[string]string),
+		CtxLock:             sync.RWMutex{},
 		CtxList:             make(map[string][]string),
+		CtxListLock:         sync.RWMutex{},
 		LastIndex:           -1,
 		CountryIndex:        232,
 		CityIndex:           -1,

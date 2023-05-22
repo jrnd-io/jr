@@ -111,7 +111,7 @@ func DoTemplates(conf configuration.Configuration, options interface{}) {
 
 	if conf.Output == "kafka" {
 		if len(conf.TemplateNames) != len(conf.Topic) {
-			log.Fatalf("There are %d templates and %d topics, every templates must have its own topic. \nFor example: jr run user net-device -o kafka -t \"test\",\"test1\"", len(conf.TemplateNames), len(conf.Topic))
+			log.Fatalf("There are %d templates and %d topics, every templates must have its own topic. \nFor example: jr template run user net-device -o kafka -t \"test\",\"test1\"", len(conf.TemplateNames), len(conf.Topic))
 		}
 		for i := range conf.TemplateNames {
 			producer[i] = createKafkaProducer(conf, i)

@@ -34,11 +34,11 @@ var templateRunCmd = &cobra.Command{
 	Short: "Execute a template",
 	Long: `Execute a template. 
   Without any other flag, [template] is just the name of a template in the templates directory, which by default is in '$HOME/.jr/templates' Example: 
-jr run net-device
+jr template run net-device
   With the --template flag, [template] is a string containing a full template. Example:
-jr run --template "{{name}}"
+jr template run --template "{{name}}"
  With the -templateFileName flag [template] is a file name with a template. Example:
-jr run --templateFileName ~/.jr/templates/net_device.tpl
+jr template run --templateFileName ~/.jr/templates/net_device.tpl
 `,
 	Args: cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {

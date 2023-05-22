@@ -187,12 +187,14 @@ var fmap = map[string]interface{}{
 	"add_v_to_list":        AddValueToList,
 	"random_v_from_list":   RandomValueFromList,
 	"random_n_v_from_list": RandomNValuesFromList,
-	"get_v":                func(s string) string { return ctx.JrContext.Ctx[s] },
-	"set_v":                func(s string, v string) string { ctx.JrContext.Ctx[s] = v; return "" },
+	"get_v":                GetV,
+	"set_v":                SetV,
 }
 
 // AddValueToList adds value v to Context list l
 func AddValueToList(l string, v string) string {
+	ctx.JrContext.CtxListLock.Lock()
+	defer ctx.JrContext.CtxListLock.Unlock()
 	ctx.JrContext.CtxList[l] = append(ctx.JrContext.CtxList[l], v)
 	return ""
 }
@@ -206,6 +208,21 @@ func ExtractMetaFrom(outTemplate string) (string, string) {
 	meta := outTemplate[start+7 : end+1]
 	tpl := outTemplate[0:start-1] + outTemplate[end+2:]
 	return meta, tpl
+}
+
+// GetV gets value s from Context
+func GetV(s string) string {
+	ctx.JrContext.CtxLock.RLock()
+	defer ctx.JrContext.CtxLock.RUnlock()
+	return ctx.JrContext.Ctx[s]
+}
+
+// SetV adds value v to Context
+func SetV(s string, v string) string {
+	ctx.JrContext.CtxLock.Lock()
+	defer ctx.JrContext.CtxLock.Unlock()
+	ctx.JrContext.Ctx[s] = v
+	return ""
 }
 
 // IndexOf returns the index of the s string in a file
@@ -247,6 +264,8 @@ func RandomIndex(name string) string {
 
 // RandomValueFromList returns a random value from Context list l
 func RandomValueFromList(s string) string {
+	ctx.JrContext.CtxListLock.RLock()
+	defer ctx.JrContext.CtxListLock.RUnlock()
 	list := ctx.JrContext.CtxList[s]
 	l := len(list)
 	if l != 0 {
@@ -258,6 +277,8 @@ func RandomValueFromList(s string) string {
 
 // RandomNValuesFromList returns a random value from Context list l
 func RandomNValuesFromList(s string, n int) []string {
+	ctx.JrContext.CtxListLock.RLock()
+	defer ctx.JrContext.CtxListLock.RUnlock()
 	list := ctx.JrContext.CtxList[s]
 	l := len(list)
 	if l != 0 {

@@ -4,9 +4,9 @@
   "last_name": "{{surname}}",
   "email": "{{email}}",
   "state": "{{state}}",
-  "zip_code": "{{zip}}"
+  "zip_code": "{{zip}}",
   "street_address": "{{city}}, {{street}} {{building 2}}, {{zip}}",
   "phone_number": "{{phone}}",
   "country": "United States",
-  "country_code: "US"
+  "country_code": "US"
 }

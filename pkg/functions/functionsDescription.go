@@ -49,7 +49,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "length int",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{account 10}}'",
+		Example:     "jr template run --template '{{account 10}}'",
 		Output:      "6192117146",
 	},
 	"add": {
@@ -59,7 +59,7 @@ var funcDesc = map[string]FunctionDescription{
 		Localizable: false,
 		Description: "adds two numbers",
 		Return:      "int",
-		Example:     "jr run --template '{{add 1 2}}'",
+		Example:     "jr template run --template '{{add 1 2}}'",
 		Output:      "3",
 	},
 	"add_v_to_list": {
@@ -69,7 +69,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "name string, value string",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{add_v_to_list \"ids\" \"12770\"}}{{random_v_from_list \"ids\"}}'",
+		Example:     "jr template run --template '{{add_v_to_list \"ids\" \"12770\"}}{{random_v_from_list \"ids\"}}'",
 		Output:      "12770",
 	},
 	"amount": {
@@ -79,7 +79,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "min float32, max float32, currency string",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{account 10 1000 \"$\"}}'",
+		Example:     "jr template run --template '{{account 10 1000 \"$\"}}'",
 		Output:      "$7409.66",
 	},
 	"array": {
@@ -89,7 +89,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "size int",
 		Localizable: false,
 		Return:      "array",
-		Example:     "jr run --template '{{array 5}}'",
+		Example:     "jr template run --template '{{array 5}}'",
 		Output:      "[0,0,0,0,0]",
 	},
 	"atoi": {
@@ -99,7 +99,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "string string",
 		Localizable: false,
 		Return:      "int",
-		Example:     "jr run --template '{{atoi \"123\"}}'",
+		Example:     "jr template run --template '{{atoi \"123\"}}'",
 		Output:      "123",
 	},
 	"birthdate": {
@@ -109,7 +109,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "minAge int, maxAge int",
 		Localizable: false,
 		Return:      "[]string",
-		Example:     "jr run --template '{{birthdate 1 23}}'",
+		Example:     "jr template run --template '{{birthdate 1 23}}'",
 		Output:      "2018-06-09",
 	},
 	"bitcoin": {
@@ -119,7 +119,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{bitcoin}}'",
+		Example:     "jr template run --template '{{bitcoin}}'",
 		Output:      "12KuG8lNm42zkk3aKd4sC0uuFM",
 	},
 	"bool": {
@@ -129,7 +129,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "",
 		Localizable: false,
 		Return:      "bool",
-		Example:     "jr run --template '{{bool}}'",
+		Example:     "jr template run --template '{{bool}}'",
 		Output:      "true",
 	},
 	"building": {
@@ -139,7 +139,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "n int",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{building 3}}'",
+		Example:     "jr template run --template '{{building 3}}'",
 		Output:      "982",
 	},
 	"capital": {
@@ -149,7 +149,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "",
 		Localizable: true,
 		Return:      "string",
-		Example:     "jr run --template '{{capital}}'",
+		Example:     "jr template run --template '{{capital}}'",
 		Output:      "Phoenix",
 	},
 	"capital_at": {
@@ -159,7 +159,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "index int",
 		Localizable: true,
 		Return:      "string",
-		Example:     "jr run --template '{{capital_at 4}}'",
+		Example:     "jr template run --template '{{capital_at 4}}'",
 		Output:      "Sacramento",
 	},
 	"card": {
@@ -169,7 +169,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "issuer string",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{card \"amex\"}}'",
+		Example:     "jr template run --template '{{card \"amex\"}}'",
 		Output:      "376794009305701",
 	},
 	"cardCVV": {
@@ -179,7 +179,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "length int",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{cardCVV 3}}'",
+		Example:     "jr template run --template '{{cardCVV 3}}'",
 		Output:      "072",
 	},
 	"cardinal": {
@@ -189,7 +189,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "short bool",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{cardinal false}} {{cardinal true}}'",
+		Example:     "jr template run --template '{{cardinal false}} {{cardinal true}}'",
 		Output:      "North-Ovest SE",
 	},
 	"cf": {
@@ -199,7 +199,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{cf}'",
+		Example:     "jr template run --template '{{cf}'",
 		Output:      "RSSMRA70A30H501W",
 	},
 	"city": {
@@ -209,7 +209,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "",
 		Localizable: true,
 		Return:      "string",
-		Example:     "jr run --template '{{city}}'",
+		Example:     "jr template run --template '{{city}}'",
 		Output:      "New York",
 	},
 	"city_at": {
@@ -219,7 +219,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "index int",
 		Localizable: true,
 		Return:      "string",
-		Example:     "jr run --template '{{city_at 1}}'",
+		Example:     "jr template run --template '{{city_at 1}}'",
 		Output:      "Austin",
 	},
 	"company": {
@@ -229,7 +229,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "",
 		Localizable: true,
 		Return:      "string",
-		Example:     "jr run --template '{{company}}'",
+		Example:     "jr template run --template '{{company}}'",
 		Output:      "Umbrella Corporation",
 	},
 	"counter": {
@@ -239,7 +239,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "name string, start int, step int",
 		Localizable: false,
 		Return:      "int",
-		Example:     "jr run -n 5 --template '{{counter \"mycounter\" 0 1}}'",
+		Example:     "jr template run -n 5 --template '{{counter \"mycounter\" 0 1}}'",
 		Output:      "\n0\n1\n2\n3\n4",
 	},
 	"country": {
@@ -259,7 +259,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "",
 		Localizable: true,
 		Return:      "string",
-		Example:     "jr run --template '{{country}}'",
+		Example:     "jr template run --template '{{country}}'",
 		Output:      "IT",
 	},
 	"country_at": {
@@ -269,7 +269,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "",
 		Localizable: true,
 		Return:      "string",
-		Example:     "jr run --template '{{country_at 109}}'",
+		Example:     "jr template run --template '{{country_at 109}}'",
 		Output:      "IT",
 	},
 	"country_code": {
@@ -279,7 +279,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{country_code}}'",
+		Example:     "jr template run --template '{{country_code}}'",
 		Output:      "+39",
 	},
 	"country_code_at": {
@@ -289,7 +289,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{country_code_at 109}}'",
+		Example:     "jr template run --template '{{country_code_at 109}}'",
 		Output:      "+39",
 	},
 	"cusip": {
@@ -299,7 +299,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{cusip}}'",
+		Example:     "jr template run --template '{{cusip}}'",
 		Output:      "DWNFYN9W2",
 	},
 	"date_between": {
@@ -309,7 +309,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "from string, to string",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{date_between \"1970-12-07\" \"1990-12-07\"}}'",
+		Example:     "jr template run --template '{{date_between \"1970-12-07\" \"1990-12-07\"}}'",
 		Output:      "1985-06-29",
 	},
 	"dates_between": {
@@ -319,7 +319,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "from string, to string, num int",
 		Localizable: false,
 		Return:      "[]string",
-		Example:     "jr run --template '{{dates_between \"1970-12-07\" \"1990-12-07\" 3}}'",
+		Example:     "jr template run --template '{{dates_between \"1970-12-07\" \"1990-12-07\" 3}}'",
 		Output:      "[1974-12-27 1987-06-07 1985-08-18]",
 	},
 	"div": {
@@ -329,7 +329,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "first int, second int",
 		Localizable: false,
 		Return:      "int",
-		Example:     "jr run --template '{{div 10 2}}'",
+		Example:     "jr template run --template '{{div 10 2}}'",
 		Output:      "5",
 	},
 	"email": {
@@ -339,7 +339,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "",
 		Localizable: true,
 		Return:      "string",
-		Example:     "jr run --template '{{email_provider}}'",
+		Example:     "jr template run --template '{{email_provider}}'",
 		Output:      "paul.newman@gmail.com",
 	},
 	"email_provider": {
@@ -349,7 +349,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "",
 		Localizable: true,
 		Return:      "string",
-		Example:     "jr run --template '{{email_provider}}'",
+		Example:     "jr template run --template '{{email_provider}}'",
 		Output:      "gmail.com",
 	},
 	"email_work": {
@@ -359,7 +359,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "",
 		Localizable: true,
 		Return:      "string",
-		Example:     "jr run --template '{{email_work}}'",
+		Example:     "jr template run --template '{{email_work}}'",
 		Output:      "paul.newman@bostonstatic.com",
 	},
 	"ethereum": {
@@ -369,7 +369,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{ethereum}}'",
+		Example:     "jr template run --template '{{ethereum}}'",
 		Output:      "0xb0c2fa65e1C39bD0ADeE9c2EDfC260af81aF62f8",
 	},
 	"first": {
@@ -379,7 +379,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "text string",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{first \"hello world\"}}'",
+		Example:     "jr template run --template '{{first \"hello world\"}}'",
 		Output:      "h",
 	},
 	"firstword": {
@@ -389,7 +389,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "text string",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{firstword \"hello world\"}}'",
+		Example:     "jr template run --template '{{firstword \"hello world\"}}'",
 		Output:      "hello",
 	},
 	"floating": {
@@ -399,7 +399,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "min float64, max float64",
 		Localizable: false,
 		Return:      "float64",
-		Example:     "jr run --template '{{floating 10 20}}'",
+		Example:     "jr template run --template '{{floating 10 20}}'",
 		Output:      "13.123",
 	},
 	"format_float": {
@@ -409,7 +409,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "format string, number float",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{{format_float \"%.2f\" (floating 1 5)}}'",
+		Example:     "jr template run --template '{{{format_float \"%.2f\" (floating 1 5)}}'",
 		Output:      "4.46",
 	},
 	"from": {
@@ -419,7 +419,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "set string",
 		Localizable: true,
 		Return:      "string",
-		Example:     "jr run --template '{{from \"actor\"}}'",
+		Example:     "jr template run --template '{{from \"actor\"}}'",
 		Output:      "John Travolta",
 	},
 	"from_at": {
@@ -429,7 +429,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "index int",
 		Localizable: true,
 		Return:      "string",
-		Example:     "jr run --template '{{from_at \"actor\" 3}}'",
+		Example:     "jr template run --template '{{from_at \"actor\" 3}}'",
 		Output:      "James Dean",
 	},
 	"from_n": {
@@ -439,7 +439,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "set string, number int",
 		Localizable: true,
 		Return:      "[]string",
-		Example:     "jr run --template '{{from_n \"State\" 5}}'",
+		Example:     "jr template run --template '{{from_n \"State\" 5}}'",
 		Output:      "[West Virginia Idaho Maryland New Hampshire Wyoming]",
 	},
 	"from_shuffle": {
@@ -449,7 +449,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "set string",
 		Localizable: true,
 		Return:      "[]string",
-		Example:     "jr run --template '{{from_shuffle \"state_short\"}}'",
+		Example:     "jr template run --template '{{from_shuffle \"state_short\"}}'",
 		Output:      "[ND IL MO WA NC SD MS PA AZ HI DE SC WI WV TN AL MA IA NH NV OH VA WY MT MN NM LA OK IN CA OR VT MD NY RI UT AK NE AR CO FL ID KY TX ME GA NJ MI KS CT]",
 	},
 	"future": {
@@ -459,7 +459,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "years int",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{future 5}}'",
+		Example:     "jr template run --template '{{future 5}}'",
 		Output:      "2022-05-08",
 	},
 	"gender": {
@@ -469,7 +469,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{gender}}'",
+		Example:     "jr template run --template '{{gender}}'",
 		Output:      "F",
 	},
 	"get_v": {
@@ -479,7 +479,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "name string",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{set_v \"id\" \"12770\"}}{{get_v \"id\"}}'",
+		Example:     "jr template run --template '{{set_v \"id\" \"12770\"}}{{get_v \"id\"}}'",
 		Output:      "12770",
 	},
 	"http_method": {
@@ -489,7 +489,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{http_method}}'",
+		Example:     "jr template run --template '{{http_method}}'",
 		Output:      "GET",
 	},
 	"image": {
@@ -499,7 +499,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "width int, height int",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{image 640 480}}'",
+		Example:     "jr template run --template '{{image 640 480}}'",
 		Output:      "https://loremflickr.com/640/480/animals",
 	},
 	"image_of": {
@@ -511,7 +511,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "width int, height int, type string",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{image_of 640 480 \"cats\"}}'",
+		Example:     "jr template run --template '{{image_of 640 480 \"cats\"}}'",
 		Output:      "https://loremflickr.com/640/480/cats",
 	},
 	"imei": {
@@ -521,7 +521,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{imei}}'",
+		Example:     "jr template run --template '{{imei}}'",
 		Output:      "334238791972527",
 	},
 	"integer": {
@@ -531,7 +531,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "min int, max int",
 		Localizable: false,
 		Return:      "int",
-		Example:     "jr run --template '{{integer 10 20}}'",
+		Example:     "jr template run --template '{{integer 10 20}}'",
 		Output:      "13",
 	},
 	"integer64": {
@@ -541,7 +541,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "min int64, max int64",
 		Localizable: false,
 		Return:      "int64",
-		Example:     "jr run --template '{{integer64 10 20}}'",
+		Example:     "jr template run --template '{{integer64 10 20}}'",
 		Output:      "13",
 	},
 	"ip": {
@@ -551,7 +551,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "cidr string",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{ip \"10.2.0.0/16\"}}'",
+		Example:     "jr template run --template '{{ip \"10.2.0.0/16\"}}'",
 		Output:      "10.2.55.217",
 	},
 	"ipv6": {
@@ -561,7 +561,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{ipv6}}'",
+		Example:     "jr template run --template '{{ipv6}}'",
 		Output:      "2001:db8:85a3:8d3:1319:8a2e:370:7348",
 	},
 	"ip_known_protocol": {
@@ -571,7 +571,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{ip_known_protocol}}'",
+		Example:     "jr template run --template '{{ip_known_protocol}}'",
 		Output:      "tcp",
 	},
 	"ip_known_port": {
@@ -581,7 +581,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{ip_known_port}}'",
+		Example:     "jr template run --template '{{ip_known_port}}'",
 		Output:      "80",
 	},
 	"isin": {
@@ -591,7 +591,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{isin}}'",
+		Example:     "jr template run --template '{{isin}}'",
 		Output:      "",
 	},
 	"join": {
@@ -601,7 +601,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "strings []string",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{join \"hello,\" \"world\"}}'",
+		Example:     "jr template run --template '{{join \"hello,\" \"world\"}}'",
 		Output:      "hello,world",
 	},
 	"key": {
@@ -611,7 +611,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "prefix string, length int",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{key \"KEY\" 20}}'",
+		Example:     "jr template run --template '{{key \"KEY\" 20}}'",
 		Output:      "KEY4",
 	},
 	"index_of": {
@@ -621,7 +621,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "s string, name string",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{index_of  \"New York\" \"city\"}}'",
+		Example:     "jr template run --template '{{index_of  \"New York\" \"city\"}}'",
 		Output:      "27",
 	},
 	"latitude": {
@@ -631,7 +631,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{latitude}}'",
+		Example:     "jr template run --template '{{latitude}}'",
 		Output:      "",
 	},
 	"len": {
@@ -641,7 +641,7 @@ var funcDesc = map[string]FunctionDescription{
 		Localizable: true,
 		Description: "returns the length a list of strings in a file. Files are in '$HOME/.jr/templates/data/locale'",
 		Return:      "string",
-		Example:     "jr run --template '{{len \"city\"}}'",
+		Example:     "jr template run --template '{{len \"city\"}}'",
 		Output:      "46",
 	},
 	"longitude": {
@@ -651,7 +651,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{longitude}}'",
+		Example:     "jr template run --template '{{longitude}}'",
 		Output:      "",
 	},
 	"lower": {
@@ -661,7 +661,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "text string",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{lower \"HELLO\"}}'",
+		Example:     "jr template run --template '{{lower \"HELLO\"}}'",
 		Output:      "hello",
 	},
 	"lorem": {
@@ -671,7 +671,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "words int",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{lorem 10}}'",
+		Example:     "jr template run --template '{{lorem 10}}'",
 		Output:      "Lorem ipsum dolor sit amet, consectetur adipiscing elit.Fusce elit magna.",
 	},
 	"mac": {
@@ -681,7 +681,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{mac}}'",
+		Example:     "jr template run --template '{{mac}}'",
 		Output:      "7e:8e:75:a5:0a:85",
 	},
 	"max": {
@@ -691,7 +691,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "first int, second int",
 		Localizable: false,
 		Return:      "int",
-		Example:     "jr run --template '{{max 10 2}}'",
+		Example:     "jr template run --template '{{max 10 2}}'",
 		Output:      "10",
 	},
 	"markov": {
@@ -701,7 +701,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "chain int, text string",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{markov 10 \"hello world\"}}'",
+		Example:     "jr template run --template '{{markov 10 \"hello world\"}}'",
 		Output:      "hello world",
 	},
 	"min": {
@@ -711,7 +711,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "min int, max int",
 		Localizable: false,
 		Return:      "int",
-		Example:     "jr run --template '{{min 10 2}}'",
+		Example:     "jr template run --template '{{min 10 2}}'",
 		Output:      "2",
 	},
 	"middle_name": {
@@ -721,7 +721,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "",
 		Localizable: true,
 		Return:      "string",
-		Example:     "jr run --template '{{middle_name}}'",
+		Example:     "jr template run --template '{{middle_name}}'",
 		Output:      "J",
 	},
 	"mobile_phone": {
@@ -731,7 +731,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{mobile_phone}}'",
+		Example:     "jr template run --template '{{mobile_phone}}'",
 		Output:      "34033546096",
 	},
 	"mobile_phone_at": {
@@ -741,7 +741,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{mobile_phone_at 79}}'",
+		Example:     "jr template run --template '{{mobile_phone_at 79}}'",
 		Output:      "3422308090",
 	},
 	"mod": {
@@ -751,7 +751,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "first int, second int",
 		Localizable: false,
 		Return:      "int",
-		Example:     "jr run --template '{{mod 10 2}}'",
+		Example:     "jr template run --template '{{mod 10 2}}'",
 		Output:      "0",
 	},
 	"mul": {
@@ -761,7 +761,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "first int, second int",
 		Localizable: false,
 		Return:      "int",
-		Example:     "jr run --template '{{mul 10 2}}'",
+		Example:     "jr template run --template '{{mul 10 2}}'",
 		Output:      "20",
 	},
 	"name": {
@@ -771,7 +771,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "",
 		Localizable: true,
 		Return:      "string",
-		Example:     "jr run --template '{{name}}'",
+		Example:     "jr template run --template '{{name}}'",
 		Output:      "Lisa",
 	},
 	"name_m": {
@@ -781,7 +781,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "",
 		Localizable: true,
 		Return:      "string",
-		Example:     "jr run --template '{{name_m}}'",
+		Example:     "jr template run --template '{{name_m}}'",
 		Output:      "John",
 	},
 	"name_f": {
@@ -791,7 +791,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "",
 		Localizable: true,
 		Return:      "string",
-		Example:     "jr run --template '{{name_f}}'",
+		Example:     "jr template run --template '{{name_f}}'",
 		Output:      "Lisa",
 	},
 	"nearby_gps": {
@@ -801,7 +801,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "latitude float64, longitude float64, radius int",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{nearby_gps 41.9028 12.4964 1000}}'",
+		Example:     "jr template run --template '{{nearby_gps 41.9028 12.4964 1000}}'",
 		Output:      "41.8963 12.4975",
 	},
 	"password": {
@@ -811,7 +811,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "length int, memorable bool, prefix string, suffix string",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{password 10 true \"!\" \"?\"}}'",
+		Example:     "jr template run --template '{{password 10 true \"!\" \"?\"}}'",
 		Output:      "!itAPYgivIH?",
 	},
 	"past": {
@@ -821,7 +821,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "years int",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{past 5}}'",
+		Example:     "jr template run --template '{{past 5}}'",
 		Output:      "2022-05-08",
 	},
 	"phone": {
@@ -831,7 +831,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{phone}}'",
+		Example:     "jr template run --template '{{phone}}'",
 		Output:      "06 72358749",
 	},
 	"phone_at": {
@@ -841,7 +841,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "index int",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{phone_at 79}}'",
+		Example:     "jr template run --template '{{phone_at 79}}'",
 		Output:      "06 72358749",
 	},
 	"random": {
@@ -861,7 +861,7 @@ var funcDesc = map[string]FunctionDescription{
 		Localizable: false,
 		Description: "returns a random strings from a | separated list string",
 		Return:      "string",
-		Example:     "jr run --template '{{randoms \"ALPHA|BETA|GAMMA|DELTA\"}}'",
+		Example:     "jr template run --template '{{randoms \"ALPHA|BETA|GAMMA|DELTA\"}}'",
 		Output:      "BETA",
 	},
 	"random_index": {
@@ -871,7 +871,7 @@ var funcDesc = map[string]FunctionDescription{
 		Localizable: true,
 		Description: "returns a random index from a list of strings in a file. Files are in '$HOME/.jr/templates/data/locale'",
 		Return:      "string",
-		Example:     "jr run --template '{{random_index \"city\"}}'",
+		Example:     "jr template run --template '{{random_index \"city\"}}'",
 		Output:      "12",
 	},
 	"random_string": {
@@ -881,7 +881,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "min int, max int, vocabulary string",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{random_string 3 10}}'",
+		Example:     "jr template run --template '{{random_string 3 10}}'",
 		Output:      "YBCEjxmn",
 	},
 	"random_string_vocabulary": {
@@ -891,7 +891,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "min int, max int, vocabulary string",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{random_string_vocabulary 3 10 \"hello world\"}}'",
+		Example:     "jr template run --template '{{random_string_vocabulary 3 10 \"hello world\"}}'",
 		Output:      "llolh",
 	},
 	"random_v_from_list": {
@@ -901,8 +901,18 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "name string",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{add_v_to_list \"ids\" \"12770\"}}{{random_v_from_list \"ids\"}}'",
+		Example:     "jr template run --template '{{add_v_to_list \"ids\" \"12770\"}}{{random_v_from_list \"ids\"}}'",
 		Output:      "12770",
+	},
+	"random_n_v_from_list": {
+		Name:        "random_n_v_from_list",
+		Category:    "context",
+		Description: "returns n random values from a list. All values will be different. The list must be set with 'add_v_to_list', usually in an other template",
+		Parameters:  "name string",
+		Localizable: false,
+		Return:      "string",
+		Example:     "jr template run --template '{{add_v_to_list \"ids\" \"12770\"}}{{add_v_to_list \"ids\" \"12771\"}}{{add_v_to_list \"ids\" \"12772\"}}{{random_n_v_from_list \"ids\" 2}}'",
+		Output:      "[12770,12771]",
 	},
 	"recent": {
 		Name:        "recent",
@@ -911,7 +921,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "days int",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{recent 15}}'",
+		Example:     "jr template run --template '{{recent 15}}'",
 		Output:      "2023-04-17",
 	},
 	"regex": {
@@ -921,7 +931,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "regex string",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{regex \"[a-z]{5}\"}}'",
+		Example:     "jr template run --template '{{regex \"[a-z]{5}\"}}'",
 		Output:      "xxlbh",
 	},
 	"repeat": {
@@ -931,7 +941,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "text string, number int",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{repeat \"hello\" 3}}'",
+		Example:     "jr template run --template '{{repeat \"hello\" 3}}'",
 		Output:      "hellohellohello",
 	},
 	"replaceall": {
@@ -941,7 +951,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "set string, original string, replaced string",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{replaceall \"hello world\" \"hello\" \"goodbye\"}}'",
+		Example:     "jr template run --template '{{replaceall \"hello world\" \"hello\" \"goodbye\"}}'",
 		Output:      "goodbye world",
 	},
 	"sedol": {
@@ -951,7 +961,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{sedol}}'",
+		Example:     "jr template run --template '{{sedol}}'",
 		Output:      "",
 	},
 	"sentence": {
@@ -961,7 +971,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "words int",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{sentence 15}}'",
+		Example:     "jr template run --template '{{sentence 15}}'",
 		Output:      "Alice was not going to happen next. First, she tried to curtsey as she fell",
 	},
 	"sentence_prefix": {
@@ -971,7 +981,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "prefix int, length int",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{sentence_prefix 3 15}}'",
+		Example:     "jr template run --template '{{sentence_prefix 3 15}}'",
 		Output:      "Alice was beginning to get very tired of sitting by her sister on the bank.",
 	},
 	"set_v": {
@@ -981,7 +991,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "name string, value string",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{set_v \"id\" \"12770\"}}{{get_v \"id\"}}'",
+		Example:     "jr template run --template '{{set_v \"id\" \"12770\"}}{{get_v \"id\"}}'",
 		Output:      "12770",
 	},
 	"soon": {
@@ -991,7 +1001,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "days int",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{soon 15}}'",
+		Example:     "jr template run --template '{{soon 15}}'",
 		Output:      "2023-04-25",
 	},
 	"split": {
@@ -1001,7 +1011,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "text string, separator string",
 		Localizable: false,
 		Return:      "[]string",
-		Example:     "jr run --template '{{split \"hello,world\" \",\"}}'",
+		Example:     "jr template run --template '{{split \"hello,world\" \",\"}}'",
 		Output:      "[hello world]",
 	},
 	"squeezechars": {
@@ -1011,7 +1021,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "set string, chars string",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{squeezechars \"hello world\" \"l\"}}'",
+		Example:     "jr template run --template '{{squeezechars \"hello world\" \"l\"}}'",
 		Output:      "heo word",
 	},
 	"ssn": {
@@ -1021,7 +1031,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{ssn}}'",
+		Example:     "jr template run --template '{{ssn}}'",
 		Output:      "834-76-1234",
 	},
 	"state": {
@@ -1031,7 +1041,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "",
 		Localizable: true,
 		Return:      "string",
-		Example:     "jr run --template '{{state}}'",
+		Example:     "jr template run --template '{{state}}'",
 		Output:      "New York",
 	},
 	"state_at": {
@@ -1041,7 +1051,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "index int",
 		Localizable: true,
 		Return:      "string",
-		Example:     "jr run --template '{{state_at 3}}'",
+		Example:     "jr template run --template '{{state_at 3}}'",
 		Output:      "Arkansas",
 	},
 	"state_short": {
@@ -1051,7 +1061,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "",
 		Localizable: true,
 		Return:      "string",
-		Example:     "jr run --template '{{state_short}}'",
+		Example:     "jr template run --template '{{state_short}}'",
 		Output:      "KY",
 	},
 	"state_short_at": {
@@ -1061,7 +1071,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "index int",
 		Localizable: true,
 		Return:      "string",
-		Example:     "jr run --template '{{state_short_at 3}}'",
+		Example:     "jr template run --template '{{state_short_at 3}}'",
 		Output:      "AR",
 	},
 	"street": {
@@ -1071,7 +1081,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "",
 		Localizable: true,
 		Return:      "string",
-		Example:     "jr run --template '{{street}}'",
+		Example:     "jr template run --template '{{street}}'",
 		Output:      "Union Street",
 	},
 	"sub": {
@@ -1081,7 +1091,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "first int, second int",
 		Localizable: false,
 		Return:      "int",
-		Example:     "jr run --template '{{sub 1 2}}'",
+		Example:     "jr template run --template '{{sub 1 2}}'",
 		Output:      "-1",
 	},
 	"surname": {
@@ -1091,7 +1101,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "",
 		Localizable: true,
 		Return:      "string",
-		Example:     "jr run --template '{{surname}}'",
+		Example:     "jr template run --template '{{surname}}'",
 		Output:      "Wright",
 	},
 	"swift": {
@@ -1101,7 +1111,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{swift}}'",
+		Example:     "jr template run --template '{{swift}}'",
 		Output:      "KZMTMP84448",
 	},
 	"squeeze": {
@@ -1111,7 +1121,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "text string",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{squeeze \" hello   world \"}}'",
+		Example:     "jr template run --template '{{squeeze \" hello   world \"}}'",
 		Output:      "helloworld",
 	},
 	"substr": {
@@ -1121,7 +1131,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "from int, to int, text string",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{substr 0 5 \"hello world\"}}'",
+		Example:     "jr template run --template '{{substr 0 5 \"hello world\"}}'",
 		Output:      "hello",
 	},
 	"title": {
@@ -1131,7 +1141,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "text string",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{title \"hello world\"}}'",
+		Example:     "jr template run --template '{{title \"hello world\"}}'",
 		Output:      "Hello World",
 	},
 	"trim": {
@@ -1141,7 +1151,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "text string",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{trim \" hello world \"}}'",
+		Example:     "jr template run --template '{{trim \" hello world \"}}'",
 		Output:      "hello world",
 	},
 	"trimchars": {
@@ -1151,7 +1161,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "set string, chars string",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{trimchars \"hello world\" \"hld\"}}'",
+		Example:     "jr template run --template '{{trimchars \"hello world\" \"hld\"}}'",
 		Output:      "ello wor",
 	},
 	"unix_time_stamp": {
@@ -1161,7 +1171,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "days int",
 		Localizable: false,
 		Return:      "int64",
-		Example:     "jr run --template '{{unix_time_stamp 10}}'",
+		Example:     "jr template run --template '{{unix_time_stamp 10}}'",
 		Output:      "1679703304",
 	},
 	"upper": {
@@ -1171,7 +1181,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "text string",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{upper \"hello\"}}'",
+		Example:     "jr template run --template '{{upper \"hello\"}}'",
 		Output:      "HELLO",
 	},
 	"useragent": {
@@ -1181,7 +1191,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{useragent}}'",
+		Example:     "jr template run --template '{{useragent}}'",
 		Output:      "Mozilla/5.0 (Android 10) AppleWebKit/592.64 (KHTML, like Gecko) Chrome Mobile/7.3.5.7 Mobile Safari/9.10",
 	},
 	"user": {
@@ -1191,7 +1201,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "name string, surname string, length int",
 		Localizable: true,
 		Return:      "string",
-		Example:     "jr run --template '{{user \"barack\" \"obama\" 12 }}'",
+		Example:     "jr template run --template '{{user \"barack\" \"obama\" 12 }}'",
 		Output:      "barackobama75",
 	},
 	"username": {
@@ -1201,7 +1211,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "name string, surname stringt",
 		Localizable: true,
 		Return:      "string",
-		Example:     "jr run --template '{{username \"barack\" \"obama\" }}'",
+		Example:     "jr template run --template '{{username \"barack\" \"obama\" }}'",
 		Output:      "b-obama",
 	},
 	"uuid": {
@@ -1211,7 +1221,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{uuid}}'",
+		Example:     "jr template run --template '{{uuid}}'",
 		Output:      "a6da3ed0-5fcb-4bb8-a6aa-654120a1e6e3",
 	},
 	"valor": {
@@ -1221,7 +1231,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{valor}}'",
+		Example:     "jr template run --template '{{valor}}'",
 		Output:      "0832047",
 	},
 	"wkn": {
@@ -1231,7 +1241,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{wkn}}'",
+		Example:     "jr template run --template '{{wkn}}'",
 		Output:      "UFJKSNM",
 	},
 	"yesorno": {
@@ -1241,7 +1251,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr run --template '{{yesorno}}'",
+		Example:     "jr template run --template '{{yesorno}}'",
 		Output:      "yes",
 	},
 	"zip": {
@@ -1251,7 +1261,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "",
 		Localizable: true,
 		Return:      "string",
-		Example:     "jr run --template '{{zip}}'",
+		Example:     "jr template run --template '{{zip}}'",
 		Output:      "21401",
 	},
 	"zip_at": {
@@ -1261,7 +1271,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "index int",
 		Localizable: true,
 		Return:      "string",
-		Example:     "jr run --template '{{zip_at 3}}'",
+		Example:     "jr template run --template '{{zip_at 3}}'",
 		Output:      "72201",
 	},
 }

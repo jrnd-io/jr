@@ -57,7 +57,7 @@ Templates with parsing issues are showed in <font color='red'>red</font>, Templa
 Use for example the predefined `net_device` template to generate a random JSON network device
 
 ```bash
-jr run net_device
+jr template run net_device
 ````
 
 ### Other options for templates
@@ -72,13 +72,13 @@ If you want to use your own template, you have several options:
 For a quick and dirty test, a good option is to directly point to a template:
 
 ```bash 
-jr run --templateFileName ~/.jr/templates/user.tpl
+jr template run --templateFileName ~/.jr/templates/user.tpl
 ```
 
 For an even quicker and dirtier test, the best option is to embed directly a template in the command:
 
 ```bash
-jr run --template "name:{{name}}"
+jr template run --template "name:{{name}}"
 ```
 
 ### Create more random data 
@@ -87,7 +87,7 @@ Using `-n` option you can create more data in each pass.
 This example creates 3 net_device objects at once:
 
 ```bash
-jr run net_device -n 3
+jr template run net_device -n 3
 ```
 ### Continuous streaming data
 
@@ -95,12 +95,12 @@ Using `--frequency` option you can repeat the creation every `f` milliseconds
 
 This example creates 2 net_device every second, for ever:
 ```bash
-jr run net_device -n 2 -f 1s 
+jr template run net_device -n 2 -f 1s 
 ```
 Using `--duration` option you can time bound the entire object creation.
 This example creates 2 net_device every 100ms for 1 minute:
 ```bash
-jr run net_device -n 2 -f 100ms -d 1m 
+jr template run net_device -n 2 -f 100ms -d 1m 
 ```
 
 Results are by default written on standard out (`--output "stdout"`) with this output template:

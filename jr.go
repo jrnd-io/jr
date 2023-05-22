@@ -31,19 +31,19 @@ You can override with the --templatePath command flag Templates with parsing iss
 
 To use for example one of the predefined templates, net-device:
 
-> jr run net-device
+> jr template run net-device
 
 Using -n option you can create more data in each pass. This example creates 3 net-device objects at once:
 
-> jr run net-device -n 3
+> jr template run net-device -n 3
 
 Using --frequency option you can repeat the creation every f milliseconds. This example creates 2 net-device every second, for ever:
 
-> jr run net-device -n 2 -f 1s
+> jr template run net-device -n 2 -f 1s
 
 Using --duration option you can time bound the entire object creation. This example creates 2 net-device every 100ms for 1 minute:
 
-> jr run net-device -n 2 -f 100ms -d 1m
+> jr template run net-device -n 2 -f 100ms -d 1m
 */
 package main
 

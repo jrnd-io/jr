@@ -51,13 +51,13 @@ type Emitter struct {
 
 func (e *Emitter) Run(conf configuration.GlobalConfiguration) {
 
-	keyTpl, err := tpl.NewTpl("key", e.KeyTemplate, functions.FunctionsMap(), ctx.JrContext)
+	keyTpl, err := tpl.NewTpl("key", e.KeyTemplate, functions.FunctionsMap(), &ctx.JrContext)
 	if err != nil {
 		log.Println(err)
 	}
 	templatePath := fmt.Sprintf("%s/%s.tpl", os.ExpandEnv(conf.TemplateDir), e.ValueTemplate)
 	vt, err := os.ReadFile(templatePath)
-	valueTpl, err := tpl.NewTpl("value", string(vt), functions.FunctionsMap(), ctx.JrContext)
+	valueTpl, err := tpl.NewTpl("value", string(vt), functions.FunctionsMap(), &ctx.JrContext)
 	if err != nil {
 		log.Println(err)
 	}

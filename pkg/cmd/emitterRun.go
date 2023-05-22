@@ -45,13 +45,15 @@ var emitterRunCmd = &cobra.Command{
 		if len(args) == 0 {
 			wg.Add(number)
 			for _, v := range emitters {
-				go v.Run(GlobalCfg)
+				//go v.Run(GlobalCfg)
+				v.Run(GlobalCfg)
 			}
 		} else {
 			for _, v := range emitters {
 				if functions.Contains(args, v.Name) {
 					wg.Add(1)
 					go v.Run(GlobalCfg)
+					//v.Run(GlobalCfg)
 				}
 			}
 		}

@@ -41,6 +41,6 @@ type Configuration struct {
 	Serializer       string
 	RedisTtl         time.Duration
 	RedisConfig      string
-	MongoConfig    string
+	MongoConfig      string
 	Url              string
 }

@@ -19,9 +19,9 @@ type Config struct {
 }
 
 type MongoProducer struct {
-	client mongo.Client
-	database string
-	collection string
+    client mongo.Client
+    database string
+    collection string
 }
 
 func (p *MongoProducer) Initialize(configFile string) {
@@ -69,8 +69,8 @@ func (p *MongoProducer) Produce(k []byte, v []byte, o interface{})  {
 }
 
 func (p *MongoProducer) Close() {
-	err := p.client.Disconnect(context.TODO())
-	if err != nil {
-		log.Fatalf("Failed to close Mongo connection:\n%s", err)
-	}
+    err := p.client.Disconnect(context.Background())
+    if err != nil {
+    	log.Fatalf("Failed to close Mongo connection:\n%s", err)
+    }
 }

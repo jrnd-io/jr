@@ -1,0 +1,7 @@
+{
+  "mongo_uri": "mongodb://localhost:27017",
+  "database": "mydb",
+  "collection" "col1",
+  "username": "admin",
+  "password": "password123"
+}

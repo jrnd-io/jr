@@ -71,6 +71,7 @@ jr run --templateFileName ~/.jr/templates/net_device.tpl
 
 		redisTtl, _ := cmd.Flags().GetDuration("redis.ttl")
 		redisConfig, _ := cmd.Flags().GetString("redisConfig")
+		mongoConfig, _ := cmd.Flags().GetString("mongoConfig")
 
 		if kcat {
 			oneline = true
@@ -101,6 +102,7 @@ jr run --templateFileName ~/.jr/templates/net_device.tpl
 			Serializer:       serializer,
 			RedisTtl:         redisTtl,
 			RedisConfig:      redisConfig,
+			MongoConfig:      mongoConfig,
 			Preload:          preload,
 			PreloadSize:      preloadSize,
 		}

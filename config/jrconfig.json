@@ -59,6 +59,7 @@
     "autoCreate": false,
     "redisTtl": "1m",
     "redisConfig": "",
+    "mongoConfig": "",
     "url": ""
   }
 }

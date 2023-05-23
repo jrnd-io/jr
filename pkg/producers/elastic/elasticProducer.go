@@ -83,5 +83,5 @@ func (p *ElasticProducer) Produce(k []byte, v []byte, o interface{})  {
 }
 
 func (p *ElasticProducer) Close() {
-
+    log.Println("elasticsearch Client doesn't provide a close method!")
 }

@@ -48,5 +48,5 @@ releases
 build
 pkg/producers/kafka/*.properties
 pkg/producers/redis/config.json
-pkg/producers/redis/*.json
+pkg/producers/elastic/*.json
 pkg/producers/mongoDB/*.json

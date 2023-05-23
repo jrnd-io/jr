@@ -100,7 +100,7 @@ func init() {
 	emitterCreateCmd.Flags().StringVar(&valueTemplate, "valueTemplate", constants.DEFAULT_VALUE_TEMPLATE, "template name to use for the value")
 	emitterCreateCmd.Flags().StringVar(&keyTemplate, "keyTemplate", constants.DEFAULT_KEY, "template to use for the key")
 	emitterCreateCmd.Flags().StringVar(&outputTemplate, "outputTemplate", constants.DEFAULT_OUTPUT_TEMPLATE, "Formatting of K,V on standard output")
-	emitterCreateCmd.Flags().StringVarP(&output, "output", "o", constants.DEFAULT_OUTPUT, "can be one of stdout, kafka, redis, mongo")
+	emitterCreateCmd.Flags().StringVarP(&output, "output", "o", constants.DEFAULT_OUTPUT, "can be one of stdout, kafka, redis, mongo, elastic")
 	emitterCreateCmd.Flags().StringVar(&topic, "topic", constants.DEFAULT_TOPIC, "Default topic to write to if using output='kafka'")
 	emitterCreateCmd.Flags().BoolVar(&kcat, "kcat", false, "If you want to pipe jr with kcat, use this flag: it is equivalent to --output stdout --outputTemplate '{{key}},{{value}}' --oneline")
 	emitterCreateCmd.Flags().BoolVarP(&oneline, "oneline", "l", false, "strips /n from output, for example to be pipelined to tools like kcat")

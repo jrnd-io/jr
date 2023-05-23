@@ -60,6 +60,7 @@
     "redisTtl": "1m",
     "redisConfig": "",
     "mongoConfig": "",
+    "elasticConfig": "",
     "url": ""
   }
 }

@@ -1,7 +1,5 @@
 {
   "mongo_uri": "mongodb+srv://<username>:<password>@<cluster-address>/<database-name>?retryWrites=true&w=majority",
   "database": "mydb",
-  "collection": "col1",
-  "username": "admin",
-  "password": "password123"
+  "collection": "col1"
 }

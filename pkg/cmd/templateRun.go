@@ -72,6 +72,7 @@ jr template run --templateFileName ~/.jr/templates/net_device.tpl
 		redisTtl, _ := cmd.Flags().GetDuration("redis.ttl")
 		redisConfig, _ := cmd.Flags().GetString("redisConfig")
 		mongoConfig, _ := cmd.Flags().GetString("mongoConfig")
+		elasticConfig, _ := cmd.Flags().GetString("elasticConfig")
 
 		if kcat {
 			oneline = true
@@ -103,6 +104,7 @@ jr template run --templateFileName ~/.jr/templates/net_device.tpl
 			RedisTtl:         redisTtl,
 			RedisConfig:      redisConfig,
 			MongoConfig:      mongoConfig,
+			ElasticConfig:      elasticConfig,
 			Preload:          preload,
 			PreloadSize:      preloadSize,
 		}
@@ -143,5 +145,6 @@ func init() {
 	templateRunCmd.Flags().Duration("redis.ttl", constants.REDIS_TTL, "If output is redis, ttl of the object")
 	templateRunCmd.Flags().String("redisConfig", constants.REDIS_CONFIG, "Redis configuration")
 	templateRunCmd.Flags().String("mongoConfig", constants.MONGO_CONFIG, "MongoDB configuration")
+	templateRunCmd.Flags().String("elasticConfig", constants.ELASTIC_CONFIG, "Elastic Search configuration")
 
 }

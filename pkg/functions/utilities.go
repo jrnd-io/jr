@@ -28,9 +28,6 @@ import (
 
 // Counter creates a counter named c, starting from start and incrementing by step
 func Counter(c string, start, step int) int {
-	ctx.JrContext.CtxCountersLock.Lock()
-	defer ctx.JrContext.CtxCountersLock.Unlock()
-
 	val, exists := ctx.JrContext.CtxCounters[c]
 	if exists {
 		ctx.JrContext.CtxCounters[c] = val + step

@@ -193,8 +193,6 @@ var fmap = map[string]interface{}{
 
 // AddValueToList adds value v to Context list l
 func AddValueToList(l string, v string) string {
-	ctx.JrContext.CtxListLock.Lock()
-	defer ctx.JrContext.CtxListLock.Unlock()
 	ctx.JrContext.CtxList[l] = append(ctx.JrContext.CtxList[l], v)
 	return ""
 }
@@ -212,15 +210,11 @@ func ExtractMetaFrom(outTemplate string) (string, string) {
 
 // GetV gets value s from Context
 func GetV(s string) string {
-	ctx.JrContext.CtxLock.RLock()
-	defer ctx.JrContext.CtxLock.RUnlock()
 	return ctx.JrContext.Ctx[s]
 }
 
 // SetV adds value v to Context
 func SetV(s string, v string) string {
-	ctx.JrContext.CtxLock.Lock()
-	defer ctx.JrContext.CtxLock.Unlock()
 	ctx.JrContext.Ctx[s] = v
 	return ""
 }
@@ -264,8 +258,6 @@ func RandomIndex(name string) string {
 
 // RandomValueFromList returns a random value from Context list l
 func RandomValueFromList(s string) string {
-	ctx.JrContext.CtxListLock.RLock()
-	defer ctx.JrContext.CtxListLock.RUnlock()
 	list := ctx.JrContext.CtxList[s]
 	l := len(list)
 	if l != 0 {
@@ -277,8 +269,6 @@ func RandomValueFromList(s string) string {
 
 // RandomNValuesFromList returns a random value from Context list l
 func RandomNValuesFromList(s string, n int) []string {
-	ctx.JrContext.CtxListLock.RLock()
-	defer ctx.JrContext.CtxListLock.RUnlock()
 	list := ctx.JrContext.CtxList[s]
 	l := len(list)
 	if l != 0 {

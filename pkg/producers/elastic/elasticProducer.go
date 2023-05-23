@@ -9,6 +9,7 @@ import (
 
     "github.com/elastic/go-elasticsearch/v8"
     "github.com/elastic/go-elasticsearch/v8/esapi"
+    "github.com/google/uuid"
 )
 
 type Config struct {
@@ -45,9 +46,11 @@ func (p *ElasticProducer) Initialize(configFile string) {
 
 func (p *ElasticProducer) Produce(k []byte, v []byte, o interface{})  {
 
+    id := uuid.New()
+
     req := esapi.IndexRequest{
     	Index:      p.index,
-    	DocumentID: string(k),
+    	DocumentID: id.String(),
     	Body:       strings.NewReader(string(v)),
     	Refresh:    "true",
     }

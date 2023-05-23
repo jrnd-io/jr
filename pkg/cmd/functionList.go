@@ -101,5 +101,5 @@ func init() {
 	functionCmd.AddCommand(functionListCmd)
 	functionListCmd.Flags().BoolP("category", "c", false, "IndexOf in category")
 	functionListCmd.Flags().BoolP("find", "f", false, "IndexOf in description and name")
-	functionListCmd.Flags().BoolP("run", "r", false, "Run the example")
+	functionListCmd.Flags().BoolP("run", "r", false, "RunPreload the example")
 }

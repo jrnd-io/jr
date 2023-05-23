@@ -37,10 +37,10 @@ import (
 	"time"
 
 	"github.com/ugol/jr/pkg/producers/console"
-	"github.com/ugol/jr/pkg/producers/kafka"
-	"github.com/ugol/jr/pkg/producers/redis"
-	"github.com/ugol/jr/pkg/producers/mongoDB"
 	"github.com/ugol/jr/pkg/producers/elastic"
+	"github.com/ugol/jr/pkg/producers/kafka"
+	"github.com/ugol/jr/pkg/producers/mongoDB"
+	"github.com/ugol/jr/pkg/producers/redis"
 	"github.com/ugol/jr/pkg/producers/server"
 )
 
@@ -130,17 +130,17 @@ func DoTemplates(conf configuration.Configuration, options interface{}) {
 		}
 	}
 
-	if conf.Output == "mongo" ||  conf.Output == "mongodb" {
-    	for i := range conf.TemplateNames {
-    		producer[i] = createMongoProducer(conf.MongoConfig)
-    	}
-    }
+	if conf.Output == "mongo" || conf.Output == "mongodb" {
+		for i := range conf.TemplateNames {
+			producer[i] = createMongoProducer(conf.MongoConfig)
+		}
+	}
 
-    if conf.Output == "elastic" {
-        for i := range conf.TemplateNames {
-        	producer[i] = createElasticProducer(conf.ElasticConfig)
-        }
-    }
+	if conf.Output == "elastic" {
+		for i := range conf.TemplateNames {
+			producer[i] = createElasticProducer(conf.ElasticConfig)
+		}
+	}
 
 	if conf.Output == "http" {
 		for i := range conf.TemplateNames {

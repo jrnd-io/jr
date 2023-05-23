@@ -49,7 +49,7 @@ type Emitter struct {
 	Oneline        bool          `mapstructure:"oneline"`
 }
 
-func (e *Emitter) Run(conf configuration.GlobalConfiguration) {
+func (e *Emitter) RunPreload(conf configuration.GlobalConfiguration) {
 
 	keyTpl, err := tpl.NewTpl("key", e.KeyTemplate, functions.FunctionsMap(), &ctx.JrContext)
 	if err != nil {
@@ -64,13 +64,8 @@ func (e *Emitter) Run(conf configuration.GlobalConfiguration) {
 
 	producer := e.CreateProducer()
 
+	// Preload
 	for i := 0; i < e.Preload; i++ {
-		k := keyTpl.Execute()
-		v := valueTpl.Execute()
-		producer.Produce([]byte(k), []byte(v), nil)
-	}
-
-	for i := 0; i < e.Num; i++ {
 		k := keyTpl.Execute()
 		v := valueTpl.Execute()
 		producer.Produce([]byte(k), []byte(v), nil)

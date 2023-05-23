@@ -15,6 +15,8 @@ import (
 type Config struct {
     ElasticURI  string `json:"es_uri"`
     ElasticIndex  string `json:"index"`
+    ElasticUsername  string `json:"username"`
+    ElasticPassword  string `json:"password"`
 }
 
 type ElasticProducer struct {
@@ -32,6 +34,8 @@ func (p *ElasticProducer) Initialize(configFile string) {
 
     cfg := elasticsearch.Config{
     	Addresses: []string{config.ElasticURI},
+    	Username: config.ElasticUsername,
+        Password: config.ElasticPassword,
     }
 
     client, err := elasticsearch.NewClient(cfg)

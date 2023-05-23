@@ -5,6 +5,10 @@ import (
     "encoding/json"
     "log"
     "strings"
+    "time"
+    "net"
+    "net/http"
+    "crypto/tls"
     "io/ioutil"
 
     "github.com/elastic/go-elasticsearch/v8"
@@ -36,6 +40,14 @@ func (p *ElasticProducer) Initialize(configFile string) {
     	Addresses: []string{config.ElasticURI},
     	Username: config.ElasticUsername,
         Password: config.ElasticPassword,
+        Transport: &http.Transport{
+        	MaxIdleConnsPerHost:   10,
+        	ResponseHeaderTimeout: time.Second,
+        	DialContext:           (&net.Dialer{Timeout: time.Second}).DialContext,
+        	TLSClientConfig: &tls.Config{
+        		MinVersion: tls.VersionTLS12,
+        	},
+        },
     }
 
     client, err := elasticsearch.NewClient(cfg)

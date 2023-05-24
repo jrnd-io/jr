@@ -100,6 +100,8 @@ func (k *KafkaManager) Produce(key []byte, data []byte, o interface{}) {
 			log.Fatal("Protobuf not yet implemented")
 		} else if k.Serializer == "json-schema" {
 			ser, err = jsonschema.NewSerializer(k.schema, serde.ValueSerde, jsonschema.NewSerializerConfig())
+		} else {
+			log.Fatalf("Serializer '%v' not supported", k.Serializer)
 		}
 		if err != nil {
 			log.Fatalf("Error creating serializer: %s\n", err)

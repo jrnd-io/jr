@@ -102,8 +102,6 @@ func doLoop() {
 					select {
 					case <-ticker.C:
 
-						//fmt.Printf("%s every %s \n", emitters[index].Name, emitters[index].Frequency)
-
 						keyTpl, err := tpl.NewTpl("key", emitters[index].KeyTemplate, functions.FunctionsMap(), &ctx.JrContext)
 						if err != nil {
 							log.Println(err)

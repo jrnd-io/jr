@@ -9,7 +9,6 @@
       "preload": 100,
       "valueTemplate": "shoe",
       "output": "kafka",
-      "serializer": "json-schema",
       "keyTemplate": "null",
       "outputTemplate": "{{.V}}\n",
       "topic": "shoes"
@@ -23,7 +22,6 @@
       "preload": 20,
       "valueTemplate": "shoe_customer",
       "output": "kafka",
-      "serializer": "json-schema",
       "keyTemplate": "null",
       "outputTemplate": "{{.V}}\n",
       "topic": "shoe_customers"
@@ -37,7 +35,6 @@
       "preload": 0,
       "valueTemplate": "shoe_order",
       "output": "kafka",
-      "serializer": "json-schema",
       "keyTemplate": "null",
       "outputTemplate": "{{.V}}\n",
       "topic": "shoe_orders"
@@ -51,7 +48,6 @@
       "preload": 0,
       "valueTemplate": "shoe_clickstream",
       "output": "kafka",
-      "serializer": "json-schema",
       "keyTemplate": "null",
       "outputTemplate": "{{.V}}\n",
       "topic": "shoe_clickstream"
@@ -61,8 +57,9 @@
     "seed": 0,
     "templateDir": "$HOME/.jr/templates",
     "kafkaConfig": "./kafka/config.properties",
-    "schemaRegistry": false,
+    "schemaRegistry": true,
     "registryConfig": "./kafka/registry.properties",
+    "serializer": "json-schema",
     "autoCreate": true,
     "redisTtl": "1m",
     "redisConfig": "./redis/config.json",

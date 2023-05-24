@@ -142,7 +142,6 @@ func createKafkaProducer(conf configuration.GlobalConfiguration, topic string, t
 
 	kManager.Initialize(conf.KafkaConfig)
 
-	fmt.Println(conf.SchemaRegistry)
 	if conf.SchemaRegistry {
 		kManager.InitializeSchemaRegistry(conf.RegistryConfig)
 	}

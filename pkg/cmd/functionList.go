@@ -67,9 +67,13 @@ var functionListCmd = &cobra.Command{
 				printFunction(args[0])
 			}
 		} else {
+			count := 0
 			for k := range functions.FunctionsMap() {
+				count++
 				printFunction(k)
 			}
+			fmt.Println()
+			fmt.Printf("Total functions: %d\n", count)
 		}
 		fmt.Println()
 	},

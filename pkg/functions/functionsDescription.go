@@ -454,7 +454,7 @@ var funcDesc = map[string]FunctionDescription{
 	},
 	"future": {
 		Name:        "future",
-		Category:    "future",
+		Category:    "time",
 		Description: "returns a date in the future not after the given years",
 		Parameters:  "years int",
 		Localizable: false,

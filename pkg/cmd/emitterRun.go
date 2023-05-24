@@ -60,7 +60,20 @@ var emitterRunCmd = &cobra.Command{
 
 		doLoop()
 
+		closeProducers()
+		time.Sleep(100 * time.Millisecond)
+		writeStats()
+
 	},
+}
+
+func closeProducers() {
+	for i := 0; i < len(emitters); i++ {
+		p := emitters[i].Producer
+		if p != nil {
+			p.Close()
+		}
+	}
 }
 
 func doLoop() {
@@ -119,6 +132,17 @@ func doLoop() {
 	}
 
 	wg.Wait()
+}
+
+func writeStats() {
+	_, _ = fmt.Fprintln(os.Stderr)
+	elapsed := time.Since(ctx.JrContext.StartTime)
+	_, _ = fmt.Fprintf(os.Stderr, "Elapsed time: %v\n", elapsed.Round(1*time.Second))
+	_, _ = fmt.Fprintf(os.Stderr, "Data Generated (Objects): %d\n", ctx.JrContext.GeneratedObjects)
+	_, _ = fmt.Fprintf(os.Stderr, "Data Generated (bytes): %d\n", ctx.JrContext.GeneratedBytes)
+	_, _ = fmt.Fprintf(os.Stderr, "Number of templates (Objects): %d\n", ctx.JrContext.NumTemplates)
+	_, _ = fmt.Fprintf(os.Stderr, "Throughput (bytes per second): %9.f\n", float64(ctx.JrContext.GeneratedBytes)/elapsed.Seconds())
+	_, _ = fmt.Fprintln(os.Stderr)
 }
 
 func init() {

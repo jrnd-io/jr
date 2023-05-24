@@ -51,7 +51,6 @@ type Emitter struct {
 	Kcat           bool          `mapstructure:"kcat"`
 	Oneline        bool          `mapstructure:"oneline"`
 	Producer       loop.Producer
-	Test           string
 }
 
 func (e *Emitter) RunPreload(conf configuration.GlobalConfiguration) {
@@ -80,11 +79,7 @@ func (e *Emitter) Initialize(conf configuration.GlobalConfiguration) {
 
 	o, _ := tpl.NewTpl("out", e.OutputTemplate, functions.FunctionsMap(), nil)
 	if e.Output == "stdout" {
-		e.Test = e.Name
-
 		e.Producer = &console.KonsoleProducer{OutputTpl: &o}
-		fmt.Printf("SETTING PRODUCER %v/n", e.Producer)
-
 		return
 	}
 
@@ -145,6 +140,7 @@ func createKafkaProducer(conf configuration.GlobalConfiguration, topic string, t
 
 	kManager.Initialize(conf.KafkaConfig)
 
+	fmt.Println(conf.SchemaRegistry)
 	if conf.SchemaRegistry {
 		kManager.InitializeSchemaRegistry(conf.RegistryConfig)
 	}

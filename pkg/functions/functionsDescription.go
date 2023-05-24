@@ -494,7 +494,7 @@ var funcDesc = map[string]FunctionDescription{
 	},
 	"image": {
 		Name:        "image",
-		Category:    "utilities",
+		Category:    "image",
 		Description: "generates a random Image url of given width, height.",
 		Parameters:  "width int, height int",
 		Localizable: false,
@@ -504,7 +504,7 @@ var funcDesc = map[string]FunctionDescription{
 	},
 	"image_of": {
 		Name:     "image",
-		Category: "utilities",
+		Category: "image",
 		Description: "generates a random Image url of given width, height and type. Type can be one of \"abstract\", " +
 			"\"animals\", \"business\", \"cats\", \"city\", \"fashion\", \"food\", \"nature\", \"nightlife\", \"people\", " +
 			"\"sport\", \"technics\", \"transport\"",

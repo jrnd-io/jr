@@ -119,6 +119,9 @@ func doLoop() {
 						v := valueTpl.Execute()
 						emitters[index].Producer.Produce([]byte(k), []byte(v), nil)
 
+						ctx.JrContext.GeneratedObjects++
+						ctx.JrContext.GeneratedBytes += int64(len(v))
+
 					case <-stopChannels[timerIndex]:
 						return
 					}

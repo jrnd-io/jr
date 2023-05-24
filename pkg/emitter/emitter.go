@@ -71,6 +71,8 @@ func (e *Emitter) RunPreload(conf configuration.GlobalConfiguration) {
 		k := keyTpl.Execute()
 		v := valueTpl.Execute()
 		e.Producer.Produce([]byte(k), []byte(v), nil)
+		ctx.JrContext.GeneratedObjects++
+		ctx.JrContext.GeneratedBytes += int64(len(v))
 	}
 
 }

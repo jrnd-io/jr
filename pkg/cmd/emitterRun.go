@@ -24,8 +24,11 @@ import (
 	"fmt"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"github.com/ugol/jr/pkg/ctx"
 	"github.com/ugol/jr/pkg/functions"
+	"github.com/ugol/jr/pkg/tpl"
 	"log"
+	"os"
 	"sync"
 	"time"
 )
@@ -53,27 +56,21 @@ var emitterRunCmd = &cobra.Command{
 			}
 		}
 
-		// Create an array of timers and stop channels
 		numTimers := len(emitters)
 		timers := make([]*time.Timer, numTimers)
 		stopChannels := make([]chan struct{}, numTimers)
 
-		// Create a wait group to ensure all timers are processed
 		var wg sync.WaitGroup
 		wg.Add(numTimers)
 
-		// Start the timers
 		for i := 0; i < numTimers; i++ {
-			index := i // Capture the current index for the goroutine
+			index := i
 
-			// Create a stop channel for the current timer
 			stopChannels[i] = make(chan struct{})
 
-			// Start the timer's goroutine
 			go func(timerIndex int) {
 				defer wg.Done()
 
-				// Create a ticker for the current timer's frequency
 				frequency := emitters[timerIndex].Frequency
 				if frequency > 0 {
 					ticker := time.NewTicker(emitters[timerIndex].Frequency)
@@ -84,7 +81,23 @@ var emitterRunCmd = &cobra.Command{
 						select {
 						case <-ticker.C:
 
-							fmt.Printf("%s every %d \n", emitters[index].Name, emitters[index].Frequency)
+							//fmt.Printf("%s every %s \n", emitters[index].Name, emitters[index].Frequency)
+
+							keyTpl, err := tpl.NewTpl("key", emitters[index].KeyTemplate, functions.FunctionsMap(), &ctx.JrContext)
+							if err != nil {
+								log.Println(err)
+							}
+							templatePath := fmt.Sprintf("%s/%s.tpl", os.ExpandEnv(GlobalCfg.TemplateDir), emitters[index].ValueTemplate)
+							vt, err := os.ReadFile(templatePath)
+							valueTpl, err := tpl.NewTpl("value", string(vt), functions.FunctionsMap(), &ctx.JrContext)
+							if err != nil {
+								log.Println(err)
+							}
+							producer := emitters[index].CreateProducer()
+
+							k := keyTpl.Execute()
+							v := valueTpl.Execute()
+							producer.Produce([]byte(k), []byte(v), nil)
 
 						case <-stopChannels[timerIndex]:
 							return
@@ -93,13 +106,11 @@ var emitterRunCmd = &cobra.Command{
 				}
 			}(index)
 
-			// Create a timer to stop the goroutine after the duration elapses
 			timers[i] = time.AfterFunc(emitters[index].Duration, func() {
 				stopChannels[index] <- struct{}{}
 			})
 		}
 
-		// Wait for all timers to complete
 		wg.Wait()
 
 	},

@@ -45,75 +45,80 @@ var emitterRunCmd = &cobra.Command{
 		}
 
 		if len(args) == 0 {
-			for _, v := range emitters {
-				v.RunPreload(GlobalCfg)
+			for i := 0; i < len(emitters); i++ {
+				emitters[i].Initialize(GlobalCfg)
+				emitters[i].RunPreload(GlobalCfg)
 			}
 		} else {
-			for _, v := range emitters {
-				if functions.Contains(args, v.Name) {
-					v.RunPreload(GlobalCfg)
+			for i := 0; i < len(emitters); i++ {
+				if functions.Contains(args, emitters[i].Name) {
+					emitters[i].Initialize(GlobalCfg)
+					emitters[i].RunPreload(GlobalCfg)
 				}
 			}
 		}
 
-		numTimers := len(emitters)
-		timers := make([]*time.Timer, numTimers)
-		stopChannels := make([]chan struct{}, numTimers)
-
-		var wg sync.WaitGroup
-		wg.Add(numTimers)
-
-		for i := 0; i < numTimers; i++ {
-			index := i
-
-			stopChannels[i] = make(chan struct{})
-
-			go func(timerIndex int) {
-				defer wg.Done()
-
-				frequency := emitters[timerIndex].Frequency
-				if frequency > 0 {
-					ticker := time.NewTicker(emitters[timerIndex].Frequency)
-
-					defer ticker.Stop()
-
-					for {
-						select {
-						case <-ticker.C:
-
-							//fmt.Printf("%s every %s \n", emitters[index].Name, emitters[index].Frequency)
-
-							keyTpl, err := tpl.NewTpl("key", emitters[index].KeyTemplate, functions.FunctionsMap(), &ctx.JrContext)
-							if err != nil {
-								log.Println(err)
-							}
-							templatePath := fmt.Sprintf("%s/%s.tpl", os.ExpandEnv(GlobalCfg.TemplateDir), emitters[index].ValueTemplate)
-							vt, err := os.ReadFile(templatePath)
-							valueTpl, err := tpl.NewTpl("value", string(vt), functions.FunctionsMap(), &ctx.JrContext)
-							if err != nil {
-								log.Println(err)
-							}
-							producer := emitters[index].CreateProducer()
-
-							k := keyTpl.Execute()
-							v := valueTpl.Execute()
-							producer.Produce([]byte(k), []byte(v), nil)
-
-						case <-stopChannels[timerIndex]:
-							return
-						}
-					}
-				}
-			}(index)
-
-			timers[i] = time.AfterFunc(emitters[index].Duration, func() {
-				stopChannels[index] <- struct{}{}
-			})
-		}
-
-		wg.Wait()
+		doLoop()
 
 	},
+}
+
+func doLoop() {
+	numTimers := len(emitters)
+	timers := make([]*time.Timer, numTimers)
+	stopChannels := make([]chan struct{}, numTimers)
+
+	var wg sync.WaitGroup
+	wg.Add(numTimers)
+
+	for i := 0; i < numTimers; i++ {
+		index := i
+
+		stopChannels[i] = make(chan struct{})
+
+		go func(timerIndex int) {
+			defer wg.Done()
+
+			frequency := emitters[timerIndex].Frequency
+			if frequency > 0 {
+				ticker := time.NewTicker(emitters[timerIndex].Frequency)
+
+				defer ticker.Stop()
+
+				for {
+					select {
+					case <-ticker.C:
+
+						//fmt.Printf("%s every %s \n", emitters[index].Name, emitters[index].Frequency)
+
+						keyTpl, err := tpl.NewTpl("key", emitters[index].KeyTemplate, functions.FunctionsMap(), &ctx.JrContext)
+						if err != nil {
+							log.Println(err)
+						}
+						templatePath := fmt.Sprintf("%s/%s.tpl", os.ExpandEnv(GlobalCfg.TemplateDir), emitters[index].ValueTemplate)
+						vt, err := os.ReadFile(templatePath)
+						valueTpl, err := tpl.NewTpl("value", string(vt), functions.FunctionsMap(), &ctx.JrContext)
+						if err != nil {
+							log.Println(err)
+						}
+
+						k := keyTpl.Execute()
+						v := valueTpl.Execute()
+						emitters[index].Producer.Produce([]byte(k), []byte(v), nil)
+
+					case <-stopChannels[timerIndex]:
+						return
+					}
+				}
+			}
+		}(index)
+
+		timers[i] = time.AfterFunc(emitters[index].Duration, func() {
+			stopChannels[index] <- struct{}{}
+		})
+	}
+
+	wg.Wait()
 }
 
 func init() {

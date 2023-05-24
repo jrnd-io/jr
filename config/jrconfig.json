@@ -8,6 +8,8 @@
       "duration": "10s",
       "preload": 100,
       "valueTemplate": "shoe",
+      "output": "kafka",
+      "serializer": "json-schema",
       "keyTemplate": "null",
       "outputTemplate": "{{.V}}\n",
       "topic": "shoes"
@@ -20,6 +22,8 @@
       "duration": "10s",
       "preload": 20,
       "valueTemplate": "shoe_customer",
+      "output": "kafka",
+      "serializer": "json-schema",
       "keyTemplate": "null",
       "outputTemplate": "{{.V}}\n",
       "topic": "shoe_customers"
@@ -32,6 +36,8 @@
       "duration": "10s",
       "preload": 0,
       "valueTemplate": "shoe_order",
+      "output": "kafka",
+      "serializer": "json-schema",
       "keyTemplate": "null",
       "outputTemplate": "{{.V}}\n",
       "topic": "shoe_orders"
@@ -44,6 +50,8 @@
       "duration": "10s",
       "preload": 0,
       "valueTemplate": "shoe_clickstream",
+      "output": "kafka",
+      "serializer": "json-schema",
       "keyTemplate": "null",
       "outputTemplate": "{{.V}}\n",
       "topic": "shoe_clickstream"
@@ -52,15 +60,14 @@
   "global": {
     "seed": 0,
     "templateDir": "$HOME/.jr/templates",
-    "kafkaConfig": "",
+    "kafkaConfig": "./kafka/config.properties",
     "schemaRegistry": false,
-    "registryConfig": "",
-    "serializer": "",
-    "autoCreate": false,
+    "registryConfig": "./kafka/registry.properties",
+    "autoCreate": true,
     "redisTtl": "1m",
-    "redisConfig": "",
-    "mongoConfig": "",
-    "elasticConfig": "",
+    "redisConfig": "./redis/config.json",
+    "mongoConfig": "./mongoDB/config.json",
+    "elasticConfig": "./elastic/config.json",
     "url": ""
   }
 }

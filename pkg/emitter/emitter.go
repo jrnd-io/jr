@@ -27,6 +27,9 @@ import (
 	"github.com/ugol/jr/pkg/functions"
 	"github.com/ugol/jr/pkg/loop"
 	"github.com/ugol/jr/pkg/producers/console"
+	"github.com/ugol/jr/pkg/producers/kafka"
+	"github.com/ugol/jr/pkg/producers/mongoDB"
+	"github.com/ugol/jr/pkg/producers/redis"
 	"github.com/ugol/jr/pkg/tpl"
 	"log"
 	"os"
@@ -47,6 +50,8 @@ type Emitter struct {
 	Topic          string        `mapstructure:"topic"`
 	Kcat           bool          `mapstructure:"kcat"`
 	Oneline        bool          `mapstructure:"oneline"`
+	Producer       loop.Producer
+	Test           string
 }
 
 func (e *Emitter) RunPreload(conf configuration.GlobalConfiguration) {
@@ -62,18 +67,89 @@ func (e *Emitter) RunPreload(conf configuration.GlobalConfiguration) {
 		log.Println(err)
 	}
 
-	producer := e.CreateProducer()
-
 	// Preload
 	for i := 0; i < e.Preload; i++ {
 		k := keyTpl.Execute()
 		v := valueTpl.Execute()
-		producer.Produce([]byte(k), []byte(v), nil)
+		e.Producer.Produce([]byte(k), []byte(v), nil)
 	}
 
 }
 
+func (e *Emitter) Initialize(conf configuration.GlobalConfiguration) {
+
+	o, _ := tpl.NewTpl("out", e.OutputTemplate, functions.FunctionsMap(), nil)
+	if e.Output == "stdout" {
+		e.Test = e.Name
+
+		e.Producer = &console.KonsoleProducer{OutputTpl: &o}
+		fmt.Printf("SETTING PRODUCER %v/n", e.Producer)
+
+		return
+	}
+
+	if e.Output == "kafka" {
+		e.Producer = createKafkaProducer(conf, e.Topic, e.ValueTemplate)
+		return
+	} else {
+		if conf.SchemaRegistry {
+			log.Println("Ignoring schemaRegistry and/or serializer when output not set to kafka")
+		}
+	}
+
+	if e.Output == "redis" {
+		e.Producer = createRedisProducer(conf.RedisTtl, conf.RedisConfig)
+		return
+	}
+
+	if e.Output == "mongo" || e.Output == "mongodb" {
+		e.Producer = createMongoProducer(conf.MongoConfig)
+		return
+	}
+
+	if e.Output == "http" {
+		//e.Producer = &server.JsonProducer{OutTemplate: &o}
+		// return
+	}
+}
+
+/*
 func (e *Emitter) CreateProducer() loop.Producer {
 	o, _ := tpl.NewTpl("out", e.OutputTemplate, functions.FunctionsMap(), nil)
 	return &console.KonsoleProducer{OutputTpl: &o}
+}
+*/
+
+func createRedisProducer(ttl time.Duration, redisConfig string) loop.Producer {
+	rProducer := &redis.RedisProducer{
+		Ttl: ttl,
+	}
+	rProducer.Initialize(redisConfig)
+	return rProducer
+}
+
+func createMongoProducer(mongoConfig string) loop.Producer {
+	mProducer := &mongoDB.MongoProducer{}
+	mProducer.Initialize(mongoConfig)
+
+	return mProducer
+}
+
+func createKafkaProducer(conf configuration.GlobalConfiguration, topic string, templateType string) *kafka.KafkaManager {
+
+	kManager := &kafka.KafkaManager{
+		Serializer:   conf.Serializer,
+		Topic:        topic,
+		TemplateType: templateType,
+	}
+
+	kManager.Initialize(conf.KafkaConfig)
+
+	if conf.SchemaRegistry {
+		kManager.InitializeSchemaRegistry(conf.RegistryConfig)
+	}
+	if conf.AutoCreate {
+		kManager.CreateTopic(topic)
+	}
+	return kManager
 }

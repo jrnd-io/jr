@@ -334,7 +334,8 @@ func WordShuffleN(name string, n int) []string {
 	Random.Shuffle(len(words), func(i, j int) {
 		words[i], words[j] = words[j], words[i]
 	})
-	return words[:n]
+	number := Minint(n, len(words))
+	return words[:number]
 }
 
 // Minint returns the minimum between two ints

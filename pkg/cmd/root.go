@@ -73,7 +73,7 @@ func initConfig() {
 	viper.AutomaticEnv() // read in environment variables that match
 
 	if err := viper.ReadInConfig(); err == nil {
-		log.Println("Using config file:", viper.ConfigFileUsed())
+		log.Println("JR configuration loaded from:", viper.ConfigFileUsed())
 	}
 	err := viper.UnmarshalKey("global", &GlobalCfg)
 	if err != nil {

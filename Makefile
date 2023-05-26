@@ -1,4 +1,4 @@
-VERSION=0.2.2
+VERSION=0.3.0
 USER=$(shell id -u -n)
 TIME=$(shell date)
 
@@ -11,7 +11,7 @@ generate:
 
 compile:
 	@echo "Compiling"
-	go build -v -ldflags="-X 'github.com/ugol/jr/cmd.Version=$(VERSION)' -X 'github.com/ugol/jr/cmd.BuildUser=$(USER)' -X 'github.com/ugol/jr/cmd.BuildTime=$(TIME)'" -o build/jr jr.go
+	go build -v -ldflags="-X 'github.com/ugol/jr/pkg/cmd.Version=$(VERSION)' -X 'github.com/ugol/jr/pkg/cmd.BuildUser=$(USER)' -X 'github.com/ugol/jr/pkg/cmd.BuildTime=$(TIME)'" -o build/jr jr.go
 
 run: compile
 	./build/jr

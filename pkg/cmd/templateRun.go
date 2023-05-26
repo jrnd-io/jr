@@ -148,6 +148,6 @@ func init() {
 	templateRunCmd.Flags().String("redisConfig", constants.REDIS_CONFIG, "Redis configuration")
 	templateRunCmd.Flags().String("mongoConfig", constants.MONGO_CONFIG, "MongoDB configuration")
 	templateRunCmd.Flags().String("elasticConfig", constants.ELASTIC_CONFIG, "Elastic Search configuration")
-	templateRunCmd.Flags().String("S3Config", constants.S3_CONFIG, "Amazon S3 configuration")
+	templateRunCmd.Flags().String("s3Config", constants.S3_CONFIG, "Amazon S3 configuration")
 
 }

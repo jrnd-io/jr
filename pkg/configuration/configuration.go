@@ -13,7 +13,8 @@ type GlobalConfiguration struct {
 	RedisTtl       time.Duration
 	RedisConfig    string
 	MongoConfig    string
-	ElasticConfig    string
+	ElasticConfig  string
+	S3Config       string
 	Url            string
 }
 
@@ -44,5 +45,6 @@ type Configuration struct {
 	RedisConfig      string
 	MongoConfig      string
 	ElasticConfig    string
+	S3Config         string
 	Url              string
 }

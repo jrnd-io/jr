@@ -65,6 +65,7 @@
     "redisConfig": "./redis/config.json",
     "mongoConfig": "./mongoDB/config.json",
     "elasticConfig": "./elastic/config.json",
+    "s3Config": "./s3/config.json",
     "url": ""
   }
 }

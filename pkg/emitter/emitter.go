@@ -29,6 +29,8 @@ import (
 	"github.com/ugol/jr/pkg/producers/console"
 	"github.com/ugol/jr/pkg/producers/kafka"
 	"github.com/ugol/jr/pkg/producers/mongoDB"
+	"github.com/ugol/jr/pkg/producers/elastic"
+	"github.com/ugol/jr/pkg/producers/s3"
 	"github.com/ugol/jr/pkg/producers/redis"
 	"github.com/ugol/jr/pkg/tpl"
 	"log"
@@ -104,6 +106,16 @@ func (e *Emitter) Initialize(conf configuration.GlobalConfiguration) {
 		return
 	}
 
+	if e.Output == "elastic" {
+    	e.Producer = createElasticProducer(conf.ElasticConfig)
+    	return
+    }
+
+	if e.Output == "s3"{
+    	e.Producer = createS3Producer(conf.S3Config)
+    	return
+    }
+
 	if e.Output == "http" {
 		//e.Producer = &server.JsonProducer{OutTemplate: &o}
 		// return
@@ -130,6 +142,20 @@ func createMongoProducer(mongoConfig string) loop.Producer {
 	mProducer.Initialize(mongoConfig)
 
 	return mProducer
+}
+
+func createElasticProducer(elasticConfig string) loop.Producer {
+	eProducer := &elastic.ElasticProducer{}
+	eProducer.Initialize(elasticConfig)
+
+	return eProducer
+}
+
+func createS3Producer(s3Config string) loop.Producer {
+	sProducer := &s3.S3Producer{}
+	sProducer.Initialize(s3Config)
+
+	return sProducer
 }
 
 func createKafkaProducer(conf configuration.GlobalConfiguration, topic string, templateType string) *kafka.KafkaManager {

@@ -39,6 +39,8 @@ import (
 	"github.com/ugol/jr/pkg/producers/console"
 	"github.com/ugol/jr/pkg/producers/kafka"
 	"github.com/ugol/jr/pkg/producers/mongoDB"
+	"github.com/ugol/jr/pkg/producers/elastic"
+	"github.com/ugol/jr/pkg/producers/s3"
 	"github.com/ugol/jr/pkg/producers/redis"
 	"github.com/ugol/jr/pkg/producers/server"
 )
@@ -135,6 +137,18 @@ func DoTemplates(conf configuration.Configuration, options interface{}) {
 		}
 	}
 
+	if conf.Output == "elastic" {
+        for i := range conf.TemplateNames {
+        	producer[i] = createElasticProducer(conf.ElasticConfig)
+        }
+    }
+
+	if conf.Output == "s3" {
+    	for i := range conf.TemplateNames {
+    		producer[i] = createS3Producer(conf.S3Config)
+    	}
+    }
+
 	if conf.Output == "http" {
 		for i := range conf.TemplateNames {
 			producer[i] = &server.JsonProducer{OutTemplate: outTemplate}
@@ -218,6 +232,20 @@ func createMongoProducer(mongoConfig string) Producer {
 	mProducer.Initialize(mongoConfig)
 
 	return mProducer
+}
+
+func createElasticProducer(elasticConfig string) Producer {
+	eProducer := &elastic.ElasticProducer{}
+	eProducer.Initialize(elasticConfig)
+
+	return eProducer
+}
+
+func createS3Producer(s3Config string) Producer {
+	sProducer := &s3.S3Producer{}
+	sProducer.Initialize(s3Config)
+
+	return sProducer
 }
 
 func createKafkaProducer(conf configuration.Configuration, index int) *kafka.KafkaManager {

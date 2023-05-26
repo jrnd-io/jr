@@ -62,13 +62,25 @@ func (p *ElasticProducer) Initialize(configFile string) {
 
 func (p *ElasticProducer) Produce(k []byte, v []byte, o interface{})  {
 
-    id := uuid.New()
+    var req esapi.IndexRequest
 
-    req := esapi.IndexRequest{
-    	Index:      p.index,
-    	DocumentID: id.String(),
-    	Body:       strings.NewReader(string(v)),
-    	Refresh:    "true",
+    if k != nil && len(k) == 0 {
+        // generate a UUID as index
+        id := uuid.New()
+
+        req = esapi.IndexRequest{
+    	    Index:      p.index,
+    	    DocumentID: id.String(),
+    	    Body:       strings.NewReader(string(v)),
+    	    Refresh:    "true",
+        }
+    } else {
+        req = esapi.IndexRequest{
+            Index:      p.index,
+        	DocumentID: string(k),
+        	Body:       strings.NewReader(string(v)),
+        	Refresh:    "true",
+        }
     }
 
     res, err := req.Do(context.Background(), &p.client)

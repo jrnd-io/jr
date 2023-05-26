@@ -3,5 +3,5 @@
   "database": "mydb",
   "collection": "col1",
   "username": "admin",
-  "password": "password123"
+  "password": "password"
 }

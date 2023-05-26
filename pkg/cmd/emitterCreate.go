@@ -90,7 +90,8 @@ var emitterCreateCmd = &cobra.Command{
 }
 
 func init() {
-	emitterCmd.AddCommand(emitterCreateCmd)
+	//@TODO enable when it works
+	//emitterCmd.AddCommand(emitterCreateCmd)
 	emitterCreateCmd.Flags().IntVarP(&num, "num", "n", constants.NUM, "Number of elements to create for each pass")
 	emitterCreateCmd.Flags().StringVar(&name, "name", constants.DEFAULT_EMITTER_NAME, "Emitter name")
 	emitterCreateCmd.Flags().DurationVarP(&frequency, "frequency", "f", constants.FREQUENCY, "how much time to wait for next generation pass")

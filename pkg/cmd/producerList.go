@@ -32,9 +32,13 @@ var producerListCmd = &cobra.Command{
 		"jr producer list",
 	Run: func(cmd *cobra.Command, args []string) {
 
-		var Reset = "\033[0m"
 		var Green = "\033[32m"
+		var Reset = "\033[0m"
+
 		fmt.Println()
+		fmt.Println("List of JR emitters:")
+		fmt.Println()
+
 		fmt.Printf("%sConsole *%s (--output = stdout)\n", Green, Reset)
 		fmt.Printf("%sKafka%s (--output = kafka)\n", Green, Reset)
 		fmt.Printf("%sRedis%s (--output = redis)\n", Green, Reset)

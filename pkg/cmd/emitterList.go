@@ -42,9 +42,13 @@ var emitterListCmd = &cobra.Command{
 			log.Println(err)
 		}
 
+		var Green = "\033[32m"
+		var Reset = "\033[0m"
+
 		for _, v := range emitters {
-			fmt.Printf("%s -> %+v \n", v.Name, v)
+			fmt.Printf("%s%s%s\n", Green, v.Name, Reset)
 		}
+		fmt.Println()
 
 	},
 }

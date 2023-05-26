@@ -48,7 +48,7 @@ func (p *S3Producer) Produce(k []byte, v []byte, o interface{})  {
    bucket := p.bucket
    var key string
 
-   if k != nil && len(k) == 0 {
+   if k == nil || len(k) == 0 {
       // generate a UUID as index
       id := uuid.New()
       key = id.String() + "/.json"

@@ -62,6 +62,10 @@ func (p *MongoProducer) Produce(k []byte, v []byte, o interface{})  {
     	log.Fatalf("Failed to unmarshal json:\n%s", err)
     }
 
+    if k == nil || len(k) == 0 {
+        dev["_id"] = string(k)
+    }
+
     _, err = collection.InsertOne(context.Background(), dev)
     if err != nil {
     	log.Fatalf("Failed to write data in Mongo:\n%s", err)

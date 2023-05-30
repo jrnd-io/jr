@@ -21,6 +21,7 @@
 package cmd
 
 import (
+	"github.com/google/uuid"
 	"github.com/spf13/cobra"
 	"github.com/ugol/jr/pkg/configuration"
 	"github.com/ugol/jr/pkg/constants"
@@ -120,6 +121,8 @@ jr template run --template "{{name}}"
 		}
 
 		functions.Random.Seed(seed)
+		uuid.SetRand(functions.Random)
+
 		es := []emitter.Emitter{e}
 
 		emitter.Initialize([]string{e.Name}, es)

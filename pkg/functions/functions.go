@@ -23,6 +23,7 @@ package functions
 import (
 	"bufio"
 	"fmt"
+	"github.com/google/uuid"
 	"github.com/ugol/jr/pkg/ctx"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
@@ -179,7 +180,7 @@ var fmap = map[string]interface{}{
 	"image_of": ImageOf,
 	"index_of": IndexOf,
 	"key":      func(name string, n int) string { return fmt.Sprintf("%s%d", name, Random.Intn(n)) },
-	"seed":     func(rndSeed int64) string { Random.Seed(rndSeed); return "" },
+	"seed":     Seed,
 	"uuid":     UniqueId,
 	"yesorno":  YesOrNo,
 
@@ -189,6 +190,18 @@ var fmap = map[string]interface{}{
 	"random_n_v_from_list": RandomNValuesFromList,
 	"get_v":                GetV,
 	"set_v":                SetV,
+}
+
+// Seed sets seeds and can be used in a template
+func Seed(rndSeed int64) string {
+	SetSeed(rndSeed)
+	return ""
+}
+
+// SetSeed sets seeds for all random JR objects
+func SetSeed(rndSeed int64) {
+	Random.Seed(rndSeed)
+	uuid.SetRand(Random)
 }
 
 // AddValueToList adds value v to Context list l

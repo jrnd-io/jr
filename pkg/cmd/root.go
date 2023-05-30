@@ -21,7 +21,6 @@
 package cmd
 
 import (
-	"github.com/google/uuid"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/ugol/jr/pkg/configuration"
@@ -82,10 +81,8 @@ func initConfig() {
 	}
 	seed := configuration.GlobalCfg.Seed
 	if seed != -1 {
-		functions.Random.Seed(seed)
-		uuid.SetRand(functions.Random)
+		functions.SetSeed(seed)
 	} else {
-		functions.Random.Seed(time.Now().UTC().UnixNano())
-		uuid.SetRand(functions.Random)
+		functions.SetSeed(time.Now().UTC().UnixNano())
 	}
 }

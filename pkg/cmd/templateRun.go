@@ -113,7 +113,7 @@ jr template run --template "{{name}}"
 			ValueTemplate:    vTemplate,
 			EmbeddedTemplate: eTemplate,
 			KeyTemplate:      keyTemplate,
-			OutputTemplate:   outputTemplate, //@TODO FIX
+			OutputTemplate:   outputTemplate,
 			Output:           output,
 			Topic:            topic,
 			Kcat:             kcat,

@@ -121,6 +121,9 @@ func doTemplate(emitter Emitter) {
 	for i := 0; i < emitter.Num; i++ {
 		k := keyTpl.Execute()
 		v := valueTpl.Execute()
+		if emitter.Oneline {
+			v = strings.ReplaceAll(v, "\n", "")
+		}
 		emitter.Producer.Produce([]byte(k), []byte(v), nil)
 
 		ctx.JrContext.GeneratedObjects++

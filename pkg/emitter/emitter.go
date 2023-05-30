@@ -130,13 +130,6 @@ func (e *Emitter) RunPreload(conf configuration.GlobalConfiguration) {
 
 }
 
-/*
-func (e *Emitter) CreateProducer() loop.Producer {
-	o, _ := tpl.NewTpl("out", e.OutputTemplate, functions.FunctionsMap(), nil)
-	return &console.KonsoleProducer{OutputTpl: &o}
-}
-*/
-
 func createRedisProducer(ttl time.Duration, redisConfig string) Producer {
 	rProducer := &redis.RedisProducer{
 		Ttl: ttl,

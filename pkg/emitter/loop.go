@@ -40,25 +40,6 @@ type Producer interface {
 	Produce(k []byte, v []byte, o interface{})
 }
 
-/*
-if conf.EmbeddedTemplate {
-		valueTemplate[0] = []byte(conf.TemplateNames[0])
-	} else if conf.TemplateFileName {
-		for i := range conf.TemplateNames {
-			valueTemplate[i], err = os.ReadFile(os.ExpandEnv(conf.TemplateNames[i]))
-			ctx.JrContext.TemplateType[i] = conf.TemplateNames[i]
-		}
-		ctx.JrContext.NumTemplates = len(conf.TemplateNames)
-	} else {
-		for i := range conf.TemplateNames {
-			templatePath := fmt.Sprintf("%s/%s.tpl", conf.TemplateDir, conf.TemplateNames[i])
-			valueTemplate[i], err = os.ReadFile(templatePath)
-			ctx.JrContext.TemplateType[i] = conf.TemplateNames[i]
-		}
-		ctx.JrContext.NumTemplates = len(conf.TemplateNames)
-	}
-*/
-
 func Initialize(emitterNames []string, es []Emitter) {
 
 	if len(emitterNames) == 0 {

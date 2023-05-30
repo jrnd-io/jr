@@ -35,48 +35,61 @@ var functionListCmd = &cobra.Command{
 	Long: "describes available functions. Example usage:\n" +
 		"jr function list lorem",
 	Run: func(cmd *cobra.Command, args []string) {
+		doList(cmd, args)
+	},
+}
 
-		category, _ := cmd.Flags().GetBool("category")
-		find, _ := cmd.Flags().GetBool("find")
-		run, _ := cmd.Flags().GetBool("run")
+var functionManCmd = &cobra.Command{
+	Use:   "man",
+	Short: "describes available functions",
+	Long: "describes available functions. Example usage:\n" +
+		"jr man lorem",
+	Run: func(cmd *cobra.Command, args []string) {
+		doList(cmd, args)
+	},
+}
 
-		if category {
-			for k, v := range functions.DescriptionMap() {
-				if strings.Contains(v.Category, args[0]) {
-					printFunction(k)
-				}
-			}
-		} else if find {
-			for k, v := range functions.DescriptionMap() {
-				if strings.Contains(v.Description, args[0]) || strings.Contains(v.Name, args[0]) {
-					printFunction(k)
-				}
-			}
-		} else if len(args) == 1 {
+func doList(cmd *cobra.Command, args []string) {
+	category, _ := cmd.Flags().GetBool("category")
+	find, _ := cmd.Flags().GetBool("find")
+	run, _ := cmd.Flags().GetBool("run")
 
-			if run {
-				f, found := printFunction(args[0])
-				if found {
-					fmt.Println()
-					cmd := exec.Command("/bin/sh", "-c", f.Example)
-					cmd.Stdout = os.Stdout
-					cmd.Stderr = os.Stderr
-					cmd.Run()
-				}
-			} else {
-				printFunction(args[0])
-			}
-		} else {
-			count := 0
-			for k := range functions.FunctionsMap() {
-				count++
+	if category {
+		for k, v := range functions.DescriptionMap() {
+			if strings.Contains(v.Category, args[0]) {
 				printFunction(k)
 			}
-			fmt.Println()
-			fmt.Printf("Total functions: %d\n", count)
+		}
+	} else if find {
+		for k, v := range functions.DescriptionMap() {
+			if strings.Contains(v.Description, args[0]) || strings.Contains(v.Name, args[0]) {
+				printFunction(k)
+			}
+		}
+	} else if len(args) == 1 {
+
+		if run {
+			f, found := printFunction(args[0])
+			if found {
+				fmt.Println()
+				cmd := exec.Command("/bin/sh", "-c", f.Example)
+				cmd.Stdout = os.Stdout
+				cmd.Stderr = os.Stderr
+				cmd.Run()
+			}
+		} else {
+			printFunction(args[0])
+		}
+	} else {
+		count := 0
+		for k := range functions.FunctionsMap() {
+			count++
+			printFunction(k)
 		}
 		fmt.Println()
-	},
+		fmt.Printf("Total functions: %d\n", count)
+	}
+	fmt.Println()
 }
 
 func printFunction(name string) (functions.FunctionDescription, bool) {
@@ -102,6 +115,7 @@ func printFunction(name string) (functions.FunctionDescription, bool) {
 }
 
 func init() {
+	rootCmd.AddCommand(functionManCmd)
 	functionCmd.AddCommand(functionListCmd)
 	functionListCmd.Flags().BoolP("category", "c", false, "IndexOf in category")
 	functionListCmd.Flags().BoolP("find", "f", false, "IndexOf in description and name")

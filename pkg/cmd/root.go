@@ -68,7 +68,6 @@ func initConfig() {
 		viper.SetConfigType("json")
 		viper.SetConfigName("jrconfig")
 		viper.SetEnvPrefix(constants.DEFAULT_ENV_PREFIX)
-
 	}
 
 	viper.AutomaticEnv() // read in environment variables that match

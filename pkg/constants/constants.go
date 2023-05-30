@@ -20,7 +20,6 @@ const REDIS_CONFIG = "./redis/config.json"
 const MONGO_CONFIG = "./mongoDB/config.json"
 const ELASTIC_CONFIG = "./elastic/config.json"
 const S3_CONFIG = "./s3/config.json"
-const NUM_TEMPLATES = 5
 const DEFAULT_PARTITIONS = 6
 const DEFAULT_REPLICA = 3
 const DEFAULT_PRELOAD_SIZE = 0

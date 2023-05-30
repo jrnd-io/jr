@@ -25,8 +25,10 @@ import (
 	"github.com/spf13/viper"
 	"github.com/ugol/jr/pkg/configuration"
 	"github.com/ugol/jr/pkg/constants"
+	"github.com/ugol/jr/pkg/functions"
 	"log"
 	"os"
+	"time"
 )
 
 var cfgFile string
@@ -77,5 +79,11 @@ func initConfig() {
 	err := viper.UnmarshalKey("global", &configuration.GlobalCfg)
 	if err != nil {
 		log.Println(err)
+	}
+	seed := configuration.GlobalCfg.Seed
+	if seed != -1 {
+		functions.Random.Seed(seed)
+	} else {
+		functions.Random.Seed(time.Now().UTC().UnixNano())
 	}
 }

@@ -5,6 +5,7 @@ import "time"
 var GlobalCfg GlobalConfiguration
 
 type GlobalConfiguration struct {
+	Seed             int64
 	TemplateDir      string
 	KafkaConfig      string
 	SchemaRegistry   bool

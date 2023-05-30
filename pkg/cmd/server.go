@@ -3,16 +3,14 @@ package cmd
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/gorilla/mux"
+	"github.com/spf13/cobra"
 	"github.com/ugol/jr/pkg/configuration"
 	"github.com/ugol/jr/pkg/constants"
 	"github.com/ugol/jr/pkg/ctx"
-	"github.com/ugol/jr/pkg/loop"
 	"log"
 	"net/http"
 	"time"
-
-	"github.com/gorilla/mux"
-	"github.com/spf13/cobra"
 )
 
 type JsonConfig struct {
@@ -115,7 +113,8 @@ func handleData(w http.ResponseWriter, r *http.Request) {
 	configuration, ok := savedConfigurations[url]
 
 	if ok {
-		loop.DoTemplates(configuration, &w)
+		//loop.DoTemplates(configuration, &w)
+		fmt.Println(configuration)
 	} else {
 		w.WriteHeader(http.StatusNotFound)
 	}

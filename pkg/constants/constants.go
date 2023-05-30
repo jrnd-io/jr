@@ -5,7 +5,7 @@ import "time"
 const NUM = 1
 const LOCALE = "US"
 const FREQUENCY = -1
-const DURATION = 0
+const DURATION = time.Hour * 24 * 7 * 365
 const DEFAULT_HOMEDIR = "$HOME/.jr"
 const TEMPLATEDIR = "$HOME/.jr/templates"
 const DEFAULT_KEY = "null"

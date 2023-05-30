@@ -31,54 +31,38 @@ var JrContext Context
 
 // Context is the object passed on the templates which contains all the needed details.
 type Context struct {
-	StartTime           time.Time
-	TemplateDir         string
-	TemplateType        []string
-	PreloadTemplateType []string
-	GeneratedObjects    int64
-	GeneratedBytes      int64
-	Num                 int
-	NumTemplates        int
-	Range               []int
-	Frequency           time.Duration
-	Duration            time.Duration
-	Locale              string
-	Seed                int64
-	CtxCounters         map[string]int
-	CtxCountersLock     sync.RWMutex
-	Ctx                 map[string]string
-	CtxLock             sync.RWMutex
-	CtxList             map[string][]string
-	CtxListLock         sync.RWMutex
-	LastIndex           int
-	CountryIndex        int
-	CityIndex           int
+	StartTime        time.Time
+	TemplateDir      string
+	GeneratedObjects int64
+	GeneratedBytes   int64
+	Locale           string
+	CtxCounters      map[string]int
+	CtxCountersLock  sync.RWMutex
+	Ctx              map[string]string
+	CtxLock          sync.RWMutex
+	CtxList          map[string][]string
+	CtxListLock      sync.RWMutex
+	LastIndex        int
+	CountryIndex     int
+	CityIndex        int
 }
 
 func init() {
 
 	JrContext = Context{
-		StartTime:           time.Now(),
-		TemplateDir:         os.ExpandEnv(constants.TEMPLATEDIR),
-		TemplateType:        make([]string, constants.NUM_TEMPLATES),
-		PreloadTemplateType: make([]string, constants.NUM_TEMPLATES),
-		GeneratedBytes:      0,
-		GeneratedObjects:    0,
-		Num:                 constants.NUM,
-		NumTemplates:        constants.NUM_TEMPLATES,
-		Range:               make([]int, constants.NUM),
-		Frequency:           constants.FREQUENCY,
-		Duration:            constants.DURATION,
-		Locale:              "us",
-		Seed:                time.Now().UTC().UnixNano(),
-		CtxCounters:         make(map[string]int),
-		CtxCountersLock:     sync.RWMutex{},
-		Ctx:                 make(map[string]string),
-		CtxLock:             sync.RWMutex{},
-		CtxList:             make(map[string][]string),
-		CtxListLock:         sync.RWMutex{},
-		LastIndex:           -1,
-		CountryIndex:        232,
-		CityIndex:           -1,
+		StartTime:        time.Now(),
+		TemplateDir:      os.ExpandEnv(constants.TEMPLATEDIR),
+		GeneratedBytes:   0,
+		GeneratedObjects: 0,
+		Locale:           "us",
+		CtxCounters:      make(map[string]int),
+		CtxCountersLock:  sync.RWMutex{},
+		Ctx:              make(map[string]string),
+		CtxLock:          sync.RWMutex{},
+		CtxList:          make(map[string][]string),
+		CtxListLock:      sync.RWMutex{},
+		LastIndex:        -1,
+		CountryIndex:     232,
+		CityIndex:        -1,
 	}
 }

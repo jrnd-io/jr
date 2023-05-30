@@ -30,7 +30,6 @@ import (
 )
 
 var cfgFile string
-var GlobalCfg configuration.GlobalConfiguration
 
 var rootCmd = &cobra.Command{
 	Use:   "jr",
@@ -75,7 +74,7 @@ func initConfig() {
 	if err := viper.ReadInConfig(); err == nil {
 		log.Println("JR configuration loaded from:", viper.ConfigFileUsed())
 	}
-	err := viper.UnmarshalKey("global", &GlobalCfg)
+	err := viper.UnmarshalKey("global", &configuration.GlobalCfg)
 	if err != nil {
 		log.Println(err)
 	}

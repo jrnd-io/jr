@@ -24,7 +24,8 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/ugol/jr/pkg/configuration"
 	"github.com/ugol/jr/pkg/constants"
-	"github.com/ugol/jr/pkg/loop"
+	"github.com/ugol/jr/pkg/emitter"
+	"github.com/ugol/jr/pkg/functions"
 	"os"
 	"time"
 )
@@ -45,8 +46,7 @@ jr template run --templateFileName ~/.jr/templates/net_device.tpl
 
 		keyTemplate, _ := cmd.Flags().GetString("key")
 		outputTemplate, _ := cmd.Flags().GetString("outputTemplate")
-		embeddedTemplate, _ := cmd.Flags().GetBool("template")
-		templateFileName, _ := cmd.Flags().GetBool("templateFileName")
+		embeddedTemplate, _ := cmd.Flags().GetBool("embedded")
 		kcat, _ := cmd.Flags().GetBool("kcat")
 		output, _ := cmd.Flags().GetString("output")
 		oneline, _ := cmd.Flags().GetBool("oneline")
@@ -58,9 +58,8 @@ jr template run --templateFileName ~/.jr/templates/net_device.tpl
 		seed, _ := cmd.Flags().GetInt64("seed")
 		kafkaConfig, _ := cmd.Flags().GetString("kafkaConfig")
 		registryConfig, _ := cmd.Flags().GetString("registryConfig")
-		topic, _ := cmd.Flags().GetStringSlice("topic")
-		preload, _ := cmd.Flags().GetStringSlice("preload")
-		preloadSize, _ := cmd.Flags().GetIntSlice("preloadSize")
+		topic, _ := cmd.Flags().GetString("topic")
+		preload, _ := cmd.Flags().GetInt("preload")
 
 		templateDir, _ := cmd.Flags().GetString("templateDir")
 		templateDir = os.ExpandEnv(templateDir)
@@ -81,37 +80,55 @@ jr template run --templateFileName ~/.jr/templates/net_device.tpl
 			outputTemplate = constants.DEFAULT_OUTPUT_KCAT_TEMPLATE
 		}
 
-		conf := configuration.Configuration{
-			TemplateNames:    args,
-			KeyTemplate:      keyTemplate,
-			OutputTemplate:   outputTemplate,
-			EmbeddedTemplate: embeddedTemplate,
-			TemplateFileName: templateFileName,
-			Kcat:             kcat,
-			Output:           output,
-			Topic:            topic,
-			Oneline:          oneline,
+		var vTemplate, eTemplate string
+		if embeddedTemplate {
+			vTemplate = ""
+			eTemplate = args[0]
+		} else {
+			vTemplate = args[0]
+			eTemplate = ""
+		}
+
+		configuration.GlobalCfg = configuration.GlobalConfiguration{
+			AutoCreate:     autocreate,
+			KafkaConfig:    kafkaConfig,
+			RegistryConfig: registryConfig,
+			TemplateDir:    templateDir,
+			SchemaRegistry: schemaRegistry,
+			Serializer:     serializer,
+			RedisTtl:       redisTtl,
+			RedisConfig:    redisConfig,
+			MongoConfig:    mongoConfig,
+			ElasticConfig:  elasticConfig,
+			S3Config:       s3Config,
+		}
+
+		e := emitter.Emitter{
+			Name:             name,
 			Locale:           locale,
 			Num:              num,
 			Frequency:        frequency,
 			Duration:         duration,
-			Seed:             seed,
-			KafkaConfig:      kafkaConfig,
-			RegistryConfig:   registryConfig,
-			TemplateDir:      templateDir,
-			Autocreate:       autocreate,
-			SchemaRegistry:   schemaRegistry,
-			Serializer:       serializer,
-			RedisTtl:         redisTtl,
-			RedisConfig:      redisConfig,
-			MongoConfig:      mongoConfig,
-			ElasticConfig:    elasticConfig,
-			S3Config:         s3Config,
 			Preload:          preload,
-			PreloadSize:      preloadSize,
+			ValueTemplate:    vTemplate,
+			EmbeddedTemplate: eTemplate,
+			KeyTemplate:      keyTemplate,
+			OutputTemplate:   outputTemplate, //@TODO FIX
+			Output:           output,
+			Topic:            topic,
+			Kcat:             kcat,
+			Oneline:          oneline,
 		}
 
-		loop.DoTemplates(conf, nil)
+		functions.Random.Seed(seed)
+		es := []emitter.Emitter{e}
+
+		emitter.Initialize([]string{e.Name}, es)
+		emitter.DoLoop(es)
+		emitter.CloseProducers(es)
+		time.Sleep(100 * time.Millisecond)
+		emitter.WriteStats()
+
 	},
 }
 
@@ -126,14 +143,11 @@ func init() {
 	templateRunCmd.Flags().String("templateDir", os.ExpandEnv(constants.TEMPLATEDIR), "directory containing templates")
 	templateRunCmd.Flags().StringP("kafkaConfig", "F", constants.KAFKA_CONFIG, "Kafka configuration")
 	templateRunCmd.Flags().String("registryConfig", constants.REGISTRY_CONFIG, "Kafka configuration")
-	templateRunCmd.Flags().Bool("templateFileName", false, "If enabled, [template] must be a template file")
-	templateRunCmd.Flags().Bool("template", false, "If enabled, [template] must be a string containing a template, to be embedded directly in the script")
-
-	templateRunCmd.Flags().StringSliceP("preload", "p", []string{""}, "Array of templates to preload")
-	templateRunCmd.Flags().IntSlice("preloadSize", []int{}, "Array of template sizes to preload")
+	templateRunCmd.Flags().Bool("embedded", false, "If enabled, [template] must be a string containing a template, to be embedded directly in the script")
+	templateRunCmd.Flags().Int("preload", constants.DEFAULT_PRELOAD_SIZE, "Number of elements to create during the preload phase")
 
 	templateRunCmd.Flags().StringP("key", "k", constants.DEFAULT_KEY, "A template to generate a key")
-	templateRunCmd.Flags().StringSliceP("topic", "t", []string{"test"}, "Array of Kafka topic names")
+	templateRunCmd.Flags().StringP("topic", "t", constants.DEFAULT_TOPIC, "Kafka topic")
 
 	templateRunCmd.Flags().Bool("kcat", false, "If you want to pipe jr with kcat, use this flag: it is equivalent to --output stdout --outputTemplate '{{key}},{{value}}' --oneline")
 	templateRunCmd.Flags().StringP("output", "o", constants.DEFAULT_OUTPUT, "can be one of stdout, kafka, redis, mongo")

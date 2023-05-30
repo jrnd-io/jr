@@ -21,15 +21,10 @@
 package cmd
 
 import (
-	"fmt"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"github.com/ugol/jr/pkg/ctx"
-	"github.com/ugol/jr/pkg/functions"
-	"github.com/ugol/jr/pkg/tpl"
+	"github.com/ugol/jr/pkg/emitter"
 	"log"
-	"os"
-	"sync"
 	"time"
 )
 
@@ -44,106 +39,14 @@ var emitterRunCmd = &cobra.Command{
 			log.Println(err)
 		}
 
-		if len(args) == 0 {
-			for i := 0; i < len(emitters); i++ {
-				emitters[i].Initialize(GlobalCfg)
-				emitters[i].RunPreload(GlobalCfg)
-			}
-		} else {
-			for i := 0; i < len(emitters); i++ {
-				if functions.Contains(args, emitters[i].Name) {
-					emitters[i].Initialize(GlobalCfg)
-					emitters[i].RunPreload(GlobalCfg)
-				}
-			}
-		}
+		emitter.Initialize(args, emitters)
+		emitter.DoLoop(emitters)
 
-		doLoop()
-
-		closeProducers()
+		emitter.CloseProducers(emitters)
 		time.Sleep(100 * time.Millisecond)
-		writeStats()
+		emitter.WriteStats()
 
 	},
-}
-
-func closeProducers() {
-	for i := 0; i < len(emitters); i++ {
-		p := emitters[i].Producer
-		if p != nil {
-			p.Close()
-		}
-	}
-}
-
-func doLoop() {
-	numTimers := len(emitters)
-	timers := make([]*time.Timer, numTimers)
-	stopChannels := make([]chan struct{}, numTimers)
-
-	var wg sync.WaitGroup
-	wg.Add(numTimers)
-
-	for i := 0; i < numTimers; i++ {
-		index := i
-
-		stopChannels[i] = make(chan struct{})
-
-		go func(timerIndex int) {
-			defer wg.Done()
-
-			frequency := emitters[timerIndex].Frequency
-			if frequency > 0 {
-				ticker := time.NewTicker(emitters[timerIndex].Frequency)
-
-				defer ticker.Stop()
-
-				for {
-					select {
-					case <-ticker.C:
-
-						keyTpl, err := tpl.NewTpl("key", emitters[index].KeyTemplate, functions.FunctionsMap(), &ctx.JrContext)
-						if err != nil {
-							log.Println(err)
-						}
-						templatePath := fmt.Sprintf("%s/%s.tpl", os.ExpandEnv(GlobalCfg.TemplateDir), emitters[index].ValueTemplate)
-						vt, err := os.ReadFile(templatePath)
-						valueTpl, err := tpl.NewTpl("value", string(vt), functions.FunctionsMap(), &ctx.JrContext)
-						if err != nil {
-							log.Println(err)
-						}
-
-						k := keyTpl.Execute()
-						v := valueTpl.Execute()
-						emitters[index].Producer.Produce([]byte(k), []byte(v), nil)
-
-						ctx.JrContext.GeneratedObjects++
-						ctx.JrContext.GeneratedBytes += int64(len(v))
-
-					case <-stopChannels[timerIndex]:
-						return
-					}
-				}
-			}
-		}(index)
-
-		timers[i] = time.AfterFunc(emitters[index].Duration, func() {
-			stopChannels[index] <- struct{}{}
-		})
-	}
-
-	wg.Wait()
-}
-
-func writeStats() {
-	_, _ = fmt.Fprintln(os.Stderr)
-	elapsed := time.Since(ctx.JrContext.StartTime)
-	_, _ = fmt.Fprintf(os.Stderr, "Elapsed time: %v\n", elapsed.Round(1*time.Second))
-	_, _ = fmt.Fprintf(os.Stderr, "Data Generated (Objects): %d\n", ctx.JrContext.GeneratedObjects)
-	_, _ = fmt.Fprintf(os.Stderr, "Data Generated (bytes): %d\n", ctx.JrContext.GeneratedBytes)
-	_, _ = fmt.Fprintf(os.Stderr, "Number of templates (Objects): %d\n", ctx.JrContext.NumTemplates)
-	_, _ = fmt.Fprintf(os.Stderr, "Throughput (bytes per second): %9.f\n", float64(ctx.JrContext.GeneratedBytes)/elapsed.Seconds())
-	_, _ = fmt.Fprintln(os.Stderr)
 }
 
 func init() {

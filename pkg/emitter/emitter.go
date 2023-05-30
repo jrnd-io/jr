@@ -25,13 +25,12 @@ import (
 	"github.com/ugol/jr/pkg/configuration"
 	"github.com/ugol/jr/pkg/ctx"
 	"github.com/ugol/jr/pkg/functions"
-	"github.com/ugol/jr/pkg/loop"
 	"github.com/ugol/jr/pkg/producers/console"
+	"github.com/ugol/jr/pkg/producers/elastic"
 	"github.com/ugol/jr/pkg/producers/kafka"
 	"github.com/ugol/jr/pkg/producers/mongoDB"
-	"github.com/ugol/jr/pkg/producers/elastic"
-	"github.com/ugol/jr/pkg/producers/s3"
 	"github.com/ugol/jr/pkg/producers/redis"
+	"github.com/ugol/jr/pkg/producers/s3"
 	"github.com/ugol/jr/pkg/tpl"
 	"log"
 	"os"
@@ -39,47 +38,33 @@ import (
 )
 
 type Emitter struct {
-	Name           string        `mapstructure:"name"`
-	Locale         string        `mapstructure:"locale"`
-	Num            int           `mapstructure:"num"`
-	Frequency      time.Duration `mapstructure:"frequency"`
-	Duration       time.Duration `mapstructure:"duration"`
-	Preload        int           `mapstructure:"preload"`
-	ValueTemplate  string        `mapstructure:"valueTemplate"`
-	KeyTemplate    string        `mapstructure:"keyTemplate"`
-	OutputTemplate string        `mapstructure:"outputTemplate"`
-	Output         string        `mapstructure:"output"`
-	Topic          string        `mapstructure:"topic"`
-	Kcat           bool          `mapstructure:"kcat"`
-	Oneline        bool          `mapstructure:"oneline"`
-	Producer       loop.Producer
-}
-
-func (e *Emitter) RunPreload(conf configuration.GlobalConfiguration) {
-
-	keyTpl, err := tpl.NewTpl("key", e.KeyTemplate, functions.FunctionsMap(), &ctx.JrContext)
-	if err != nil {
-		log.Println(err)
-	}
-	templatePath := fmt.Sprintf("%s/%s.tpl", os.ExpandEnv(conf.TemplateDir), e.ValueTemplate)
-	vt, err := os.ReadFile(templatePath)
-	valueTpl, err := tpl.NewTpl("value", string(vt), functions.FunctionsMap(), &ctx.JrContext)
-	if err != nil {
-		log.Println(err)
-	}
-
-	// Preload
-	for i := 0; i < e.Preload; i++ {
-		k := keyTpl.Execute()
-		v := valueTpl.Execute()
-		e.Producer.Produce([]byte(k), []byte(v), nil)
-		ctx.JrContext.GeneratedObjects++
-		ctx.JrContext.GeneratedBytes += int64(len(v))
-	}
-
+	Name             string        `mapstructure:"name"`
+	Locale           string        `mapstructure:"locale"`
+	Num              int           `mapstructure:"num"`
+	Frequency        time.Duration `mapstructure:"frequency"`
+	Duration         time.Duration `mapstructure:"duration"`
+	Preload          int           `mapstructure:"preload"`
+	ValueTemplate    string        `mapstructure:"valueTemplate"`
+	EmbeddedTemplate string        `mapstructure:"embeddedTemplate"`
+	KeyTemplate      string        `mapstructure:"keyTemplate"`
+	OutputTemplate   string        `mapstructure:"outputTemplate"`
+	Output           string        `mapstructure:"output"`
+	Topic            string        `mapstructure:"topic"`
+	Kcat             bool          `mapstructure:"kcat"`
+	Oneline          bool          `mapstructure:"oneline"`
+	Producer         Producer
 }
 
 func (e *Emitter) Initialize(conf configuration.GlobalConfiguration) {
+
+	if e.EmbeddedTemplate == "" {
+		templatePath := fmt.Sprintf("%s/%s.tpl", os.ExpandEnv(conf.TemplateDir), e.ValueTemplate)
+		vt, err := os.ReadFile(templatePath)
+		e.EmbeddedTemplate = string(vt)
+		if err != nil {
+			log.Println(err)
+		}
+	}
 
 	o, _ := tpl.NewTpl("out", e.OutputTemplate, functions.FunctionsMap(), nil)
 	if e.Output == "stdout" {
@@ -107,19 +92,42 @@ func (e *Emitter) Initialize(conf configuration.GlobalConfiguration) {
 	}
 
 	if e.Output == "elastic" {
-    	e.Producer = createElasticProducer(conf.ElasticConfig)
-    	return
-    }
+		e.Producer = createElasticProducer(conf.ElasticConfig)
+		return
+	}
 
-	if e.Output == "s3"{
-    	e.Producer = createS3Producer(conf.S3Config)
-    	return
-    }
+	if e.Output == "s3" {
+		e.Producer = createS3Producer(conf.S3Config)
+		return
+	}
 
 	if e.Output == "http" {
 		//e.Producer = &server.JsonProducer{OutTemplate: &o}
 		// return
 	}
+
+}
+
+func (e *Emitter) RunPreload(conf configuration.GlobalConfiguration) {
+
+	keyTpl, err := tpl.NewTpl("key", e.KeyTemplate, functions.FunctionsMap(), &ctx.JrContext)
+	if err != nil {
+		log.Println(err)
+	}
+	valueTpl, err := tpl.NewTpl("value", e.EmbeddedTemplate, functions.FunctionsMap(), &ctx.JrContext)
+	if err != nil {
+		log.Println(err)
+	}
+
+	// Preload
+	for i := 0; i < e.Preload; i++ {
+		k := keyTpl.Execute()
+		v := valueTpl.Execute()
+		e.Producer.Produce([]byte(k), []byte(v), nil)
+		ctx.JrContext.GeneratedObjects++
+		ctx.JrContext.GeneratedBytes += int64(len(v))
+	}
+
 }
 
 /*
@@ -129,7 +137,7 @@ func (e *Emitter) CreateProducer() loop.Producer {
 }
 */
 
-func createRedisProducer(ttl time.Duration, redisConfig string) loop.Producer {
+func createRedisProducer(ttl time.Duration, redisConfig string) Producer {
 	rProducer := &redis.RedisProducer{
 		Ttl: ttl,
 	}
@@ -137,21 +145,21 @@ func createRedisProducer(ttl time.Duration, redisConfig string) loop.Producer {
 	return rProducer
 }
 
-func createMongoProducer(mongoConfig string) loop.Producer {
+func createMongoProducer(mongoConfig string) Producer {
 	mProducer := &mongoDB.MongoProducer{}
 	mProducer.Initialize(mongoConfig)
 
 	return mProducer
 }
 
-func createElasticProducer(elasticConfig string) loop.Producer {
+func createElasticProducer(elasticConfig string) Producer {
 	eProducer := &elastic.ElasticProducer{}
 	eProducer.Initialize(elasticConfig)
 
 	return eProducer
 }
 
-func createS3Producer(s3Config string) loop.Producer {
+func createS3Producer(s3Config string) Producer {
 	sProducer := &s3.S3Producer{}
 	sProducer.Initialize(s3Config)
 

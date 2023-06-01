@@ -47,7 +47,7 @@ JR is very straightforward to use. Here are some examples:
 
 ### Listing existing templates
 ```bash
-jr list
+jr template list
 ````
 Templates are in the directory `$HOME/.jr/templates`. You can override with the ```--templatePath``` command flag
 Templates with parsing issues are showed in <font color='red'>red</font>, Templates with no parsing issues are showed in <font color='green'>green</font>
@@ -60,25 +60,24 @@ Use for example the predefined `net_device` template to generate a random JSON n
 jr template run net_device
 ````
 
+or, with a shortcut:
+
+```bash
+jr run net_device
+````
+
 ### Other options for templates
 
 If you want to use your own template, you have several options:
 
 - put it in the default directory
 - put it in another directory and use the `--templateDir` flag
-- put it in another directory and use the `--templateFileName` flag to directly refer to it
 - embed it directly in the command using the `--template` flag
 
-For a quick and dirty test, a good option is to directly point to a template:
-
-```bash 
-jr template run --templateFileName ~/.jr/templates/user.tpl
-```
-
-For an even quicker and dirtier test, the best option is to embed directly a template in the command:
+For a quick and dirty test, the best option is to embed directly a template in the command:
 
 ```bash
-jr template run --template "name:{{name}}"
+jr run --template "name:{{name}}"
 ```
 
 ### Create more random data 
@@ -87,20 +86,24 @@ Using `-n` option you can create more data in each pass.
 This example creates 3 net_device objects at once:
 
 ```bash
-jr template run net_device -n 3
+jr run net_device -n 3
 ```
 ### Continuous streaming data
 
 Using `--frequency` option you can repeat the creation every `f` milliseconds
 
 This example creates 2 net_device every second, for ever:
+
 ```bash
-jr template run net_device -n 2 -f 1s 
+jr run net_device -n 2 -f 1s 
 ```
+
 Using `--duration` option you can time bound the entire object creation.
+
 This example creates 2 net_device every 100ms for 1 minute:
+
 ```bash
-jr template run net_device -n 2 -f 100ms -d 1m 
+jr run net_device -n 2 -f 100ms -d 1m 
 ```
 
 Results are by default written on standard out (`--output "stdout"`) with this output template:

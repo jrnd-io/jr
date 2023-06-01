@@ -40,6 +40,16 @@ func TestSimpleContext(t *testing.T) {
 	}
 }
 
+func TestCondition(t *testing.T) {
+	tpl := `{{if eq .Name "Ugo"}}Ugo Landini{{end}}`
+	data := struct {
+		Name string
+	}{"Ugo"}
+	if err := runtv(tpl, "Ugo Landini", data); err != nil {
+		t.Error(err)
+	}
+}
+
 func TestRange(t *testing.T) {
 
 	type City struct {

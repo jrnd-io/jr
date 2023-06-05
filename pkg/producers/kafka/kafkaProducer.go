@@ -85,7 +85,7 @@ func (k *KafkaManager) Close() {
 
 func (k *KafkaManager) Produce(key []byte, data []byte, o interface{}) {
 
-	go listenToEventsFrom(k.producer)
+	go listenToEventsFrom(k.producer, k.Topic)
 
 	var ser serde.Serializer
 
@@ -184,7 +184,7 @@ func (k *KafkaManager) CreateTopicFull(topic string, partitions int, rf int) {
 
 }
 
-func listenToEventsFrom(k *kafka.Producer) {
+func listenToEventsFrom(k *kafka.Producer, topic string) {
 
 	for e := range k.Events() {
 		switch ev := e.(type) {
@@ -204,7 +204,7 @@ func listenToEventsFrom(k *kafka.Producer) {
 			if err != nil {
 				return
 			}
-			log.Printf("%9.f bytes produced to Kafka\n", stats["txmsg_bytes"])
+			log.Printf("%9.f bytes produced to topic %s \n", stats["txmsg_bytes"], topic)
 		default:
 			log.Printf("Ignored event: %s\n", ev)
 		}

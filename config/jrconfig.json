@@ -8,7 +8,7 @@
       "duration": "0s",
       "preload": 10,
       "valueTemplate": "shoe",
-      "output": "stdout",
+      "output": "kafka",
       "keyTemplate": "null",
       "outputTemplate": "{{.V}}\n",
       "topic": "shoes"
@@ -21,7 +21,7 @@
       "duration": "1s",
       "preload": 5,
       "valueTemplate": "shoe_customer",
-      "output": "stdout",
+      "output": "kafka",
       "keyTemplate": "null",
       "outputTemplate": "{{.V}}\n",
       "topic": "shoe_customers"
@@ -34,7 +34,7 @@
       "duration": "1s",
       "preload": 0,
       "valueTemplate": "shoe_order",
-      "output": "stdout",
+      "output": "kafka",
       "keyTemplate": "null",
       "outputTemplate": "{{.V}}\n",
       "topic": "shoe_orders"
@@ -47,7 +47,7 @@
       "duration": "1s",
       "preload": 0,
       "valueTemplate": "shoe_clickstream",
-      "output": "stdout",
+      "output": "kafka",
       "keyTemplate": "null",
       "outputTemplate": "{{.V}}\n",
       "topic": "shoe_clickstream"

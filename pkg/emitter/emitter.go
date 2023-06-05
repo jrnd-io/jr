@@ -53,6 +53,8 @@ type Emitter struct {
 	Kcat             bool          `mapstructure:"kcat"`
 	Oneline          bool          `mapstructure:"oneline"`
 	Producer         Producer
+	KTpl             tpl.Tpl
+	VTpl             tpl.Tpl
 }
 
 func (e *Emitter) Initialize(conf configuration.GlobalConfiguration) {
@@ -65,6 +67,18 @@ func (e *Emitter) Initialize(conf configuration.GlobalConfiguration) {
 			log.Println(err)
 		}
 	}
+
+	keyTpl, err := tpl.NewTpl("key", e.KeyTemplate, functions.FunctionsMap(), &ctx.JrContext)
+	if err != nil {
+		log.Println(err)
+	}
+	valueTpl, err := tpl.NewTpl("value", e.EmbeddedTemplate, functions.FunctionsMap(), &ctx.JrContext)
+	if err != nil {
+		log.Println(err)
+	}
+
+	e.KTpl = keyTpl
+	e.VTpl = valueTpl
 
 	o, _ := tpl.NewTpl("out", e.OutputTemplate, functions.FunctionsMap(), nil)
 	if e.Output == "stdout" {
@@ -110,19 +124,10 @@ func (e *Emitter) Initialize(conf configuration.GlobalConfiguration) {
 
 func (e *Emitter) RunPreload(conf configuration.GlobalConfiguration) {
 
-	keyTpl, err := tpl.NewTpl("key", e.KeyTemplate, functions.FunctionsMap(), &ctx.JrContext)
-	if err != nil {
-		log.Println(err)
-	}
-	valueTpl, err := tpl.NewTpl("value", e.EmbeddedTemplate, functions.FunctionsMap(), &ctx.JrContext)
-	if err != nil {
-		log.Println(err)
-	}
-
 	// Preload
 	for i := 0; i < e.Preload; i++ {
-		k := keyTpl.Execute()
-		v := valueTpl.Execute()
+		k := e.KTpl.Execute()
+		v := e.VTpl.Execute()
 		e.Producer.Produce([]byte(k), []byte(v), nil)
 		ctx.JrContext.GeneratedObjects++
 		ctx.JrContext.GeneratedBytes += int64(len(v))

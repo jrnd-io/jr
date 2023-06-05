@@ -26,8 +26,6 @@ import (
 	"github.com/ugol/jr/pkg/configuration"
 	"github.com/ugol/jr/pkg/ctx"
 	"github.com/ugol/jr/pkg/functions"
-	"github.com/ugol/jr/pkg/tpl"
-	"log"
 	"os"
 	"os/signal"
 	"strings"
@@ -59,6 +57,7 @@ func Initialize(emitterNames []string, es []Emitter) {
 
 func DoLoop(es []Emitter) {
 	numTimers := len(es)
+	fmt.Println(es)
 	timers := make([]*time.Timer, numTimers)
 	stopChannels := make([]chan struct{}, numTimers)
 
@@ -108,19 +107,11 @@ func DoLoop(es []Emitter) {
 func doTemplate(emitter Emitter) {
 	ctx.JrContext.Locale = emitter.Locale
 	ctx.JrContext.CountryIndex = functions.IndexOf(strings.ToUpper(emitter.Locale), "country")
-	keyTpl, err := tpl.NewTpl("key", emitter.KeyTemplate, functions.FunctionsMap(), &ctx.JrContext)
-	if err != nil {
-		log.Println(err)
-	}
-
-	valueTpl, err := tpl.NewTpl("value", emitter.EmbeddedTemplate, functions.FunctionsMap(), &ctx.JrContext)
-	if err != nil {
-		log.Println(err)
-	}
 
 	for i := 0; i < emitter.Num; i++ {
-		k := keyTpl.Execute()
-		v := valueTpl.Execute()
+
+		k := emitter.KTpl.Execute()
+		v := emitter.VTpl.Execute()
 		if emitter.Oneline {
 			v = strings.ReplaceAll(v, "\n", "")
 		}

@@ -46,8 +46,8 @@ var emitterRunCmd = &cobra.Command{
 
 func RunEmitters(emitterNames []string, ems []emitter.Emitter) {
 	emitter.Initialize(emitterNames, ems)
-	emitter.DoLoop(emitters)
-	emitter.CloseProducers(emitters)
+	emitter.DoLoop(ems)
+	emitter.CloseProducers(ems)
 	time.Sleep(100 * time.Millisecond)
 	emitter.WriteStats()
 }

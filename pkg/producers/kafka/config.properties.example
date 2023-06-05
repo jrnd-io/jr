@@ -6,6 +6,7 @@ security.protocol=SASL_SSL
 sasl.mechanisms=PLAIN
 sasl.username=
 sasl.password=
+client.id= JR
 compression.type=gzip
 compression.level=9
 # statistics.interval.ms=1000

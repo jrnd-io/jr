@@ -1,3 +1,23 @@
+v.0.2.2
+- Added emitters, producer, functions and templates as resources
+- Added emitter concept and refactored run/template run to use an emitter
+- Added E2E example with relations (shoes)
+- Added server with REST apis
+- Added preload
+- Added multithread support for emitters
+- Added S3 producer
+- Added Elastic Producer
+- Added Mongo producer
+- Added relations between templates (random_n_v_from_list, add_v_to_list random_v_from_list)
+- Fixed seed in uuid
+- Added French localization
+- Switched to ubi images in docker
+- Added avro files for all old Datagen templates
+- Added function counter to function list/man
+- Added producer list
+- Added jrconfig to configure everything (emitters, global) in a single file
+- Default key template for Kafka changed to null (no key)
+
 v0.1.9
 - improved generate.go to generate *.avsc
 - updated release notes

@@ -122,11 +122,7 @@ jr template run --template "{{name}}"
 		functions.SetSeed(seed)
 		es := []emitter.Emitter{e}
 
-		emitter.Initialize([]string{e.Name}, es)
-		emitter.DoLoop(es)
-		emitter.CloseProducers(es)
-		time.Sleep(100 * time.Millisecond)
-		emitter.WriteStats()
+		RunEmitters([]string{e.Name}, es)
 
 	},
 }

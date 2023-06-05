@@ -57,7 +57,6 @@ func Initialize(emitterNames []string, es []Emitter) {
 
 func DoLoop(es []Emitter) {
 	numTimers := len(es)
-	fmt.Println(es)
 	timers := make([]*time.Timer, numTimers)
 	stopChannels := make([]chan struct{}, numTimers)
 

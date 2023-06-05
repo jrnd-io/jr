@@ -24,8 +24,10 @@ import (
 	"bufio"
 	"context"
 	"encoding/json"
+	"fmt"
 	"log"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 
@@ -204,7 +206,12 @@ func listenToEventsFrom(k *kafka.Producer, topic string) {
 			if err != nil {
 				return
 			}
-			log.Printf("%9.f bytes produced to topic %s \n", stats["txmsg_bytes"], topic)
+			txbytes := fmt.Sprintf("%9.f", stats["txmsg_bytes"])
+			b, _ := strconv.Atoi(strings.TrimSpace(txbytes))
+
+			if b > 0 {
+				log.Printf("%s bytes produced to topic %s \n", txbytes, topic)
+			}
 		default:
 			log.Printf("Ignored event: %s\n", ev)
 		}

@@ -23,7 +23,6 @@ type JsonConfig struct {
 }
 
 var savedConfigurations map[string]configuration.Configuration
-var outputTemplate = "{{.K}},{{.V}}"
 
 var serverCmd = &cobra.Command{
 	Use:   "server",
@@ -121,6 +120,7 @@ func handleData(w http.ResponseWriter, r *http.Request) {
 }
 
 func init() {
-	rootCmd.AddCommand(serverCmd)
+	//@TODO enable when refactored
+	//rootCmd.AddCommand(serverCmd)
 	serverCmd.Flags().IntP("port", "p", 8080, "Port for the server")
 }

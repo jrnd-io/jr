@@ -38,8 +38,7 @@ var duration time.Duration
 var preload int
 var valueTemplate string
 var keyTemplate string
-
-// var outputTemplate string //@TODO FIX
+var outputTemplate string
 var output string
 var topic string
 var kcat bool

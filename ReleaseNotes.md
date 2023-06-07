@@ -1,4 +1,4 @@
-v.0.2.2
+v.0.3.0
 - Added emitters, producer, functions and templates as resources
 - Added emitter concept and refactored run/template run to use an emitter
 - Added E2E example with relations (shoes)

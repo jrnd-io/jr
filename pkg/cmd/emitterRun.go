@@ -25,7 +25,6 @@ import (
 	"github.com/spf13/viper"
 	"github.com/ugol/jr/pkg/emitter"
 	"log"
-	"time"
 )
 
 var emitterRunCmd = &cobra.Command{
@@ -45,11 +44,10 @@ var emitterRunCmd = &cobra.Command{
 }
 
 func RunEmitters(emitterNames []string, ems []emitter.Emitter) {
+	defer emitter.WriteStats()
+	defer emitter.CloseProducers(ems)
 	emitter.Initialize(emitterNames, ems)
 	emitter.DoLoop(ems)
-	emitter.CloseProducers(ems)
-	time.Sleep(100 * time.Millisecond)
-	emitter.WriteStats()
 }
 
 func init() {

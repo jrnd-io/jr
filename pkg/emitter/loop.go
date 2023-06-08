@@ -126,9 +126,12 @@ func CloseProducers(es []Emitter) {
 	for i := 0; i < len(es); i++ {
 		p := es[i].Producer
 		if p != nil {
-			p.Close()
+			if err := p.Close(); err != nil {
+				fmt.Printf("Error in closing producers: %v\n", err)
+			}
 		}
 	}
+	time.Sleep(100 * time.Millisecond)
 }
 
 func WriteStats() {

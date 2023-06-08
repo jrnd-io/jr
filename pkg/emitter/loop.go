@@ -35,7 +35,7 @@ import (
 
 type Producer interface {
 	Close()
-	Produce(k []byte, v []byte, o interface{})
+	Produce(k []byte, v []byte, o any)
 }
 
 func Initialize(emitterNames []string, es []Emitter) {

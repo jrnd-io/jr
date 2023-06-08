@@ -26,6 +26,7 @@ import (
 	"github.com/ugol/jr/pkg/configuration"
 	"github.com/ugol/jr/pkg/ctx"
 	"github.com/ugol/jr/pkg/functions"
+	"io"
 	"os"
 	"os/signal"
 	"strings"
@@ -34,8 +35,8 @@ import (
 )
 
 type Producer interface {
-	Close()
 	Produce(k []byte, v []byte, o any)
+	io.Closer
 }
 
 func Initialize(emitterNames []string, es []Emitter) {

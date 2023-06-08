@@ -79,10 +79,11 @@ func (k *KafkaManager) InitializeSchemaRegistry(configFile string) {
 	k.schemaRegistry = true
 }
 
-func (k *KafkaManager) Close() {
+func (k *KafkaManager) Close() error {
 	k.admin.Close()
 	k.producer.Flush(15 * 1000)
 	k.producer.Close()
+	return nil
 }
 
 func (k *KafkaManager) Produce(key []byte, data []byte, o interface{}) {

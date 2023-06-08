@@ -29,8 +29,9 @@ type KonsoleProducer struct {
 	OutputTpl *tpl.Tpl
 }
 
-func (k *KonsoleProducer) Close() {
+func (k *KonsoleProducer) Close() error {
 	// no need to close
+	return nil
 }
 
 func (k *KonsoleProducer) Produce(key []byte, value []byte, o interface{}) {

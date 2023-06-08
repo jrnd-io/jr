@@ -31,11 +31,12 @@ func (p *RedisProducer) Initialize(configFile string) {
 	p.client = *redis.NewClient(&options)
 }
 
-func (p *RedisProducer) Close() {
+func (p *RedisProducer) Close() error {
 	err := p.client.Close()
 	if err != nil {
-		log.Fatalf("Failed to close Redis connection:\n%s", err)
+		log.Println("Failed to close Redis connection:\n%s", err)
 	}
+	return err
 }
 
 func (p *RedisProducer) Produce(k []byte, v []byte, o interface{}) {

@@ -75,7 +75,7 @@ func (p *MongoProducer) Produce(k []byte, v []byte, o interface{}) {
 func (p *MongoProducer) Close() error {
 	err := p.client.Disconnect(context.Background())
 	if err != nil {
-		log.Println("Failed to close Mongo connection:\n%s", err)
+		log.Printf("Failed to close Mongo connection:\n%s", err)
 	}
 	return err
 }

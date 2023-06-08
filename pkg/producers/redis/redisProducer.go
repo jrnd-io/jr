@@ -34,7 +34,7 @@ func (p *RedisProducer) Initialize(configFile string) {
 func (p *RedisProducer) Close() error {
 	err := p.client.Close()
 	if err != nil {
-		log.Println("Failed to close Redis connection:\n%s", err)
+		log.Printf("Failed to close Redis connection:\n%s", err)
 	}
 	return err
 }

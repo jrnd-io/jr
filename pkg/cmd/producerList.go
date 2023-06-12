@@ -36,7 +36,7 @@ var producerListCmd = &cobra.Command{
 		var Reset = "\033[0m"
 
 		fmt.Println()
-		fmt.Println("List of JR emitters:")
+		fmt.Println("List of JR producers:")
 		fmt.Println()
 
 		fmt.Printf("%sConsole *%s (--output = stdout)\n", Green, Reset)

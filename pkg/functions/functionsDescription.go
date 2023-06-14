@@ -1014,6 +1014,16 @@ var funcDesc = map[string]FunctionDescription{
 		Example:     "jr template run --embedded '{{split \"hello,world\" \",\"}}'",
 		Output:      "[hello world]",
 	},
+	"stock_symbol": {
+		Name:        "stock_symbol",
+		Category:    "finance",
+		Description: "returns a NASDAQ stock symbol",
+		Parameters:  "",
+		Localizable: false,
+		Return:      "string",
+		Example:     "jr template run --embedded '{{stock_symbol}}'",
+		Output:      "CFLT",
+	},
 	"squeezechars": {
 		Name:        "squeezechars",
 		Category:    "text utilities",

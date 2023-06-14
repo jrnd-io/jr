@@ -97,10 +97,16 @@ func Isin(country string) string {
 	return c + IsinCheckDigit(c)
 }
 
-// returns a valid 7 characters sedol code
+// Sedol returns a valid 7 characters sedol code
 func Sedol() string {
 	sedol, _ := Regex("[0-9BCDFGHJKLMNPQRSTVWXYZ]]{6}")
 	return sedol + SedolCheckDigit(sedol)
+}
+
+// StockSymbol returns a NASDAQ stock symbol
+func StockSymbol() string {
+	symbol := Word("stock_symbol")
+	return symbol
 }
 
 // Swift returns a swift/bic code
@@ -125,7 +131,7 @@ func Valor() string {
 	return valor
 }
 
-// returns a valid 6 characters wkn code
+// Wkn returns a valid 6 characters wkn code
 func Wkn() string {
 	wkn, _ := Regex("[ABCDEFGHLMNPQRSTUVXYZ]{6}")
 	return wkn

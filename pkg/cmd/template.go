@@ -35,4 +35,5 @@ func init() {
 	rootCmd.AddCommand(templateCmd)
 	rootCmd.AddCommand(templateRunCmd)
 	rootCmd.AddCommand(templateListCmd)
+	rootCmd.AddCommand(templateShowCmd)
 }

@@ -34,4 +34,5 @@ var templateCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(templateCmd)
 	rootCmd.AddCommand(templateRunCmd)
+	rootCmd.AddCommand(templateListCmd)
 }

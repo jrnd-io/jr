@@ -3,7 +3,7 @@ package constants
 import "time"
 
 const NUM = 1
-const LOCALE = "US"
+const LOCALE = "us"
 const FREQUENCY = -1
 const DURATION = time.Hour * 24 * 7 * 365
 const DEFAULT_HOMEDIR = "$HOME/.jr"

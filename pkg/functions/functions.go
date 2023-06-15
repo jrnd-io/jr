@@ -373,10 +373,10 @@ func Cache(name string) (bool, error) {
 
 	v := data[name]
 	if v == nil {
-		locale := ctx.JrContext.Locale
+		locale := strings.ToLower(ctx.JrContext.Locale)
 		filename := fmt.Sprintf("%s/data/%s/%s", ctx.JrContext.TemplateDir, locale, name)
 		if locale != "us" && !(fileExists(filename)) {
-			filename = fmt.Sprintf("%s/data/%s/%s", ctx.JrContext.TemplateDir, "US", name)
+			filename = fmt.Sprintf("%s/data/%s/%s", ctx.JrContext.TemplateDir, "us", name)
 		}
 		data[name] = initialize(filename)
 		if len(data[name]) == 0 {

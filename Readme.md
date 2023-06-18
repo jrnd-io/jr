@@ -67,6 +67,14 @@ or, with a shortcut:
 jr run net_device
 ````
 
+## Using Docker
+
+You can also use a <a href="https://hub.docker.com/r/ugol/jr" rel="nofollow"><img src="https://camo.githubusercontent.com/421d553dffc10e388b434da561788794b788ac47889a4e0931eb30cd7055fbfa/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f646f636b65722d6c61746573742d626c75652e737667" alt="Docker Hub" data-canonical-src="https://img.shields.io/badge/docker-latest-blue.svg" style="max-width: 100%;"></a>
+
+```bash
+docker run -it ugol/jr:latest jr run net_device
+```
+
 ### Other options for templates
 
 If you want to use your own template, you can:

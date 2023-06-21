@@ -119,7 +119,7 @@ func handleData(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println(err)
 	}
-
+	RunEmitters([]string{url}, emitters)
 }
 
 func init() {

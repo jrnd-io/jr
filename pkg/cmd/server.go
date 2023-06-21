@@ -11,15 +11,6 @@ import (
 	"net/http"
 )
 
-type JsonConfig struct {
-	URL         string `json:"url"`
-	Template    string `json:"template"`
-	Key         string `json:"key"`
-	TemplateDir string `json:"templatedir"`
-	Locale      string `json:"locale"`
-	Num         int    `json:"num"`
-}
-
 var serverCmd = &cobra.Command{
 	Use:     "server",
 	Short:   "Starts the jr http server",

@@ -27,3 +27,4 @@ const DEFAULT_ENV_PREFIX = "JR"
 const DEFAULT_EMITTER_NAME = "emitter"
 const DEFAULT_VALUE_TEMPLATE = "user"
 const DEFAULT_TOPIC = "test"
+const DEFAULT_HTTP_PORT = 7482

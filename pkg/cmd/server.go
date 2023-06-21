@@ -21,16 +21,9 @@ type JsonConfig struct {
 }
 
 var serverCmd = &cobra.Command{
-	Use:   "server",
-	Short: "Starts the jr http server",
-	Long: `Start the jr web server and takes the port flag. Default port is 8080.
-	To configure a new http generator jr expect a configuration post on the /jr/configure address, 
-	the post body should be a json with those parameters:
-	Name: the name of the configuration 
-	URL: the URL to expose in the form http://domain/jr/data/{URL}. URL should be unique among all the configuration otherwise an existing one will be updated.
-	Template: the name of the template to use to generate the data
-	Num: the number of element to create for each http get
-	You can do multiple configurations using different URLs and different templates`,
+	Use:     "server",
+	Short:   "Starts the jr http server",
+	Long:    `Start the jr http server`,
 	GroupID: "server",
 	Run: func(cmd *cobra.Command, args []string) {
 

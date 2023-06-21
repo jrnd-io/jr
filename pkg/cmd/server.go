@@ -98,12 +98,15 @@ func handleEmitters(w http.ResponseWriter, r *http.Request) {
 func handleData(w http.ResponseWriter, r *http.Request) {
 
 	url := mux.Vars(r)["URL"]
+
+	//@TODO must run only the emitter named 'url' and with frequency disabled (just to get n values to put on response)
+	//RunEmitters([]string{url}, emitters)
+
 	response := fmt.Sprintf("%s", url)
 	_, err := w.Write([]byte(response))
 	if err != nil {
 		log.Println(err)
 	}
-	RunEmitters([]string{url}, emitters)
 }
 
 func init() {

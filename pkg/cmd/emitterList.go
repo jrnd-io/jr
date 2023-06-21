@@ -23,8 +23,6 @@ package cmd
 import (
 	"fmt"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
-	"log"
 )
 
 var emitterListCmd = &cobra.Command{
@@ -36,11 +34,6 @@ var emitterListCmd = &cobra.Command{
 		fmt.Println()
 		fmt.Println("List of JR emitters:")
 		fmt.Println()
-
-		err := viper.UnmarshalKey("emitters", &emitters)
-		if err != nil {
-			log.Println(err)
-		}
 
 		var Green = "\033[32m"
 		var Reset = "\033[0m"

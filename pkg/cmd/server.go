@@ -45,7 +45,7 @@ var serverCmd = &cobra.Command{
 		}
 
 		router := mux.NewRouter()
-		router.HandleFunc("/jr/configure", handleConfiguration).Methods("POST")
+		router.HandleFunc("/jr/emitters", handleEmitters).Methods("POST", "GET", "PUT", "DELETE")
 		router.HandleFunc("/jr/data/{URL}", handleData).Methods("GET")
 
 		// Use the specified port, or default to 8080
@@ -55,8 +55,16 @@ var serverCmd = &cobra.Command{
 	},
 }
 
-func handleConfiguration(w http.ResponseWriter, r *http.Request) {
-	// Parse request body
+func listEmitters(w http.ResponseWriter, r *http.Request) {
+	response := fmt.Sprintf("%v", emitters)
+	_, err := w.Write([]byte(response))
+	if err != nil {
+		return
+	}
+
+}
+
+func addEmitter(w http.ResponseWriter, r *http.Request) {
 	var jsonconf JsonConfig
 
 	err := json.NewDecoder(r.Body).Decode(&jsonconf)
@@ -105,6 +113,31 @@ func handleConfiguration(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(response))
 }
 
+func updateEmitter(w http.ResponseWriter, r *http.Request) {
+
+}
+
+func deleteEmitter(w http.ResponseWriter, r *http.Request) {
+
+}
+
+func handleEmitters(w http.ResponseWriter, r *http.Request) {
+
+	switch r.Method {
+	case "GET":
+		listEmitters(w, r)
+	case "POST":
+		addEmitter(w, r)
+	case "PUT":
+		updateEmitter(w, r)
+	case "DELETE":
+		deleteEmitter(w, r)
+	default:
+		return
+	}
+
+}
+
 func handleData(w http.ResponseWriter, r *http.Request) {
 	// Get the URL parameter from the request
 	vars := mux.Vars(r)
@@ -120,7 +153,6 @@ func handleData(w http.ResponseWriter, r *http.Request) {
 }
 
 func init() {
-	//@TODO enable when refactored
-	//rootCmd.AddCommand(serverCmd)
+	rootCmd.AddCommand(serverCmd)
 	serverCmd.Flags().IntP("port", "p", 8080, "Port for the server")
 }

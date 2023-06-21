@@ -23,10 +23,8 @@ package cmd
 import (
 	"fmt"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 	"github.com/ugol/jr/pkg/constants"
 	"github.com/ugol/jr/pkg/emitter"
-	"log"
 	"time"
 )
 
@@ -64,11 +62,6 @@ var emitterCreateCmd = &cobra.Command{
 			Topic:          topic,
 			Kcat:           kcat,
 			Oneline:        oneline,
-		}
-
-		err := viper.UnmarshalKey("emitters", &emitters)
-		if err != nil {
-			log.Println(err)
 		}
 
 		emitters = append(emitters, emitter)

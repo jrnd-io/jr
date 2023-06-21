@@ -22,9 +22,7 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 	"github.com/ugol/jr/pkg/emitter"
-	"log"
 )
 
 var emitterRunCmd = &cobra.Command{
@@ -32,11 +30,6 @@ var emitterRunCmd = &cobra.Command{
 	Short: "RunPreload all or selected configured emitters",
 	Long:  `RunPreload all or selected configured emitters`,
 	Run: func(cmd *cobra.Command, args []string) {
-
-		err := viper.UnmarshalKey("emitters", &emitters)
-		if err != nil {
-			log.Println(err)
-		}
 
 		RunEmitters(args, emitters)
 

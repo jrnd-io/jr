@@ -79,6 +79,10 @@ func initConfig() {
 	if err != nil {
 		log.Println(err)
 	}
+	err = viper.UnmarshalKey("emitters", &emitters)
+	if err != nil {
+		log.Println(err)
+	}
 	seed := configuration.GlobalCfg.Seed
 	if seed != -1 {
 		functions.SetSeed(seed)

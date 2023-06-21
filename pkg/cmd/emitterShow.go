@@ -23,8 +23,6 @@ package cmd
 import (
 	"fmt"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
-	"log"
 )
 
 var emitterShowCmd = &cobra.Command{
@@ -34,11 +32,6 @@ var emitterShowCmd = &cobra.Command{
 		"jr emitter show [name]",
 	Args: cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-
-		err := viper.UnmarshalKey("emitters", &emitters)
-		if err != nil {
-			log.Println(err)
-		}
 
 		var Green = "\033[32m"
 		var Reset = "\033[0m"

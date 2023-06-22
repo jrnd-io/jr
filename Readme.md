@@ -1,4 +1,4 @@
-# JR: Quality Random Data from the Command line
+# JR: streaming Quality Random Data from the Command line
 
 JR is a CLI program that helps you to stream quality random data for your applications.
 

@@ -16,7 +16,7 @@ JR is a CLI program that helps you to create quality random data for your applic
 
 ## Documentation
 
-[JR Documentation](https://jrnd.io)
+For full documentation about emitters, referential integrity, how to write templates and more, pls see the full [JR Documentation](https://jrnd.io).
 
 ## Building and compiling
 

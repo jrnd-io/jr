@@ -21,31 +21,26 @@
 package console
 
 import (
-	"bytes"
 	"fmt"
-	"log"
-	"text/template"
+	"github.com/ugol/jr/pkg/tpl"
 )
 
 type ConsoleProducer struct {
-	OutTemplate *template.Template
+	OutputTpl *tpl.Tpl
 }
 
-func (c *ConsoleProducer) Close() {
+func (k *ConsoleProducer) Close() error {
 	// no need to close
+	return nil
 }
 
-func (c *ConsoleProducer) Produce(key []byte, value []byte, o interface{}) {
-	var outBuffer bytes.Buffer
-	var err error
+func (k *ConsoleProducer) Produce(key []byte, value []byte, o interface{}) {
 
 	data := struct {
 		K string
 		V string
 	}{string(key), string(value)}
 
-	if err = c.OutTemplate.Execute(&outBuffer, data); err != nil {
-		log.Println(err)
-	}
-	fmt.Print(outBuffer.String())
+	out := k.OutputTpl.ExecuteWith(data)
+	fmt.Print(out)
 }

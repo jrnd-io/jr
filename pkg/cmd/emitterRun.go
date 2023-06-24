@@ -27,8 +27,8 @@ import (
 
 var emitterRunCmd = &cobra.Command{
 	Use:   "run",
-	Short: "RunPreload all or selected configured emitters",
-	Long:  `RunPreload all or selected configured emitters`,
+	Short: "Run all or selected configured emitters",
+	Long:  `Run all or selected configured emitters`,
 	Run: func(cmd *cobra.Command, args []string) {
 
 		RunEmitters(args, emitters)
@@ -39,8 +39,8 @@ var emitterRunCmd = &cobra.Command{
 func RunEmitters(emitterNames []string, ems []emitter.Emitter) {
 	defer emitter.WriteStats()
 	defer emitter.CloseProducers(ems)
-	emitter.Initialize(emitterNames, ems)
-	emitter.DoLoop(ems)
+	emittersToRun := emitter.Initialize(emitterNames, ems)
+	emitter.DoLoop(emittersToRun)
 }
 
 func init() {

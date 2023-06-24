@@ -28,8 +28,8 @@ import (
 var emitterShowCmd = &cobra.Command{
 	Use:   "show",
 	Short: "show a configured emitter",
-	Long: "show a configured emitter: Example usage:\n" +
-		"jr emitter show [name]",
+	Long: `show a configured emitter: 
+jr emitter show net_device`,
 	Args: cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 

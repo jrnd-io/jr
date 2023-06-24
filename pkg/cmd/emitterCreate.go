@@ -87,7 +87,7 @@ func init() {
 	emitterCreateCmd.Flags().IntVarP(&num, "num", "n", constants.NUM, "Number of elements to create for each pass")
 	emitterCreateCmd.Flags().StringVar(&name, "name", constants.DEFAULT_EMITTER_NAME, "Emitter name")
 	emitterCreateCmd.Flags().DurationVarP(&frequency, "frequency", "f", constants.FREQUENCY, "how much time to wait for next generation pass")
-	emitterCreateCmd.Flags().DurationVarP(&duration, "duration", "d", constants.DURATION, "If frequency is enabled, with Duration you can set a finite amount of time")
+	emitterCreateCmd.Flags().DurationVarP(&duration, "duration", "d", constants.YEAR, "If frequency is enabled, with Duration you can set a finite amount of time")
 	emitterCreateCmd.Flags().IntVarP(&preload, "preload", "p", constants.DEFAULT_PRELOAD_SIZE, "number of elements to create in preload phase")
 	emitterCreateCmd.Flags().StringVar(&locale, "locale", constants.LOCALE, "Locale")
 	emitterCreateCmd.Flags().StringVar(&valueTemplate, "valueTemplate", constants.DEFAULT_VALUE_TEMPLATE, "template name to use for the value")

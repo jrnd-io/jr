@@ -34,8 +34,8 @@ var templateRunCmd = &cobra.Command{
 	Use:   "run [template]",
 	Short: "Execute a template",
 	Long: `Execute a template. 
-  Without any other flag, [template] is just the name of a template in the templates directory, which by default is in '$HOME/.jr/templates' Example: 
-jr template run net-device
+  Without any other flag, [template] is just the name of a template in the templates directory, which is '$JR_HOME/templates'. Example: 
+jr template run net_device
   With the --embedded flag, [template] is a string containing a full template. Example:
 jr template run --template "{{name}}"
 `,
@@ -128,7 +128,7 @@ func init() {
 	templateCmd.AddCommand(templateRunCmd)
 	templateRunCmd.Flags().IntP("num", "n", constants.NUM, "Number of elements to create for each pass")
 	templateRunCmd.Flags().DurationP("frequency", "f", constants.FREQUENCY, "how much time to wait for next generation pass")
-	templateRunCmd.Flags().DurationP("duration", "d", constants.DURATION, "If frequency is enabled, with Duration you can set a finite amount of time")
+	templateRunCmd.Flags().DurationP("duration", "d", constants.YEAR, "If frequency is enabled, with Duration you can set a finite amount of time")
 
 	templateRunCmd.Flags().Int64("seed", time.Now().UTC().UnixNano(), "Seed to init pseudorandom generator")
 

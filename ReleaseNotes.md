@@ -1,4 +1,23 @@
-v.0.3.0
+v0.3.2
+- ...
+- removed ConsoleProducer clone used during emitter refactoring
+- improved error messages if template name doesn't exist
+- 
+
+v0.3.1
+- Added $JR_HOME 
+- Added $PATH and $JR_HOME to jrconfig search
+- Made templates subdir of $JR_HOME and got rid of --templateDir option
+- merged jrconfig.json conf and cli conf in jr template run
+- Minor refactorings to interface Producer
+- Added UK localization
+- Added ES localization
+- Added back jr commands as jr template run|list|show
+- Added stock symbol function
+- Fixed user avro schema
+- Started http server refactoring -> uncompleted
+
+v0.3.0
 - Added emitters, producer, functions and templates as resources
 - Added emitter concept and refactored run/template run to use an emitter
 - Added E2E example with relations (shoes)

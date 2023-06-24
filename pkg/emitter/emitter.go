@@ -59,12 +59,14 @@ type Emitter struct {
 
 func (e *Emitter) Initialize(conf configuration.GlobalConfiguration) {
 
+	templateName := e.ValueTemplate
 	if e.EmbeddedTemplate == "" {
-		templatePath := fmt.Sprintf("%s/%s.tpl", os.ExpandEnv(conf.TemplateDir), e.ValueTemplate)
-		vt, err := os.ReadFile(templatePath)
+		path := os.ExpandEnv(conf.TemplateDir)
+		templateFullPath := fmt.Sprintf("%s/%s.tpl", path, templateName)
+		vt, err := os.ReadFile(templateFullPath)
 		e.EmbeddedTemplate = string(vt)
 		if err != nil {
-			log.Println(err)
+			log.Printf("Template '%s' not found in %s\n", templateName, path)
 		}
 	}
 
@@ -82,12 +84,12 @@ func (e *Emitter) Initialize(conf configuration.GlobalConfiguration) {
 
 	o, _ := tpl.NewTpl("out", e.OutputTemplate, functions.FunctionsMap(), nil)
 	if e.Output == "stdout" {
-		e.Producer = &console.KonsoleProducer{OutputTpl: &o}
+		e.Producer = &console.ConsoleProducer{OutputTpl: &o}
 		return
 	}
 
 	if e.Output == "kafka" {
-		e.Producer = createKafkaProducer(conf, e.Topic, e.ValueTemplate)
+		e.Producer = createKafkaProducer(conf, e.Topic, templateName)
 		return
 	} else {
 		if conf.SchemaRegistry {

@@ -39,20 +39,25 @@ type Producer interface {
 	io.Closer
 }
 
-func Initialize(emitterNames []string, es []Emitter) {
+func Initialize(emitterNames []string, es []Emitter) []Emitter {
 
-	if len(emitterNames) == 0 {
+	howManyEmitters := len(emitterNames)
+	if howManyEmitters == 0 {
 		for i := 0; i < len(es); i++ {
 			es[i].Initialize(configuration.GlobalCfg)
 			es[i].RunPreload(configuration.GlobalCfg)
 		}
+		return es
 	} else {
+		emittersToRun := make([]Emitter, 0, howManyEmitters)
 		for i := 0; i < len(es); i++ {
 			if functions.Contains(emitterNames, es[i].Name) {
 				es[i].Initialize(configuration.GlobalCfg)
+				emittersToRun = append(emittersToRun, es[i])
 				es[i].RunPreload(configuration.GlobalCfg)
 			}
 		}
+		return emittersToRun
 	}
 }
 

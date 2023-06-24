@@ -29,8 +29,11 @@ import (
 var createTopicCmd = &cobra.Command{
 	Use:   "createTopic [topic]",
 	Short: "Create a Kafka Topic",
-	Long:  "Create a Kafka Topic",
-	Args:  cobra.ExactArgs(1),
+	Long: `Create a Kafka Topic.
+jr createTopic advancedTopic -p 10 -r 3
+jr createTopic newDefaultTopic
+`,
+	Args: cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		kafkaConfig, _ := cmd.Flags().GetString("kafkaConfig")
 

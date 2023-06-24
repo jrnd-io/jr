@@ -1,0 +1,17 @@
+GET http://localhost:7482/jr/emitters
+
+###
+
+GET http://localhost:7482/jr/emitter/shoe
+
+###
+
+GET http://localhost:7482/jr/emitter/shoe_customer
+
+###
+
+GET http://localhost:7482/jr/emitter/shoe_order
+
+###
+
+GET http://localhost:7482/jr/emitter/shoe_clickstream

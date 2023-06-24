@@ -23,6 +23,11 @@ var serverCmd = &cobra.Command{
 			log.Fatal(err)
 		}
 
+		for i := 0; i < len(emitters); i++ {
+			emitters[i].Frequency = 0
+			emitters[i].Output = "stdout"
+		}
+
 		router := mux.NewRouter()
 		router.HandleFunc("/jr/emitters", handleEmitters).Methods("POST", "GET", "PUT", "DELETE")
 		router.HandleFunc("/jr/emitter/{URL}", handleData).Methods("GET")
@@ -102,7 +107,7 @@ func handleData(w http.ResponseWriter, r *http.Request) {
 	url := mux.Vars(r)["URL"]
 
 	//@TODO must run only the emitter named 'url' and with frequency disabled (just to get n values to put on response)
-	//RunEmitters([]string{url}, emitters)
+	RunEmitters([]string{url}, emitters)
 
 	response := fmt.Sprintf("%s", url)
 	_, err := w.Write([]byte(response))

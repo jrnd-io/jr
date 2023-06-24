@@ -50,7 +50,12 @@ JR is very straightforward to use. Here are some examples:
 ```bash
 jr template list
 ````
-Templates are in the directory `$HOME/.jr/templates`. You can override with the ```--templatePath``` command flag
+Templates are in the directory `$JR_HOME/templates`. JR_HOME defaults to `~/.jr` and can be changed to a different dir, for example:
+
+```bash
+JR_HOME=~/jrconfig/ jr template list
+````
+
 Templates with parsing issues are showed in <font color='red'>red</font>, Templates with no parsing issues are showed in <font color='green'>green</font>
 
 ### Create random data from one of the provided templates
@@ -79,7 +84,7 @@ docker run -it ugol/jr:latest jr run net_device
 
 If you want to use your own template, you can:
 
-- put it in the default directory
+- put it in the templates directory
 - embed it directly in the command using the `--embedded` flag
 
 For a quick and dirty test, the best option is to embed directly a template in the command:

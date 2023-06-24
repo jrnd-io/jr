@@ -59,7 +59,7 @@ func init() {
 		ID:    "server",
 		Title: "HTTP Server",
 	})
-	rootCmd.PersistentFlags().StringVar(&home, "home", "", "JR home dir")
+	rootCmd.PersistentFlags().StringVar(&home, "config", "", "JR config dir")
 }
 
 func initConfig() {

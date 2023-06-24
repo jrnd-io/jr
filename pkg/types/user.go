@@ -61,7 +61,7 @@ type User struct {
 
 	IsActive bool `json:"isActive"`
 
-	Balance float64 `json:"balance"`
+	Balance string `json:"balance"`
 
 	Age int32 `json:"age"`
 
@@ -71,9 +71,9 @@ type User struct {
 
 	Company string `json:"company"`
 
-	Email string `json:"email"`
+	Work_email string `json:"work_email"`
 
-	Alt_email string `json:"alt_email"`
+	Email string `json:"email"`
 
 	About string `json:"about"`
 
@@ -82,7 +82,7 @@ type User struct {
 	Longitude float32 `json:"longitude"`
 }
 
-const UserAvroCRC64Fingerprint = "\x06=\xfeP5\xad\x99\xd3"
+const UserAvroCRC64Fingerprint = "\xc14\xf27I\xfa\x83\x11"
 
 func NewUser() User {
 	r := User{}
@@ -122,7 +122,7 @@ func writeUser(r User, w io.Writer) error {
 	if err != nil {
 		return err
 	}
-	err = vm.WriteDouble(r.Balance, w)
+	err = vm.WriteString(r.Balance, w)
 	if err != nil {
 		return err
 	}
@@ -142,11 +142,11 @@ func writeUser(r User, w io.Writer) error {
 	if err != nil {
 		return err
 	}
-	err = vm.WriteString(r.Email, w)
+	err = vm.WriteString(r.Work_email, w)
 	if err != nil {
 		return err
 	}
-	err = vm.WriteString(r.Alt_email, w)
+	err = vm.WriteString(r.Email, w)
 	if err != nil {
 		return err
 	}
@@ -170,7 +170,7 @@ func (r User) Serialize(w io.Writer) error {
 }
 
 func (r User) Schema() string {
-	return "{\"fields\":[{\"name\":\"guid\",\"type\":\"string\"},{\"name\":\"isActive\",\"type\":\"boolean\"},{\"name\":\"balance\",\"type\":\"double\"},{\"name\":\"age\",\"type\":\"int\"},{\"name\":\"eyeColor\",\"type\":\"string\"},{\"name\":\"name\",\"type\":\"string\"},{\"name\":\"company\",\"type\":\"string\"},{\"name\":\"email\",\"type\":\"string\"},{\"name\":\"alt_email\",\"type\":\"string\"},{\"name\":\"about\",\"type\":\"string\"},{\"name\":\"latitude\",\"type\":\"float\"},{\"name\":\"longitude\",\"type\":\"float\"}],\"name\":\"jr.User\",\"type\":\"record\"}"
+	return "{\"fields\":[{\"name\":\"guid\",\"type\":\"string\"},{\"name\":\"isActive\",\"type\":\"boolean\"},{\"name\":\"balance\",\"type\":\"string\"},{\"name\":\"age\",\"type\":\"int\"},{\"name\":\"eyeColor\",\"type\":\"string\"},{\"name\":\"name\",\"type\":\"string\"},{\"name\":\"company\",\"type\":\"string\"},{\"name\":\"work_email\",\"type\":\"string\"},{\"name\":\"email\",\"type\":\"string\"},{\"name\":\"about\",\"type\":\"string\"},{\"name\":\"latitude\",\"type\":\"float\"},{\"name\":\"longitude\",\"type\":\"float\"}],\"name\":\"jr.User\",\"type\":\"record\"}"
 }
 
 func (r User) SchemaName() string {
@@ -199,7 +199,7 @@ func (r *User) Get(i int) types.Field {
 		return w
 
 	case 2:
-		w := types.Double{Target: &r.Balance}
+		w := types.String{Target: &r.Balance}
 
 		return w
 
@@ -224,12 +224,12 @@ func (r *User) Get(i int) types.Field {
 		return w
 
 	case 7:
-		w := types.String{Target: &r.Email}
+		w := types.String{Target: &r.Work_email}
 
 		return w
 
 	case 8:
-		w := types.String{Target: &r.Alt_email}
+		w := types.String{Target: &r.Email}
 
 		return w
 
@@ -304,11 +304,11 @@ func (r User) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	output["email"], err = json.Marshal(r.Email)
+	output["work_email"], err = json.Marshal(r.Work_email)
 	if err != nil {
 		return nil, err
 	}
-	output["alt_email"], err = json.Marshal(r.Alt_email)
+	output["email"], err = json.Marshal(r.Email)
 	if err != nil {
 		return nil, err
 	}
@@ -433,6 +433,20 @@ func (r *User) UnmarshalJSON(data []byte) error {
 		return fmt.Errorf("no value specified for company")
 	}
 	val = func() json.RawMessage {
+		if v, ok := fields["work_email"]; ok {
+			return v
+		}
+		return nil
+	}()
+
+	if val != nil {
+		if err := json.Unmarshal([]byte(val), &r.Work_email); err != nil {
+			return err
+		}
+	} else {
+		return fmt.Errorf("no value specified for work_email")
+	}
+	val = func() json.RawMessage {
 		if v, ok := fields["email"]; ok {
 			return v
 		}
@@ -445,20 +459,6 @@ func (r *User) UnmarshalJSON(data []byte) error {
 		}
 	} else {
 		return fmt.Errorf("no value specified for email")
-	}
-	val = func() json.RawMessage {
-		if v, ok := fields["alt_email"]; ok {
-			return v
-		}
-		return nil
-	}()
-
-	if val != nil {
-		if err := json.Unmarshal([]byte(val), &r.Alt_email); err != nil {
-			return err
-		}
-	} else {
-		return fmt.Errorf("no value specified for alt_email")
 	}
 	val = func() json.RawMessage {
 		if v, ok := fields["about"]; ok {

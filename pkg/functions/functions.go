@@ -24,6 +24,8 @@ import (
 	"bufio"
 	"fmt"
 	"github.com/google/uuid"
+	"github.com/ugol/jr/pkg/configuration"
+	"github.com/ugol/jr/pkg/constants"
 	"github.com/ugol/jr/pkg/ctx"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
@@ -371,12 +373,16 @@ func Maxint(a, b int) int {
 // Cache is used to internally Cache data from word files
 func Cache(name string) (bool, error) {
 
+	templateDir := configuration.GlobalCfg.TemplateDir
+	if templateDir == "" {
+		templateDir = fmt.Sprintf("%s/%s", constants.DEFAULT_HOMEDIR, "templates")
+	}
 	v := data[name]
 	if v == nil {
 		locale := strings.ToLower(ctx.JrContext.Locale)
-		filename := fmt.Sprintf("%s/data/%s/%s", ctx.JrContext.TemplateDir, locale, name)
+		filename := fmt.Sprintf("%s/data/%s/%s", os.ExpandEnv(templateDir), locale, name)
 		if locale != "us" && !(fileExists(filename)) {
-			filename = fmt.Sprintf("%s/data/%s/%s", ctx.JrContext.TemplateDir, "us", name)
+			filename = fmt.Sprintf("%s/data/%s/%s", os.ExpandEnv(templateDir), "us", name)
 		}
 		data[name] = initialize(filename)
 		if len(data[name]) == 0 {

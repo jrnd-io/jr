@@ -22,7 +22,7 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/ugol/jr/pkg/constants"
+	"github.com/ugol/jr/pkg/configuration"
 	"log"
 	"os"
 	"runtime"
@@ -42,9 +42,8 @@ var templateShowCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		templateDir, _ := cmd.Flags().GetString("templateDir")
 		nocolor, _ := cmd.Flags().GetBool("nocolor")
-		templateDir = os.ExpandEnv(templateDir)
+		templateDir := os.ExpandEnv(configuration.GlobalCfg.TemplateDir)
 		templatePath := fmt.Sprintf("%s/%s.tpl", templateDir, args[0])
 		templateScript, err := os.ReadFile(templatePath)
 		valid, err := isValidTemplate([]byte(templateScript))
@@ -68,6 +67,5 @@ var templateShowCmd = &cobra.Command{
 
 func init() {
 	templateCmd.AddCommand(templateShowCmd)
-	templateShowCmd.Flags().String("templateDir", constants.TEMPLATEDIR, "directory containing templates")
 	templateShowCmd.Flags().BoolP("nocolor", "n", false, "disable colorized output")
 }

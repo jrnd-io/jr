@@ -7,7 +7,6 @@ const LOCALE = "us"
 const FREQUENCY = -1
 const DURATION = time.Hour * 24 * 7 * 365
 const DEFAULT_HOMEDIR = "$HOME/.jr"
-const TEMPLATEDIR = "$HOME/.jr/templates"
 const DEFAULT_KEY = "null"
 const DEFAULT_OUTPUT = "stdout"
 const DEFAULT_OUTPUT_TEMPLATE = "{{.V}}\n"

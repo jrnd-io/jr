@@ -34,7 +34,7 @@ import (
 	"time"
 )
 
-var home string
+var JRhome string
 
 var rootCmd = &cobra.Command{
 	Use:   "jr",
@@ -59,7 +59,7 @@ func init() {
 		ID:    "server",
 		Title: "HTTP Server",
 	})
-	rootCmd.PersistentFlags().StringVar(&home, "config", "", "JR config dir")
+	rootCmd.PersistentFlags().StringVar(&JRhome, "home", "", "JR home dir")
 }
 
 func initConfig() {
@@ -74,17 +74,21 @@ func initConfig() {
 	viper.SetEnvKeyReplacer(strings.NewReplacer("-", "_"))
 	viper.AutomaticEnv()
 	bindFlags(rootCmd, viper.GetViper())
-	viper.AddConfigPath(home)
+	if JRhome == "" {
+		JRhome = constants.DEFAULT_HOMEDIR
+	}
+	viper.AddConfigPath(JRhome)
 
 	if err := viper.ReadInConfig(); err == nil {
-		log.Println("JR configuration loaded from:", viper.ConfigFileUsed())
+		log.Println("JR configuration:", viper.ConfigFileUsed())
 	} else {
-		log.Println(err)
+		log.Println("JR configuration not found")
 	}
 	err := viper.UnmarshalKey("global", &configuration.GlobalCfg)
 	if err != nil {
 		log.Println(err)
 	}
+
 	err = viper.UnmarshalKey("emitters", &emitters)
 	if err != nil {
 		log.Println(err)

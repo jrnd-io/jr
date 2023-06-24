@@ -21,8 +21,6 @@
 package ctx
 
 import (
-	"github.com/ugol/jr/pkg/constants"
-	"os"
 	"sync"
 	"time"
 )
@@ -32,7 +30,6 @@ var JrContext Context
 // Context is the object passed on the templates which contains all the needed details.
 type Context struct {
 	StartTime        time.Time
-	TemplateDir      string
 	GeneratedObjects int64
 	GeneratedBytes   int64
 	Locale           string
@@ -51,7 +48,6 @@ func init() {
 
 	JrContext = Context{
 		StartTime:        time.Now(),
-		TemplateDir:      os.ExpandEnv(constants.TEMPLATEDIR),
 		GeneratedBytes:   0,
 		GeneratedObjects: 0,
 		Locale:           "us",

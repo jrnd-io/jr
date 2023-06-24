@@ -22,11 +22,11 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
+	"github.com/spf13/pflag"
 	"github.com/ugol/jr/pkg/configuration"
 	"github.com/ugol/jr/pkg/constants"
 	"github.com/ugol/jr/pkg/emitter"
 	"github.com/ugol/jr/pkg/functions"
-	"os"
 	"time"
 )
 
@@ -54,23 +54,8 @@ jr template run --template "{{name}}"
 		frequency, _ := cmd.Flags().GetDuration("frequency")
 		duration, _ := cmd.Flags().GetDuration("duration")
 		seed, _ := cmd.Flags().GetInt64("seed")
-		kafkaConfig, _ := cmd.Flags().GetString("kafkaConfig")
-		registryConfig, _ := cmd.Flags().GetString("registryConfig")
 		topic, _ := cmd.Flags().GetString("topic")
 		preload, _ := cmd.Flags().GetInt("preload")
-
-		templateDir, _ := cmd.Flags().GetString("templateDir")
-		templateDir = os.ExpandEnv(templateDir)
-
-		autocreate, _ := cmd.Flags().GetBool("autocreate")
-		schemaRegistry, _ := cmd.Flags().GetBool("schemaRegistry")
-		serializer, _ := cmd.Flags().GetString("serializer")
-
-		redisTtl, _ := cmd.Flags().GetDuration("redis.ttl")
-		redisConfig, _ := cmd.Flags().GetString("redisConfig")
-		mongoConfig, _ := cmd.Flags().GetString("mongoConfig")
-		elasticConfig, _ := cmd.Flags().GetString("elasticConfig")
-		s3Config, _ := cmd.Flags().GetString("s3Config")
 
 		if kcat {
 			oneline = true
@@ -87,20 +72,32 @@ jr template run --template "{{name}}"
 			eTemplate = ""
 		}
 
-		configuration.GlobalCfg = configuration.GlobalConfiguration{
-			Seed:           seed,
-			AutoCreate:     autocreate,
-			KafkaConfig:    kafkaConfig,
-			RegistryConfig: registryConfig,
-			TemplateDir:    templateDir,
-			SchemaRegistry: schemaRegistry,
-			Serializer:     serializer,
-			RedisTtl:       redisTtl,
-			RedisConfig:    redisConfig,
-			MongoConfig:    mongoConfig,
-			ElasticConfig:  elasticConfig,
-			S3Config:       s3Config,
-		}
+		cmd.Flags().VisitAll(func(f *pflag.Flag) {
+			if f.Changed {
+				switch f.Name {
+				case "kafkaConfig":
+					configuration.GlobalCfg.KafkaConfig, _ = cmd.Flags().GetString(f.Name)
+				case "registryConfig":
+					configuration.GlobalCfg.RegistryConfig, _ = cmd.Flags().GetString(f.Name)
+				case "autocreate":
+					configuration.GlobalCfg.AutoCreate, _ = cmd.Flags().GetBool(f.Name)
+				case "schemaRegistry":
+					configuration.GlobalCfg.SchemaRegistry, _ = cmd.Flags().GetBool(f.Name)
+				case "serializer":
+					configuration.GlobalCfg.Serializer, _ = cmd.Flags().GetString(f.Name)
+				case "redisTtl":
+					configuration.GlobalCfg.RedisTtl, _ = cmd.Flags().GetDuration(f.Name)
+				case "redisConfig":
+					configuration.GlobalCfg.RedisConfig, _ = cmd.Flags().GetString(f.Name)
+				case "mongoConfig":
+					configuration.GlobalCfg.MongoConfig, _ = cmd.Flags().GetString(f.Name)
+				case "elasticConfig":
+					configuration.GlobalCfg.ElasticConfig, _ = cmd.Flags().GetString(f.Name)
+				case "s3Config":
+					configuration.GlobalCfg.S3Config, _ = cmd.Flags().GetString(f.Name)
+				}
+			}
+		})
 
 		e := emitter.Emitter{
 			Name:             name,
@@ -135,9 +132,8 @@ func init() {
 
 	templateRunCmd.Flags().Int64("seed", time.Now().UTC().UnixNano(), "Seed to init pseudorandom generator")
 
-	templateRunCmd.Flags().String("templateDir", os.ExpandEnv(constants.TEMPLATEDIR), "directory containing templates")
-	templateRunCmd.Flags().StringP("kafkaConfig", "F", constants.KAFKA_CONFIG, "Kafka configuration")
-	templateRunCmd.Flags().String("registryConfig", constants.REGISTRY_CONFIG, "Kafka configuration")
+	templateRunCmd.Flags().StringP("kafkaConfig", "F", "", "Kafka configuration")
+	templateRunCmd.Flags().String("registryConfig", "", "Kafka configuration")
 	templateRunCmd.Flags().Bool("embedded", false, "If enabled, [template] must be a string containing a template, to be embedded directly in the script")
 	templateRunCmd.Flags().Int("preload", constants.DEFAULT_PRELOAD_SIZE, "Number of elements to create during the preload phase")
 
@@ -152,11 +148,11 @@ func init() {
 	templateRunCmd.Flags().String("locale", constants.LOCALE, "Locale")
 
 	templateRunCmd.Flags().BoolP("schemaRegistry", "s", false, "If you want to use Confluent Schema Registry")
-	templateRunCmd.Flags().String("serializer", constants.DEFAULT_SERIALIZER, "Type of serializer: json-schema, avro-generic, avro, protobuf")
-	templateRunCmd.Flags().Duration("redis.ttl", constants.REDIS_TTL, "If output is redis, ttl of the object")
-	templateRunCmd.Flags().String("redisConfig", constants.REDIS_CONFIG, "Redis configuration")
-	templateRunCmd.Flags().String("mongoConfig", constants.MONGO_CONFIG, "MongoDB configuration")
-	templateRunCmd.Flags().String("elasticConfig", constants.ELASTIC_CONFIG, "Elastic Search configuration")
-	templateRunCmd.Flags().String("s3Config", constants.S3_CONFIG, "Amazon S3 configuration")
+	templateRunCmd.Flags().String("serializer", "", "Type of serializer: json-schema, avro-generic, avro, protobuf")
+	templateRunCmd.Flags().Duration("redis.ttl", -1, "If output is redis, ttl of the object")
+	templateRunCmd.Flags().String("redisConfig", "", "Redis configuration")
+	templateRunCmd.Flags().String("mongoConfig", "", "MongoDB configuration")
+	templateRunCmd.Flags().String("elasticConfig", "", "Elastic Search configuration")
+	templateRunCmd.Flags().String("s3Config", "", "Amazon S3 configuration")
 
 }

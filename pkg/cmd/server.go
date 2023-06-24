@@ -71,10 +71,12 @@ func addEmitter(w http.ResponseWriter, r *http.Request) {
 }
 
 func updateEmitter(w http.ResponseWriter, r *http.Request) {
+	//@TODO update emitter by name
 
 }
 
 func deleteEmitter(w http.ResponseWriter, r *http.Request) {
+	//@TODO delete emitter by name
 
 }
 

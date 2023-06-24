@@ -21,17 +21,20 @@
 package cmd
 
 import (
+	"fmt"
 	"github.com/spf13/cobra"
+	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 	"github.com/ugol/jr/pkg/configuration"
 	"github.com/ugol/jr/pkg/constants"
 	"github.com/ugol/jr/pkg/functions"
 	"log"
 	"os"
+	"strings"
 	"time"
 )
 
-var cfgFile string
+var home string
 
 var rootCmd = &cobra.Command{
 	Use:   "jr",
@@ -56,24 +59,27 @@ func init() {
 		ID:    "server",
 		Title: "HTTP Server",
 	})
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.jr/jrconfig.json)")
+	rootCmd.PersistentFlags().StringVar(&home, "home", "", "JR home dir")
 }
 
 func initConfig() {
-	if cfgFile != "" {
-		viper.SetConfigFile(cfgFile)
-	} else {
-		home := constants.DEFAULT_HOMEDIR
-		viper.AddConfigPath(home)
-		viper.SetConfigType("json")
-		viper.SetConfigName("jrconfig")
-		viper.SetEnvPrefix(constants.DEFAULT_ENV_PREFIX)
-	}
 
-	viper.AutomaticEnv() // read in environment variables that match
+	viper.SetConfigName("jrconfig")
+	viper.SetConfigType("json")
+	viper.AddConfigPath(".")
+	for _, path := range strings.Split(os.ExpandEnv("$PATH"), ":") {
+		viper.AddConfigPath(path)
+	}
+	viper.SetEnvPrefix(constants.DEFAULT_ENV_PREFIX)
+	viper.SetEnvKeyReplacer(strings.NewReplacer("-", "_"))
+	viper.AutomaticEnv()
+	bindFlags(rootCmd, viper.GetViper())
+	viper.AddConfigPath(home)
 
 	if err := viper.ReadInConfig(); err == nil {
 		log.Println("JR configuration loaded from:", viper.ConfigFileUsed())
+	} else {
+		log.Println(err)
 	}
 	err := viper.UnmarshalKey("global", &configuration.GlobalCfg)
 	if err != nil {
@@ -89,4 +95,14 @@ func initConfig() {
 	} else {
 		functions.SetSeed(time.Now().UTC().UnixNano())
 	}
+}
+
+func bindFlags(cmd *cobra.Command, v *viper.Viper) {
+	cmd.Flags().VisitAll(func(f *pflag.Flag) {
+		configName := f.Name
+		if !f.Changed && v.IsSet(configName) {
+			val := v.Get(configName)
+			cmd.Flags().Set(f.Name, fmt.Sprintf("%v", val))
+		}
+	})
 }

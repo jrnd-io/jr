@@ -10,7 +10,7 @@ Content-Type: application/json
       "preload": 0,
       "valueTemplate": "net_device",
       "output": "http",
-      "keyTemplate": "null",
+      "keyTemplate": "{{uuid}}",
       "outputTemplate": "{{.V}}\n"
 }
 

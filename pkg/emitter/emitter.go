@@ -73,11 +73,11 @@ func (e *Emitter) Initialize(conf configuration.GlobalConfiguration) {
 
 	keyTpl, err := tpl.NewTpl("key", e.KeyTemplate, functions.FunctionsMap(), &ctx.JrContext)
 	if err != nil {
-		log.Println(err)
+		log.Fatal(err)
 	}
 	valueTpl, err := tpl.NewTpl("value", e.EmbeddedTemplate, functions.FunctionsMap(), &ctx.JrContext)
 	if err != nil {
-		log.Println(err)
+		log.Fatal(err)
 	}
 
 	e.KTpl = keyTpl

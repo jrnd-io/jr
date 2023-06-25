@@ -50,7 +50,7 @@ func (t *Tpl) ExecuteWith(data any) string {
 	var buffer bytes.Buffer
 	err := t.Template.Execute(&buffer, data)
 	if err != nil {
-		log.Println(err)
+		log.Fatal(err)
 	}
 	return buffer.String()
 }

@@ -86,12 +86,10 @@ func addEmitter(w http.ResponseWriter, r *http.Request) {
 
 func updateEmitter(w http.ResponseWriter, r *http.Request) {
 	//@TODO update emitter by name
-
 }
 
 func deleteEmitter(w http.ResponseWriter, r *http.Request) {
 	//@TODO delete emitter by name
-
 }
 
 func handleEmitters(w http.ResponseWriter, r *http.Request) {
@@ -121,7 +119,11 @@ func handleData(w http.ResponseWriter, r *http.Request) {
 			if functions.Contains([]string{url}, emitters[i].Name) {
 				emitters[i].Initialize(configuration.GlobalCfg)
 				emitterToRun[url] = append(emitterToRun[url], emitters[i])
-				emitters[i].Run(emitters[i].Preload, w)
+				if emitters[i].Preload > 0 {
+					emitters[i].Run(emitters[i].Preload, w)
+				} else {
+					emitters[i].Run(emitters[i].Num, w)
+				}
 			}
 		}
 		firstRun[url] = true

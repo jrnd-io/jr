@@ -1,3 +1,17 @@
+POST http://localhost:7482/jr/emitters
+Content-Type: application/json
+
+{
+      "name": "net_device",
+      "locale": "us",
+      "num": 5,
+      "preload": 0,
+      "valueTemplate": "net_device",
+      "output": "http",
+      "keyTemplate": "null"
+}
+
+###
 GET http://localhost:7482/jr/emitters
 
 ###
@@ -15,3 +29,11 @@ GET http://localhost:7482/jr/emitter/shoe_order
 ###
 
 GET http://localhost:7482/jr/emitter/shoe_clickstream
+
+###
+
+GET http://localhost:7482/jr/emitter/net_device
+
+###
+
+GET http://localhost:7482/jr/emitter/user

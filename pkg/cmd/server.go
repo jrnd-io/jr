@@ -124,9 +124,9 @@ func handleData(w http.ResponseWriter, r *http.Request) {
 				} else {
 					emitters[i].Run(emitters[i].Num, w)
 				}
+				firstRun[url] = true
 			}
 		}
-		firstRun[url] = true
 	} else {
 		for _, e := range emitterToRun[url] {
 			e.Run(e.Num, w)

@@ -8,7 +8,8 @@ Content-Type: application/json
       "preload": 0,
       "valueTemplate": "net_device",
       "output": "http",
-      "keyTemplate": "null"
+      "keyTemplate": "null",
+      "outputTemplate": "{{.V}}\n"
 }
 
 ###

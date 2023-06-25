@@ -86,7 +86,7 @@ func (k *KafkaManager) Close() error {
 	return nil
 }
 
-func (k *KafkaManager) Produce(key []byte, data []byte, o interface{}) {
+func (k *KafkaManager) Produce(key []byte, data []byte, o any) {
 
 	go listenToEventsFrom(k.producer, k.Topic)
 

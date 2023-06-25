@@ -60,7 +60,7 @@ func (p *ElasticProducer) Initialize(configFile string) {
 	p.client = *client
 }
 
-func (p *ElasticProducer) Produce(k []byte, v []byte, o interface{}) {
+func (p *ElasticProducer) Produce(k []byte, v []byte, o any) {
 
 	var req esapi.IndexRequest
 

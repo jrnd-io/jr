@@ -5,11 +5,16 @@ import (
 	"fmt"
 	"github.com/gorilla/mux"
 	"github.com/spf13/cobra"
+	"github.com/ugol/jr/pkg/configuration"
 	"github.com/ugol/jr/pkg/constants"
 	"github.com/ugol/jr/pkg/emitter"
+	"github.com/ugol/jr/pkg/functions"
 	"log"
 	"net/http"
 )
+
+var firstRun = make(map[string]bool)
+var emitterToRun = make(map[string][]emitter.Emitter)
 
 var serverCmd = &cobra.Command{
 	Use:     "server",
@@ -24,8 +29,10 @@ var serverCmd = &cobra.Command{
 		}
 
 		for i := 0; i < len(emitters); i++ {
-			emitters[i].Frequency = 0
-			emitters[i].Output = "stdout"
+			emitters[i].Output = "http"
+			if emitters[i].Num == 0 {
+				emitters[i].Num = 1
+			}
 		}
 
 		router := mux.NewRouter()
@@ -67,6 +74,8 @@ func addEmitter(w http.ResponseWriter, r *http.Request) {
 		e.Num = 1
 	}
 
+	e.Output = "http"
+
 	emitters = append(emitters, e)
 	response := fmt.Sprintf("Emitter %s added", e.Name)
 	_, err = w.Write([]byte(response))
@@ -104,16 +113,24 @@ func handleEmitters(w http.ResponseWriter, r *http.Request) {
 
 func handleData(w http.ResponseWriter, r *http.Request) {
 
+	w.Header().Set("Content-Type", "application/json")
 	url := mux.Vars(r)["URL"]
 
-	//@TODO must run only the emitter named 'url' and with frequency disabled (just to get n values to put on response)
-	RunEmitters([]string{url}, emitters)
-
-	response := fmt.Sprintf("%s", url)
-	_, err := w.Write([]byte(response))
-	if err != nil {
-		log.Println(err)
+	if firstRun[url] == false {
+		for i := 0; i < len(emitters); i++ {
+			if functions.Contains([]string{url}, emitters[i].Name) {
+				emitters[i].Initialize(configuration.GlobalCfg)
+				emitterToRun[url] = append(emitterToRun[url], emitters[i])
+				emitters[i].Run(emitters[i].Preload, &w)
+			}
+		}
+		firstRun[url] = true
+	} else {
+		for _, e := range emitterToRun[url] {
+			e.Run(e.Num, &w)
+		}
 	}
+
 }
 
 func init() {

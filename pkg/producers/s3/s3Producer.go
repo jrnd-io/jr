@@ -43,7 +43,7 @@ func (p *S3Producer) Initialize(configFile string) {
 	p.bucket = config.Bucket
 }
 
-func (p *S3Producer) Produce(k []byte, v []byte, o interface{}) {
+func (p *S3Producer) Produce(k []byte, v []byte, o any) {
 
 	bucket := p.bucket
 	var key string

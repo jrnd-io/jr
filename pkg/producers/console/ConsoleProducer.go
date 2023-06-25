@@ -29,18 +29,18 @@ type ConsoleProducer struct {
 	OutputTpl *tpl.Tpl
 }
 
-func (k *ConsoleProducer) Close() error {
+func (c *ConsoleProducer) Close() error {
 	// no need to close
 	return nil
 }
 
-func (k *ConsoleProducer) Produce(key []byte, value []byte, o interface{}) {
+func (c *ConsoleProducer) Produce(key []byte, value []byte, o any) {
 
 	data := struct {
 		K string
 		V string
 	}{string(key), string(value)}
 
-	out := k.OutputTpl.ExecuteWith(data)
+	out := c.OutputTpl.ExecuteWith(data)
 	fmt.Print(out)
 }

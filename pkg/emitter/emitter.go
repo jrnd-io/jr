@@ -31,6 +31,7 @@ import (
 	"github.com/ugol/jr/pkg/producers/mongoDB"
 	"github.com/ugol/jr/pkg/producers/redis"
 	"github.com/ugol/jr/pkg/producers/s3"
+	"github.com/ugol/jr/pkg/producers/server"
 	"github.com/ugol/jr/pkg/tpl"
 	"log"
 	"os"
@@ -118,19 +119,18 @@ func (e *Emitter) Initialize(conf configuration.GlobalConfiguration) {
 	}
 
 	if e.Output == "http" {
-		//e.Producer = &server.JsonProducer{OutTemplate: &o}
-		// return
+		e.Producer = &server.JsonProducer{OutputTpl: &o}
+		return
 	}
 
 }
 
-func (e *Emitter) RunPreload(conf configuration.GlobalConfiguration) {
+func (e *Emitter) Run(num int, o any) {
 
-	// Preload
-	for i := 0; i < e.Preload; i++ {
+	for i := 0; i < num; i++ {
 		k := e.KTpl.Execute()
 		v := e.VTpl.Execute()
-		e.Producer.Produce([]byte(k), []byte(v), nil)
+		e.Producer.Produce([]byte(k), []byte(v), o)
 		ctx.JrContext.GeneratedObjects++
 		ctx.JrContext.GeneratedBytes += int64(len(v))
 	}

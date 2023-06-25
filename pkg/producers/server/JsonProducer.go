@@ -1,41 +1,38 @@
 package server
 
 import (
-	"bytes"
 	"encoding/json"
+	"github.com/ugol/jr/pkg/tpl"
 	"log"
 	"net/http"
-	"text/template"
 )
 
 type JsonProducer struct {
-	OutTemplate *template.Template
+	OutputTpl *tpl.Tpl
 }
 
-func (c *JsonProducer) Close() {
+func (c *JsonProducer) Close() error {
 	// no need to close
+	return nil
 }
 
 func (c *JsonProducer) Produce(key []byte, value []byte, o interface{}) {
-	var outBuffer bytes.Buffer
-	var err error
 
 	data := struct {
 		K string
 		V string
 	}{string(key), string(value)}
 
-	if err = c.OutTemplate.Execute(&outBuffer, data); err != nil {
-		log.Println(err)
-	}
-
-	out, err := json.Marshal(outBuffer.String())
+	out, err := json.Marshal(c.OutputTpl.ExecuteWith(data))
 	if err != nil {
-		log.Print(err.Error())
+		log.Println(err.Error())
 	}
 	if o != nil {
 		respWriter := o.(*http.ResponseWriter)
-		(*respWriter).Write(out)
+		_, err := (*respWriter).Write(out)
+		if err != nil {
+			log.Println(err.Error())
+		}
 	}
 
 }

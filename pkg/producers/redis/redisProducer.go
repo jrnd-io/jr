@@ -39,7 +39,7 @@ func (p *RedisProducer) Close() error {
 	return err
 }
 
-func (p *RedisProducer) Produce(k []byte, v []byte, o interface{}) {
+func (p *RedisProducer) Produce(k []byte, v []byte, o any) {
 	ctx := context.Background()
 	err := p.client.Set(ctx, string(k), string(v), p.Ttl).Err()
 	if err != nil {

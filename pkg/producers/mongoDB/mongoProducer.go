@@ -52,7 +52,7 @@ func (p *MongoProducer) Initialize(configFile string) {
 	p.client = *client
 }
 
-func (p *MongoProducer) Produce(k []byte, v []byte, o interface{}) {
+func (p *MongoProducer) Produce(k []byte, v []byte, o any) {
 
 	collection := p.client.Database(p.database).Collection(p.collection)
 

@@ -45,7 +45,7 @@ func Initialize(emitterNames []string, es []Emitter) []Emitter {
 	if howManyEmitters == 0 {
 		for i := 0; i < len(es); i++ {
 			es[i].Initialize(configuration.GlobalCfg)
-			es[i].RunPreload(configuration.GlobalCfg)
+			es[i].Run(es[i].Preload, nil)
 		}
 		return es
 	} else {
@@ -54,7 +54,7 @@ func Initialize(emitterNames []string, es []Emitter) []Emitter {
 			if functions.Contains(emitterNames, es[i].Name) {
 				es[i].Initialize(configuration.GlobalCfg)
 				emittersToRun = append(emittersToRun, es[i])
-				es[i].RunPreload(configuration.GlobalCfg)
+				es[i].Run(es[i].Preload, nil)
 			}
 		}
 		return emittersToRun

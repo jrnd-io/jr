@@ -121,13 +121,13 @@ func handleData(w http.ResponseWriter, r *http.Request) {
 			if functions.Contains([]string{url}, emitters[i].Name) {
 				emitters[i].Initialize(configuration.GlobalCfg)
 				emitterToRun[url] = append(emitterToRun[url], emitters[i])
-				emitters[i].Run(emitters[i].Preload, &w)
+				emitters[i].Run(emitters[i].Preload, w)
 			}
 		}
 		firstRun[url] = true
 	} else {
 		for _, e := range emitterToRun[url] {
-			e.Run(e.Num, &w)
+			e.Run(e.Num, w)
 		}
 	}
 

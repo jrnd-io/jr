@@ -22,7 +22,7 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/ugol/jr/pkg/configuration"
+	"github.com/ugol/jr/pkg/constants"
 	"log"
 	"os"
 	"runtime"
@@ -43,7 +43,7 @@ var templateShowCmd = &cobra.Command{
 		}
 
 		nocolor, _ := cmd.Flags().GetBool("nocolor")
-		templateDir := os.ExpandEnv(configuration.GlobalCfg.TemplateDir)
+		templateDir := os.ExpandEnv(fmt.Sprintf("%s/%s", constants.JRhome, "templates"))
 		templatePath := fmt.Sprintf("%s/%s.tpl", templateDir, args[0])
 		templateScript, err := os.ReadFile(templatePath)
 		valid, err := isValidTemplate([]byte(templateScript))

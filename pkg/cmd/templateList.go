@@ -23,7 +23,7 @@ package cmd
 import (
 	"bytes"
 	"fmt"
-	"github.com/ugol/jr/pkg/configuration"
+	"github.com/ugol/jr/pkg/constants"
 	"os"
 	"path/filepath"
 	"strings"
@@ -42,7 +42,8 @@ var templateListCmd = &cobra.Command{
 		fmt.Println()
 		fmt.Println("List of available JR templates:")
 		fmt.Println()
-		templateDir := os.ExpandEnv(configuration.GlobalCfg.TemplateDir)
+
+		templateDir := os.ExpandEnv(fmt.Sprintf("%s/%s", constants.JRhome, "templates"))
 
 		if _, err := os.Stat(templateDir); os.IsNotExist(err) {
 			return

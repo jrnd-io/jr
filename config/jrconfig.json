@@ -55,7 +55,6 @@
   ],
   "global": {
     "seed": -1,
-    "templateDir": "$HOME/.jr/templates",
     "kafkaConfig": "./kafka/config.properties",
     "schemaRegistry": true,
     "registryConfig": "./kafka/registry.properties",

@@ -34,8 +34,6 @@ import (
 	"time"
 )
 
-var JRhome string
-
 var rootCmd = &cobra.Command{
 	Use:   "jr",
 	Short: "jr, the data random generator",
@@ -59,7 +57,7 @@ func init() {
 		ID:    "server",
 		Title: "HTTP Server",
 	})
-	rootCmd.PersistentFlags().StringVar(&JRhome, "home", "", "JR home dir")
+	rootCmd.PersistentFlags().StringVar(&constants.JRhome, "home", "", "JR home dir")
 }
 
 func initConfig() {
@@ -74,10 +72,10 @@ func initConfig() {
 	viper.SetEnvKeyReplacer(strings.NewReplacer("-", "_"))
 	viper.AutomaticEnv()
 	bindFlags(rootCmd, viper.GetViper())
-	if JRhome == "" {
-		JRhome = constants.DEFAULT_HOMEDIR
+	if constants.JRhome == "" {
+		constants.JRhome = constants.DEFAULT_HOMEDIR
 	}
-	viper.AddConfigPath(JRhome)
+	viper.AddConfigPath(constants.JRhome)
 
 	if err := viper.ReadInConfig(); err == nil {
 		log.Println("JR configuration:", viper.ConfigFileUsed())

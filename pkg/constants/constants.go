@@ -2,6 +2,8 @@ package constants
 
 import "time"
 
+var JRhome string
+
 const NUM = 1
 const LOCALE = "us"
 const FREQUENCY = -1

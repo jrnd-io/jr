@@ -23,6 +23,7 @@ package emitter
 import (
 	"fmt"
 	"github.com/ugol/jr/pkg/configuration"
+	"github.com/ugol/jr/pkg/constants"
 	"github.com/ugol/jr/pkg/ctx"
 	"github.com/ugol/jr/pkg/functions"
 	"github.com/ugol/jr/pkg/producers/console"
@@ -62,7 +63,7 @@ func (e *Emitter) Initialize(conf configuration.GlobalConfiguration) {
 
 	templateName := e.ValueTemplate
 	if e.EmbeddedTemplate == "" {
-		path := os.ExpandEnv(conf.TemplateDir)
+		path := os.ExpandEnv(fmt.Sprintf("%s/%s", constants.JRhome, "templates"))
 		templateFullPath := fmt.Sprintf("%s/%s.tpl", path, templateName)
 		vt, err := os.ReadFile(templateFullPath)
 		e.EmbeddedTemplate = string(vt)

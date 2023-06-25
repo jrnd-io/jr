@@ -1,3 +1,5 @@
+### Add net_device to emitters
+
 POST http://localhost:7482/jr/emitters
 Content-Type: application/json
 
@@ -12,29 +14,47 @@ Content-Type: application/json
       "outputTemplate": "{{.V}}\n"
 }
 
-###
+### Add malformed json
+
+POST http://localhost:7482/jr/emitters
+Content-Type: application/json
+
+{
+      "name" "net_device",
+      "locale": "us",
+      "num": 5,
+      "preload": 0,
+      "valueTemplate": "net_device",
+      "output": "http",
+      "keyTemplate": "null",
+      "outputTemplate": "{{.V}}\n"
+}
+
+
+### Get all emitters
+
 GET http://localhost:7482/jr/emitters
 
-###
+### Run predefined shoe emitter
 
 GET http://localhost:7482/jr/emitter/shoe
 
-###
+### Run predefined shoe_customer emitter
 
 GET http://localhost:7482/jr/emitter/shoe_customer
 
-###
+### Run predefined shoe_order emitter
 
 GET http://localhost:7482/jr/emitter/shoe_order
 
-###
+### Run predefined shoe_clickstream emitter
 
 GET http://localhost:7482/jr/emitter/shoe_clickstream
 
-###
+### Run net_device emitter
 
 GET http://localhost:7482/jr/emitter/net_device
 
-###
+### Run user emitter
 
 GET http://localhost:7482/jr/emitter/user

@@ -30,6 +30,8 @@ func (c *JsonProducer) Produce(key []byte, value []byte, o interface{}) {
 		if err != nil {
 			log.Println(err.Error())
 		}
+	} else {
+		log.Printf("Server producer must produce to a http.ResponseWriter, but was a %#v\n", o)
 	}
 
 }

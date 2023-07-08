@@ -45,7 +45,7 @@ var serverCmd = &cobra.Command{
 		router.Use(middleware.Recoverer)
 		router.Use(middleware.Timeout(60 * time.Second))
 		router.Get("/", func(w http.ResponseWriter, r *http.Request) {
-			w.Write([]byte("JR"))
+			w.Write([]byte("JR is 7482!"))
 		})
 
 		router.Route("/emitters", func(r chi.Router) {

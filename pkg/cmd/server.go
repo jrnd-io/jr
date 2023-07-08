@@ -116,7 +116,6 @@ func runEmitter(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	url := chi.URLParam(r, "emitter")
-	fmt.Println(url)
 	if firstRun[url] == false {
 		for i := 0; i < len(emitters); i++ {
 			if functions.Contains([]string{url}, emitters[i].Name) {

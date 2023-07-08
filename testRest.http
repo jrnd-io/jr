@@ -1,6 +1,6 @@
 ### Add net_device to emitters
 
-POST http://localhost:7482/jr/emitters
+POST http://localhost:7482/emitters
 Content-Type: application/json
 
 {
@@ -16,7 +16,7 @@ Content-Type: application/json
 
 ### Add malformed json
 
-POST http://localhost:7482/jr/emitters
+POST http://localhost:7482/emitters
 Content-Type: application/json
 
 {
@@ -33,28 +33,28 @@ Content-Type: application/json
 
 ### Get all emitters
 
-GET http://localhost:7482/jr/emitters
+GET http://localhost:7482/emitters
 
 ### Run predefined shoe emitter
 
-GET http://localhost:7482/jr/emitter/shoe
+GET http://localhost:7482/emitters/shoe
 
 ### Run predefined shoe_customer emitter
 
-GET http://localhost:7482/jr/emitter/shoe_customer
+GET http://localhost:7482/emitters/shoe_customer
 
 ### Run predefined shoe_order emitter
 
-GET http://localhost:7482/jr/emitter/shoe_order
+GET http://localhost:7482/emitters/shoe_order
 
 ### Run predefined shoe_clickstream emitter
 
-GET http://localhost:7482/jr/emitter/shoe_clickstream
+GET http://localhost:7482/emitters/shoe_clickstream
 
 ### Run net_device emitter
 
-GET http://localhost:7482/jr/emitter/net_device
+GET http://localhost:7482/emitters/net_device
 
 ### Run user emitter
 
-GET http://localhost:7482/jr/emitter/user
+GET http://localhost:7482/emitters/user

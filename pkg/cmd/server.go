@@ -3,7 +3,8 @@ package cmd
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/gorilla/mux"
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
 	"github.com/spf13/cobra"
 	"github.com/ugol/jr/pkg/configuration"
 	"github.com/ugol/jr/pkg/constants"
@@ -11,6 +12,7 @@ import (
 	"github.com/ugol/jr/pkg/functions"
 	"log"
 	"net/http"
+	"time"
 )
 
 var firstRun = make(map[string]bool)
@@ -35,9 +37,27 @@ var serverCmd = &cobra.Command{
 			}
 		}
 
-		router := mux.NewRouter()
-		router.HandleFunc("/jr/emitters", handleEmitters).Methods("POST", "GET", "PUT", "DELETE")
-		router.HandleFunc("/jr/emitter/{URL}", handleData).Methods("GET")
+		router := chi.NewRouter()
+
+		router.Use(middleware.RequestID)
+		router.Use(middleware.RealIP)
+		router.Use(middleware.Logger)
+		router.Use(middleware.Recoverer)
+		router.Use(middleware.Timeout(60 * time.Second))
+		router.Get("/", func(w http.ResponseWriter, r *http.Request) {
+			w.Write([]byte("JR"))
+		})
+
+		router.Route("/emitters", func(r chi.Router) {
+			r.Get("/", listEmitters)
+			r.Post("/", addEmitter)
+
+			r.Route("/{emitter}", func(r chi.Router) {
+				r.Get("/", runEmitter)
+				r.Put("/", updateEmitter)
+				r.Delete("/", deleteEmitter)
+			})
+		})
 
 		addr := fmt.Sprintf(":%d", port)
 		log.Printf("Starting HTTP server on port %d\n", port)
@@ -92,28 +112,11 @@ func deleteEmitter(w http.ResponseWriter, r *http.Request) {
 	//@TODO delete emitter by name
 }
 
-func handleEmitters(w http.ResponseWriter, r *http.Request) {
-
-	switch r.Method {
-	case "GET":
-		listEmitters(w, r)
-	case "POST":
-		addEmitter(w, r)
-	case "PUT":
-		updateEmitter(w, r)
-	case "DELETE":
-		deleteEmitter(w, r)
-	default:
-		return
-	}
-
-}
-
-func handleData(w http.ResponseWriter, r *http.Request) {
+func runEmitter(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
-	url := mux.Vars(r)["URL"]
-
+	url := chi.URLParam(r, "emitter")
+	fmt.Println(url)
 	if firstRun[url] == false {
 		for i := 0; i < len(emitters); i++ {
 			if functions.Contains([]string{url}, emitters[i].Name) {

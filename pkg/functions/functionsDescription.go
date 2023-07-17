@@ -199,7 +199,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr template run --embedded '{{cf}'",
+		Example:     "jr template run --locale IT --embedded '{{cf}}'",
 		Output:      "RSSMRA70A30H501W",
 	},
 	"city": {

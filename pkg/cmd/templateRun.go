@@ -27,6 +27,7 @@ import (
 	"github.com/ugol/jr/pkg/constants"
 	"github.com/ugol/jr/pkg/emitter"
 	"github.com/ugol/jr/pkg/functions"
+	"log"
 	"time"
 )
 
@@ -53,6 +54,7 @@ jr template run --template "{{name}}"
 		num, _ := cmd.Flags().GetInt("num")
 		frequency, _ := cmd.Flags().GetDuration("frequency")
 		duration, _ := cmd.Flags().GetDuration("duration")
+		throughputString, _ := cmd.Flags().GetString("throughput")
 		seed, _ := cmd.Flags().GetInt64("seed")
 		topic, _ := cmd.Flags().GetString("topic")
 		preload, _ := cmd.Flags().GetInt("preload")
@@ -70,6 +72,15 @@ jr template run --template "{{name}}"
 		} else {
 			vTemplate = args[0]
 			eTemplate = ""
+		}
+
+		throughput, err := parseThroughput(throughputString)
+		if err != nil {
+			log.Panicf("Throughput format error:%v", err)
+		}
+
+		if throughput > 0 {
+			// @TODO
 		}
 
 		cmd.Flags().VisitAll(func(f *pflag.Flag) {
@@ -129,6 +140,7 @@ func init() {
 	templateRunCmd.Flags().IntP("num", "n", constants.NUM, "Number of elements to create for each pass")
 	templateRunCmd.Flags().DurationP("frequency", "f", constants.FREQUENCY, "how much time to wait for next generation pass")
 	templateRunCmd.Flags().DurationP("duration", "d", constants.YEAR, "If frequency is enabled, with Duration you can set a finite amount of time")
+	templateRunCmd.Flags().String("throughput", "", "You can set throughput, JR will calculate frequency automatically.")
 
 	templateRunCmd.Flags().Int64("seed", time.Now().UTC().UnixNano(), "Seed to init pseudorandom generator")
 

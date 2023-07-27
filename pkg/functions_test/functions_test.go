@@ -23,6 +23,7 @@ package functions_test
 import (
 	"bytes"
 	"fmt"
+	"github.com/ugol/jr/pkg/ctx"
 	"github.com/ugol/jr/pkg/functions"
 	"testing"
 	"text/template"
@@ -159,4 +160,102 @@ func runtv(tpl, expect string, vars interface{}) error {
 		return fmt.Errorf("Expected '%s', got '%s'", expect, b.String())
 	}
 	return nil
+}
+
+
+func TestParamFromCSV_odd(t *testing.T) {
+	functions.InitCSV("../../testfiles/test3.csv")
+
+	tpl := `{{fromcsv "NAME"}} {{fromcsv "SURNAME"}}`
+
+	ctx.JrContext.CurrentIterationLoopIndex++
+
+	if err := runt(tpl, "Jhon Brown"); err != nil {
+		t.Error(err)
+	}
+
+	ctx.JrContext.CurrentIterationLoopIndex++
+
+	if err := runt(tpl, "Mary White"); err != nil {
+		t.Error(err)
+	}
+
+	ctx.JrContext.CurrentIterationLoopIndex++
+
+	if err := runt(tpl, "Anna Green"); err != nil {
+		t.Error(err)
+	}
+
+	ctx.JrContext.CurrentIterationLoopIndex++
+
+	if err := runt(tpl, "Jhon Brown"); err != nil {
+		t.Error(err)
+	}
+
+	ctx.JrContext.CurrentIterationLoopIndex++
+
+	if err := runt(tpl, "Mary White"); err != nil {
+		t.Error(err)
+	}
+
+	ctx.JrContext.CurrentIterationLoopIndex++
+
+	if err := runt(tpl, "Anna Green"); err != nil {
+		t.Error(err)
+	}
+
+	ctx.JrContext.CurrentIterationLoopIndex++
+
+	if err := runt(tpl, "Jhon Brown"); err != nil {
+		t.Error(err)
+	}
+}
+
+func TestParamFromCSV_not_initialized(t *testing.T) {
+
+	ctx.JrContext.CtxCSV = make(map[int]map[string]string)
+
+	tpl := `{{fromcsv "NAME"}} {{fromcsv "SURNAME"}}`
+
+	ctx.JrContext.CurrentIterationLoopIndex++
+
+	if err := runt(tpl, " "); err != nil {
+		t.Error(err)
+	}
+}
+
+func TestParamFromCSV_even(t *testing.T) {
+	functions.InitCSV("../../testfiles/test2.csv")
+
+	tpl := `{{fromcsv "NAME"}} {{fromcsv "SURNAME"}}`
+
+	ctx.JrContext.CurrentIterationLoopIndex++
+
+	if err := runt(tpl, "Jhon Brown"); err != nil {
+		t.Error(err)
+	}
+
+	ctx.JrContext.CurrentIterationLoopIndex++
+
+	if err := runt(tpl, "Mary White"); err != nil {
+		t.Error(err)
+	}
+
+	ctx.JrContext.CurrentIterationLoopIndex++
+
+	if err := runt(tpl, "Jhon Brown"); err != nil {
+		t.Error(err)
+	}
+
+	ctx.JrContext.CurrentIterationLoopIndex++
+
+	if err := runt(tpl, "Mary White"); err != nil {
+		t.Error(err)
+	}
+
+	ctx.JrContext.CurrentIterationLoopIndex++
+
+	if err := runt(tpl, "Jhon Brown"); err != nil {
+		t.Error(err)
+	}
 }

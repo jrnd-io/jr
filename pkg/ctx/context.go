@@ -39,9 +39,12 @@ type Context struct {
 	CtxLock          sync.RWMutex
 	CtxList          map[string][]string
 	CtxListLock      sync.RWMutex
+	CtxCSV           map[int]map[string]string
+	CtxCSVLock 		 sync.RWMutex	
 	LastIndex        int
 	CountryIndex     int
 	CityIndex        int
+	CurrentIterationLoopIndex int	
 }
 
 func init() {
@@ -57,6 +60,8 @@ func init() {
 		CtxLock:          sync.RWMutex{},
 		CtxList:          make(map[string][]string),
 		CtxListLock:      sync.RWMutex{},
+		CtxCSV:           make(map[int]map[string]string),
+		CtxCSVLock:       sync.RWMutex{},		
 		LastIndex:        -1,
 		CountryIndex:     232,
 		CityIndex:        -1,

@@ -89,3 +89,16 @@ func Contains(s []string, str string) bool {
 	}
 	return false
 }
+
+// get the label value from csv file
+func fromcsv(c string) string {
+	ctx.JrContext.CtxCSVLock.Lock()
+	defer ctx.JrContext.CtxCSVLock.Unlock()
+
+	if len(ctx.JrContext.CtxCSV) > 0 {
+		return ctx.JrContext.CtxCSV[(ctx.JrContext.CurrentIterationLoopIndex-1)%len(ctx.JrContext.CtxCSV)][c]
+	} else {
+		return ""
+	}
+
+}

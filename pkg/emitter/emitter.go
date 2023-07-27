@@ -54,12 +54,15 @@ type Emitter struct {
 	Topic            string        `mapstructure:"topic"`
 	Kcat             bool          `mapstructure:"kcat"`
 	Oneline          bool          `mapstructure:"oneline"`
+	Csv            	 string        `mapstructure:"csv"`
 	Producer         Producer
 	KTpl             tpl.Tpl
 	VTpl             tpl.Tpl
 }
 
 func (e *Emitter) Initialize(conf configuration.GlobalConfiguration) {
+
+	functions.InitCSV(e.Csv)
 
 	templateName := e.ValueTemplate
 	if e.EmbeddedTemplate == "" {
@@ -71,6 +74,7 @@ func (e *Emitter) Initialize(conf configuration.GlobalConfiguration) {
 			log.Printf("Template '%s' not found in %s\n", templateName, path)
 		}
 	}
+	
 
 	keyTpl, err := tpl.NewTpl("key", e.KeyTemplate, functions.FunctionsMap(), &ctx.JrContext)
 	if err != nil {

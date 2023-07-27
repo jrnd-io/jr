@@ -58,7 +58,9 @@ jr template run --template "{{name}}"
 		seed, _ := cmd.Flags().GetInt64("seed")
 		topic, _ := cmd.Flags().GetString("topic")
 		preload, _ := cmd.Flags().GetInt("preload")
-
+		
+		csv, _ := cmd.Flags().GetString("csv")
+		
 		if kcat {
 			oneline = true
 			output = "stdout"
@@ -112,7 +114,7 @@ jr template run --template "{{name}}"
 
 		e := emitter.Emitter{
 			Name:             name,
-			Locale:           locale,
+			Locale:           locale,			
 			Num:              num,
 			Frequency:        frequency,
 			Duration:         duration,
@@ -125,6 +127,7 @@ jr template run --template "{{name}}"
 			Topic:            topic,
 			Kcat:             kcat,
 			Oneline:          oneline,
+			Csv:              csv,
 		}
 
 		functions.SetSeed(seed)
@@ -143,6 +146,8 @@ func init() {
 	templateRunCmd.Flags().String("throughput", "", "You can set throughput, JR will calculate frequency automatically.")
 
 	templateRunCmd.Flags().Int64("seed", time.Now().UTC().UnixNano(), "Seed to init pseudorandom generator")
+
+	templateRunCmd.Flags().String("csv", "", "Path to csv file to use")
 
 	templateRunCmd.Flags().StringP("kafkaConfig", "F", "", "Kafka configuration")
 	templateRunCmd.Flags().String("registryConfig", "", "Kafka configuration")

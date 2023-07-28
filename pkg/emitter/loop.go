@@ -73,13 +73,15 @@ func DoLoop(es []Emitter) {
 	defer stop()
 
 	for i := 0; i < numTimers; i++ {
+		
+
 		index := i
 
 		stopChannels[i] = make(chan struct{})
 
 		go func(timerIndex int) {
 			defer wg.Done()
-
+			
 			frequency := es[timerIndex].Frequency
 			if frequency > 0 {
 				ticker := time.NewTicker(es[timerIndex].Frequency)
@@ -113,8 +115,12 @@ func doTemplate(emitter Emitter) {
 	ctx.JrContext.Locale = emitter.Locale
 	ctx.JrContext.CountryIndex = functions.IndexOf(strings.ToUpper(emitter.Locale), "country")
 
-	for i := 0; i < emitter.Num; i++ {
 
+	
+	
+	for i := 0; i < emitter.Num; i++ {
+		ctx.JrContext.CurrentIterationLoopIndex++		
+	
 		k := emitter.KTpl.Execute()
 		v := emitter.VTpl.Execute()
 		if emitter.Oneline {

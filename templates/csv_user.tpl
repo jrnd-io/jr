@@ -4,5 +4,5 @@
   "name": "{{fromcsv "NAME"}} {{fromcsv "SURNAME"}}",
   "gender": "{{gender}}",
   "company": "{{company}}",
-  "email": "{{fromcsv "NAME"}}.{{fromcsv "SURNAME"}}@thelandoof.oz"
+  "email": "{{fromcsv "NAME"}}.{{fromcsv "SURNAME"}}@thelandof.oz"
 }

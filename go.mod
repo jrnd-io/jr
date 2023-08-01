@@ -4,7 +4,7 @@ go 1.20
 
 require (
 	github.com/actgardner/gogen-avro/v10 v10.2.1
-	github.com/aws/aws-sdk-go v1.44.301
+	github.com/aws/aws-sdk-go v1.44.308
 	github.com/confluentinc/confluent-kafka-go/v2 v2.2.0
 	github.com/elastic/go-elasticsearch/v8 v8.8.2
 	github.com/go-chi/chi/v5 v5.0.10
@@ -43,7 +43,7 @@ require (
 	github.com/magiconair/properties v1.8.7 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.9 // indirect
-	github.com/santhosh-tekuri/jsonschema/v5 v5.3.0 // indirect
+	github.com/santhosh-tekuri/jsonschema/v5 v5.3.1 // indirect
 	github.com/spf13/afero v1.9.5 // indirect
 	github.com/spf13/cast v1.5.1 // indirect
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect

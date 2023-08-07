@@ -23,10 +23,11 @@ package functions_test
 import (
 	"bytes"
 	"fmt"
-	"github.com/ugol/jr/pkg/ctx"
-	"github.com/ugol/jr/pkg/functions"
 	"testing"
 	"text/template"
+
+	"github.com/ugol/jr/pkg/ctx"
+	"github.com/ugol/jr/pkg/functions"
 )
 
 func TestSubstr(t *testing.T) {
@@ -162,7 +163,6 @@ func runtv(tpl, expect string, vars interface{}) error {
 	return nil
 }
 
-
 func TestParamFromCSV_odd(t *testing.T) {
 	functions.InitCSV("../../testfiles/test3.csv")
 
@@ -170,7 +170,7 @@ func TestParamFromCSV_odd(t *testing.T) {
 
 	ctx.JrContext.CurrentIterationLoopIndex++
 
-	if err := runt(tpl, "Jhon Brown"); err != nil {
+	if err := runt(tpl, "John Brown"); err != nil {
 		t.Error(err)
 	}
 
@@ -188,7 +188,7 @@ func TestParamFromCSV_odd(t *testing.T) {
 
 	ctx.JrContext.CurrentIterationLoopIndex++
 
-	if err := runt(tpl, "Jhon Brown"); err != nil {
+	if err := runt(tpl, "John Brown"); err != nil {
 		t.Error(err)
 	}
 
@@ -206,7 +206,7 @@ func TestParamFromCSV_odd(t *testing.T) {
 
 	ctx.JrContext.CurrentIterationLoopIndex++
 
-	if err := runt(tpl, "Jhon Brown"); err != nil {
+	if err := runt(tpl, "John Brown"); err != nil {
 		t.Error(err)
 	}
 }
@@ -231,7 +231,7 @@ func TestParamFromCSV_even(t *testing.T) {
 
 	ctx.JrContext.CurrentIterationLoopIndex++
 
-	if err := runt(tpl, "Jhon Brown"); err != nil {
+	if err := runt(tpl, "John Brown"); err != nil {
 		t.Error(err)
 	}
 
@@ -243,7 +243,7 @@ func TestParamFromCSV_even(t *testing.T) {
 
 	ctx.JrContext.CurrentIterationLoopIndex++
 
-	if err := runt(tpl, "Jhon Brown"); err != nil {
+	if err := runt(tpl, "John Brown"); err != nil {
 		t.Error(err)
 	}
 
@@ -255,7 +255,7 @@ func TestParamFromCSV_even(t *testing.T) {
 
 	ctx.JrContext.CurrentIterationLoopIndex++
 
-	if err := runt(tpl, "Jhon Brown"); err != nil {
+	if err := runt(tpl, "John Brown"); err != nil {
 		t.Error(err)
 	}
 }

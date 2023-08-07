@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>JR Console</title>
+
+	<link href="/bs/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+	<!--link href="/stylesheets/main.css?s" rel="stylesheet" crossorigin="anonymous"-->
+</head>
+<script src="/js/jquery-3.2.1.slim.min.js" crossorigin="anonymous"></script>
+<script src="/bs/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+
+<body class="p-0 m-0 border-3 bd-example m-4 border-0">
+
+	<div>
+		<img src="/images/jr_logo.png" class="rounded float-left" alt="JR"><h1 class="p-1 m-2 border-3">Web Console</h1>
+	</div>	
+	<br>
+	<div id="infobox" class="modal" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document">
+		  <div class="modal-content">
+			<div class="modal-header">
+			  <h5 class="modal-title">Emitter info</h5>
+			  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			  </button>
+			</div>
+			<div id="infobox_text" class="modal-body">
+			  <p>Modal body text goes here.</p>
+			</div>
+			<div class="modal-footer">			
+			  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		  </div>
+		</div>
+	  </div>
+
+	<div class="list-group" id="emitters">
+
+	</div>
+
+	<script>
+		// Fetch JSON data from the HTTP endpoint
+		fetch('/emitters')
+
+			.then(response => response.json())
+
+			.then(data => {
+				// Access the JSON data and create a list
+
+				const emitters_list = document.getElementById('emitters');
+
+				data.forEach(item => {
+					var an_emitter_html = "";
+
+					an_emitter_html +=
+
+						"<div class='card'>" +
+						"	<div class='card-header' id='heading" + item.Name + "'>" +
+						"		<div class='row'>" +//row
+						"		<div class='col align-self-center'>" +//col
+						"		<h5 class='mb-0 '>" +
+						"			<button class='btn btn-link collapsed' data-toggle='collapse' data-target='#collapse" + item.Name + "' aria-expanded='false' aria-controls='collapse" + item.Name + "'>" +
+						"				" + item.Name + "" +
+						"			</button>" +
+						"		</h5>" +
+						"		</div>" +//col
+						"		<div class='col-auto'>" +//col
+						"			<div class='m-1 btn-toolbar text-center well'>" +
+						"				<button type='button' class='m-2 btn btn-success btn-sm' onclick=\"startEmitter('" + item.Name + "')\">" +
+						"					 Start" +
+						"				</button>" +
+						"				<button type='button' class='m-2 btn-danger btn-sm' onclick=\"stopEmitter('" + item.Name + "')\">" +
+						"				 Stop" +
+						"				</button>" +
+						"				<button type='button' class='m-2 btn-warning btn-sm' onclick=\"pauseEmitter('" + item.Name + "')\">" +
+						"				 Pause" +
+						"				</button>" +
+						"				<button type='button' class='m-2 btn-info btn-sm' onclick=\"statusEmitter('" + item.Name + "')\">" +
+						"				 Status" +
+						"				</button>" +
+						"			</div>" +
+						"		</div>" +//row
+						"		</div>" +//col
+
+						"	</div>" +
+						"	<div id='collapse" + item.Name + "' class='collapse' aria-labelledby='heading" + item.Name + "' data-parent='#emitters'>" +
+						"		<div class='card-body'>";
+
+					//Emitters details table:
+					an_emitter_html +=
+						"<table class='table table-striped w-25 p-3'>" +
+						"	<thead class='thead-dark'>" +
+						"		<tr>" +
+						"		<th scope='col'>Key</th>" +
+						"		<th scope='col'>Value</th>" +
+						"	</tr>" +
+						"	</thead>" +
+						"<tbody>";
+
+					for (var prop in item) {
+						if (Object.prototype.hasOwnProperty.call(item, prop) && (prop !== "KTpl") && (prop !== "VTpl")) {
+							an_emitter_html +=
+								"	<tr>" +
+								"	<th scope='row'>" + prop + "</th>" +
+								"	<td>" + item[prop] + "</td>" +
+								"	</tr>";
+						} else {
+							an_emitter_html +=
+								"	<tr>" +
+								"	<th scope='row'>" + prop + "</th>" +
+								"	<td> Context=" + item[prop].Context + "<br> Template=" + item[prop].Template + "</td>" +
+								"	</tr>";
+						}
+					}
+					an_emitter_html +=
+						"</table>";
+
+					an_emitter_html +=		
+						"		</div>" +
+						"	</div>" +
+
+						"</div>";
+
+					emitters_list.innerHTML += an_emitter_html;
+		
+				});
+			})
+			.catch(error => console.log('Error:', error));
+
+		function startEmitter(name) {
+			fetch('/emitters/' + name + '/start')
+
+				.then(response => response.json())
+
+				.then(data => {
+					$('#infobox').modal()
+					$('#infobox_text').empty();
+					text_div = document.createElement( "div" );
+					for (var prop in data) {
+						text_div.innerHTML+= prop + "="+ data[prop];
+					}
+					$('#infobox_text').append(text_div);
+				});
+
+
+		}
+
+		function stopEmitter(name) {
+			fetch('/emitters/' + name + '/stop')
+
+				.then(response => response.json())
+
+				.then(data => {
+					$('#infobox').modal()
+					$('#infobox_text').empty();
+					text_div = document.createElement( "div" );
+					for (var prop in data) {
+						text_div.innerHTML+= prop + "="+ data[prop];
+					}
+					$('#infobox_text').append(text_div);
+				});
+
+
+		}
+
+		function pauseEmitter(name) {
+			fetch('/emitters/' + name + '/pause')
+
+				.then(response => response.json())
+
+				.then(data => {
+					$('#infobox').modal()
+					$('#infobox_text').empty();
+					text_div = document.createElement( "div" );
+					for (var prop in data) {
+						text_div.innerHTML+= prop + "="+ data[prop];
+					}
+					$('#infobox_text').append(text_div);
+				});
+
+
+		}
+
+		function statusEmitter(name) {
+			fetch('/emitters/' + name + '/status')
+
+				.then(response => response.json())
+
+				.then(data => {
+					$('#infobox').modal()
+					$('#infobox_text').empty();
+					text_div = document.createElement( "div" );
+					for (var prop in data) {
+						text_div.innerHTML+= prop + "="+ data[prop];
+					}
+					$('#infobox_text').append(text_div);
+				});
+
+
+		}
+
+
+
+	</script>
+
+</body>
+
+<!--  localhost:7482/emitters -->
+
+</html>

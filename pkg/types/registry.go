@@ -83,13 +83,13 @@ var purchase Purchase
 
 var ratings Ratings
 
+var shoe Shoe
+
 var shoeclickstream Shoeclickstream
 
 var shoecustomers Shoecustomers
 
 var shoeorders Shoeorders
-
-var shoeproduct Shoeproduct
 
 var siemlogs Siemlogs
 
@@ -235,6 +235,9 @@ func GetType(templateType string) interface{} {
 	case "ratings":
 		return &ratings
 
+	case "shoe":
+		return &shoe
+
 	case "shoeclickstream":
 		return &shoeclickstream
 
@@ -243,9 +246,6 @@ func GetType(templateType string) interface{} {
 
 	case "shoeorders":
 		return &shoeorders
-
-	case "shoeproduct":
-		return &shoeproduct
 
 	case "siemlogs":
 		return &siemlogs

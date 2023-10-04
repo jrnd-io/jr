@@ -87,9 +87,9 @@ var shoe Shoe
 
 var shoeclickstream Shoeclickstream
 
-var shoecustomers Shoecustomers
+var shoecustomer Shoecustomer
 
-var shoeorders Shoeorders
+var shoeorder Shoeorder
 
 var siemlogs Siemlogs
 
@@ -241,11 +241,11 @@ func GetType(templateType string) interface{} {
 	case "shoeclickstream":
 		return &shoeclickstream
 
-	case "shoecustomers":
-		return &shoecustomers
+	case "shoecustomer":
+		return &shoecustomer
 
-	case "shoeorders":
-		return &shoeorders
+	case "shoeorder":
+		return &shoeorder
 
 	case "siemlogs":
 		return &siemlogs

@@ -1,6 +1,6 @@
 {
   "type" : "record",
-  "namespace" : "jr",
+  "namespace" : "shoes",
   "name" : "shoe",
   "fields" : [
     { "name" : "id" , "type" : "string"},

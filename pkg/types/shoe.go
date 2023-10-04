@@ -33,8 +33,8 @@
  *     ratings.avsc
  *     shoe.avsc
  *     shoe_clickstream.avsc
- *     shoe_customers.avsc
- *     shoe_orders.avsc
+ *     shoe_customer.avsc
+ *     shoe_order.avsc
  *     siem_logs.avsc
  *     stockTrades.avsc
  *     stores.avsc
@@ -68,7 +68,7 @@ type Shoe struct {
 	Rating float32 `json:"rating"`
 }
 
-const ShoeAvroCRC64Fingerprint = "Zr\x1f\xcf2\xadn\xc9"
+const ShoeAvroCRC64Fingerprint = "\xcee\a\x83]\xae\xc0\xda"
 
 func NewShoe() Shoe {
 	r := Shoe{}
@@ -128,11 +128,11 @@ func (r Shoe) Serialize(w io.Writer) error {
 }
 
 func (r Shoe) Schema() string {
-	return "{\"fields\":[{\"name\":\"id\",\"type\":\"string\"},{\"name\":\"sale_price\",\"type\":\"int\"},{\"name\":\"brand\",\"type\":\"string\"},{\"name\":\"name\",\"type\":\"string\"},{\"name\":\"rating\",\"type\":\"float\"}],\"name\":\"jr.shoe\",\"type\":\"record\"}"
+	return "{\"fields\":[{\"name\":\"id\",\"type\":\"string\"},{\"name\":\"sale_price\",\"type\":\"int\"},{\"name\":\"brand\",\"type\":\"string\"},{\"name\":\"name\",\"type\":\"string\"},{\"name\":\"rating\",\"type\":\"float\"}],\"name\":\"shoes.shoe\",\"type\":\"record\"}"
 }
 
 func (r Shoe) SchemaName() string {
-	return "jr.shoe"
+	return "shoes.shoe"
 }
 
 func (_ Shoe) SetBoolean(v bool)    { panic("Unsupported operation") }

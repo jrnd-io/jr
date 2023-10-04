@@ -59,16 +59,16 @@ var _ = fmt.Printf
 type Shoe struct {
 	Id string `json:"id"`
 
-	Sale_price int32 `json:"sale_price"`
+	Sale_price string `json:"sale_price"`
 
 	Brand string `json:"brand"`
 
 	Name string `json:"name"`
 
-	Rating float32 `json:"rating"`
+	Rating string `json:"rating"`
 }
 
-const ShoeAvroCRC64Fingerprint = "\xcee\a\x83]\xae\xc0\xda"
+const ShoeAvroCRC64Fingerprint = "oB\xcd\xe9\x7f\xc7,\xd6"
 
 func NewShoe() Shoe {
 	r := Shoe{}
@@ -104,7 +104,7 @@ func writeShoe(r Shoe, w io.Writer) error {
 	if err != nil {
 		return err
 	}
-	err = vm.WriteInt(r.Sale_price, w)
+	err = vm.WriteString(r.Sale_price, w)
 	if err != nil {
 		return err
 	}
@@ -116,7 +116,7 @@ func writeShoe(r Shoe, w io.Writer) error {
 	if err != nil {
 		return err
 	}
-	err = vm.WriteFloat(r.Rating, w)
+	err = vm.WriteString(r.Rating, w)
 	if err != nil {
 		return err
 	}
@@ -128,7 +128,7 @@ func (r Shoe) Serialize(w io.Writer) error {
 }
 
 func (r Shoe) Schema() string {
-	return "{\"fields\":[{\"name\":\"id\",\"type\":\"string\"},{\"name\":\"sale_price\",\"type\":\"int\"},{\"name\":\"brand\",\"type\":\"string\"},{\"name\":\"name\",\"type\":\"string\"},{\"name\":\"rating\",\"type\":\"float\"}],\"name\":\"shoes.shoe\",\"type\":\"record\"}"
+	return "{\"fields\":[{\"name\":\"id\",\"type\":\"string\"},{\"name\":\"sale_price\",\"type\":\"string\"},{\"name\":\"brand\",\"type\":\"string\"},{\"name\":\"name\",\"type\":\"string\"},{\"name\":\"rating\",\"type\":\"string\"}],\"name\":\"shoes.shoe\",\"type\":\"record\"}"
 }
 
 func (r Shoe) SchemaName() string {
@@ -152,7 +152,7 @@ func (r *Shoe) Get(i int) types.Field {
 		return w
 
 	case 1:
-		w := types.Int{Target: &r.Sale_price}
+		w := types.String{Target: &r.Sale_price}
 
 		return w
 
@@ -167,7 +167,7 @@ func (r *Shoe) Get(i int) types.Field {
 		return w
 
 	case 4:
-		w := types.Float{Target: &r.Rating}
+		w := types.String{Target: &r.Rating}
 
 		return w
 

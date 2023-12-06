@@ -32,6 +32,7 @@ import (
 	"github.com/ugol/jr/pkg/producers/mongoDB"
 	"github.com/ugol/jr/pkg/producers/redis"
 	"github.com/ugol/jr/pkg/producers/s3"
+	"github.com/ugol/jr/pkg/producers/gcs"
 	"github.com/ugol/jr/pkg/producers/server"
 	"github.com/ugol/jr/pkg/tpl"
 	"log"
@@ -123,6 +124,11 @@ func (e *Emitter) Initialize(conf configuration.GlobalConfiguration) {
 		return
 	}
 
+	if e.Output == "gcs" {
+    	e.Producer = createGCSProducer(conf.GCSConfig)
+    	return
+    }
+
 	if e.Output == "http" {
 		e.Producer = &server.JsonProducer{OutputTpl: &o}
 		return
@@ -169,6 +175,13 @@ func createS3Producer(s3Config string) Producer {
 	sProducer.Initialize(s3Config)
 
 	return sProducer
+}
+
+func createGCSProducer(gcsConfig string) Producer {
+	gProducer := &gcs.GCSProducer{}
+	gProducer.Initialize(gcsConfig)
+
+	return gProducer
 }
 
 func createKafkaProducer(conf configuration.GlobalConfiguration, topic string, templateType string) *kafka.KafkaManager {

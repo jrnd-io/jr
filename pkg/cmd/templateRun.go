@@ -107,6 +107,8 @@ jr template run --template "{{name}}"
 					configuration.GlobalCfg.ElasticConfig, _ = cmd.Flags().GetString(f.Name)
 				case "s3Config":
 					configuration.GlobalCfg.S3Config, _ = cmd.Flags().GetString(f.Name)
+				case "gcsConfig":
+                	configuration.GlobalCfg.GCSConfig, _ = cmd.Flags().GetString(f.Name)
 				}
 			}
 		})
@@ -170,5 +172,6 @@ func init() {
 	templateRunCmd.Flags().String("mongoConfig", "", "MongoDB configuration")
 	templateRunCmd.Flags().String("elasticConfig", "", "Elastic Search configuration")
 	templateRunCmd.Flags().String("s3Config", "", "Amazon S3 configuration")
+	templateRunCmd.Flags().String("gcsConfig", "", "Google GCS configuration")
 
 }

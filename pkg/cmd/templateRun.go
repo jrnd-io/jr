@@ -52,8 +52,8 @@ jr template run --template "{{name}}"
 
 		num, _ := cmd.Flags().GetInt("num")
 		frequency, _ := cmd.Flags().GetDuration("frequency")
-		//duration, _ := cmd.Flags().GetDuration("duration")
-		throughputString, _ := cmd.Flags().GetString("throughput")
+		duration, _ := cmd.Flags().GetDuration("duration")
+		//throughputString, _ := cmd.Flags().GetString("throughput")
 		seed, _ := cmd.Flags().GetInt64("seed")
 		topic, _ := cmd.Flags().GetString("topic")
 		preload, _ := cmd.Flags().GetInt("preload")

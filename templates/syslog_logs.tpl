@@ -1,0 +1,20 @@
+{
+  "name" : "{{random_string 4 18}}",
+  "type" : "{{randoms "RFC5424|RFC3164|CEF|UNKNOWN"}}",
+  "message" : "{{random_string_vocabulary 10 15 "abcdefghijklmnopqrstuvwxyz "}}",
+  "host" : "{{randoms "121.46.66.201|127.26.223.241|185.167.200.143|137.92.22.136|191.84.20.142|151.253.100.45|76.115.125.169|25.19.61.124|140.136.224.11|107.226.4.123"}}",
+  "version" : "3.25.1",
+  "tag" : ".source.s_src",
+  "level" : {{integer 0 191}},
+  "facility" : "{{randoms "syslog|authpriv|cron"}}",
+  "severity" : {{integer 0 8}},
+  "appName" : "{{random_string_vocabulary 5 8 "ABCDEFGHIJKLMNOPQRSTUVWXYZ"}}",
+  "remoteAddress" : "{{randoms "91.253.222.9|48.92.8.255|107.150.81.0|254.11.108.139|14.53.111.201|215.70.232.123|122.96.193.183|185.128.89.135|246.46.59.238|238.158.147.172"}}",
+  "rawMessage" : "{{random_string_vocabulary 10 15 "abcdefghijklmnopqrstuvwxyz "}}",
+  "processId" : {{random_string_vocabulary 1 2 "123456789"}}{{random_string_vocabulary 6 7 "0123456789"}},
+  "messageId" : "{{random_string_vocabulary 1 2 "123456789"}}{{random_string_vocabulary 2 3 "0123456789"}}",
+  "deviceVendor" : "{{random_string_vocabulary 5 6 "abcdefghijklmnopqrstuvwxyz"}}",
+  "deviceProduct" : "{{random_string_vocabulary 5 6 "abcdefghijklmnopqrstuvwxyz"}}",
+  "deviceVersion" : "{{randoms "1.0|2.0|3.0|4.0|5.0"}}",
+  "ts" : {{counter "ts" 1 100 }}
+}

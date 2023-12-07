@@ -45,6 +45,7 @@ var producerListCmd = &cobra.Command{
 		fmt.Printf("%sMongodb%s (--output = mongo)\n", Green, Reset)
 		fmt.Printf("%sElastic%s (--output = elastic)\n", Green, Reset)
 		fmt.Printf("%sS3%s (--output = s3)\n", Green, Reset)
+		fmt.Printf("%sGCS%s (--output = gcs)\n", Green, Reset)
 		fmt.Println()
 
 	},

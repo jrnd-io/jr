@@ -442,6 +442,7 @@
     "mongoConfig": "./mongoDB/config.json",
     "elasticConfig": "./elastic/config.json",
     "s3Config": "./s3/config.json",
+    "gcsConfig": "./gcs/config.json",
     "url": ""
   }
 }

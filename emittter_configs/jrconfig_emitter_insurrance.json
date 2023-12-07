@@ -1,56 +1,43 @@
 {
   "emitters": [
     {
-      "name": "shoe",
+      "name": "insurance_offers",
+      "locale": "us",
+      "num": 1,
+      "frequency": "500ms",
+      "duration": "2s",
+      "preload": 0,
+      "valueTemplate": "insurance_offers",
+      "output": "kafka",
+      "keyTemplate": "null",
+      "outputTemplate": "{{.V}}\n",
+      "topic": "insurance_offers"
+    },
+    {
+      "name": "insurance_customers",
       "locale": "us",
       "num": 0,
       "frequency": "0s",
       "duration": "0s",
-      "preload": 10,
-      "valueTemplate": "shoe",
+      "preload": 200,
+      "valueTemplate": "insurance_customers",
       "output": "kafka",
       "keyTemplate": "null",
       "outputTemplate": "{{.V}}\n",
-      "topic": "shoes"
+      "topic": "insurance_customers"
     },
     {
-      "name": "shoe_customer",
-      "locale": "us",
-      "num": 1,
-      "frequency": "1s",
-      "duration": "1s",
-      "preload": 5,
-      "valueTemplate": "shoe_customer",
-      "output": "kafka",
-      "keyTemplate": "null",
-      "outputTemplate": "{{.V}}\n",
-      "topic": "shoe_customers"
-    },
-    {
-      "name": "shoe_order",
-      "locale": "us",
-      "num": 1,
-      "frequency": "500ms",
-      "duration": "1s",
-      "preload": 0,
-      "valueTemplate": "shoe_order",
-      "output": "kafka",
-      "keyTemplate": "null",
-      "outputTemplate": "{{.V}}\n",
-      "topic": "shoe_orders"
-    },
-    {
-      "name": "shoe_clickstream",
+      "name": "insurance_customer_activity",
       "locale": "us",
       "num": 1,
       "frequency": "100ms",
-      "duration": "1s",
+      "duration": "3s",
       "preload": 0,
-      "valueTemplate": "shoe_clickstream",
+      "valueTemplate": "insurance_customer_activity",
       "output": "kafka",
       "keyTemplate": "null",
       "outputTemplate": "{{.V}}\n",
-      "topic": "shoe_clickstream"
+      "topic": "insurance_customer_activity"
     }
   ],
   "global": {
@@ -58,7 +45,7 @@
     "kafkaConfig": "./kafka/config.properties",
     "schemaRegistry": true,
     "registryConfig": "./kafka/registry.properties",
-    "serializer": "json-schema",
+    "serializer": "avro-generic",
     "autoCreate": true,
     "redisTtl": "1m",
     "redisConfig": "./redis/config.json",

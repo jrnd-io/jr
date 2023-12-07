@@ -58,7 +58,7 @@
     "kafkaConfig": "./kafka/config.properties",
     "schemaRegistry": true,
     "registryConfig": "./kafka/registry.properties",
-    "serializer": "json-schema",
+    "serializer": "avro-generic",
     "autoCreate": true,
     "redisTtl": "1m",
     "redisConfig": "./redis/config.json",

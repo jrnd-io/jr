@@ -1,56 +1,43 @@
 {
   "emitters": [
     {
-      "name": "shoe",
+      "name": "payroll_employee",
       "locale": "us",
       "num": 0,
       "frequency": "0s",
       "duration": "0s",
-      "preload": 10,
-      "valueTemplate": "shoe",
+      "preload": 300,
+      "valueTemplate": "payroll_employee",
       "output": "kafka",
       "keyTemplate": "null",
       "outputTemplate": "{{.V}}\n",
-      "topic": "shoes"
+      "topic": "payroll_employee"
     },
     {
-      "name": "shoe_customer",
+      "name": "payroll_employee_location",
       "locale": "us",
-      "num": 1,
-      "frequency": "1s",
-      "duration": "1s",
-      "preload": 5,
-      "valueTemplate": "shoe_customer",
+      "num": 0,
+      "frequency": "0s",
+      "duration": "0s",
+      "preload": 300,
+      "valueTemplate": "payroll_employee_location",
       "output": "kafka",
       "keyTemplate": "null",
       "outputTemplate": "{{.V}}\n",
-      "topic": "shoe_customers"
+      "topic": "payroll_employee_location"
     },
     {
-      "name": "shoe_order",
-      "locale": "us",
-      "num": 1,
-      "frequency": "500ms",
-      "duration": "1s",
-      "preload": 0,
-      "valueTemplate": "shoe_order",
-      "output": "kafka",
-      "keyTemplate": "null",
-      "outputTemplate": "{{.V}}\n",
-      "topic": "shoe_orders"
-    },
-    {
-      "name": "shoe_clickstream",
+      "name": "payroll_bonus",
       "locale": "us",
       "num": 1,
       "frequency": "100ms",
-      "duration": "1s",
+      "duration": "3s",
       "preload": 0,
-      "valueTemplate": "shoe_clickstream",
+      "valueTemplate": "payroll_bonus",
       "output": "kafka",
       "keyTemplate": "null",
       "outputTemplate": "{{.V}}\n",
-      "topic": "shoe_clickstream"
+      "topic": "payroll_bonus"
     }
   ],
   "global": {
@@ -58,7 +45,7 @@
     "kafkaConfig": "./kafka/config.properties",
     "schemaRegistry": true,
     "registryConfig": "./kafka/registry.properties",
-    "serializer": "json-schema",
+    "serializer": "avro-generic",
     "autoCreate": true,
     "redisTtl": "1m",
     "redisConfig": "./redis/config.json",

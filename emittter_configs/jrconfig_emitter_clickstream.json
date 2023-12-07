@@ -1,56 +1,43 @@
 {
   "emitters": [
     {
-      "name": "shoe",
+      "name": "clickstream_users_schema",
       "locale": "us",
       "num": 0,
       "frequency": "0s",
       "duration": "0s",
-      "preload": 10,
-      "valueTemplate": "shoe",
+      "preload": 30,
+      "valueTemplate": "clickstream_users_schema",
       "output": "kafka",
       "keyTemplate": "null",
       "outputTemplate": "{{.V}}\n",
-      "topic": "shoes"
-    },
+      "topic": "clickstream_users_schema"
+    } ,
     {
-      "name": "shoe_customer",
-      "locale": "us",
-      "num": 1,
-      "frequency": "1s",
-      "duration": "1s",
-      "preload": 5,
-      "valueTemplate": "shoe_customer",
-      "output": "kafka",
-      "keyTemplate": "null",
-      "outputTemplate": "{{.V}}\n",
-      "topic": "shoe_customers"
-    },
-    {
-      "name": "shoe_order",
+      "name": "clickstream_schema",
       "locale": "us",
       "num": 1,
       "frequency": "500ms",
-      "duration": "1s",
+      "duration": "3s",
       "preload": 0,
-      "valueTemplate": "shoe_order",
+      "valueTemplate": "clickstream_schema",
       "output": "kafka",
       "keyTemplate": "null",
       "outputTemplate": "{{.V}}\n",
-      "topic": "shoe_orders"
+      "topic": "clickstream_schema"
     },
     {
-      "name": "shoe_clickstream",
+      "name": "clickstream_codes_schema",
       "locale": "us",
       "num": 1,
-      "frequency": "100ms",
-      "duration": "1s",
+      "frequency": "500ms",
+      "duration": "3s",
       "preload": 0,
-      "valueTemplate": "shoe_clickstream",
+      "valueTemplate": "clickstream_codes_schema",
       "output": "kafka",
       "keyTemplate": "null",
       "outputTemplate": "{{.V}}\n",
-      "topic": "shoe_clickstream"
+      "topic": "clickstream_codes_schema"
     }
   ],
   "global": {
@@ -58,7 +45,7 @@
     "kafkaConfig": "./kafka/config.properties",
     "schemaRegistry": true,
     "registryConfig": "./kafka/registry.properties",
-    "serializer": "json-schema",
+    "serializer": "avro-generic",
     "autoCreate": true,
     "redisTtl": "1m",
     "redisConfig": "./redis/config.json",

@@ -21,6 +21,9 @@ func (c *JsonProducer) Produce(key []byte, value []byte, o interface{}) {
 		respWriter := o.(http.ResponseWriter)
 		if string(key) != "null" {
 			_, err := (respWriter).Write(key)
+			if err != nil {
+                log.Println(err.Error())
+            }
 			_, err = (respWriter).Write([]byte(","))
 			if err != nil {
 				log.Println(err.Error())

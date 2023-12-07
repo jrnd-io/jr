@@ -1,10 +1,14 @@
 package cmd
-import _ "embed"
 
 import (
-
+	_ "embed"
 	"encoding/json"
 	"fmt"
+	"log"
+	"net/http"
+	"strings"
+	"time"
+
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/spf13/cobra"
@@ -12,13 +16,10 @@ import (
 	"github.com/ugol/jr/pkg/constants"
 	"github.com/ugol/jr/pkg/emitter"
 	"github.com/ugol/jr/pkg/functions"
-	"log"
-	"net/http"
-	"time"
-	"strings"
-	//os"
-	//"path/filepath"
 )
+
+//os" //uncomment this for local UI development
+//"path/filepath" //uncomment this for local UI development
 
 //go:embed html/index.html
 var index_html string
@@ -73,21 +74,21 @@ var serverCmd = &cobra.Command{
 		router.Use(middleware.Logger)
 		router.Use(middleware.Recoverer)
 		router.Use(middleware.Timeout(60 * time.Second))
-				
-	// /* EMBEDDED
+
+		// /* EMBEDDED START comment this block for local UI development
 		router.Get("/", func(w http.ResponseWriter, r *http.Request) {
 			w.Write([]byte(index_html))
 		})
 
-		router.Get("/stylesheets/main.css", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {			
+		router.Get("/stylesheets/main.css", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			w.Write([]byte(main_css))
 		}))
-	
+
 		router.Get("/bs/css/bootstrap.min.css", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			w.Header().Set("Content-Type", "text/css")
 			w.Write([]byte(bootstrap_min_css))
 		}))
-	
+
 		router.Get("/bs/css/bootstrap.min.css.map", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			w.Write([]byte(bootstrap_min_css_map))
 		}))
@@ -100,7 +101,7 @@ var serverCmd = &cobra.Command{
 		router.Get("/bs/js/bootstrap.bundle.min.js.map", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			w.Write([]byte(bootstrap_bundle_min_js_map))
 		}))
-		
+
 		router.Get("/js/jquery-3.2.1.slim.min.js", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			w.Header().Set("Content-Type", "application/javascript")
 			w.Write([]byte(jquery_3_2_1_slim_min_js))
@@ -110,9 +111,9 @@ var serverCmd = &cobra.Command{
 			w.Header().Set("Content-Type", "image/x-png")
 			w.Write(jr_logo_png)
 		}))
-	//	*/
+		//	EMBEDDED END */
 
-		/*
+		/* // uncomment this block for local UI development
 		//workDir, _ := os.Getwd()
 		filesDir := http.Dir(filepath.Join("../dev/jr/pkg/cmd/", "html"))
 		FileServer(router, "/", filesDir)
@@ -139,7 +140,7 @@ var serverCmd = &cobra.Command{
 	},
 }
 
-// static files from a http.FileSystem.
+// static files from a http.FileSystem. This function is for local UI development
 func FileServer(r chi.Router, path string, root http.FileSystem) {
 	if strings.ContainsAny(path, "{}*") {
 		panic("FileServer does not permit any URL parameters.")
@@ -212,8 +213,8 @@ func startEmitter(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	url := chi.URLParam(r, "emitter")
 
-	_, err := w.Write([]byte("{\"started\":\"" + url + "\"}"))	 
-	
+	_, err := w.Write([]byte("{\"started\":\"" + url + "\"}"))
+
 	if err != nil {
 		log.Println(err)
 	}
@@ -224,8 +225,8 @@ func stopEmitter(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	url := chi.URLParam(r, "emitter")
 
-	_, err := w.Write([]byte("{\"stopped\":\"" + url + "\"}"))	 
-	
+	_, err := w.Write([]byte("{\"stopped\":\"" + url + "\"}"))
+
 	if err != nil {
 		log.Println(err)
 	}
@@ -236,8 +237,8 @@ func pauseEmitter(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	url := chi.URLParam(r, "emitter")
 
-	_, err := w.Write([]byte("{\"paused\":\"" + url + "\"}"))	 
-	
+	_, err := w.Write([]byte("{\"paused\":\"" + url + "\"}"))
+
 	if err != nil {
 		log.Println(err)
 	}
@@ -273,13 +274,12 @@ func statusEmitter(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	url := chi.URLParam(r, "emitter")
 
-	_, err := w.Write([]byte("{\"status\":\"" + url + "\"}"))	 
-	
+	_, err := w.Write([]byte("{\"status\":\"" + url + "\"}"))
+
 	if err != nil {
 		log.Println(err)
 	}
 }
-
 
 func init() {
 	rootCmd.AddCommand(serverCmd)

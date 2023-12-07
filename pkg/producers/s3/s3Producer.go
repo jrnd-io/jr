@@ -25,6 +25,9 @@ type S3Producer struct {
 func (p *S3Producer) Initialize(configFile string) {
 	var config Config
 	file, err := ioutil.ReadFile(configFile)
+	if err != nil {
+        log.Fatalf("Failed to ReadFile: %s", err)
+    }
 	err = json.Unmarshal(file, &config)
 	if err != nil {
 		log.Fatalf("Failed to parse configuration parameters: %s", err)

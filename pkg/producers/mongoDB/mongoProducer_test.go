@@ -9,15 +9,15 @@ import (
 )
 
 func TestProducer_Initialize(t *testing.T) {
-   configFile := "config.json.example"
+	configFile := "config.json.example"
 
-   producer, err := storage.ProducerFactory("mongo")
-   if err != nil {
-       t.Fatalf("Error reading configuration file: %v", err)
-   }
-   err = producer.Initialize(configFile)
-   if err != nil {
-       t.Fatalf("Error reading configuration file: %v", err)
+	producer, err := storage.ProducerFactory("mongo")
+	if err != nil {
+		t.Fatalf("Error reading configuration file: %v", err)
+	}
+	err = producer.Initialize(configFile)
+	if err != nil {
+		t.Fatalf("Error reading configuration file: %v", err)
 	}
 }
 

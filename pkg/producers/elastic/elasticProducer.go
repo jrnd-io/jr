@@ -33,6 +33,9 @@ func (p *ElasticProducer) Initialize(configFile string) {
 	file, err := ioutil.ReadFile(configFile)
 	err = json.Unmarshal(file, &config)
 	if err != nil {
+        log.Fatalf("Failed to ReadFile: %s", err)
+    }
+	if err != nil {
 		log.Fatalf("Failed to parse configuration parameters: %s", err)
 	}
 

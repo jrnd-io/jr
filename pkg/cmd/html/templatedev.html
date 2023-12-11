@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>JR Template development</title>
+
+	<link href="/bs/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+	<!-- highlightjs css-->
+	<!-- link href="/stylesheets/ocean.min.css" rel="stylesheet" crossorigin="anonymous"-->
+
+
+</head>
+<!-- Workaround with embeded css for a problem in css loading with external file-->
+<style>
+	.hljs-comment,
+	.hljs-quote {
+		color: #65737e
+	}
+
+	.hljs-variable,
+	.hljs-template-variable,
+	.hljs-tag,
+	.hljs-name,
+	.hljs-selector-id,
+	.hljs-selector-class,
+	.hljs-regexp,
+	.hljs-deletion {
+		color: #bf616a
+	}
+
+	.hljs-number,
+	.hljs-built_in,
+	.hljs-builtin-name,
+	.hljs-literal,
+	.hljs-type,
+	.hljs-params,
+	.hljs-meta,
+	.hljs-link {
+		color: #d08770
+	}
+
+	.hljs-attribute {
+		color: #ebcb8b
+	}
+
+	.hljs-string,
+	.hljs-symbol,
+	.hljs-bullet,
+	.hljs-addition {
+		color: #718460
+	}
+
+	.hljs-title,
+	.hljs-section {
+		color: #8fa1b3
+	}
+
+	.hljs-keyword,
+	.hljs-selector-tag {
+		color: #b48ead
+	}
+
+	.hljs {
+		display: block;
+		overflow-x: auto;
+		background: #ffffff;
+		color: #002c7e;
+		padding: 0.5em
+	}
+
+	.hljs-emphasis {
+		font-style: italic
+	}
+
+	.hljs-strong {
+		font-weight: bold
+	}
+</style>
+
+<script src="/js/jquery-3.2.1.slim.min.js" crossorigin="anonymous"></script>
+<script src="/bs/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<script src="/js/highlight-11.9.0.min.js" crossorigin="anonymous"></script>
+<script src="/js/font-awesome.js" crossorigin="anonymous"></script>
+
+
+<body class="p-0 m-0 border-3 bd-example m-4 border-0" onload="loadLastTemplate()">
+
+	<div>
+		<img src="/images/jr_logo.png" class="rounded float-left" alt="JR">
+		<h1 class="p-1 m-2 border-3">Template editor</h1>
+	</div>
+	<br>
+	<div id="infobox" class="modal" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Emitter info</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div id="infobox_text" class="modal-body">
+					<p>Modal body text goes here.</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<div class="d-flex flex-row bd-highlight mb-2">
+			<div class="p-2 bd-highlight">
+				<label for="exampleFormControlTextarea1">Template area</label>
+			</div>
+			<div class="p-2 bd-highlight"><input type="checkbox" id="isJsonOutput">
+				<label class="form-check-label" for="exampleCheck1">Pretty print json output</label>
+			</div>
+			<div class="p-2 bd-highlight">
+				<i class="fa-solid fa-rotate" onclick="executeTemplate()"></i>
+			</div>
+		</div>
+		<textarea class="form-control" id="template" rows=10" height="400px" oninput="executeTemplate()"></textarea>
+	</div>
+
+	<div class="rounded p-3" id="templatebox">
+		<pre>
+			<code  class="language-json" id="templaterendered"></code>
+		</pre>
+	</div>
+
+	<script>
+		function executeTemplate(name) {
+			//alert($('#template').val())
+			fetch('/executeTemplate', {
+				method: "post",
+				body: $('#template').val()
+			}).then(data => {
+				if (data.ok) {
+					data.text().then(template_rendered => {
+						//console.log(text);
+						$('#templaterendered').empty();
+						$('#templatebox').addClass("border-success")
+						$('#templatebox').removeClass("border-danger")
+
+						if ($("#isJsonOutput").prop('checked') == true) {
+							//we pretty print json and highlight the code
+							try {
+								//remove highlightjs to reapply it later
+								$('#templaterendered').removeAttr("data-highlighted");
+								var jsonObj = JSON.parse(template_rendered);
+								var template_rendered = JSON.stringify(jsonObj, null, '\t');
+								$('#templaterendered').append(template_rendered);
+								hljs.highlightElement(document.getElementById('templaterendered'));
+							} catch (error) {
+								//We have a valid template but an invalid json output from the template
+								//remove highlightjs from the block to print the error
+								$('#templaterendered').empty();
+								$('#templaterendered').removeClass("hljs")
+								$('#templaterendered').removeAttr("data-highlighted");
+								//add danger border
+								$('#templatebox').addClass("border")
+								$('#templatebox').removeClass("border-success")
+								$('#templatebox').addClass("border-danger")
+								//add result
+								$('#templaterendered').append("</BR>");
+								$('#templaterendered').append("A valid template generated an invalid json output:");
+								$('#templaterendered').append("</BR>");
+								$('#templaterendered').append("</BR>");
+								$('#templaterendered').append(template_rendered.trim());
+							}
+
+						} else {
+							//add success border
+							$('#templaterendered').append("</BR>");
+							$('#templatebox').addClass("border")
+							$('#templatebox').addClass("border-success")
+							//remove highlightjs from the block to print the error
+							$('#templaterendered').removeClass("hljs")
+							$('#templaterendered').removeAttr("data-highlighted");
+							$('#templaterendered').removeAttr("data-highlighted");
+							//add result
+							$('#templaterendered').append(template_rendered);
+						}
+
+					});
+				} else if (!data.ok) {
+					data.text().then(template_rendered => {
+						//remove highlightjs from the block to print the error
+						$('#templaterendered').empty();
+						$('#templaterendered').removeClass("hljs")
+						$('#templaterendered').removeAttr("data-highlighted");
+						//add result
+						$('#templaterendered').append("</BR>");
+						$('#templaterendered').append(template_rendered.trim());
+						//add success border
+						$('#templatebox').addClass("border")
+						$('#templatebox').removeClass("border-success")
+						$('#templatebox').addClass("border-danger")
+					});
+				}
+			}).catch(error => console.log('Error:', error));
+
+
+		}
+
+		function loadLastTemplate() {
+			fetch('/lastTemplate')
+				.then(data => {
+					if (data.ok) {
+						data.text().then(template => {
+							//console.log(data.text());
+							if (template.length > 0) {
+								$('#template').val(template);
+								executeTemplate();
+							}
+						})
+					}
+				})
+		}
+
+		document.getElementById('template').addEventListener('keydown', function (e) {
+			if (e.key == 'Tab') {
+				e.preventDefault();
+				var start = this.selectionStart;
+				var end = this.selectionEnd;
+
+				// set textarea value to: text before caret + tab + text after caret
+				this.value = this.value.substring(0, start) +
+					"\t" + this.value.substring(end);
+
+				// put caret at right position again
+				this.selectionStart =
+					this.selectionEnd = start + 1;
+			}
+		});
+
+		document.getElementById('isJsonOutput').addEventListener('change', (event) => {
+			executeTemplate()
+		})
+
+	</script>
+
+</body>
+
+<!--  localhost:7482/emitters -->
+
+</html>

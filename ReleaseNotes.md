@@ -1,6 +1,6 @@
 v0.3.4
 - added DE localisation
-- added we template editor/validator
+- added web template editor/validator
 - added Google GCS producer
 
 v0.3.2

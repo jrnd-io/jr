@@ -1,7 +1,7 @@
 FROM golang AS builder
 MAINTAINER Ugo Landini <ugo@confluent.io>
 
-ARG VERSION=0.3.3
+ARG VERSION=0.3.4
 ARG USER=$(id -u -n)
 ARG TIME=$(date)
 

@@ -24,11 +24,6 @@ import (
 	"bufio"
 	"encoding/csv"
 	"fmt"
-	"github.com/google/uuid"
-	"github.com/ugol/jr/pkg/constants"
-	"github.com/ugol/jr/pkg/ctx"
-	"golang.org/x/text/cases"
-	"golang.org/x/text/language"
 	"log"
 	"math"
 	"math/rand"
@@ -37,6 +32,12 @@ import (
 	"strconv"
 	"strings"
 	"text/template"
+
+	"github.com/google/uuid"
+	"github.com/ugol/jr/pkg/constants"
+	"github.com/ugol/jr/pkg/ctx"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 func FunctionsMap() template.FuncMap {
@@ -49,6 +50,8 @@ var fmap = map[string]interface{}{
 
 	// text utilities
 	"atoi":                     strconv.Atoi,
+	"itoa":                     strconv.Itoa,
+	"concat":                   func(a string, b string) string { return a + b },
 	"counter":                  Counter,
 	"first":                    func(s string) string { return s[:1] },
 	"firstword":                func(s string) string { return strings.Split(s, " ")[0] },
@@ -188,12 +191,13 @@ var fmap = map[string]interface{}{
 	"yesorno":  YesOrNo,
 
 	// context utilities
-	"add_v_to_list":        AddValueToList,
-	"random_v_from_list":   RandomValueFromList,
-	"random_n_v_from_list": RandomNValuesFromList,
-	"get_v":                GetV,
-	"set_v":                SetV,
-	"fromcsv":              fromcsv,
+	"add_v_to_list":            AddValueToList,
+	"random_v_from_list":       RandomValueFromList,
+	"random_n_v_from_list":     RandomNValuesFromList,
+	"get_v_from_list_at_index": GetValueFromListAtIndex,
+	"get_v":                    GetV,
+	"set_v":                    SetV,
+	"fromcsv":                  fromcsv,
 }
 
 // Seed sets seeds and can be used in a template
@@ -287,6 +291,20 @@ func RandomValueFromList(s string) string {
 	l := len(list)
 	if l != 0 {
 		return list[Random.Intn(l)]
+	} else {
+		return ""
+	}
+}
+
+// GetValuesFromList returns a value from Context list l at index
+func GetValueFromListAtIndex(s string, index int) string {
+
+	ctx.JrContext.CtxListLock.RLock()
+	defer ctx.JrContext.CtxListLock.RUnlock()
+	list := ctx.JrContext.CtxList[s]
+	l := len(list)
+	if l != 0 && index < l {
+		return list[index]
 	} else {
 		return ""
 	}

@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>JR Template development</title>
+
+	<link href="/bs/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+	<!-- highlightjs css-->
+	<!-- link href="/stylesheets/ocean.min.css" rel="stylesheet" crossorigin="anonymous"-->
+
+
+</head>
+<!-- Workaround with embeded css for a problem in css loading with external file-->
+<style>
+	.hljs-comment,
+	.hljs-quote {
+		color: #65737e
+	}
+
+	.hljs-variable,
+	.hljs-template-variable,
+	.hljs-tag,
+	.hljs-name,
+	.hljs-selector-id,
+	.hljs-selector-class,
+	.hljs-regexp,
+	.hljs-deletion {
+		color: #bf616a
+	}
+
+	.hljs-number,
+	.hljs-built_in,
+	.hljs-builtin-name,
+	.hljs-literal,
+	.hljs-type,
+	.hljs-params,
+	.hljs-meta,
+	.hljs-link {
+		color: #d08770
+	}
+
+	.hljs-attribute {
+		color: #ebcb8b
+	}
+
+	.hljs-string,
+	.hljs-symbol,
+	.hljs-bullet,
+	.hljs-addition {
+		color: #718460
+	}
+
+	.hljs-title,
+	.hljs-section {
+		color: #8fa1b3
+	}
+
+	.hljs-keyword,
+	.hljs-selector-tag {
+		color: #b48ead
+	}
+
+	.hljs {
+		display: block;
+		overflow-x: auto;
+		background: #ffffff;
+		color: #002c7e;
+		padding: 0.5em
+	}
+
+	.hljs-emphasis {
+		font-style: italic
+	}
+
+	.hljs-strong {
+		font-weight: bold
+	}
+</style>
+
+<script src="/js/jquery-3.2.1.slim.min.js" crossorigin="anonymous"></script>
+<script src="/bs/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<script src="/js/highlight-11.9.0.min.js" crossorigin="anonymous"></script>
+<script src="/js/font-awesome.js" crossorigin="anonymous"></script>
+
+
+<body class="p-0 m-0 border-3 bd-example m-4 border-0" onload="loadLastStatus()">
+
+	<div>
+		<img src="/images/jr_logo.png" class="rounded float-left" alt="JR">
+		<h1 class="p-1 m-2 border-3">Template editor</h1>
+	</div>
+	<br>
+	<div id="infobox" class="modal" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Emitter info</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div id="infobox_text" class="modal-body">
+					<p>Modal body text goes here.</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!--div class="form-group">
+		<div class="d-flex flex-row bd-highlight mb-2">
+			<div class="p-2 bd-highlight">
+				<label for="exampleFormControlTextarea1">Template area</label>
+			</div>
+			<div class="p-2 bd-highlight"><input type="checkbox" id="isJsonOutput">
+				<label class="form-check-label" for="exampleCheck1">Pretty print json output</label>
+			</div>
+			<div class="p-2 bd-highlight">
+				<i class="fa-solid fa-rotate" onclick="executeTemplate()"></i>
+			</div>
+		</div>
+		<textarea class="form-control" id="template" rows=10" height="400px" oninput="executeTemplate()"></textarea>
+	</div-->
+
+	<div class="container-fluid">
+		<div class="row">
+			<div style="min-width: 100%">
+				<nav>
+					<div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+						<a class="nav-item nav-link active" id="nav-editor-tab" data-toggle="tab" href="#nav-editor"
+							role="tab" aria-controls="nav-editor" aria-selected="true">Editor</a>
+						<a class="nav-item nav-link" id="nav-functions-tab" data-toggle="tab" href="#nav-functions"
+							role="tab" aria-controls="nav-functions" aria-selected="false">Function finder</a>
+					</div>
+				</nav>
+				<!-- Template editor tab panel -->
+				<div class="tab-content py-3 px-3 px-sm-0" id="nav-tabContent">
+					<div class="tab-pane show active" id="nav-editor" role="tabpanel" aria-labelledby="nav-editor-tab">
+						<form id="templateform">
+							<div class="d-flex flex-row bd-highlight mb-2">
+								<div class="p-2 bd-highlight">
+									<label>Template area</label>
+								</div>
+								<div class="p-2 bd-highlight"><input type="checkbox" id="isJsonOutput">
+									<label class="form-check-label" for="exampleCheck1">Pretty print json output</label>
+								</div>
+								<div class="p-2 bd-highlight">
+									<i class="fa-solid fa-rotate" onclick="executeTemplate()"></i>
+								</div>
+							</div>
+							<!-- Text area editor-->
+							<textarea class="form-control" id="template" rows="10" height="400px"
+								style="min-width: 100%" oninput="executeTemplate()"></textarea>
+							<br>
+						</form>
+						<div class="rounded p-3" id="templatebox">
+							<pre>
+								<code  class="language-json" id="templaterendered"></code>
+							</pre>
+						</div>
+					</div>
+					<!-- Function tab panel -->
+					<div class="tab-pane " id="nav-functions" role="tabpanel" aria-labelledby="nav-functions-tab">
+						<div id="function list">
+							<label>Function filter</label> <input type="text" id="functionfilter"
+								oninput="filterFunctions()">
+						</div>
+						<div>
+							<div id="functionslist"></div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+
+	<script>
+
+		function filterFunctions() {
+
+			const parameters = new URLSearchParams();
+
+			if ($('#functionfilter').val().trim().length > 0) {
+				parameters.append('functiontofind', $('#functionfilter').val().trim());
+
+				fetch('/functionsList', {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+					body: parameters
+				}).then(data => {
+					if (data.ok) {
+						data.json().then(function_found => {
+							$('#functionslist').empty();
+							$('#functionslist').append(`<b>Name</b>: ${function_found.Name}</br>`);
+							$('#functionslist').append(`<b>Category</b>: ${function_found.Category}</br>`);
+							$('#functionslist').append(`<b>Description</b>: ${function_found.Description}</br>`);
+							if (function_found.Parameters.length > 0) {
+								$('#functionslist').append(`<b>Parameters</b>: ${function_found.Parameters}</br>`);
+							}
+							$('#functionslist').append(`<b>Localizable</b>: ${function_found.Localizable}</br>`);
+							$('#functionslist').append(`<b>Return</b>: ${function_found.Return}</br>`);
+							$('#functionslist').append(`<b>Example</b>: <pre>${function_found.Example}</pre>`);
+							$('#functionslist').append(`<b>Output</b>: <pre>${function_found.Output}</pre></br>`);
+
+						})
+					} else if (!data.ok) {
+						data.text().then(result => {
+							$('#functionslist').empty();
+							$('#functionslist').append(`<b>${result}</br>`);
+						})
+					}
+				}).catch(error => {
+
+				});
+			} else {
+				$('#functionslist').empty();
+			}
+
+		}
+
+		function executeTemplate(onlaod) {
+
+			const parameters = new URLSearchParams();
+			parameters.append("template", $('#template').val());
+			parameters.append("isJsonOutput", $("#isJsonOutput").prop('checked'));
+
+			fetch('/executeTemplate', {
+				method: "POST",
+				headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+				body: parameters //$('#template').val()
+			}).then(data => {
+				if (data.ok) {
+					data.text().then(template_rendered => {
+						//console.log(text);
+						$('#templaterendered').empty();
+						$('#templatebox').addClass("border-success")
+						$('#templatebox').removeClass("border-danger")
+
+						if ($("#isJsonOutput").prop('checked') == true) {
+							//we pretty print json and highlight the code
+							try {
+								//remove highlightjs to reapply it later
+								$('#templaterendered').removeAttr("data-highlighted");
+								var jsonObj = JSON.parse(template_rendered);
+								var template_rendered = JSON.stringify(jsonObj, null, '\t');
+								$('#templaterendered').append(template_rendered);
+								hljs.highlightElement(document.getElementById('templaterendered'));
+							} catch (error) {
+								//We have a valid template but an invalid json output from the template
+								//remove highlightjs from the block to print the error
+								$('#templaterendered').empty();
+								$('#templaterendered').removeClass("hljs")
+								$('#templaterendered').removeAttr("data-highlighted");
+								//add danger border
+								$('#templatebox').addClass("border")
+								$('#templatebox').removeClass("border-success")
+								$('#templatebox').addClass("border-danger")
+								//add result
+								$('#templaterendered').append("</BR>");
+								$('#templaterendered').append("A valid template generated an invalid json output:");
+								$('#templaterendered').append("</BR>");
+								$('#templaterendered').append("</BR>");
+								$('#templaterendered').append(template_rendered.trim());
+							}
+
+						} else {
+							//add success border
+							$('#templaterendered').append("</BR>");
+							$('#templatebox').addClass("border")
+							$('#templatebox').addClass("border-success")
+							//remove highlightjs from the block to print the error
+							$('#templaterendered').removeClass("hljs")
+							$('#templaterendered').removeAttr("data-highlighted");
+							$('#templaterendered').removeAttr("data-highlighted");
+							//add result
+							$('#templaterendered').append(template_rendered);
+						}
+
+					});
+				} else if (!data.ok) {
+					data.text().then(template_rendered => {
+						//remove highlightjs from the block to print the error
+						$('#templaterendered').empty();
+						$('#templaterendered').removeClass("hljs")
+						$('#templaterendered').removeAttr("data-highlighted");
+						//add result
+						$('#templaterendered').append("</BR>");
+						$('#templaterendered').append(template_rendered.trim());
+						//add success border
+						$('#templatebox').addClass("border")
+						$('#templatebox').removeClass("border-success")
+						$('#templatebox').addClass("border-danger")
+					});
+				}
+			}).catch(error => console.log('Error:', error));
+		}
+
+		function loadLastStatus() {
+			fetch('/loadLastStatus')
+				.then(data => {
+					if (data.ok) {
+						data.json().then(status => {
+							if (status.template.length > 0) {
+								$('#template').val(atob(status.template));
+								//console.log("LOAD STATUS Boolean(status.isJsonOutput) = " + Boolean(status.isJsonOutput.trim))
+								console.log("LOAD STATUS         status.isJsonOutput) = " + status.isJsonOutput)
+								if (status.isJsonOutput.toLowerCase() === "true") {
+									$("#isJsonOutput").prop('checked', true);
+								} else {
+									$("#isJsonOutput").prop('checked', false);
+								}
+								executeTemplate();
+							}
+
+
+						})
+					}
+				})
+		}
+
+		document.getElementById('template').addEventListener('keydown', function (e) {
+			if (e.key == 'Tab') {
+				e.preventDefault();
+				var start = this.selectionStart;
+				var end = this.selectionEnd;
+
+				// set textarea value to: text before caret + tab + text after caret
+				this.value = this.value.substring(0, start) +
+					"\t" + this.value.substring(end);
+
+				// put caret at right position again
+				this.selectionStart =
+					this.selectionEnd = start + 1;
+			}
+		});
+
+		document.getElementById('isJsonOutput').addEventListener('change', (event) => {
+			executeTemplate()
+		})
+
+	</script>
+
+</body>
+
+<!--  localhost:7482/emitters -->
+
+</html>

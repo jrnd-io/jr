@@ -1,0 +1,58 @@
+{
+  "emitters": [
+    {
+      "name": "clickstream_users_schema",
+      "locale": "us",
+      "num": 0,
+      "frequency": "0s",
+      "duration": "0s",
+      "preload": 30,
+      "valueTemplate": "clickstream_users_schema",
+      "output": "kafka",
+      "keyTemplate": "null",
+      "outputTemplate": "{{.V}}\n",
+      "topic": "clickstream_users_schema"
+    } ,
+    {
+      "name": "clickstream_schema",
+      "locale": "us",
+      "num": 1,
+      "frequency": "500ms",
+      "duration": "3s",
+      "preload": 0,
+      "valueTemplate": "clickstream_schema",
+      "output": "kafka",
+      "keyTemplate": "null",
+      "outputTemplate": "{{.V}}\n",
+      "topic": "clickstream_schema"
+    },
+    {
+      "name": "clickstream_codes_schema",
+      "locale": "us",
+      "num": 1,
+      "frequency": "500ms",
+      "duration": "3s",
+      "preload": 0,
+      "valueTemplate": "clickstream_codes_schema",
+      "output": "kafka",
+      "keyTemplate": "null",
+      "outputTemplate": "{{.V}}\n",
+      "topic": "clickstream_codes_schema"
+    }
+  ],
+  "global": {
+    "seed": -1,
+    "kafkaConfig": "./kafka/config.properties",
+    "schemaRegistry": true,
+    "registryConfig": "./kafka/registry.properties",
+    "serializer": "avro-generic",
+    "autoCreate": true,
+    "redisTtl": "1m",
+    "redisConfig": "./redis/config.json",
+    "mongoConfig": "./mongoDB/config.json",
+    "elasticConfig": "./elastic/config.json",
+    "s3Config": "./s3/config.json",
+    "gcsConfig": "./gcs/config.json",
+    "url": ""
+  }
+}

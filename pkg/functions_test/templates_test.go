@@ -22,11 +22,12 @@ package functions_test
 
 import (
 	"bytes"
-	"github.com/ugol/jr/pkg/functions"
 	"log"
 	"strconv"
 	"testing"
 	"text/template"
+
+	"github.com/ugol/jr/pkg/functions"
 )
 
 func TestSimpleContext(t *testing.T) {
@@ -264,6 +265,86 @@ func Test2TemplatesWithValueFromList(t *testing.T) {
 	}
 	if expectUser.String() != expectOrder.String() && expectUser2.String() != expectOrder.String() {
 		t.Errorf("Different IDs, should be equal to one of these: '%s' '%s' but was '%s'", expectUser.String(), expectUser2.String(), expectOrder.String())
+	}
+
+}
+
+func TestTemplatesWithValueFromListAtIndex(t *testing.T) {
+	templateOne := `{{add_v_to_list "aList" "a"}}`
+	templateTwo := `{{add_v_to_list "aList" "b"}}`
+	checkTemplate := `{{get_v_from_list_at_index "aList" 1}}{{get_v_from_list_at_index "aList" 0}}`
+
+	v := template.New("aggregate").Funcs(functions.FunctionsMap())
+
+	tOne, err := v.New("user").Parse(templateOne)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var expectedOne bytes.Buffer
+	tOne.Execute(&expectedOne, nil)
+
+	tTwo, err := v.New("user").Parse(templateTwo)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var expectedTwo bytes.Buffer
+	tTwo.Execute(&expectedTwo, nil)
+
+	check, err := v.New("order").Parse(checkTemplate)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var expectCheck bytes.Buffer
+
+	err = check.Execute(&expectCheck, nil)
+	if err != nil {
+		t.Error(err)
+	}
+	if expectCheck.String() != "ba" {
+		t.Errorf("Different Result, should be  '%s' but was '%s'", "ba", expectCheck.String())
+	}
+
+}
+
+func TestTemplatesWithValueFromListAtIndex_greater_than_lenght(t *testing.T) {
+	templateOne := `{{add_v_to_list "aList" "a"}}`
+	templateTwo := `{{add_v_to_list "aList" "b"}}`
+	checkTemplate := `{{get_v_from_list_at_index "aList" 10}}{{get_v_from_list_at_index "aList" 10}}`
+
+	v := template.New("aggregate").Funcs(functions.FunctionsMap())
+
+	tOne, err := v.New("user").Parse(templateOne)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var expectedOne bytes.Buffer
+	tOne.Execute(&expectedOne, nil)
+
+	tTwo, err := v.New("user").Parse(templateTwo)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var expectedTwo bytes.Buffer
+	tTwo.Execute(&expectedTwo, nil)
+
+	check, err := v.New("order").Parse(checkTemplate)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var expectCheck bytes.Buffer
+
+	err = check.Execute(&expectCheck, nil)
+	if err != nil {
+		t.Error(err)
+	}
+	if expectCheck.String() != "" {
+		t.Errorf("Different Result, should be  '%s' but was '%s'", "", expectCheck.String())
 	}
 
 }

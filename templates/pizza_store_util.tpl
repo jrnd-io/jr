@@ -1,0 +1,1 @@
+{{$storeId := counter "storeId" 1000 1}}{{add_v_to_list "storeId"  ( itoa $storeId) }} Added to storeId list {{$storeId}}

@@ -1,10 +1,18 @@
 package cmd
-import _ "embed"
 
 import (
-
+	"bytes"
+	_ "embed"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"log"
+	"net/http"
+	"path/filepath"
+	"strings"
+	"text/template"
+	"time"
+
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/spf13/cobra"
@@ -12,22 +20,25 @@ import (
 	"github.com/ugol/jr/pkg/constants"
 	"github.com/ugol/jr/pkg/emitter"
 	"github.com/ugol/jr/pkg/functions"
-	"log"
-	"net/http"
-	"time"
-	"strings"
-	//os"
-	//"path/filepath"
 )
 
 //go:embed html/index.html
 var index_html string
 
+//go:embed html/templatedev.html
+var templatedev_html string
+
 //go:embed html/stylesheets/main.css
 var main_css string
 
+//go:embed html/stylesheets/ocean.min.css
+var ocean_min_css string
+
 //go:embed html/bs/css/bootstrap.min.css
 var bootstrap_min_css string
+
+//go:embed html/stylesheets/hljscss-11.9.0.css
+var hljscss_11_9_0_css string
 
 //go:embed html/bs/css/bootstrap.min.css.map
 var bootstrap_min_css_map string
@@ -41,8 +52,17 @@ var bootstrap_bundle_min_js_map string
 //go:embed html/js/jquery-3.2.1.slim.min.js
 var jquery_3_2_1_slim_min_js string
 
+//go:embed html/js/highlight-11.9.0.min.js
+var highlight_11_9_0_min_js string
+
+//go:embed html/js/font-awesome.js
+var font_awesome_js string
+
 //go:embed html/images/jr_logo.png
 var jr_logo_png []byte
+
+var lastTemplateSubmittedValue []byte
+var lastTemplateSubmittedisJsonOutputValue []byte
 
 var firstRun = make(map[string]bool)
 var emitterToRun = make(map[string][]emitter.Emitter)
@@ -73,50 +93,12 @@ var serverCmd = &cobra.Command{
 		router.Use(middleware.Logger)
 		router.Use(middleware.Recoverer)
 		router.Use(middleware.Timeout(60 * time.Second))
-				
-	// /* EMBEDDED
-		router.Get("/", func(w http.ResponseWriter, r *http.Request) {
-			w.Write([]byte(index_html))
-		})
 
-		router.Get("/stylesheets/main.css", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {			
-			w.Write([]byte(main_css))
-		}))
-	
-		router.Get("/bs/css/bootstrap.min.css", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			w.Header().Set("Content-Type", "text/css")
-			w.Write([]byte(bootstrap_min_css))
-		}))
-	
-		router.Get("/bs/css/bootstrap.min.css.map", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			w.Write([]byte(bootstrap_min_css_map))
-		}))
+		//comment for local dev
+		embeddedFileRoutes(router)
 
-		router.Get("/bs/js/bootstrap.bundle.min.js", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			w.Header().Set("Content-Type", "application/javascript")
-			w.Write([]byte(bootstrap_bundle_min_js))
-		}))
-
-		router.Get("/bs/js/bootstrap.bundle.min.js.map", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			w.Write([]byte(bootstrap_bundle_min_js_map))
-		}))
-		
-		router.Get("/js/jquery-3.2.1.slim.min.js", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			w.Header().Set("Content-Type", "application/javascript")
-			w.Write([]byte(jquery_3_2_1_slim_min_js))
-		}))
-
-		router.Get("/images/jr_logo.png", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			w.Header().Set("Content-Type", "image/x-png")
-			w.Write(jr_logo_png)
-		}))
-	//	*/
-
-		/*
-		//workDir, _ := os.Getwd()
-		filesDir := http.Dir(filepath.Join("../dev/jr/pkg/cmd/", "html"))
-		FileServer(router, "/", filesDir)
-		*/
+		//Uncomment for local dev
+		//localDevServerSetup(router)
 
 		router.Route("/emitters", func(r chi.Router) {
 			r.Get("/", listEmitters)
@@ -133,13 +115,93 @@ var serverCmd = &cobra.Command{
 			})
 		})
 
+		router.Route("/executeTemplate", func(r chi.Router) {
+			r.Post("/", executeTemplate)
+		})
+
+		router.Route("/loadLastStatus", func(r chi.Router) {
+			r.Get("/", loadLastStatus)
+		})
+
+		router.Route("/functionsList", func(r chi.Router) {
+			r.Post("/", webFunctionList)
+		})
+
 		addr := fmt.Sprintf(":%d", port)
 		log.Printf("Starting HTTP server on port %d\n", port)
 		log.Fatal(http.ListenAndServe(addr, router))
 	},
 }
 
-// static files from a http.FileSystem.
+func embeddedFileRoutes(router chi.Router) {
+
+	router.Get("/", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte(index_html))
+	})
+
+	router.Get("/templatedev.html", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte(templatedev_html))
+	})
+
+	router.Get("/stylesheets/main.css", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte(main_css))
+	}))
+
+	router.Get("/stylesheets/hljscss-11.9.0.css", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte(hljscss_11_9_0_css))
+	}))
+
+	router.Get("/stylesheets/ocean.min.css", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte(ocean_min_css))
+	}))
+
+	router.Get("/bs/css/bootstrap.min.css", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "text/css")
+		w.Write([]byte(bootstrap_min_css))
+	}))
+
+	router.Get("/bs/css/bootstrap.min.css.map", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte(bootstrap_min_css_map))
+	}))
+
+	router.Get("/bs/js/bootstrap.bundle.min.js", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/javascript")
+		w.Write([]byte(bootstrap_bundle_min_js))
+	}))
+
+	router.Get("/bs/js/bootstrap.bundle.min.js.map", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte(bootstrap_bundle_min_js_map))
+	}))
+
+	router.Get("/js/jquery-3.2.1.slim.min.js", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/javascript")
+		w.Write([]byte(jquery_3_2_1_slim_min_js))
+	}))
+
+	router.Get("/js/highlight-11.9.0.min.js", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/javascript")
+		w.Write([]byte(highlight_11_9_0_min_js))
+	}))
+
+	router.Get("/js/font-awesome.js", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/javascript")
+		w.Write([]byte(font_awesome_js))
+	}))
+
+	router.Get("/images/jr_logo.png", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "image/x-png")
+		w.Write(jr_logo_png)
+	}))
+
+}
+
+// For local UI development
+func localDevServerSetup(router chi.Router) {
+	filesDir := http.Dir(filepath.Join("./pkg/cmd/", "html"))
+	FileServer(router, "/", filesDir)
+}
+
+// For local UI development static files from a http.FileSystem. This function is for local UI development
 func FileServer(r chi.Router, path string, root http.FileSystem) {
 	if strings.ContainsAny(path, "{}*") {
 		panic("FileServer does not permit any URL parameters.")
@@ -212,8 +274,8 @@ func startEmitter(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	url := chi.URLParam(r, "emitter")
 
-	_, err := w.Write([]byte("{\"started\":\"" + url + "\"}"))	 
-	
+	_, err := w.Write([]byte("{\"started\":\"" + url + "\"}"))
+
 	if err != nil {
 		log.Println(err)
 	}
@@ -224,8 +286,8 @@ func stopEmitter(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	url := chi.URLParam(r, "emitter")
 
-	_, err := w.Write([]byte("{\"stopped\":\"" + url + "\"}"))	 
-	
+	_, err := w.Write([]byte("{\"stopped\":\"" + url + "\"}"))
+
 	if err != nil {
 		log.Println(err)
 	}
@@ -236,8 +298,8 @@ func pauseEmitter(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	url := chi.URLParam(r, "emitter")
 
-	_, err := w.Write([]byte("{\"paused\":\"" + url + "\"}"))	 
-	
+	_, err := w.Write([]byte("{\"paused\":\"" + url + "\"}"))
+
 	if err != nil {
 		log.Println(err)
 	}
@@ -273,13 +335,96 @@ func statusEmitter(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	url := chi.URLParam(r, "emitter")
 
-	_, err := w.Write([]byte("{\"status\":\"" + url + "\"}"))	 
-	
+	_, err := w.Write([]byte("{\"status\":\"" + url + "\"}"))
+
 	if err != nil {
 		log.Println(err)
 	}
 }
 
+func loadLastStatus(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	var response bytes.Buffer
+
+	response.WriteString("{")
+	lastTemplateSubmittedValueB64 := base64.StdEncoding.EncodeToString(lastTemplateSubmittedValue)
+	response.WriteString("\"template\": \"" + lastTemplateSubmittedValueB64 + "\",")
+	response.WriteString("\"isJsonOutput\": \"" + string(lastTemplateSubmittedisJsonOutputValue) + "\"")
+	response.WriteString("}")
+
+	_, err := w.Write(response.Bytes())
+	if err != nil {
+		log.Println(err)
+	}
+}
+
+func executeTemplate(w http.ResponseWriter, r *http.Request) {
+
+	w.Header().Set("Content-Type", "plain/text")
+	errorFormParse := r.ParseForm()
+	if errorFormParse != nil {
+		log.Println("errorFormParse ", errorFormParse)
+		http.Error(w, errorFormParse.Error(), http.StatusInternalServerError)
+	}
+
+	lastTemplateSubmittedValue = []byte(r.Form.Get("template"))
+	lastTemplateSubmittedisJsonOutputValue = []byte(r.Form.Get("isJsonOutput"))
+
+	templateParsed, errValidity := template.New("").Funcs(functions.FunctionsMap()).Parse(string(lastTemplateSubmittedValue))
+
+	if errValidity != nil {
+		log.Println("errValidity ", errValidity)
+		http.Error(w, errValidity.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	var b bytes.Buffer
+	dummy := struct{ Name string }{""}
+	errValidityRendering := templateParsed.Execute(&b, dummy)
+
+	if errValidityRendering != nil {
+		log.Println("errValidityRendering = ", errValidityRendering)
+		http.Error(w, errValidityRendering.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	_, err := w.Write([]byte(b.String()))
+
+	if err != nil {
+		log.Println(err)
+	}
+
+}
+
+func webFunctionList(w http.ResponseWriter, r *http.Request) {
+
+	r.ParseForm()
+	var function_to_find = r.Form.Get("functiontofind")
+
+	if len(function_to_find) > 0 {
+		webPrintFunction(function_to_find, w, r)
+	}
+}
+
+func webPrintFunction(web_function_to_find string, w http.ResponseWriter, r *http.Request) {
+	f, found := functions.Description(web_function_to_find)
+
+	if found {
+		b, errMarshal := json.Marshal(f)
+		if errMarshal != nil {
+			fmt.Println(errMarshal)
+			return
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, err := w.Write(b)
+		if err != nil {
+			log.Println(err)
+		}
+	} else {
+		http.Error(w, "No function found", http.StatusNotFound)
+	}
+
+}
 
 func init() {
 	rootCmd.AddCommand(serverCmd)

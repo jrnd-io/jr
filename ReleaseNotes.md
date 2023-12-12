@@ -1,3 +1,8 @@
+v0.3.4
+- added DE localisation
+- added web template editor/validator
+- added Google GCS producer
+
 v0.3.2
 - ...
 - removed ConsoleProducer clone used during emitter refactoring

@@ -46,7 +46,13 @@ var templateShowCmd = &cobra.Command{
 		templateDir := os.ExpandEnv(fmt.Sprintf("%s/%s", constants.JRhome, "templates"))
 		templatePath := fmt.Sprintf("%s/%s.tpl", templateDir, args[0])
 		templateScript, err := os.ReadFile(templatePath)
+		if err != nil {
+            log.Fatalf("Failed to ReadFile: %s", err)
+        }
 		valid, err := isValidTemplate([]byte(templateScript))
+		if err != nil {
+            log.Fatalf("Failed to read a template: %s", err)
+        }
 		templateString := string(templateScript)
 
 		var Reset = "\033[0m"

@@ -20,7 +20,7 @@ For full documentation about emitters, referential integrity, how to write templ
 
 ## Building and compiling
 
-JR requires Go 1.20
+JR requires Go 1.21
 
 you can use the `make_install.sh` to install JR. This script does everything needed in one simple command.
 

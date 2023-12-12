@@ -3,9 +3,9 @@ package cmd
 import (
 	"bytes"
 	_ "embed"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"io"
 	"log"
 	"net/http" //uncomment this for local UI development
 	"path/filepath"
@@ -62,6 +62,7 @@ var font_awesome_js string
 var jr_logo_png []byte
 
 var lastTemplateSubmittedValue []byte
+var lastTemplateSubmittedisJsonOutputValue []byte
 
 var firstRun = make(map[string]bool)
 var emitterToRun = make(map[string][]emitter.Emitter)
@@ -94,10 +95,10 @@ var serverCmd = &cobra.Command{
 		router.Use(middleware.Timeout(60 * time.Second))
 
 		//comment for local dev
-		//embeddedFileRoutes(router)
+		embeddedFileRoutes(router)
 
 		//Uncomment for local dev
-		localDevServerSetup(router)
+		//localDevServerSetup(router)
 
 		router.Route("/emitters", func(r chi.Router) {
 			r.Get("/", listEmitters)
@@ -118,8 +119,12 @@ var serverCmd = &cobra.Command{
 			r.Post("/", executeTemplate)
 		})
 
-		router.Route("/lastTemplate", func(r chi.Router) {
-			r.Get("/", lastTemplateSubmitted)
+		router.Route("/loadLastStatus", func(r chi.Router) {
+			r.Get("/", loadLastStatus)
+		})
+
+		router.Route("/functionsList", func(r chi.Router) {
+			r.Post("/", webFunctionList)
 		})
 
 		addr := fmt.Sprintf(":%d", port)
@@ -129,7 +134,7 @@ var serverCmd = &cobra.Command{
 }
 
 func embeddedFileRoutes(router chi.Router) {
-	//* EMBEDDED START comment this block for local UI development
+
 	router.Get("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(index_html))
 	})
@@ -187,20 +192,16 @@ func embeddedFileRoutes(router chi.Router) {
 		w.Header().Set("Content-Type", "image/x-png")
 		w.Write(jr_logo_png)
 	}))
-	//EMBEDDED END */
 
 }
 
+// For local UI development
 func localDevServerSetup(router chi.Router) {
-	//* uncomment this block for local UI development
-	//workDir, _ := os.Getwd()
-	//filesDir := http.Dir(filepath.Join("../dev/jr/pkg/cmd/", "html"))
 	filesDir := http.Dir(filepath.Join("./pkg/cmd/", "html"))
 	FileServer(router, "/", filesDir)
-
 }
 
-// static files from a http.FileSystem. This function is for local UI development
+// For local UI development static files from a http.FileSystem. This function is for local UI development
 func FileServer(r chi.Router, path string, root http.FileSystem) {
 	if strings.ContainsAny(path, "{}*") {
 		panic("FileServer does not permit any URL parameters.")
@@ -341,8 +342,17 @@ func statusEmitter(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func lastTemplateSubmitted(w http.ResponseWriter, r *http.Request) {
-	_, err := w.Write(lastTemplateSubmittedValue)
+func loadLastStatus(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	var response bytes.Buffer
+
+	response.WriteString("{")
+	lastTemplateSubmittedValueB64 := base64.StdEncoding.EncodeToString(lastTemplateSubmittedValue)
+	response.WriteString("\"template\": \"" + lastTemplateSubmittedValueB64 + "\",")
+	response.WriteString("\"isJsonOutput\": \"" + string(lastTemplateSubmittedisJsonOutputValue) + "\"")
+	response.WriteString("}")
+
+	_, err := w.Write(response.Bytes())
 	if err != nil {
 		log.Println(err)
 	}
@@ -351,14 +361,14 @@ func lastTemplateSubmitted(w http.ResponseWriter, r *http.Request) {
 func executeTemplate(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "plain/text")
-	result, errRead := io.ReadAll(r.Body)
-
-	lastTemplateSubmittedValue = result
-
-	if errRead != nil {
-		log.Println("errRead ", errRead)
-		http.Error(w, errRead.Error(), http.StatusInternalServerError)
+	errorFormParse := r.ParseForm() //ParseMultipartForm(10 << 20)
+	if errorFormParse != nil {
+		log.Println("errorFormParse ", errorFormParse)
+		http.Error(w, errorFormParse.Error(), http.StatusInternalServerError)
 	}
+
+	lastTemplateSubmittedValue = []byte(r.Form.Get("template"))
+	lastTemplateSubmittedisJsonOutputValue = []byte(r.Form.Get("isJsonOutput"))
 
 	templateParsed, errValidity := template.New("").Funcs(functions.FunctionsMap()).Parse(string(lastTemplateSubmittedValue))
 
@@ -382,6 +392,36 @@ func executeTemplate(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		log.Println(err)
+	}
+
+}
+
+func webFunctionList(w http.ResponseWriter, r *http.Request) {
+
+	r.ParseForm()
+	var function_to_find = r.Form.Get("functiontofind")
+
+	if len(function_to_find) > 0 {
+		webPrintFunction(function_to_find, w, r)
+	}
+}
+
+func webPrintFunction(web_function_to_find string, w http.ResponseWriter, r *http.Request) {
+	f, found := functions.Description(web_function_to_find)
+
+	if found {
+		b, errMarshal := json.Marshal(f)
+		if errMarshal != nil {
+			fmt.Println(errMarshal)
+			return
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, err := w.Write(b)
+		if err != nil {
+			log.Println(err)
+		}
+	} else {
+		http.Error(w, "No function found", http.StatusNotFound)
 	}
 
 }

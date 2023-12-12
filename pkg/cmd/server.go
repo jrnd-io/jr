@@ -7,11 +7,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"net/http" //uncomment this for local UI development
+	"net/http"
 	"path/filepath"
 	"strings"
 	"text/template"
-	"time" //uncomment this for local UI development
+	"time"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
@@ -361,7 +361,7 @@ func loadLastStatus(w http.ResponseWriter, r *http.Request) {
 func executeTemplate(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "plain/text")
-	errorFormParse := r.ParseForm() //ParseMultipartForm(10 << 20)
+	errorFormParse := r.ParseForm()
 	if errorFormParse != nil {
 		log.Println("errorFormParse ", errorFormParse)
 		http.Error(w, errorFormParse.Error(), http.StatusInternalServerError)

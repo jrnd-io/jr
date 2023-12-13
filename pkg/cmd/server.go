@@ -25,6 +25,9 @@ import (
 //go:embed html/index.html
 var index_html string
 
+//go:embed html/emitters.html
+var emitters_html string
+
 //go:embed html/templatedev.html
 var templatedev_html string
 
@@ -137,6 +140,10 @@ func embeddedFileRoutes(router chi.Router) {
 
 	router.Get("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(index_html))
+	})
+
+	router.Get("/emitters.html", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte(emitters_html))
 	})
 
 	router.Get("/templatedev.html", func(w http.ResponseWriter, r *http.Request) {

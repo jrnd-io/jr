@@ -312,6 +312,16 @@ var funcDesc = map[string]FunctionDescription{
 		Example:     "jr template run --embedded '{{country_code_at 109}}'",
 		Output:      "+39",
 	},
+	"fromcsv": {
+		Name:        "fromcsv",
+		Category:    "utilities",
+		Description: "returns a value for given column label from a csv file row",
+		Parameters:  "string",
+		Localizable: false,
+		Return:      "string",
+		Example:     "jr template run --embedded '{{fromcsv \"NAME\"}}' --csv testfiles/test2.csv",
+		Output:      "John",
+	},
 	"cusip": {
 		Name:        "cusip",
 		Category:    "finance",

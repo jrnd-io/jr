@@ -1,8 +1,8 @@
 {
   "age": {{integer 20 60}},
   "eyeColor": "{{randoms "blue|brown|green"}}",
-  "name": "{{fromcsv "NAME"}} {{fromcsv "SURNAME"}}",
-  "gender": "{{gender}}",
+  "name": "{{fromcsv "NAME"}}",
+  "surname": "{{fromcsv "SURNAME"}}",
   "company": "{{company}}",
-  "email": "{{fromcsv "NAME"}}.{{fromcsv "SURNAME"}}@thelandof.oz"
+  "email": "{{lower (fromcsv "NAME") }}.{{lower (fromcsv "SURNAME") }}@emeraldcity.oz"
 }

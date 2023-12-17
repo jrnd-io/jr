@@ -1,0 +1,58 @@
+{
+  "emitters": [
+    {
+      "name": "gaming_games",
+      "locale": "us",
+      "num": 1,
+      "frequency": "500ms",
+      "duration": "2s",
+      "preload": 0,
+      "valueTemplate": "gaming_games",
+      "output": "kafka",
+      "keyTemplate": "null",
+      "outputTemplate": "{{.V}}\n",
+      "topic": "gaming_games"
+    },
+    {
+      "name": "gaming_players",
+      "locale": "us",
+      "num": 0,
+      "frequency": "0s",
+      "duration": "0s",
+      "preload": 200,
+      "valueTemplate": "gaming_players",
+      "output": "kafka",
+      "keyTemplate": "null",
+      "outputTemplate": "{{.V}}\n",
+      "topic": "gaming_players"
+    },
+    {
+      "name": "gaming_player_activity",
+      "locale": "us",
+      "num": 1,
+      "frequency": "100ms",
+      "duration": "3s",
+      "preload": 0,
+      "valueTemplate": "gaming_player_activity",
+      "output": "kafka",
+      "keyTemplate": "null",
+      "outputTemplate": "{{.V}}\n",
+      "topic": "gaming_player_activity"
+    }
+  ],
+  "global": {
+    "seed": -1,
+    "kafkaConfig": "./kafka/config.properties",
+    "schemaRegistry": true,
+    "registryConfig": "./kafka/registry.properties",
+    "serializer": "avro-generic",
+    "autoCreate": true,
+    "redisTtl": "1m",
+    "redisConfig": "./redis/config.json",
+    "mongoConfig": "./mongoDB/config.json",
+    "elasticConfig": "./elastic/config.json",
+    "s3Config": "./s3/config.json",
+    "gcsConfig": "./gcs/config.json",
+    "url": ""
+  }
+}

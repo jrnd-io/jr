@@ -1,0 +1,58 @@
+{
+  "emitters": [
+    {
+      "name": "util_userid",
+      "locale": "us",
+      "num": 0,
+      "frequency": "0s",
+      "duration": "0s",
+      "preload": 50,
+      "valueTemplate": "util_userid",
+      "output": "stdout",
+      "keyTemplate": "null",
+      "outputTemplate": "{{.V}}\n",
+      "topic": "util_userid"
+    },
+    {
+      "name": "credit_cards",
+      "locale": "us",
+      "num": 0,
+      "frequency": "0s",
+      "duration": "0s",
+      "preload": 30,
+      "valueTemplate": "credit_cards",
+      "output": "kafka",
+      "keyTemplate": "null",
+      "outputTemplate": "{{.V}}\n",
+      "topic": "credit_cards"
+    },
+    {
+      "name": "transactions",
+      "locale": "us",
+      "num": 1,
+      "frequency": "100ms",
+      "duration": "3s",
+      "preload": 0,
+      "valueTemplate": "transactions",
+      "output": "kafka",
+      "keyTemplate": "null",
+      "outputTemplate": "{{.V}}\n",
+      "topic": "transactions"
+    }
+  ],
+  "global": {
+    "seed": -1,
+    "kafkaConfig": "./kafka/config.properties",
+    "schemaRegistry": true,
+    "registryConfig": "./kafka/registry.properties",
+    "serializer": "avro-generic",
+    "autoCreate": true,
+    "redisTtl": "1m",
+    "redisConfig": "./redis/config.json",
+    "mongoConfig": "./mongoDB/config.json",
+    "elasticConfig": "./elastic/config.json",
+    "s3Config": "./s3/config.json",
+    "gcsConfig": "./gcs/config.json",
+    "url": ""
+  }
+}

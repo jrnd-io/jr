@@ -1,0 +1,39 @@
+name: jrnd
+base: core22
+version: 0.3.4
+summary: Random data generator
+description: |
+  Command line generator of random data.
+
+grade: stable
+confinement: strict
+
+apps:
+  jr:
+    command: bin/jr
+    environment:
+      JR_HOME: $SNAP
+    plugs:
+      - home
+
+parts:
+  jr:
+    plugin: go
+    source-type: git
+    source-branch: main
+    source: https://github.com/ugol/jr
+    build-snaps: [go/1.21/stable]
+
+  jr-copy-files-templates:
+    plugin: dump
+    source-type: git
+    source: https://github.com/ugol/jr
+    source-subdir: "templates"
+    organize:
+      "*": templates/
+
+  jr-copy-files-config:
+    plugin: dump
+    source-type: git
+    source: https://github.com/ugol/jr
+    source-subdir: "config"

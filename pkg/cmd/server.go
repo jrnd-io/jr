@@ -142,6 +142,10 @@ func embeddedFileRoutes(router chi.Router) {
 		w.Write([]byte(index_html))
 	})
 
+	router.Get("/index.html", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte(index_html))
+	})
+
 	router.Get("/emitters.html", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(emitters_html))
 	})

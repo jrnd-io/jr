@@ -32,9 +32,9 @@
  *     purchase.avsc
  *     ratings.avsc
  *     shoe.avsc
- *     shoe_clickstream.avsc
- *     shoe_customer.avsc
- *     shoe_order.avsc
+ *     shoeclickstream.avsc
+ *     shoecustomer.avsc
+ *     shoeorder.avsc
  *     siem_logs.avsc
  *     stockTrades.avsc
  *     stores.avsc
@@ -65,10 +65,10 @@ type Shoe struct {
 
 	Name string `json:"name"`
 
-	Rating string `json:"rating"`
+	Rating float32 `json:"rating"`
 }
 
-const ShoeAvroCRC64Fingerprint = "oB\xcd\xe9\x7f\xc7,\xd6"
+const ShoeAvroCRC64Fingerprint = "\xd4n\x94\xa5p\xb2\t\xe9"
 
 func NewShoe() Shoe {
 	r := Shoe{}
@@ -116,7 +116,7 @@ func writeShoe(r Shoe, w io.Writer) error {
 	if err != nil {
 		return err
 	}
-	err = vm.WriteString(r.Rating, w)
+	err = vm.WriteFloat(r.Rating, w)
 	if err != nil {
 		return err
 	}
@@ -128,7 +128,7 @@ func (r Shoe) Serialize(w io.Writer) error {
 }
 
 func (r Shoe) Schema() string {
-	return "{\"fields\":[{\"name\":\"id\",\"type\":\"string\"},{\"name\":\"sale_price\",\"type\":\"string\"},{\"name\":\"brand\",\"type\":\"string\"},{\"name\":\"name\",\"type\":\"string\"},{\"name\":\"rating\",\"type\":\"string\"}],\"name\":\"shoes.shoe\",\"type\":\"record\"}"
+	return "{\"fields\":[{\"name\":\"id\",\"type\":\"string\"},{\"name\":\"sale_price\",\"type\":\"string\"},{\"name\":\"brand\",\"type\":\"string\"},{\"name\":\"name\",\"type\":\"string\"},{\"name\":\"rating\",\"type\":\"float\"}],\"name\":\"shoes.shoe\",\"type\":\"record\"}"
 }
 
 func (r Shoe) SchemaName() string {
@@ -167,7 +167,7 @@ func (r *Shoe) Get(i int) types.Field {
 		return w
 
 	case 4:
-		w := types.String{Target: &r.Rating}
+		w := types.Float{Target: &r.Rating}
 
 		return w
 

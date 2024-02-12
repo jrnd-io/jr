@@ -4,8 +4,8 @@
     "name" : "shoeclickstream",
     "fields" : [
         { "name" : "product_id" , "type" : "string" },
-        { "name" : "view_time" , "type" : "int"},
-        { "name" : "user_id" , "type" : "string" },
+        { "name" : "view_time" , "type" : "string"},
+        { "name" : "user_id" , "type" : "long" },
         { "name" : "page_url" , "type" : "string" },
         { "name" : "ip" , "type" : "string" },
         { "name" : "ts" , "type" : "long" }

@@ -32,9 +32,9 @@
  *     purchase.avsc
  *     ratings.avsc
  *     shoe.avsc
- *     shoe_clickstream.avsc
- *     shoe_customer.avsc
- *     shoe_order.avsc
+ *     shoeclickstream.avsc
+ *     shoecustomer.avsc
+ *     shoeorder.avsc
  *     siem_logs.avsc
  *     stockTrades.avsc
  *     stores.avsc
@@ -65,7 +65,7 @@ type Shoecustomer struct {
 
 	Email string `json:"email"`
 
-	Phone string `json:"phone"`
+	Phone_number string `json:"phone_number"`
 
 	Street_address string `json:"street_address"`
 
@@ -78,7 +78,7 @@ type Shoecustomer struct {
 	Country_code string `json:"country_code"`
 }
 
-const ShoecustomerAvroCRC64Fingerprint = "\v\x1dO1ѱ\xe6\xde"
+const ShoecustomerAvroCRC64Fingerprint = "\xc1+\xe6E1\xb3\xa3\xe0"
 
 func NewShoecustomer() Shoecustomer {
 	r := Shoecustomer{}
@@ -126,7 +126,7 @@ func writeShoecustomer(r Shoecustomer, w io.Writer) error {
 	if err != nil {
 		return err
 	}
-	err = vm.WriteString(r.Phone, w)
+	err = vm.WriteString(r.Phone_number, w)
 	if err != nil {
 		return err
 	}
@@ -158,7 +158,7 @@ func (r Shoecustomer) Serialize(w io.Writer) error {
 }
 
 func (r Shoecustomer) Schema() string {
-	return "{\"fields\":[{\"name\":\"id\",\"type\":\"string\"},{\"name\":\"first_name\",\"type\":\"string\"},{\"name\":\"last_name\",\"type\":\"string\"},{\"name\":\"email\",\"type\":\"string\"},{\"name\":\"phone\",\"type\":\"string\"},{\"name\":\"street_address\",\"type\":\"string\"},{\"name\":\"state\",\"type\":\"string\"},{\"name\":\"zip_code\",\"type\":\"string\"},{\"name\":\"country\",\"type\":\"string\"},{\"name\":\"country_code\",\"type\":\"string\"}],\"name\":\"shoes.shoecustomer\",\"type\":\"record\"}"
+	return "{\"fields\":[{\"name\":\"id\",\"type\":\"string\"},{\"name\":\"first_name\",\"type\":\"string\"},{\"name\":\"last_name\",\"type\":\"string\"},{\"name\":\"email\",\"type\":\"string\"},{\"name\":\"phone_number\",\"type\":\"string\"},{\"name\":\"street_address\",\"type\":\"string\"},{\"name\":\"state\",\"type\":\"string\"},{\"name\":\"zip_code\",\"type\":\"string\"},{\"name\":\"country\",\"type\":\"string\"},{\"name\":\"country_code\",\"type\":\"string\"}],\"name\":\"shoes.shoecustomer\",\"type\":\"record\"}"
 }
 
 func (r Shoecustomer) SchemaName() string {
@@ -197,7 +197,7 @@ func (r *Shoecustomer) Get(i int) types.Field {
 		return w
 
 	case 4:
-		w := types.String{Target: &r.Phone}
+		w := types.String{Target: &r.Phone_number}
 
 		return w
 
@@ -270,7 +270,7 @@ func (r Shoecustomer) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	output["phone"], err = json.Marshal(r.Phone)
+	output["phone_number"], err = json.Marshal(r.Phone_number)
 	if err != nil {
 		return nil, err
 	}
@@ -361,18 +361,18 @@ func (r *Shoecustomer) UnmarshalJSON(data []byte) error {
 		return fmt.Errorf("no value specified for email")
 	}
 	val = func() json.RawMessage {
-		if v, ok := fields["phone"]; ok {
+		if v, ok := fields["phone_number"]; ok {
 			return v
 		}
 		return nil
 	}()
 
 	if val != nil {
-		if err := json.Unmarshal([]byte(val), &r.Phone); err != nil {
+		if err := json.Unmarshal([]byte(val), &r.Phone_number); err != nil {
 			return err
 		}
 	} else {
-		return fmt.Errorf("no value specified for phone")
+		return fmt.Errorf("no value specified for phone_number")
 	}
 	val = func() json.RawMessage {
 		if v, ok := fields["street_address"]; ok {

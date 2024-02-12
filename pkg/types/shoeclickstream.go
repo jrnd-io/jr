@@ -32,9 +32,9 @@
  *     purchase.avsc
  *     ratings.avsc
  *     shoe.avsc
- *     shoe_clickstream.avsc
- *     shoe_customer.avsc
- *     shoe_order.avsc
+ *     shoeclickstream.avsc
+ *     shoecustomer.avsc
+ *     shoeorder.avsc
  *     siem_logs.avsc
  *     stockTrades.avsc
  *     stores.avsc
@@ -59,9 +59,9 @@ var _ = fmt.Printf
 type Shoeclickstream struct {
 	Product_id string `json:"product_id"`
 
-	View_time int32 `json:"view_time"`
+	View_time string `json:"view_time"`
 
-	User_id string `json:"user_id"`
+	User_id int64 `json:"user_id"`
 
 	Page_url string `json:"page_url"`
 
@@ -70,7 +70,7 @@ type Shoeclickstream struct {
 	Ts int64 `json:"ts"`
 }
 
-const ShoeclickstreamAvroCRC64Fingerprint = "\x0f\xea\xcaNŴ\x81\xd3"
+const ShoeclickstreamAvroCRC64Fingerprint = "r\aB\xb6y \x86|"
 
 func NewShoeclickstream() Shoeclickstream {
 	r := Shoeclickstream{}
@@ -106,11 +106,11 @@ func writeShoeclickstream(r Shoeclickstream, w io.Writer) error {
 	if err != nil {
 		return err
 	}
-	err = vm.WriteInt(r.View_time, w)
+	err = vm.WriteString(r.View_time, w)
 	if err != nil {
 		return err
 	}
-	err = vm.WriteString(r.User_id, w)
+	err = vm.WriteLong(r.User_id, w)
 	if err != nil {
 		return err
 	}
@@ -134,7 +134,7 @@ func (r Shoeclickstream) Serialize(w io.Writer) error {
 }
 
 func (r Shoeclickstream) Schema() string {
-	return "{\"fields\":[{\"name\":\"product_id\",\"type\":\"string\"},{\"name\":\"view_time\",\"type\":\"int\"},{\"name\":\"user_id\",\"type\":\"string\"},{\"name\":\"page_url\",\"type\":\"string\"},{\"name\":\"ip\",\"type\":\"string\"},{\"name\":\"ts\",\"type\":\"long\"}],\"name\":\"shoes.shoeclickstream\",\"type\":\"record\"}"
+	return "{\"fields\":[{\"name\":\"product_id\",\"type\":\"string\"},{\"name\":\"view_time\",\"type\":\"string\"},{\"name\":\"user_id\",\"type\":\"long\"},{\"name\":\"page_url\",\"type\":\"string\"},{\"name\":\"ip\",\"type\":\"string\"},{\"name\":\"ts\",\"type\":\"long\"}],\"name\":\"shoes.shoeclickstream\",\"type\":\"record\"}"
 }
 
 func (r Shoeclickstream) SchemaName() string {
@@ -158,12 +158,12 @@ func (r *Shoeclickstream) Get(i int) types.Field {
 		return w
 
 	case 1:
-		w := types.Int{Target: &r.View_time}
+		w := types.String{Target: &r.View_time}
 
 		return w
 
 	case 2:
-		w := types.String{Target: &r.User_id}
+		w := types.Long{Target: &r.User_id}
 
 		return w
 

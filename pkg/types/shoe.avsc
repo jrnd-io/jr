@@ -7,6 +7,6 @@
     { "name" : "sale_price" , "type" : "string" },
     { "name" : "brand" , "type" : "string" },
     { "name" : "name" , "type" : "string" },
-    { "name" : "rating" , "type" : "string" }
+    { "name" : "rating" , "type" : "float" }
   ]
 }

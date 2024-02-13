@@ -5,7 +5,7 @@
  *     click_stream.avsc
  *     click_stream_users.avsc
  *     clickstreamcodes.avsc
- *     creditcards.avsc
+ *     credit_cards.avsc
  *     device_information.avsc
  *     fleet_mgmt_description.avsc
  *     fleet_mgmt_location.avsc
@@ -20,7 +20,7 @@
  *     map_dumb_schema.avsc
  *     net_device.avsc
  *     orders.avsc
- *     pageviews.avsc
+ *     page_views.avsc
  *     payrollbonus.avsc
  *     payrollemployee.avsc
  *     payrollemployeelocation.avsc

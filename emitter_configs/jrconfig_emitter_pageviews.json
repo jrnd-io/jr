@@ -14,17 +14,17 @@
       "topic": "util_userid"
     },
     {
-      "name": "pageviews_schema",
+      "name": "page_views",
       "locale": "us",
       "num": 1,
       "frequency": "100ms",
       "duration": "3s",
       "preload": 0,
-      "valueTemplate": "pageviews_schema",
+      "valueTemplate": "page_views",
       "output": "kafka",
       "keyTemplate": "null",
       "outputTemplate": "{{.V}}\n",
-      "topic": "pageviews_schema"
+      "topic": "page_views"
     }
   ],
   "global": {

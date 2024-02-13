@@ -19,7 +19,7 @@ var clickstreamusers Clickstreamusers
 
 var codes Codes
 
-var creditcards Creditcards
+var credit_cards CreditCards
 
 var destination Destination
 
@@ -81,7 +81,7 @@ var orderline Orderline
 
 var orders Orders
 
-var pageviews Pageviews
+var page_views PageViews
 
 var payrollbonus Payrollbonus
 
@@ -157,8 +157,8 @@ func GetType(templateType string) interface{} {
 	case "codes":
 		return &codes
 
-	case "creditcards":
-		return &creditcards
+	case "credit_cards":
+		return &credit_cards
 
 	case "destination":
 		return &destination
@@ -250,8 +250,8 @@ func GetType(templateType string) interface{} {
 	case "orders":
 		return &orders
 
-	case "pageviews":
-		return &pageviews
+	case "page_views":
+		return &page_views
 
 	case "payrollbonus":
 		return &payrollbonus

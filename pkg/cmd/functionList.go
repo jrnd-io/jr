@@ -67,23 +67,24 @@ func doList(cmd *cobra.Command, args []string) {
 	find, _ := cmd.Flags().GetBool("find")
 	run, _ := cmd.Flags().GetBool("run")
 	isMarkdown, _ := cmd.Flags().GetBool("markdown")
+	noColor, _ := cmd.Flags().GetBool("nocolor")
 
 	if category {
 		for k, v := range functions.DescriptionMap() {
 			if strings.Contains(v.Category, args[0]) {
-				printFunction(k, isMarkdown)
+				printFunction(k, isMarkdown, noColor)
 			}
 		}
 	} else if find {
 		for k, v := range functions.DescriptionMap() {
 			if strings.Contains(v.Description, args[0]) || strings.Contains(v.Name, args[0]) {
-				printFunction(k, isMarkdown)
+				printFunction(k, isMarkdown, noColor)
 			}
 		}
 	} else if len(args) == 1 {
 
 		if run {
-			f, found := printFunction(args[0], isMarkdown)
+			f, found := printFunction(args[0], isMarkdown, noColor)
 			if found {
 				fmt.Println()
 				cmd := exec.Command("/bin/sh", "-c", f.Example)
@@ -92,13 +93,13 @@ func doList(cmd *cobra.Command, args []string) {
 				cmd.Run()
 			}
 		} else {
-			printFunction(args[0], isMarkdown)
+			printFunction(args[0], isMarkdown, noColor)
 		}
 	} else {
 		count := 0
 		for k := range functions.FunctionsMap() {
 			count++
-			printFunction(k, isMarkdown)
+			printFunction(k, isMarkdown, noColor)
 		}
 		fmt.Println()
 		fmt.Printf("Total functions: %d\n", count)
@@ -106,12 +107,17 @@ func doList(cmd *cobra.Command, args []string) {
 	fmt.Println()
 }
 
-func printFunction(name string, isMarkdown bool) (functions.FunctionDescription, bool) {
+func printFunction(name string, isMarkdown bool, noColor bool) (functions.FunctionDescription, bool) {
 	f, found := functions.Description(name)
 
+	var Cyan = ""
+	var Reset = ""
+	if !noColor {
+		Cyan = "\033[36m"
+		Reset = "\033[0m"
+	}
+
 	if !isMarkdown {
-		var Reset = "\033[0m"
-		var Cyan = "\033[36m"
 
 		if found {
 			fmt.Println()
@@ -151,9 +157,14 @@ func init() {
 	functionCmd.AddCommand(functionListCmd)
 	functionListCmd.Flags().BoolP("category", "c", false, "IndexOf in category")
 	functionListCmd.Flags().BoolP("find", "f", false, "IndexOf in description and name")
+	functionListCmd.Flags().BoolP("markdown", "m", false, "Output the list as markdown")
 	functionListCmd.Flags().BoolP("run", "r", false, "Run the example")
+	functionListCmd.Flags().BoolP("nocolor", "n", false, "Do not color output")
+
 	functionManCmd.Flags().BoolP("category", "c", false, "IndexOf in category")
 	functionManCmd.Flags().BoolP("markdown", "m", false, "Output the list as markdown")
 	functionManCmd.Flags().BoolP("find", "f", false, "IndexOf in description and name")
 	functionManCmd.Flags().BoolP("run", "r", false, "Run the example")
+	functionManCmd.Flags().BoolP("nocolor", "n", false, "Do not color output")
+
 }

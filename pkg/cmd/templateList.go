@@ -112,5 +112,5 @@ func isValidTemplate(t []byte) (bool, error) {
 func init() {
 	templateCmd.AddCommand(templateListCmd)
 	templateListCmd.Flags().BoolP("fullPath", "f", false, "Print full path")
-	templateListCmd.Flags().BoolP("nocolor", "n", false, "Do not color the output")
+	templateListCmd.Flags().BoolP("nocolor", "n", false, "Do not color output")
 }

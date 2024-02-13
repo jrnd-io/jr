@@ -73,5 +73,5 @@ var templateShowCmd = &cobra.Command{
 
 func init() {
 	templateCmd.AddCommand(templateShowCmd)
-	templateShowCmd.Flags().BoolP("nocolor", "n", false, "disable colorized output")
+	templateShowCmd.Flags().BoolP("nocolor", "n", false, "Do not color output")
 }

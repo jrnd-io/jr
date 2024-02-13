@@ -33,8 +33,14 @@ jr emitter show net_device`,
 	Args: cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 
-		var Green = "\033[32m"
-		var Reset = "\033[0m"
+		noColor, _ := cmd.Flags().GetBool("nocolor")
+
+		var Green = ""
+		var Reset = ""
+		if !noColor {
+			Green = "\033[32m"
+			Reset = "\033[0m"
+		}
 
 		fmt.Println()
 		for _, v := range emitters {
@@ -61,4 +67,6 @@ jr emitter show net_device`,
 
 func init() {
 	emitterCmd.AddCommand(emitterShowCmd)
+	emitterShowCmd.Flags().BoolP("nocolor", "n", false, "Do not color output")
+
 }

@@ -32,8 +32,14 @@ var producerListCmd = &cobra.Command{
 		"jr producer list",
 	Run: func(cmd *cobra.Command, args []string) {
 
-		var Green = "\033[32m"
-		var Reset = "\033[0m"
+		noColor, _ := cmd.Flags().GetBool("nocolor")
+
+		var Green = ""
+		var Reset = ""
+		if !noColor {
+			Green = "\033[32m"
+			Reset = "\033[0m"
+		}
 
 		fmt.Println()
 		fmt.Println("List of JR producers:")
@@ -53,4 +59,5 @@ var producerListCmd = &cobra.Command{
 
 func init() {
 	producerCmd.AddCommand(producerListCmd)
+	producerListCmd.Flags().BoolP("nocolor", "n", false, "Do not color output")
 }

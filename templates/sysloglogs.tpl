@@ -11,7 +11,7 @@
   "appName" : "{{random_string_vocabulary 5 8 "ABCDEFGHIJKLMNOPQRSTUVWXYZ"}}",
   "remoteAddress" : "{{randoms "91.253.222.9|48.92.8.255|107.150.81.0|254.11.108.139|14.53.111.201|215.70.232.123|122.96.193.183|185.128.89.135|246.46.59.238|238.158.147.172"}}",
   "rawMessage" : "{{random_string_vocabulary 10 15 "abcdefghijklmnopqrstuvwxyz "}}",
-  "processId" : {{random_string_vocabulary 1 2 "123456789"}}{{random_string_vocabulary 6 7 "0123456789"}},
+  "processId" : "{{random_string_vocabulary 1 2 "123456789"}}{{random_string_vocabulary 6 7 "0123456789"}}",
   "messageId" : "{{random_string_vocabulary 1 2 "123456789"}}{{random_string_vocabulary 2 3 "0123456789"}}",
   "deviceVendor" : "{{random_string_vocabulary 5 6 "abcdefghijklmnopqrstuvwxyz"}}",
   "deviceProduct" : "{{random_string_vocabulary 5 6 "abcdefghijklmnopqrstuvwxyz"}}",

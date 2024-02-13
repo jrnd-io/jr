@@ -2,9 +2,9 @@
 /*
  * SOURCES:
  *     campaignfinance.avsc
- *     clickstream.avsc
+ *     click_stream.avsc
+ *     click_stream_users.avsc
  *     clickstreamcodes.avsc
- *     clickstreamusers.avsc
  *     creditcards.avsc
  *     device_information.avsc
  *     fleet_mgmt_description.avsc
@@ -35,7 +35,7 @@
  *     shoe_customer.avsc
  *     shoe_order.avsc
  *     siemlogs.avsc
- *     stockTrades.avsc
+ *     stock_trades.avsc
  *     stores.avsc
  *     sysloglogs.avsc
  *     transactions.avsc
@@ -56,7 +56,7 @@ import (
 
 var _ = fmt.Printf
 
-type Clickstreamusers struct {
+type ClickStreamUsers struct {
 	User_id int32 `json:"user_id"`
 
 	Username string `json:"username"`
@@ -72,15 +72,15 @@ type Clickstreamusers struct {
 	Level string `json:"level"`
 }
 
-const ClickstreamusersAvroCRC64Fingerprint = "\xc1\xd1LuE\x0e?\xc1"
+const ClickStreamUsersAvroCRC64Fingerprint = "\x81\xab7-(\x85\xa3*"
 
-func NewClickstreamusers() Clickstreamusers {
-	r := Clickstreamusers{}
+func NewClickStreamUsers() ClickStreamUsers {
+	r := ClickStreamUsers{}
 	return r
 }
 
-func DeserializeClickstreamusers(r io.Reader) (Clickstreamusers, error) {
-	t := NewClickstreamusers()
+func DeserializeClickStreamUsers(r io.Reader) (ClickStreamUsers, error) {
+	t := NewClickStreamUsers()
 	deser, err := compiler.CompileSchemaBytes([]byte(t.Schema()), []byte(t.Schema()))
 	if err != nil {
 		return t, err
@@ -90,8 +90,8 @@ func DeserializeClickstreamusers(r io.Reader) (Clickstreamusers, error) {
 	return t, err
 }
 
-func DeserializeClickstreamusersFromSchema(r io.Reader, schema string) (Clickstreamusers, error) {
-	t := NewClickstreamusers()
+func DeserializeClickStreamUsersFromSchema(r io.Reader, schema string) (ClickStreamUsers, error) {
+	t := NewClickStreamUsers()
 
 	deser, err := compiler.CompileSchemaBytes([]byte(schema), []byte(t.Schema()))
 	if err != nil {
@@ -102,7 +102,7 @@ func DeserializeClickstreamusersFromSchema(r io.Reader, schema string) (Clickstr
 	return t, err
 }
 
-func writeClickstreamusers(r Clickstreamusers, w io.Writer) error {
+func writeClickStreamUsers(r ClickStreamUsers, w io.Writer) error {
 	var err error
 	err = vm.WriteInt(r.User_id, w)
 	if err != nil {
@@ -135,28 +135,28 @@ func writeClickstreamusers(r Clickstreamusers, w io.Writer) error {
 	return err
 }
 
-func (r Clickstreamusers) Serialize(w io.Writer) error {
-	return writeClickstreamusers(r, w)
+func (r ClickStreamUsers) Serialize(w io.Writer) error {
+	return writeClickStreamUsers(r, w)
 }
 
-func (r Clickstreamusers) Schema() string {
-	return "{\"fields\":[{\"name\":\"user_id\",\"type\":{\"arg.properties\":{\"iteration\":{\"start\":1}},\"type\":\"int\"}},{\"name\":\"username\",\"type\":{\"arg.properties\":{\"options\":[\"akatz1022\",\"bobk_43\",\"alison_99\",\"k_robertz_88\",\"Ferd88\",\"Reeva43\",\"Antonio_0966\",\"ArlyneW8ter\",\"DimitriSchenz88\",\"Oriana_70\",\"AbdelKable_86\",\"Roberto_123\",\"AlanGreta_GG66\",\"Nathan_126\",\"AndySims_345324\",\"GlenAlan_23344\",\"LukeWaters_23\",\"BenSteins_235\"]},\"type\":\"string\"}},{\"name\":\"registered_at\",\"type\":{\"arg.properties\":{\"range\":{\"max\":1502339792000,\"min\":1407645330000}},\"type\":\"long\"}},{\"name\":\"first_name\",\"type\":{\"arg.properties\":{\"options\":[\"Elwyn\",\"Curran\",\"Hanson\",\"Woodrow\",\"Ferd\",\"Reeva\",\"Antonio\",\"Arlyne\",\"Dimitri\",\"Oriana\",\"Abdel\",\"Greta\"]},\"type\":\"string\"}},{\"name\":\"last_name\",\"type\":{\"arg.properties\":{\"options\":[\"Vanyard\",\"Vears\",\"Garrity\",\"Trice\",\"Tomini\",\"Jushcke\",\"De Banke\",\"Pask\",\"Rockhill\",\"Romagosa\",\"Adicot\",\"Lalonde\"]},\"type\":\"string\"}},{\"name\":\"city\",\"type\":{\"arg.properties\":{\"options\":[\"Palo Alto\",\"San Francisco\",\"Raleigh\",\"London\",\"Frankfurt\",\"New York\"]},\"type\":\"string\"}},{\"name\":\"level\",\"type\":{\"arg.properties\":{\"options\":[\"Gold\",\"Silver\",\"Platinum\"]},\"type\":\"string\"}}],\"name\":\"clickstream.clickstreamusers\",\"type\":\"record\"}"
+func (r ClickStreamUsers) Schema() string {
+	return "{\"fields\":[{\"name\":\"user_id\",\"type\":{\"arg.properties\":{\"iteration\":{\"start\":1}},\"type\":\"int\"}},{\"name\":\"username\",\"type\":{\"arg.properties\":{\"options\":[\"akatz1022\",\"bobk_43\",\"alison_99\",\"k_robertz_88\",\"Ferd88\",\"Reeva43\",\"Antonio_0966\",\"ArlyneW8ter\",\"DimitriSchenz88\",\"Oriana_70\",\"AbdelKable_86\",\"Roberto_123\",\"AlanGreta_GG66\",\"Nathan_126\",\"AndySims_345324\",\"GlenAlan_23344\",\"LukeWaters_23\",\"BenSteins_235\"]},\"type\":\"string\"}},{\"name\":\"registered_at\",\"type\":{\"arg.properties\":{\"range\":{\"max\":1502339792000,\"min\":1407645330000}},\"type\":\"long\"}},{\"name\":\"first_name\",\"type\":{\"arg.properties\":{\"options\":[\"Elwyn\",\"Curran\",\"Hanson\",\"Woodrow\",\"Ferd\",\"Reeva\",\"Antonio\",\"Arlyne\",\"Dimitri\",\"Oriana\",\"Abdel\",\"Greta\"]},\"type\":\"string\"}},{\"name\":\"last_name\",\"type\":{\"arg.properties\":{\"options\":[\"Vanyard\",\"Vears\",\"Garrity\",\"Trice\",\"Tomini\",\"Jushcke\",\"De Banke\",\"Pask\",\"Rockhill\",\"Romagosa\",\"Adicot\",\"Lalonde\"]},\"type\":\"string\"}},{\"name\":\"city\",\"type\":{\"arg.properties\":{\"options\":[\"Palo Alto\",\"San Francisco\",\"Raleigh\",\"London\",\"Frankfurt\",\"New York\"]},\"type\":\"string\"}},{\"name\":\"level\",\"type\":{\"arg.properties\":{\"options\":[\"Gold\",\"Silver\",\"Platinum\"]},\"type\":\"string\"}}],\"name\":\"clickstream.ClickStreamUsers\",\"type\":\"record\"}"
 }
 
-func (r Clickstreamusers) SchemaName() string {
-	return "clickstream.clickstreamusers"
+func (r ClickStreamUsers) SchemaName() string {
+	return "clickstream.ClickStreamUsers"
 }
 
-func (_ Clickstreamusers) SetBoolean(v bool)    { panic("Unsupported operation") }
-func (_ Clickstreamusers) SetInt(v int32)       { panic("Unsupported operation") }
-func (_ Clickstreamusers) SetLong(v int64)      { panic("Unsupported operation") }
-func (_ Clickstreamusers) SetFloat(v float32)   { panic("Unsupported operation") }
-func (_ Clickstreamusers) SetDouble(v float64)  { panic("Unsupported operation") }
-func (_ Clickstreamusers) SetBytes(v []byte)    { panic("Unsupported operation") }
-func (_ Clickstreamusers) SetString(v string)   { panic("Unsupported operation") }
-func (_ Clickstreamusers) SetUnionElem(v int64) { panic("Unsupported operation") }
+func (_ ClickStreamUsers) SetBoolean(v bool)    { panic("Unsupported operation") }
+func (_ ClickStreamUsers) SetInt(v int32)       { panic("Unsupported operation") }
+func (_ ClickStreamUsers) SetLong(v int64)      { panic("Unsupported operation") }
+func (_ ClickStreamUsers) SetFloat(v float32)   { panic("Unsupported operation") }
+func (_ ClickStreamUsers) SetDouble(v float64)  { panic("Unsupported operation") }
+func (_ ClickStreamUsers) SetBytes(v []byte)    { panic("Unsupported operation") }
+func (_ ClickStreamUsers) SetString(v string)   { panic("Unsupported operation") }
+func (_ ClickStreamUsers) SetUnionElem(v int64) { panic("Unsupported operation") }
 
-func (r *Clickstreamusers) Get(i int) types.Field {
+func (r *ClickStreamUsers) Get(i int) types.Field {
 	switch i {
 	case 0:
 		w := types.Int{Target: &r.User_id}
@@ -197,28 +197,28 @@ func (r *Clickstreamusers) Get(i int) types.Field {
 	panic("Unknown field index")
 }
 
-func (r *Clickstreamusers) SetDefault(i int) {
+func (r *ClickStreamUsers) SetDefault(i int) {
 	switch i {
 	}
 	panic("Unknown field index")
 }
 
-func (r *Clickstreamusers) NullField(i int) {
+func (r *ClickStreamUsers) NullField(i int) {
 	switch i {
 	}
 	panic("Not a nullable field index")
 }
 
-func (_ Clickstreamusers) AppendMap(key string) types.Field { panic("Unsupported operation") }
-func (_ Clickstreamusers) AppendArray() types.Field         { panic("Unsupported operation") }
-func (_ Clickstreamusers) HintSize(int)                     { panic("Unsupported operation") }
-func (_ Clickstreamusers) Finalize()                        {}
+func (_ ClickStreamUsers) AppendMap(key string) types.Field { panic("Unsupported operation") }
+func (_ ClickStreamUsers) AppendArray() types.Field         { panic("Unsupported operation") }
+func (_ ClickStreamUsers) HintSize(int)                     { panic("Unsupported operation") }
+func (_ ClickStreamUsers) Finalize()                        {}
 
-func (_ Clickstreamusers) AvroCRC64Fingerprint() []byte {
-	return []byte(ClickstreamusersAvroCRC64Fingerprint)
+func (_ ClickStreamUsers) AvroCRC64Fingerprint() []byte {
+	return []byte(ClickStreamUsersAvroCRC64Fingerprint)
 }
 
-func (r Clickstreamusers) MarshalJSON() ([]byte, error) {
+func (r ClickStreamUsers) MarshalJSON() ([]byte, error) {
 	var err error
 	output := make(map[string]json.RawMessage)
 	output["user_id"], err = json.Marshal(r.User_id)
@@ -252,7 +252,7 @@ func (r Clickstreamusers) MarshalJSON() ([]byte, error) {
 	return json.Marshal(output)
 }
 
-func (r *Clickstreamusers) UnmarshalJSON(data []byte) error {
+func (r *ClickStreamUsers) UnmarshalJSON(data []byte) error {
 	var fields map[string]json.RawMessage
 	if err := json.Unmarshal(data, &fields); err != nil {
 		return err

@@ -2,23 +2,23 @@
 /*
  * SOURCES:
  *     campaignfinance.avsc
- *     clickstream.avsc
+ *     click_stream.avsc
+ *     click_stream_users.avsc
  *     clickstreamcodes.avsc
- *     clickstreamusers.avsc
  *     creditcards.avsc
- *     deviceinformation.avsc
- *     fleetmgmtdescription.avsc
- *     fleetmgmtlocation.avsc
- *     fleetmgmtsensors.avsc
- *     gaminggames.avsc
- *     gamingplayeractivity.avsc
- *     gamingplayers.avsc
+ *     device_information.avsc
+ *     fleet_mgmt_description.avsc
+ *     fleet_mgmt_location.avsc
+ *     fleet_mgmt_sensors.avsc
+ *     gaming_games.avsc
+ *     gaming_player_activity.avsc
+ *     gaming_players.avsc
  *     insurancecustomeractivity.avsc
  *     insurancecustomers.avsc
  *     insuranceoffers.avsc
  *     inventory.avsc
  *     map_dumb_schema.avsc
- *     netdevice.avsc
+ *     net_device.avsc
  *     orders.avsc
  *     pageviews.avsc
  *     payrollbonus.avsc
@@ -35,7 +35,7 @@
  *     shoe_customer.avsc
  *     shoe_order.avsc
  *     siemlogs.avsc
- *     stockTrades.avsc
+ *     stock_trades.avsc
  *     stores.avsc
  *     sysloglogs.avsc
  *     transactions.avsc

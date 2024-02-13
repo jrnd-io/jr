@@ -7,18 +7,18 @@
  *     clickstreamusers.avsc
  *     creditcards.avsc
  *     deviceinformation.avsc
- *     fleetmgmtdescription.avsc
- *     fleetmgmtlocation.avsc
- *     fleetmgmtsensors.avsc
- *     gaminggames.avsc
- *     gamingplayeractivity.avsc
- *     gamingplayers.avsc
+ *     fleet_mgmt_description.avsc
+ *     fleet_mgmt_location.avsc
+ *     fleet_mgmt_sensors.avsc
+ *     gaming_games.avsc
+ *     gaming_player_activity.avsc
+ *     gaming_players.avsc
  *     insurancecustomeractivity.avsc
  *     insurancecustomers.avsc
  *     insuranceoffers.avsc
  *     inventory.avsc
  *     map_dumb_schema.avsc
- *     netdevice.avsc
+ *     net_device.avsc
  *     orders.avsc
  *     pageviews.avsc
  *     payrollbonus.avsc

@@ -9,6 +9,10 @@ var bytes Bytes
 
 var campaignfinance Campaignfinance
 
+var click_stream_codes ClickStreamCodes
+
+var click_stream_users ClickStreamUsers
+
 var clickstream Clickstream
 
 var clickstreamusers Clickstreamusers
@@ -19,13 +23,27 @@ var creditcards Creditcards
 
 var destination Destination
 
+var device_information DeviceInformation
+
 var deviceinformation Deviceinformation
+
+var fleet_mgmt_description FleetMgmtDescription
+
+var fleet_mgmt_location FleetMgmtLocation
+
+var fleet_mgmt_sensors FleetMgmtSensors
 
 var fleetmgmtdescription Fleetmgmtdescription
 
 var fleetmgmtlocation Fleetmgmtlocation
 
 var fleetmgmtsensors Fleetmgmtsensors
+
+var gaming_games GamingGames
+
+var gaming_player_activity GamingPlayerActivity
+
+var gaming_players GamingPlayers
 
 var gaminggames Gaminggames
 
@@ -124,6 +142,12 @@ func GetType(templateType string) interface{} {
 	case "campaignfinance":
 		return &campaignfinance
 
+	case "click_stream_codes":
+		return &click_stream_codes
+
+	case "click_stream_users":
+		return &click_stream_users
+
 	case "clickstream":
 		return &clickstream
 
@@ -139,8 +163,20 @@ func GetType(templateType string) interface{} {
 	case "destination":
 		return &destination
 
+	case "device_information":
+		return &device_information
+
 	case "deviceinformation":
 		return &deviceinformation
+
+	case "fleet_mgmt_description":
+		return &fleet_mgmt_description
+
+	case "fleet_mgmt_location":
+		return &fleet_mgmt_location
+
+	case "fleet_mgmt_sensors":
+		return &fleet_mgmt_sensors
 
 	case "fleetmgmtdescription":
 		return &fleetmgmtdescription
@@ -150,6 +186,15 @@ func GetType(templateType string) interface{} {
 
 	case "fleetmgmtsensors":
 		return &fleetmgmtsensors
+
+	case "gaming_games":
+		return &gaming_games
+
+	case "gaming_player_activity":
+		return &gaming_player_activity
+
+	case "gaming_players":
+		return &gaming_players
 
 	case "gaminggames":
 		return &gaminggames

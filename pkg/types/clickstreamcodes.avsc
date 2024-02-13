@@ -1,6 +1,6 @@
 {
   "namespace": "clickstream",
-  "name": "codes",
+  "name": "ClickStreamCodes",
   "type": "record",
   "fields": [
     {

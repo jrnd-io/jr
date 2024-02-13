@@ -1,6 +1,6 @@
 {
         "namespace": "clickstream",
-        "name": "clickstreamusers",
+        "name": "ClickStreamUsers",
         "type": "record",
         "fields": [
                 {"name": "user_id", "type": {

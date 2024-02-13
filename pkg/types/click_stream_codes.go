@@ -2,9 +2,9 @@
 /*
  * SOURCES:
  *     campaignfinance.avsc
- *     clickstream.avsc
+ *     click_stream.avsc
+ *     click_stream_users.avsc
  *     clickstreamcodes.avsc
- *     clickstreamusers.avsc
  *     creditcards.avsc
  *     device_information.avsc
  *     fleet_mgmt_description.avsc
@@ -35,7 +35,7 @@
  *     shoe_customer.avsc
  *     shoe_order.avsc
  *     siemlogs.avsc
- *     stockTrades.avsc
+ *     stock_trades.avsc
  *     stores.avsc
  *     sysloglogs.avsc
  *     transactions.avsc
@@ -56,21 +56,21 @@ import (
 
 var _ = fmt.Printf
 
-type Codes struct {
+type ClickStreamCodes struct {
 	Code int32 `json:"code"`
 
 	Definition string `json:"definition"`
 }
 
-const CodesAvroCRC64Fingerprint = "\xf1\xc8º5\x8ac,"
+const ClickStreamCodesAvroCRC64Fingerprint = "+d\xd5}\xf6\xc5F "
 
-func NewCodes() Codes {
-	r := Codes{}
+func NewClickStreamCodes() ClickStreamCodes {
+	r := ClickStreamCodes{}
 	return r
 }
 
-func DeserializeCodes(r io.Reader) (Codes, error) {
-	t := NewCodes()
+func DeserializeClickStreamCodes(r io.Reader) (ClickStreamCodes, error) {
+	t := NewClickStreamCodes()
 	deser, err := compiler.CompileSchemaBytes([]byte(t.Schema()), []byte(t.Schema()))
 	if err != nil {
 		return t, err
@@ -80,8 +80,8 @@ func DeserializeCodes(r io.Reader) (Codes, error) {
 	return t, err
 }
 
-func DeserializeCodesFromSchema(r io.Reader, schema string) (Codes, error) {
-	t := NewCodes()
+func DeserializeClickStreamCodesFromSchema(r io.Reader, schema string) (ClickStreamCodes, error) {
+	t := NewClickStreamCodes()
 
 	deser, err := compiler.CompileSchemaBytes([]byte(schema), []byte(t.Schema()))
 	if err != nil {
@@ -92,7 +92,7 @@ func DeserializeCodesFromSchema(r io.Reader, schema string) (Codes, error) {
 	return t, err
 }
 
-func writeCodes(r Codes, w io.Writer) error {
+func writeClickStreamCodes(r ClickStreamCodes, w io.Writer) error {
 	var err error
 	err = vm.WriteInt(r.Code, w)
 	if err != nil {
@@ -105,28 +105,28 @@ func writeCodes(r Codes, w io.Writer) error {
 	return err
 }
 
-func (r Codes) Serialize(w io.Writer) error {
-	return writeCodes(r, w)
+func (r ClickStreamCodes) Serialize(w io.Writer) error {
+	return writeClickStreamCodes(r, w)
 }
 
-func (r Codes) Schema() string {
-	return "{\"arg.properties\":{\"options\":[{\"code\":200,\"definition\":\"Successful\"},{\"code\":302,\"definition\":\"Redirect\"},{\"code\":404,\"definition\":\"Page not found\"},{\"code\":405,\"definition\":\"Method not allowed\"},{\"code\":406,\"definition\":\"Not acceptable\"},{\"code\":407,\"definition\":\"Proxy authentication required\"}]},\"fields\":[{\"name\":\"code\",\"type\":\"int\"},{\"name\":\"definition\",\"type\":\"string\"}],\"name\":\"clickstream.codes\",\"type\":\"record\"}"
+func (r ClickStreamCodes) Schema() string {
+	return "{\"arg.properties\":{\"options\":[{\"code\":200,\"definition\":\"Successful\"},{\"code\":302,\"definition\":\"Redirect\"},{\"code\":404,\"definition\":\"Page not found\"},{\"code\":405,\"definition\":\"Method not allowed\"},{\"code\":406,\"definition\":\"Not acceptable\"},{\"code\":407,\"definition\":\"Proxy authentication required\"}]},\"fields\":[{\"name\":\"code\",\"type\":\"int\"},{\"name\":\"definition\",\"type\":\"string\"}],\"name\":\"clickstream.ClickStreamCodes\",\"type\":\"record\"}"
 }
 
-func (r Codes) SchemaName() string {
-	return "clickstream.codes"
+func (r ClickStreamCodes) SchemaName() string {
+	return "clickstream.ClickStreamCodes"
 }
 
-func (_ Codes) SetBoolean(v bool)    { panic("Unsupported operation") }
-func (_ Codes) SetInt(v int32)       { panic("Unsupported operation") }
-func (_ Codes) SetLong(v int64)      { panic("Unsupported operation") }
-func (_ Codes) SetFloat(v float32)   { panic("Unsupported operation") }
-func (_ Codes) SetDouble(v float64)  { panic("Unsupported operation") }
-func (_ Codes) SetBytes(v []byte)    { panic("Unsupported operation") }
-func (_ Codes) SetString(v string)   { panic("Unsupported operation") }
-func (_ Codes) SetUnionElem(v int64) { panic("Unsupported operation") }
+func (_ ClickStreamCodes) SetBoolean(v bool)    { panic("Unsupported operation") }
+func (_ ClickStreamCodes) SetInt(v int32)       { panic("Unsupported operation") }
+func (_ ClickStreamCodes) SetLong(v int64)      { panic("Unsupported operation") }
+func (_ ClickStreamCodes) SetFloat(v float32)   { panic("Unsupported operation") }
+func (_ ClickStreamCodes) SetDouble(v float64)  { panic("Unsupported operation") }
+func (_ ClickStreamCodes) SetBytes(v []byte)    { panic("Unsupported operation") }
+func (_ ClickStreamCodes) SetString(v string)   { panic("Unsupported operation") }
+func (_ ClickStreamCodes) SetUnionElem(v int64) { panic("Unsupported operation") }
 
-func (r *Codes) Get(i int) types.Field {
+func (r *ClickStreamCodes) Get(i int) types.Field {
 	switch i {
 	case 0:
 		w := types.Int{Target: &r.Code}
@@ -142,28 +142,28 @@ func (r *Codes) Get(i int) types.Field {
 	panic("Unknown field index")
 }
 
-func (r *Codes) SetDefault(i int) {
+func (r *ClickStreamCodes) SetDefault(i int) {
 	switch i {
 	}
 	panic("Unknown field index")
 }
 
-func (r *Codes) NullField(i int) {
+func (r *ClickStreamCodes) NullField(i int) {
 	switch i {
 	}
 	panic("Not a nullable field index")
 }
 
-func (_ Codes) AppendMap(key string) types.Field { panic("Unsupported operation") }
-func (_ Codes) AppendArray() types.Field         { panic("Unsupported operation") }
-func (_ Codes) HintSize(int)                     { panic("Unsupported operation") }
-func (_ Codes) Finalize()                        {}
+func (_ ClickStreamCodes) AppendMap(key string) types.Field { panic("Unsupported operation") }
+func (_ ClickStreamCodes) AppendArray() types.Field         { panic("Unsupported operation") }
+func (_ ClickStreamCodes) HintSize(int)                     { panic("Unsupported operation") }
+func (_ ClickStreamCodes) Finalize()                        {}
 
-func (_ Codes) AvroCRC64Fingerprint() []byte {
-	return []byte(CodesAvroCRC64Fingerprint)
+func (_ ClickStreamCodes) AvroCRC64Fingerprint() []byte {
+	return []byte(ClickStreamCodesAvroCRC64Fingerprint)
 }
 
-func (r Codes) MarshalJSON() ([]byte, error) {
+func (r ClickStreamCodes) MarshalJSON() ([]byte, error) {
 	var err error
 	output := make(map[string]json.RawMessage)
 	output["code"], err = json.Marshal(r.Code)
@@ -177,7 +177,7 @@ func (r Codes) MarshalJSON() ([]byte, error) {
 	return json.Marshal(output)
 }
 
-func (r *Codes) UnmarshalJSON(data []byte) error {
+func (r *ClickStreamCodes) UnmarshalJSON(data []byte) error {
 	var fields map[string]json.RawMessage
 	if err := json.Unmarshal(data, &fields); err != nil {
 		return err

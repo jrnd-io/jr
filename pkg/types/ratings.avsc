@@ -1,6 +1,6 @@
 {
         "namespace": "ksql",
-        "name": "ratings",
+        "name": "Ratings",
         "type": "record",
         "fields": [
                 {"name": "rating_id", "type": {

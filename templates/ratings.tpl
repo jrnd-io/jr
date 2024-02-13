@@ -1,6 +1,6 @@
 {
   "rating_id": {{counter "rating" 1 1}},
-  "user_id": "{{random_v_from_list "userId"}}",
+  "user_id": {{atoi (random_v_from_list "userId")}},
   "stars": {{integer 1 6}},
   "route_id": {{integer 1 9999}},
   "rating_time": {{counter "rating_time" 1 12  }},

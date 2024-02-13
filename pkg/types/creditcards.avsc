@@ -1,6 +1,6 @@
 {
         "namespace": "datagen.example",
-        "name": "creditcards",
+        "name": "CreditCards",
         "type": "record",
         "fields": [
                 {

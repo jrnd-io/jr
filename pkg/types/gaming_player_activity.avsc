@@ -1,6 +1,6 @@
 {
     "namespace": "gaming",
-    "name": "gamingplayeractivity",
+    "name": "GamingPlayerActivity",
     "type": "record",
     "fields": [
         {

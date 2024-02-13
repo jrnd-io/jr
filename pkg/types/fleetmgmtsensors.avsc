@@ -1,6 +1,6 @@
 {
     "namespace": "fleet_mgmt",
-    "name": "fleetmgmtsensors",
+    "name": "FleetMgmtSensors",
     "type": "record",
     "fields": [
         {

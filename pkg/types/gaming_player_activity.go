@@ -56,7 +56,7 @@ import (
 
 var _ = fmt.Printf
 
-type Gamingplayeractivity struct {
+type GamingPlayerActivity struct {
 	Player_id int32 `json:"player_id"`
 
 	Game_room_id int32 `json:"game_room_id"`
@@ -66,15 +66,15 @@ type Gamingplayeractivity struct {
 	Coordinates string `json:"coordinates"`
 }
 
-const GamingplayeractivityAvroCRC64Fingerprint = "\xc0\x14&ɿ\xa2\xfc\xb3"
+const GamingPlayerActivityAvroCRC64Fingerprint = " \xfdC\x90\x81\fJ\xb5"
 
-func NewGamingplayeractivity() Gamingplayeractivity {
-	r := Gamingplayeractivity{}
+func NewGamingPlayerActivity() GamingPlayerActivity {
+	r := GamingPlayerActivity{}
 	return r
 }
 
-func DeserializeGamingplayeractivity(r io.Reader) (Gamingplayeractivity, error) {
-	t := NewGamingplayeractivity()
+func DeserializeGamingPlayerActivity(r io.Reader) (GamingPlayerActivity, error) {
+	t := NewGamingPlayerActivity()
 	deser, err := compiler.CompileSchemaBytes([]byte(t.Schema()), []byte(t.Schema()))
 	if err != nil {
 		return t, err
@@ -84,8 +84,8 @@ func DeserializeGamingplayeractivity(r io.Reader) (Gamingplayeractivity, error) 
 	return t, err
 }
 
-func DeserializeGamingplayeractivityFromSchema(r io.Reader, schema string) (Gamingplayeractivity, error) {
-	t := NewGamingplayeractivity()
+func DeserializeGamingPlayerActivityFromSchema(r io.Reader, schema string) (GamingPlayerActivity, error) {
+	t := NewGamingPlayerActivity()
 
 	deser, err := compiler.CompileSchemaBytes([]byte(schema), []byte(t.Schema()))
 	if err != nil {
@@ -96,7 +96,7 @@ func DeserializeGamingplayeractivityFromSchema(r io.Reader, schema string) (Gami
 	return t, err
 }
 
-func writeGamingplayeractivity(r Gamingplayeractivity, w io.Writer) error {
+func writeGamingPlayerActivity(r GamingPlayerActivity, w io.Writer) error {
 	var err error
 	err = vm.WriteInt(r.Player_id, w)
 	if err != nil {
@@ -117,28 +117,28 @@ func writeGamingplayeractivity(r Gamingplayeractivity, w io.Writer) error {
 	return err
 }
 
-func (r Gamingplayeractivity) Serialize(w io.Writer) error {
-	return writeGamingplayeractivity(r, w)
+func (r GamingPlayerActivity) Serialize(w io.Writer) error {
+	return writeGamingPlayerActivity(r, w)
 }
 
-func (r Gamingplayeractivity) Schema() string {
-	return "{\"fields\":[{\"name\":\"player_id\",\"type\":{\"arg.properties\":{\"range\":{\"max\":1101,\"min\":1001}},\"type\":\"int\"}},{\"name\":\"game_room_id\",\"type\":{\"arg.properties\":{\"range\":{\"max\":5000,\"min\":1000}},\"type\":\"int\"}},{\"name\":\"points\",\"type\":{\"arg.properties\":{\"range\":{\"max\":500,\"min\":10}},\"type\":\"int\"}},{\"name\":\"coordinates\",\"type\":{\"arg.properties\":{\"regex\":\"\\\\[[0-9][0-9],[0-9][0-9]\\\\]\"},\"type\":\"string\"}}],\"name\":\"gaming.gamingplayeractivity\",\"type\":\"record\"}"
+func (r GamingPlayerActivity) Schema() string {
+	return "{\"fields\":[{\"name\":\"player_id\",\"type\":{\"arg.properties\":{\"range\":{\"max\":1101,\"min\":1001}},\"type\":\"int\"}},{\"name\":\"game_room_id\",\"type\":{\"arg.properties\":{\"range\":{\"max\":5000,\"min\":1000}},\"type\":\"int\"}},{\"name\":\"points\",\"type\":{\"arg.properties\":{\"range\":{\"max\":500,\"min\":10}},\"type\":\"int\"}},{\"name\":\"coordinates\",\"type\":{\"arg.properties\":{\"regex\":\"\\\\[[0-9][0-9],[0-9][0-9]\\\\]\"},\"type\":\"string\"}}],\"name\":\"gaming.GamingPlayerActivity\",\"type\":\"record\"}"
 }
 
-func (r Gamingplayeractivity) SchemaName() string {
-	return "gaming.gamingplayeractivity"
+func (r GamingPlayerActivity) SchemaName() string {
+	return "gaming.GamingPlayerActivity"
 }
 
-func (_ Gamingplayeractivity) SetBoolean(v bool)    { panic("Unsupported operation") }
-func (_ Gamingplayeractivity) SetInt(v int32)       { panic("Unsupported operation") }
-func (_ Gamingplayeractivity) SetLong(v int64)      { panic("Unsupported operation") }
-func (_ Gamingplayeractivity) SetFloat(v float32)   { panic("Unsupported operation") }
-func (_ Gamingplayeractivity) SetDouble(v float64)  { panic("Unsupported operation") }
-func (_ Gamingplayeractivity) SetBytes(v []byte)    { panic("Unsupported operation") }
-func (_ Gamingplayeractivity) SetString(v string)   { panic("Unsupported operation") }
-func (_ Gamingplayeractivity) SetUnionElem(v int64) { panic("Unsupported operation") }
+func (_ GamingPlayerActivity) SetBoolean(v bool)    { panic("Unsupported operation") }
+func (_ GamingPlayerActivity) SetInt(v int32)       { panic("Unsupported operation") }
+func (_ GamingPlayerActivity) SetLong(v int64)      { panic("Unsupported operation") }
+func (_ GamingPlayerActivity) SetFloat(v float32)   { panic("Unsupported operation") }
+func (_ GamingPlayerActivity) SetDouble(v float64)  { panic("Unsupported operation") }
+func (_ GamingPlayerActivity) SetBytes(v []byte)    { panic("Unsupported operation") }
+func (_ GamingPlayerActivity) SetString(v string)   { panic("Unsupported operation") }
+func (_ GamingPlayerActivity) SetUnionElem(v int64) { panic("Unsupported operation") }
 
-func (r *Gamingplayeractivity) Get(i int) types.Field {
+func (r *GamingPlayerActivity) Get(i int) types.Field {
 	switch i {
 	case 0:
 		w := types.Int{Target: &r.Player_id}
@@ -164,28 +164,28 @@ func (r *Gamingplayeractivity) Get(i int) types.Field {
 	panic("Unknown field index")
 }
 
-func (r *Gamingplayeractivity) SetDefault(i int) {
+func (r *GamingPlayerActivity) SetDefault(i int) {
 	switch i {
 	}
 	panic("Unknown field index")
 }
 
-func (r *Gamingplayeractivity) NullField(i int) {
+func (r *GamingPlayerActivity) NullField(i int) {
 	switch i {
 	}
 	panic("Not a nullable field index")
 }
 
-func (_ Gamingplayeractivity) AppendMap(key string) types.Field { panic("Unsupported operation") }
-func (_ Gamingplayeractivity) AppendArray() types.Field         { panic("Unsupported operation") }
-func (_ Gamingplayeractivity) HintSize(int)                     { panic("Unsupported operation") }
-func (_ Gamingplayeractivity) Finalize()                        {}
+func (_ GamingPlayerActivity) AppendMap(key string) types.Field { panic("Unsupported operation") }
+func (_ GamingPlayerActivity) AppendArray() types.Field         { panic("Unsupported operation") }
+func (_ GamingPlayerActivity) HintSize(int)                     { panic("Unsupported operation") }
+func (_ GamingPlayerActivity) Finalize()                        {}
 
-func (_ Gamingplayeractivity) AvroCRC64Fingerprint() []byte {
-	return []byte(GamingplayeractivityAvroCRC64Fingerprint)
+func (_ GamingPlayerActivity) AvroCRC64Fingerprint() []byte {
+	return []byte(GamingPlayerActivityAvroCRC64Fingerprint)
 }
 
-func (r Gamingplayeractivity) MarshalJSON() ([]byte, error) {
+func (r GamingPlayerActivity) MarshalJSON() ([]byte, error) {
 	var err error
 	output := make(map[string]json.RawMessage)
 	output["player_id"], err = json.Marshal(r.Player_id)
@@ -207,7 +207,7 @@ func (r Gamingplayeractivity) MarshalJSON() ([]byte, error) {
 	return json.Marshal(output)
 }
 
-func (r *Gamingplayeractivity) UnmarshalJSON(data []byte) error {
+func (r *GamingPlayerActivity) UnmarshalJSON(data []byte) error {
 	var fields map[string]json.RawMessage
 	if err := json.Unmarshal(data, &fields); err != nil {
 		return err

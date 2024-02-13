@@ -21,11 +21,19 @@ var destination Destination
 
 var deviceinformation Deviceinformation
 
+var fleet_mgmt_sensors FleetMgmtSensors
+
 var fleetmgmtdescription Fleetmgmtdescription
 
 var fleetmgmtlocation Fleetmgmtlocation
 
 var fleetmgmtsensors Fleetmgmtsensors
+
+var gaming_games GamingGames
+
+var gaming_player_activity GamingPlayerActivity
+
+var gaming_players GamingPlayers
 
 var gaminggames Gaminggames
 
@@ -142,6 +150,9 @@ func GetType(templateType string) interface{} {
 	case "deviceinformation":
 		return &deviceinformation
 
+	case "fleet_mgmt_sensors":
+		return &fleet_mgmt_sensors
+
 	case "fleetmgmtdescription":
 		return &fleetmgmtdescription
 
@@ -150,6 +161,15 @@ func GetType(templateType string) interface{} {
 
 	case "fleetmgmtsensors":
 		return &fleetmgmtsensors
+
+	case "gaming_games":
+		return &gaming_games
+
+	case "gaming_player_activity":
+		return &gaming_player_activity
+
+	case "gaming_players":
+		return &gaming_players
 
 	case "gaminggames":
 		return &gaminggames

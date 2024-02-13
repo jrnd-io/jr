@@ -56,7 +56,7 @@ import (
 
 var _ = fmt.Printf
 
-type Fleetmgmtsensors struct {
+type FleetMgmtSensors struct {
 	Vehicle_id int32 `json:"vehicle_id"`
 
 	Engine_temperature int32 `json:"engine_temperature"`
@@ -64,15 +64,15 @@ type Fleetmgmtsensors struct {
 	Average_rpm int32 `json:"average_rpm"`
 }
 
-const FleetmgmtsensorsAvroCRC64Fingerprint = "\x9a\x01A\xa3'\x92\x1f\x8f"
+const FleetMgmtSensorsAvroCRC64Fingerprint = "$ \xae)\xcb%LV"
 
-func NewFleetmgmtsensors() Fleetmgmtsensors {
-	r := Fleetmgmtsensors{}
+func NewFleetMgmtSensors() FleetMgmtSensors {
+	r := FleetMgmtSensors{}
 	return r
 }
 
-func DeserializeFleetmgmtsensors(r io.Reader) (Fleetmgmtsensors, error) {
-	t := NewFleetmgmtsensors()
+func DeserializeFleetMgmtSensors(r io.Reader) (FleetMgmtSensors, error) {
+	t := NewFleetMgmtSensors()
 	deser, err := compiler.CompileSchemaBytes([]byte(t.Schema()), []byte(t.Schema()))
 	if err != nil {
 		return t, err
@@ -82,8 +82,8 @@ func DeserializeFleetmgmtsensors(r io.Reader) (Fleetmgmtsensors, error) {
 	return t, err
 }
 
-func DeserializeFleetmgmtsensorsFromSchema(r io.Reader, schema string) (Fleetmgmtsensors, error) {
-	t := NewFleetmgmtsensors()
+func DeserializeFleetMgmtSensorsFromSchema(r io.Reader, schema string) (FleetMgmtSensors, error) {
+	t := NewFleetMgmtSensors()
 
 	deser, err := compiler.CompileSchemaBytes([]byte(schema), []byte(t.Schema()))
 	if err != nil {
@@ -94,7 +94,7 @@ func DeserializeFleetmgmtsensorsFromSchema(r io.Reader, schema string) (Fleetmgm
 	return t, err
 }
 
-func writeFleetmgmtsensors(r Fleetmgmtsensors, w io.Writer) error {
+func writeFleetMgmtSensors(r FleetMgmtSensors, w io.Writer) error {
 	var err error
 	err = vm.WriteInt(r.Vehicle_id, w)
 	if err != nil {
@@ -111,28 +111,28 @@ func writeFleetmgmtsensors(r Fleetmgmtsensors, w io.Writer) error {
 	return err
 }
 
-func (r Fleetmgmtsensors) Serialize(w io.Writer) error {
-	return writeFleetmgmtsensors(r, w)
+func (r FleetMgmtSensors) Serialize(w io.Writer) error {
+	return writeFleetMgmtSensors(r, w)
 }
 
-func (r Fleetmgmtsensors) Schema() string {
-	return "{\"fields\":[{\"name\":\"vehicle_id\",\"type\":{\"arg.properties\":{\"range\":{\"max\":9999,\"min\":1000}},\"type\":\"int\"}},{\"name\":\"engine_temperature\",\"type\":{\"arg.properties\":{\"range\":{\"max\":250,\"min\":150}},\"type\":\"int\"}},{\"name\":\"average_rpm\",\"type\":{\"arg.properties\":{\"range\":{\"max\":5000,\"min\":1800}},\"type\":\"int\"}}],\"name\":\"fleet_mgmt.fleetmgmtsensors\",\"type\":\"record\"}"
+func (r FleetMgmtSensors) Schema() string {
+	return "{\"fields\":[{\"name\":\"vehicle_id\",\"type\":{\"arg.properties\":{\"range\":{\"max\":9999,\"min\":1000}},\"type\":\"int\"}},{\"name\":\"engine_temperature\",\"type\":{\"arg.properties\":{\"range\":{\"max\":250,\"min\":150}},\"type\":\"int\"}},{\"name\":\"average_rpm\",\"type\":{\"arg.properties\":{\"range\":{\"max\":5000,\"min\":1800}},\"type\":\"int\"}}],\"name\":\"fleet_mgmt.FleetMgmtSensors\",\"type\":\"record\"}"
 }
 
-func (r Fleetmgmtsensors) SchemaName() string {
-	return "fleet_mgmt.fleetmgmtsensors"
+func (r FleetMgmtSensors) SchemaName() string {
+	return "fleet_mgmt.FleetMgmtSensors"
 }
 
-func (_ Fleetmgmtsensors) SetBoolean(v bool)    { panic("Unsupported operation") }
-func (_ Fleetmgmtsensors) SetInt(v int32)       { panic("Unsupported operation") }
-func (_ Fleetmgmtsensors) SetLong(v int64)      { panic("Unsupported operation") }
-func (_ Fleetmgmtsensors) SetFloat(v float32)   { panic("Unsupported operation") }
-func (_ Fleetmgmtsensors) SetDouble(v float64)  { panic("Unsupported operation") }
-func (_ Fleetmgmtsensors) SetBytes(v []byte)    { panic("Unsupported operation") }
-func (_ Fleetmgmtsensors) SetString(v string)   { panic("Unsupported operation") }
-func (_ Fleetmgmtsensors) SetUnionElem(v int64) { panic("Unsupported operation") }
+func (_ FleetMgmtSensors) SetBoolean(v bool)    { panic("Unsupported operation") }
+func (_ FleetMgmtSensors) SetInt(v int32)       { panic("Unsupported operation") }
+func (_ FleetMgmtSensors) SetLong(v int64)      { panic("Unsupported operation") }
+func (_ FleetMgmtSensors) SetFloat(v float32)   { panic("Unsupported operation") }
+func (_ FleetMgmtSensors) SetDouble(v float64)  { panic("Unsupported operation") }
+func (_ FleetMgmtSensors) SetBytes(v []byte)    { panic("Unsupported operation") }
+func (_ FleetMgmtSensors) SetString(v string)   { panic("Unsupported operation") }
+func (_ FleetMgmtSensors) SetUnionElem(v int64) { panic("Unsupported operation") }
 
-func (r *Fleetmgmtsensors) Get(i int) types.Field {
+func (r *FleetMgmtSensors) Get(i int) types.Field {
 	switch i {
 	case 0:
 		w := types.Int{Target: &r.Vehicle_id}
@@ -153,28 +153,28 @@ func (r *Fleetmgmtsensors) Get(i int) types.Field {
 	panic("Unknown field index")
 }
 
-func (r *Fleetmgmtsensors) SetDefault(i int) {
+func (r *FleetMgmtSensors) SetDefault(i int) {
 	switch i {
 	}
 	panic("Unknown field index")
 }
 
-func (r *Fleetmgmtsensors) NullField(i int) {
+func (r *FleetMgmtSensors) NullField(i int) {
 	switch i {
 	}
 	panic("Not a nullable field index")
 }
 
-func (_ Fleetmgmtsensors) AppendMap(key string) types.Field { panic("Unsupported operation") }
-func (_ Fleetmgmtsensors) AppendArray() types.Field         { panic("Unsupported operation") }
-func (_ Fleetmgmtsensors) HintSize(int)                     { panic("Unsupported operation") }
-func (_ Fleetmgmtsensors) Finalize()                        {}
+func (_ FleetMgmtSensors) AppendMap(key string) types.Field { panic("Unsupported operation") }
+func (_ FleetMgmtSensors) AppendArray() types.Field         { panic("Unsupported operation") }
+func (_ FleetMgmtSensors) HintSize(int)                     { panic("Unsupported operation") }
+func (_ FleetMgmtSensors) Finalize()                        {}
 
-func (_ Fleetmgmtsensors) AvroCRC64Fingerprint() []byte {
-	return []byte(FleetmgmtsensorsAvroCRC64Fingerprint)
+func (_ FleetMgmtSensors) AvroCRC64Fingerprint() []byte {
+	return []byte(FleetMgmtSensorsAvroCRC64Fingerprint)
 }
 
-func (r Fleetmgmtsensors) MarshalJSON() ([]byte, error) {
+func (r FleetMgmtSensors) MarshalJSON() ([]byte, error) {
 	var err error
 	output := make(map[string]json.RawMessage)
 	output["vehicle_id"], err = json.Marshal(r.Vehicle_id)
@@ -192,7 +192,7 @@ func (r Fleetmgmtsensors) MarshalJSON() ([]byte, error) {
 	return json.Marshal(output)
 }
 
-func (r *Fleetmgmtsensors) UnmarshalJSON(data []byte) error {
+func (r *FleetMgmtSensors) UnmarshalJSON(data []byte) error {
 	var fields map[string]json.RawMessage
 	if err := json.Unmarshal(data, &fields); err != nil {
 		return err

@@ -10,9 +10,9 @@
  *     fleetmgmtdescription.avsc
  *     fleetmgmtlocation.avsc
  *     fleetmgmtsensors.avsc
- *     gaminggames.avsc
- *     gamingplayeractivity.avsc
- *     gamingplayers.avsc
+ *     gaming_games.avsc
+ *     gaming_player_activity.avsc
+ *     gaming_players.avsc
  *     insurancecustomeractivity.avsc
  *     insurancecustomers.avsc
  *     insuranceoffers.avsc

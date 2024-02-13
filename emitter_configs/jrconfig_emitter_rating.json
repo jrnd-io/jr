@@ -14,17 +14,17 @@
       "topic": "util_userid"
     },
     {
-      "name": "rating_schema",
+      "name": "ratings",
       "locale": "us",
       "num": 1,
       "frequency": "100ms",
       "duration": "3s",
       "preload": 0,
-      "valueTemplate": "rating_schema",
+      "valueTemplate": "ratings",
       "output": "kafka",
       "keyTemplate": "null",
       "outputTemplate": "{{.V}}\n",
-      "topic": "rating_schema"
+      "topic": "ratings"
     }
   ],
   "global": {

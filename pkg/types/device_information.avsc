@@ -1,6 +1,6 @@
 {
     "namespace": "device_information",
-    "name": "deviceinformation",
+    "name": "DeviceInformation",
     "type": "record",
     "fields": [
         {

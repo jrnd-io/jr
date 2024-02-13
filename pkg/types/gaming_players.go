@@ -6,7 +6,7 @@
  *     clickstreamcodes.avsc
  *     clickstreamusers.avsc
  *     creditcards.avsc
- *     deviceinformation.avsc
+ *     device_information.avsc
  *     fleet_mgmt_description.avsc
  *     fleet_mgmt_location.avsc
  *     fleet_mgmt_sensors.avsc

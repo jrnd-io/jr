@@ -19,7 +19,13 @@ var creditcards Creditcards
 
 var destination Destination
 
+var device_information DeviceInformation
+
 var deviceinformation Deviceinformation
+
+var fleet_mgmt_description FleetMgmtDescription
+
+var fleet_mgmt_location FleetMgmtLocation
 
 var fleet_mgmt_sensors FleetMgmtSensors
 
@@ -147,8 +153,17 @@ func GetType(templateType string) interface{} {
 	case "destination":
 		return &destination
 
+	case "device_information":
+		return &device_information
+
 	case "deviceinformation":
 		return &deviceinformation
+
+	case "fleet_mgmt_description":
+		return &fleet_mgmt_description
+
+	case "fleet_mgmt_location":
+		return &fleet_mgmt_location
 
 	case "fleet_mgmt_sensors":
 		return &fleet_mgmt_sensors

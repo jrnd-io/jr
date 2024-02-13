@@ -1,6 +1,6 @@
 {
         "namespace": "clickstream",
-        "name": "clickstream",
+        "name": "ClickStream",
         "type": "record",
         "fields": [
                 {"name": "ip", "type": {

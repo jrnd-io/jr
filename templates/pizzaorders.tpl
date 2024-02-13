@@ -1,4 +1,4 @@
-{{$storeId := random_v_from_list "storeId" }}
+{{$storeId := atoi (random_v_from_list "storeId") }}
 {
   "store_id": {{$storeId}},
   "store_order_id": {{counter (print $storeId "_store_order_id") 1000 1}},

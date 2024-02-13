@@ -1,6 +1,6 @@
 {
     "namespace": "pizza_orders",
-    "name": "pizzaorderscancelled",
+    "name": "PizzaOrdersCancelled",
     "type": "record",
     "fields": [
         {

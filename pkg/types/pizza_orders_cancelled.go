@@ -25,7 +25,7 @@
  *     payroll_employee.avsc
  *     payroll_employee_location.avsc
  *     pizza_orders.avsc
- *     pizzaorderscancelled.avsc
+ *     pizza_orders_cancelled.avsc
  *     pizzaorderscompleted.avsc
  *     product.avsc
  *     purchase.avsc
@@ -56,7 +56,7 @@ import (
 
 var _ = fmt.Printf
 
-type Pizzaorderscancelled struct {
+type PizzaOrdersCancelled struct {
 	Store_id int32 `json:"store_id"`
 
 	Store_order_id int32 `json:"store_order_id"`
@@ -66,15 +66,15 @@ type Pizzaorderscancelled struct {
 	Status string `json:"status"`
 }
 
-const PizzaorderscancelledAvroCRC64Fingerprint = "Hh\xe7\x81\xddf\xdd\f"
+const PizzaOrdersCancelledAvroCRC64Fingerprint = "e\xbd^\x84\v\xb28\xac"
 
-func NewPizzaorderscancelled() Pizzaorderscancelled {
-	r := Pizzaorderscancelled{}
+func NewPizzaOrdersCancelled() PizzaOrdersCancelled {
+	r := PizzaOrdersCancelled{}
 	return r
 }
 
-func DeserializePizzaorderscancelled(r io.Reader) (Pizzaorderscancelled, error) {
-	t := NewPizzaorderscancelled()
+func DeserializePizzaOrdersCancelled(r io.Reader) (PizzaOrdersCancelled, error) {
+	t := NewPizzaOrdersCancelled()
 	deser, err := compiler.CompileSchemaBytes([]byte(t.Schema()), []byte(t.Schema()))
 	if err != nil {
 		return t, err
@@ -84,8 +84,8 @@ func DeserializePizzaorderscancelled(r io.Reader) (Pizzaorderscancelled, error) 
 	return t, err
 }
 
-func DeserializePizzaorderscancelledFromSchema(r io.Reader, schema string) (Pizzaorderscancelled, error) {
-	t := NewPizzaorderscancelled()
+func DeserializePizzaOrdersCancelledFromSchema(r io.Reader, schema string) (PizzaOrdersCancelled, error) {
+	t := NewPizzaOrdersCancelled()
 
 	deser, err := compiler.CompileSchemaBytes([]byte(schema), []byte(t.Schema()))
 	if err != nil {
@@ -96,7 +96,7 @@ func DeserializePizzaorderscancelledFromSchema(r io.Reader, schema string) (Pizz
 	return t, err
 }
 
-func writePizzaorderscancelled(r Pizzaorderscancelled, w io.Writer) error {
+func writePizzaOrdersCancelled(r PizzaOrdersCancelled, w io.Writer) error {
 	var err error
 	err = vm.WriteInt(r.Store_id, w)
 	if err != nil {
@@ -117,28 +117,28 @@ func writePizzaorderscancelled(r Pizzaorderscancelled, w io.Writer) error {
 	return err
 }
 
-func (r Pizzaorderscancelled) Serialize(w io.Writer) error {
-	return writePizzaorderscancelled(r, w)
+func (r PizzaOrdersCancelled) Serialize(w io.Writer) error {
+	return writePizzaOrdersCancelled(r, w)
 }
 
-func (r Pizzaorderscancelled) Schema() string {
-	return "{\"fields\":[{\"name\":\"store_id\",\"type\":{\"arg.properties\":{\"range\":{\"max\":10,\"min\":1}},\"type\":\"int\"}},{\"name\":\"store_order_id\",\"type\":{\"arg.properties\":{\"iteration\":{\"start\":1001,\"step\":2}},\"type\":\"int\"}},{\"name\":\"date\",\"type\":{\"arg.properties\":{\"range\":{\"max\":19000,\"min\":18000}},\"logicalType\":\"date\",\"type\":\"int\"}},{\"name\":\"status\",\"type\":{\"arg.properties\":{\"options\":[\"cancelled\"]},\"type\":\"string\"}}],\"name\":\"pizza_orders.pizzaorderscancelled\",\"type\":\"record\"}"
+func (r PizzaOrdersCancelled) Schema() string {
+	return "{\"fields\":[{\"name\":\"store_id\",\"type\":{\"arg.properties\":{\"range\":{\"max\":10,\"min\":1}},\"type\":\"int\"}},{\"name\":\"store_order_id\",\"type\":{\"arg.properties\":{\"iteration\":{\"start\":1001,\"step\":2}},\"type\":\"int\"}},{\"name\":\"date\",\"type\":{\"arg.properties\":{\"range\":{\"max\":19000,\"min\":18000}},\"logicalType\":\"date\",\"type\":\"int\"}},{\"name\":\"status\",\"type\":{\"arg.properties\":{\"options\":[\"cancelled\"]},\"type\":\"string\"}}],\"name\":\"pizza_orders.PizzaOrdersCancelled\",\"type\":\"record\"}"
 }
 
-func (r Pizzaorderscancelled) SchemaName() string {
-	return "pizza_orders.pizzaorderscancelled"
+func (r PizzaOrdersCancelled) SchemaName() string {
+	return "pizza_orders.PizzaOrdersCancelled"
 }
 
-func (_ Pizzaorderscancelled) SetBoolean(v bool)    { panic("Unsupported operation") }
-func (_ Pizzaorderscancelled) SetInt(v int32)       { panic("Unsupported operation") }
-func (_ Pizzaorderscancelled) SetLong(v int64)      { panic("Unsupported operation") }
-func (_ Pizzaorderscancelled) SetFloat(v float32)   { panic("Unsupported operation") }
-func (_ Pizzaorderscancelled) SetDouble(v float64)  { panic("Unsupported operation") }
-func (_ Pizzaorderscancelled) SetBytes(v []byte)    { panic("Unsupported operation") }
-func (_ Pizzaorderscancelled) SetString(v string)   { panic("Unsupported operation") }
-func (_ Pizzaorderscancelled) SetUnionElem(v int64) { panic("Unsupported operation") }
+func (_ PizzaOrdersCancelled) SetBoolean(v bool)    { panic("Unsupported operation") }
+func (_ PizzaOrdersCancelled) SetInt(v int32)       { panic("Unsupported operation") }
+func (_ PizzaOrdersCancelled) SetLong(v int64)      { panic("Unsupported operation") }
+func (_ PizzaOrdersCancelled) SetFloat(v float32)   { panic("Unsupported operation") }
+func (_ PizzaOrdersCancelled) SetDouble(v float64)  { panic("Unsupported operation") }
+func (_ PizzaOrdersCancelled) SetBytes(v []byte)    { panic("Unsupported operation") }
+func (_ PizzaOrdersCancelled) SetString(v string)   { panic("Unsupported operation") }
+func (_ PizzaOrdersCancelled) SetUnionElem(v int64) { panic("Unsupported operation") }
 
-func (r *Pizzaorderscancelled) Get(i int) types.Field {
+func (r *PizzaOrdersCancelled) Get(i int) types.Field {
 	switch i {
 	case 0:
 		w := types.Int{Target: &r.Store_id}
@@ -164,28 +164,28 @@ func (r *Pizzaorderscancelled) Get(i int) types.Field {
 	panic("Unknown field index")
 }
 
-func (r *Pizzaorderscancelled) SetDefault(i int) {
+func (r *PizzaOrdersCancelled) SetDefault(i int) {
 	switch i {
 	}
 	panic("Unknown field index")
 }
 
-func (r *Pizzaorderscancelled) NullField(i int) {
+func (r *PizzaOrdersCancelled) NullField(i int) {
 	switch i {
 	}
 	panic("Not a nullable field index")
 }
 
-func (_ Pizzaorderscancelled) AppendMap(key string) types.Field { panic("Unsupported operation") }
-func (_ Pizzaorderscancelled) AppendArray() types.Field         { panic("Unsupported operation") }
-func (_ Pizzaorderscancelled) HintSize(int)                     { panic("Unsupported operation") }
-func (_ Pizzaorderscancelled) Finalize()                        {}
+func (_ PizzaOrdersCancelled) AppendMap(key string) types.Field { panic("Unsupported operation") }
+func (_ PizzaOrdersCancelled) AppendArray() types.Field         { panic("Unsupported operation") }
+func (_ PizzaOrdersCancelled) HintSize(int)                     { panic("Unsupported operation") }
+func (_ PizzaOrdersCancelled) Finalize()                        {}
 
-func (_ Pizzaorderscancelled) AvroCRC64Fingerprint() []byte {
-	return []byte(PizzaorderscancelledAvroCRC64Fingerprint)
+func (_ PizzaOrdersCancelled) AvroCRC64Fingerprint() []byte {
+	return []byte(PizzaOrdersCancelledAvroCRC64Fingerprint)
 }
 
-func (r Pizzaorderscancelled) MarshalJSON() ([]byte, error) {
+func (r PizzaOrdersCancelled) MarshalJSON() ([]byte, error) {
 	var err error
 	output := make(map[string]json.RawMessage)
 	output["store_id"], err = json.Marshal(r.Store_id)
@@ -207,7 +207,7 @@ func (r Pizzaorderscancelled) MarshalJSON() ([]byte, error) {
 	return json.Marshal(output)
 }
 
-func (r *Pizzaorderscancelled) UnmarshalJSON(data []byte) error {
+func (r *PizzaOrdersCancelled) UnmarshalJSON(data []byte) error {
 	var fields map[string]json.RawMessage
 	if err := json.Unmarshal(data, &fields); err != nil {
 		return err

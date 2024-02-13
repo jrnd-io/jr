@@ -18,7 +18,7 @@
  *     insuranceoffers.avsc
  *     inventory.avsc
  *     map_dumb_schema.avsc
- *     netdevice.avsc
+ *     net_device.avsc
  *     orders.avsc
  *     pageviews.avsc
  *     payrollbonus.avsc

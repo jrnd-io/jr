@@ -1,7 +1,7 @@
 {
     "type": "record",
     "namespace": "payroll",
-    "name": "payrollemployee",
+    "name": "PayrollEmployee",
     "fields": [
         {
             "name": "employee_id",

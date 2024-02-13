@@ -22,8 +22,8 @@
  *     orders.avsc
  *     page_views.avsc
  *     payroll_bonus.avsc
- *     payrollemployee.avsc
- *     payrollemployeelocation.avsc
+ *     payroll_employee.avsc
+ *     payroll_employee_location.avsc
  *     pizzaorders.avsc
  *     pizzaorderscancelled.avsc
  *     pizzaorderscompleted.avsc
@@ -56,7 +56,7 @@ import (
 
 var _ = fmt.Printf
 
-type Payrollemployeelocation struct {
+type PayrollEmployeeLocation struct {
 	Employee_id int32 `json:"employee_id"`
 
 	Lab string `json:"lab"`
@@ -66,15 +66,15 @@ type Payrollemployeelocation struct {
 	Arrival_date int32 `json:"arrival_date"`
 }
 
-const PayrollemployeelocationAvroCRC64Fingerprint = "\x04tZ\xd4oƉ\x1a"
+const PayrollEmployeeLocationAvroCRC64Fingerprint = "\x936؇ur\x00("
 
-func NewPayrollemployeelocation() Payrollemployeelocation {
-	r := Payrollemployeelocation{}
+func NewPayrollEmployeeLocation() PayrollEmployeeLocation {
+	r := PayrollEmployeeLocation{}
 	return r
 }
 
-func DeserializePayrollemployeelocation(r io.Reader) (Payrollemployeelocation, error) {
-	t := NewPayrollemployeelocation()
+func DeserializePayrollEmployeeLocation(r io.Reader) (PayrollEmployeeLocation, error) {
+	t := NewPayrollEmployeeLocation()
 	deser, err := compiler.CompileSchemaBytes([]byte(t.Schema()), []byte(t.Schema()))
 	if err != nil {
 		return t, err
@@ -84,8 +84,8 @@ func DeserializePayrollemployeelocation(r io.Reader) (Payrollemployeelocation, e
 	return t, err
 }
 
-func DeserializePayrollemployeelocationFromSchema(r io.Reader, schema string) (Payrollemployeelocation, error) {
-	t := NewPayrollemployeelocation()
+func DeserializePayrollEmployeeLocationFromSchema(r io.Reader, schema string) (PayrollEmployeeLocation, error) {
+	t := NewPayrollEmployeeLocation()
 
 	deser, err := compiler.CompileSchemaBytes([]byte(schema), []byte(t.Schema()))
 	if err != nil {
@@ -96,7 +96,7 @@ func DeserializePayrollemployeelocationFromSchema(r io.Reader, schema string) (P
 	return t, err
 }
 
-func writePayrollemployeelocation(r Payrollemployeelocation, w io.Writer) error {
+func writePayrollEmployeeLocation(r PayrollEmployeeLocation, w io.Writer) error {
 	var err error
 	err = vm.WriteInt(r.Employee_id, w)
 	if err != nil {
@@ -117,28 +117,28 @@ func writePayrollemployeelocation(r Payrollemployeelocation, w io.Writer) error 
 	return err
 }
 
-func (r Payrollemployeelocation) Serialize(w io.Writer) error {
-	return writePayrollemployeelocation(r, w)
+func (r PayrollEmployeeLocation) Serialize(w io.Writer) error {
+	return writePayrollEmployeeLocation(r, w)
 }
 
-func (r Payrollemployeelocation) Schema() string {
-	return "{\"fields\":[{\"name\":\"employee_id\",\"type\":{\"arg.properties\":{\"range\":{\"max\":1100,\"min\":1000}},\"type\":\"int\"}},{\"name\":\"lab\",\"type\":{\"arg.properties\":{\"regex\":\"lab-\\\\d{1}\"},\"type\":\"string\"}},{\"name\":\"department_id\",\"type\":{\"arg.properties\":{\"range\":{\"max\":10,\"min\":1}},\"type\":\"int\"}},{\"name\":\"arrival_date\",\"type\":{\"arg.properties\":{\"range\":{\"max\":19000,\"min\":18000}},\"logicalType\":\"date\",\"type\":\"int\"}}],\"name\":\"payroll.payrollemployeelocation\",\"type\":\"record\"}"
+func (r PayrollEmployeeLocation) Schema() string {
+	return "{\"fields\":[{\"name\":\"employee_id\",\"type\":{\"arg.properties\":{\"range\":{\"max\":1100,\"min\":1000}},\"type\":\"int\"}},{\"name\":\"lab\",\"type\":{\"arg.properties\":{\"regex\":\"lab-\\\\d{1}\"},\"type\":\"string\"}},{\"name\":\"department_id\",\"type\":{\"arg.properties\":{\"range\":{\"max\":10,\"min\":1}},\"type\":\"int\"}},{\"name\":\"arrival_date\",\"type\":{\"arg.properties\":{\"range\":{\"max\":19000,\"min\":18000}},\"logicalType\":\"date\",\"type\":\"int\"}}],\"name\":\"payroll.PayrollEmployeeLocation\",\"type\":\"record\"}"
 }
 
-func (r Payrollemployeelocation) SchemaName() string {
-	return "payroll.payrollemployeelocation"
+func (r PayrollEmployeeLocation) SchemaName() string {
+	return "payroll.PayrollEmployeeLocation"
 }
 
-func (_ Payrollemployeelocation) SetBoolean(v bool)    { panic("Unsupported operation") }
-func (_ Payrollemployeelocation) SetInt(v int32)       { panic("Unsupported operation") }
-func (_ Payrollemployeelocation) SetLong(v int64)      { panic("Unsupported operation") }
-func (_ Payrollemployeelocation) SetFloat(v float32)   { panic("Unsupported operation") }
-func (_ Payrollemployeelocation) SetDouble(v float64)  { panic("Unsupported operation") }
-func (_ Payrollemployeelocation) SetBytes(v []byte)    { panic("Unsupported operation") }
-func (_ Payrollemployeelocation) SetString(v string)   { panic("Unsupported operation") }
-func (_ Payrollemployeelocation) SetUnionElem(v int64) { panic("Unsupported operation") }
+func (_ PayrollEmployeeLocation) SetBoolean(v bool)    { panic("Unsupported operation") }
+func (_ PayrollEmployeeLocation) SetInt(v int32)       { panic("Unsupported operation") }
+func (_ PayrollEmployeeLocation) SetLong(v int64)      { panic("Unsupported operation") }
+func (_ PayrollEmployeeLocation) SetFloat(v float32)   { panic("Unsupported operation") }
+func (_ PayrollEmployeeLocation) SetDouble(v float64)  { panic("Unsupported operation") }
+func (_ PayrollEmployeeLocation) SetBytes(v []byte)    { panic("Unsupported operation") }
+func (_ PayrollEmployeeLocation) SetString(v string)   { panic("Unsupported operation") }
+func (_ PayrollEmployeeLocation) SetUnionElem(v int64) { panic("Unsupported operation") }
 
-func (r *Payrollemployeelocation) Get(i int) types.Field {
+func (r *PayrollEmployeeLocation) Get(i int) types.Field {
 	switch i {
 	case 0:
 		w := types.Int{Target: &r.Employee_id}
@@ -164,28 +164,28 @@ func (r *Payrollemployeelocation) Get(i int) types.Field {
 	panic("Unknown field index")
 }
 
-func (r *Payrollemployeelocation) SetDefault(i int) {
+func (r *PayrollEmployeeLocation) SetDefault(i int) {
 	switch i {
 	}
 	panic("Unknown field index")
 }
 
-func (r *Payrollemployeelocation) NullField(i int) {
+func (r *PayrollEmployeeLocation) NullField(i int) {
 	switch i {
 	}
 	panic("Not a nullable field index")
 }
 
-func (_ Payrollemployeelocation) AppendMap(key string) types.Field { panic("Unsupported operation") }
-func (_ Payrollemployeelocation) AppendArray() types.Field         { panic("Unsupported operation") }
-func (_ Payrollemployeelocation) HintSize(int)                     { panic("Unsupported operation") }
-func (_ Payrollemployeelocation) Finalize()                        {}
+func (_ PayrollEmployeeLocation) AppendMap(key string) types.Field { panic("Unsupported operation") }
+func (_ PayrollEmployeeLocation) AppendArray() types.Field         { panic("Unsupported operation") }
+func (_ PayrollEmployeeLocation) HintSize(int)                     { panic("Unsupported operation") }
+func (_ PayrollEmployeeLocation) Finalize()                        {}
 
-func (_ Payrollemployeelocation) AvroCRC64Fingerprint() []byte {
-	return []byte(PayrollemployeelocationAvroCRC64Fingerprint)
+func (_ PayrollEmployeeLocation) AvroCRC64Fingerprint() []byte {
+	return []byte(PayrollEmployeeLocationAvroCRC64Fingerprint)
 }
 
-func (r Payrollemployeelocation) MarshalJSON() ([]byte, error) {
+func (r PayrollEmployeeLocation) MarshalJSON() ([]byte, error) {
 	var err error
 	output := make(map[string]json.RawMessage)
 	output["employee_id"], err = json.Marshal(r.Employee_id)
@@ -207,7 +207,7 @@ func (r Payrollemployeelocation) MarshalJSON() ([]byte, error) {
 	return json.Marshal(output)
 }
 
-func (r *Payrollemployeelocation) UnmarshalJSON(data []byte) error {
+func (r *PayrollEmployeeLocation) UnmarshalJSON(data []byte) error {
 	var fields map[string]json.RawMessage
 	if err := json.Unmarshal(data, &fields); err != nil {
 		return err

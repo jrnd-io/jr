@@ -85,9 +85,9 @@ var page_views PageViews
 
 var payroll_bonus PayrollBonus
 
-var payrollemployee Payrollemployee
+var payroll_employee PayrollEmployee
 
-var payrollemployeelocation Payrollemployeelocation
+var payroll_employee_location PayrollEmployeeLocation
 
 var pizzaorders Pizzaorders
 
@@ -256,11 +256,11 @@ func GetType(templateType string) interface{} {
 	case "payroll_bonus":
 		return &payroll_bonus
 
-	case "payrollemployee":
-		return &payrollemployee
+	case "payroll_employee":
+		return &payroll_employee
 
-	case "payrollemployeelocation":
-		return &payrollemployeelocation
+	case "payroll_employee_location":
+		return &payroll_employee_location
 
 	case "pizzaorders":
 		return &pizzaorders

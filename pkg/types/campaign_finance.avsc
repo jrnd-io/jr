@@ -1,6 +1,6 @@
 {
         "namespace": "datagen",
-        "name": "campaignfinance",
+        "name": "CampaignFinance",
         "type": "record",
         "fields": [
                 {"name": "time", "type": {

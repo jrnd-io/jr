@@ -7,7 +7,7 @@ var array_orderline_wrapper ArrayOrderlineWrapper
 
 var bytes Bytes
 
-var campaignfinance Campaignfinance
+var campaign_finance CampaignFinance
 
 var click_stream_codes ClickStreamCodes
 
@@ -139,8 +139,8 @@ func GetType(templateType string) interface{} {
 	case "bytes":
 		return &bytes
 
-	case "campaignfinance":
-		return &campaignfinance
+	case "campaign_finance":
+		return &campaign_finance
 
 	case "click_stream_codes":
 		return &click_stream_codes

@@ -37,7 +37,7 @@
  *     siem_logs.avsc
  *     stock_trades.avsc
  *     stores.avsc
- *     sysloglogs.avsc
+ *     syslog_logs.avsc
  *     transactions.avsc
  *     user.avsc
  *     users.avsc

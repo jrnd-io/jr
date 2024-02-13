@@ -1,6 +1,6 @@
 {
     "namespace": "syslogs",
-    "name": "sysloglogs",
+    "name": "SyslogLogs",
     "type": "record",
     "fields": [
         {

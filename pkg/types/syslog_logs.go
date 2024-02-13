@@ -37,7 +37,7 @@
  *     siem_logs.avsc
  *     stock_trades.avsc
  *     stores.avsc
- *     sysloglogs.avsc
+ *     syslog_logs.avsc
  *     transactions.avsc
  *     user.avsc
  *     users.avsc
@@ -56,7 +56,7 @@ import (
 
 var _ = fmt.Printf
 
-type Sysloglogs struct {
+type SyslogLogs struct {
 	Name string `json:"name"`
 
 	Type string `json:"type"`
@@ -94,15 +94,15 @@ type Sysloglogs struct {
 	Ts int64 `json:"ts"`
 }
 
-const SysloglogsAvroCRC64Fingerprint = "T\xcaIޚ\x8f\x92\xf4"
+const SyslogLogsAvroCRC64Fingerprint = "\xb8\xf5\xb1\x17\xfa\xec\xcb\x17"
 
-func NewSysloglogs() Sysloglogs {
-	r := Sysloglogs{}
+func NewSyslogLogs() SyslogLogs {
+	r := SyslogLogs{}
 	return r
 }
 
-func DeserializeSysloglogs(r io.Reader) (Sysloglogs, error) {
-	t := NewSysloglogs()
+func DeserializeSyslogLogs(r io.Reader) (SyslogLogs, error) {
+	t := NewSyslogLogs()
 	deser, err := compiler.CompileSchemaBytes([]byte(t.Schema()), []byte(t.Schema()))
 	if err != nil {
 		return t, err
@@ -112,8 +112,8 @@ func DeserializeSysloglogs(r io.Reader) (Sysloglogs, error) {
 	return t, err
 }
 
-func DeserializeSysloglogsFromSchema(r io.Reader, schema string) (Sysloglogs, error) {
-	t := NewSysloglogs()
+func DeserializeSyslogLogsFromSchema(r io.Reader, schema string) (SyslogLogs, error) {
+	t := NewSyslogLogs()
 
 	deser, err := compiler.CompileSchemaBytes([]byte(schema), []byte(t.Schema()))
 	if err != nil {
@@ -124,7 +124,7 @@ func DeserializeSysloglogsFromSchema(r io.Reader, schema string) (Sysloglogs, er
 	return t, err
 }
 
-func writeSysloglogs(r Sysloglogs, w io.Writer) error {
+func writeSyslogLogs(r SyslogLogs, w io.Writer) error {
 	var err error
 	err = vm.WriteString(r.Name, w)
 	if err != nil {
@@ -201,28 +201,28 @@ func writeSysloglogs(r Sysloglogs, w io.Writer) error {
 	return err
 }
 
-func (r Sysloglogs) Serialize(w io.Writer) error {
-	return writeSysloglogs(r, w)
+func (r SyslogLogs) Serialize(w io.Writer) error {
+	return writeSyslogLogs(r, w)
 }
 
-func (r Sysloglogs) Schema() string {
-	return "{\"fields\":[{\"name\":\"name\",\"type\":{\"arg.properties\":{\"regex\":\"[a-zA-Z]{5,8}\"},\"type\":\"string\"}},{\"name\":\"type\",\"type\":{\"arg.properties\":{\"options\":[\"RFC5424\",\"RFC3164\",\"CEF\",\"UNKNOWN\"]},\"type\":\"string\"}},{\"name\":\"message\",\"type\":{\"arg.properties\":{\"regex\":\"[a-z ]{10,15}\"},\"type\":\"string\"}},{\"name\":\"host\",\"type\":{\"arg.properties\":{\"options\":[\"121.46.66.201\",\"127.26.223.241\",\"185.167.200.143\",\"137.92.22.136\",\"191.84.20.142\",\"151.253.100.45\",\"76.115.125.169\",\"25.19.61.124\",\"140.136.224.11\",\"107.226.4.123\"]},\"type\":\"string\"}},{\"name\":\"version\",\"type\":{\"arg.properties\":{\"options\":[\"3.25.1\"]},\"type\":\"string\"}},{\"name\":\"tag\",\"type\":{\"arg.properties\":{\"options\":[\".source.s_src\"]},\"type\":\"string\"}},{\"name\":\"level\",\"type\":{\"arg.properties\":{\"range\":{\"max\":191,\"min\":0}},\"type\":\"int\"}},{\"name\":\"facility\",\"type\":{\"arg.properties\":{\"options\":[\"syslog\",\"authpriv\",\"cron\"]},\"type\":\"string\"}},{\"name\":\"severity\",\"type\":{\"arg.properties\":{\"range\":{\"max\":8,\"min\":0}},\"type\":\"int\"}},{\"name\":\"appName\",\"type\":{\"arg.properties\":{\"regex\":\"[A-Z]{5,8}\"},\"type\":\"string\"}},{\"name\":\"remoteAddress\",\"type\":{\"arg.properties\":{\"options\":[\"91.253.222.9\",\"48.92.8.255\",\"107.150.81.0\",\"254.11.108.139\",\"14.53.111.201\",\"215.70.232.123\",\"122.96.193.183\",\"185.128.89.135\",\"246.46.59.238\",\"238.158.147.172\"]},\"type\":\"string\"}},{\"name\":\"rawMessage\",\"type\":{\"arg.properties\":{\"regex\":\"[a-z ]{10,15}\"},\"type\":\"string\"}},{\"name\":\"processId\",\"type\":{\"arg.properties\":{\"regex\":\"[1-9]{1}[0-9]{6}\"},\"type\":\"string\"}},{\"name\":\"messageId\",\"type\":{\"arg.properties\":{\"regex\":\"[1-9]{1}[0-9]{2}\"},\"type\":\"string\"}},{\"name\":\"deviceVendor\",\"type\":{\"arg.properties\":{\"regex\":\"[a-z]{5}\"},\"type\":\"string\"}},{\"name\":\"deviceProduct\",\"type\":{\"arg.properties\":{\"regex\":\"[a-z]{5}\"},\"type\":\"string\"}},{\"name\":\"deviceVersion\",\"type\":{\"arg.properties\":{\"options\":[\"1.0\",\"2.0\",\"3.0\",\"4.0\",\"5.0\"]},\"type\":\"string\"}},{\"name\":\"ts\",\"type\":{\"arg.properties\":{\"iteration\":{\"start\":1609459200000,\"step\":100}},\"type\":\"long\"}}],\"name\":\"syslogs.sysloglogs\",\"type\":\"record\"}"
+func (r SyslogLogs) Schema() string {
+	return "{\"fields\":[{\"name\":\"name\",\"type\":{\"arg.properties\":{\"regex\":\"[a-zA-Z]{5,8}\"},\"type\":\"string\"}},{\"name\":\"type\",\"type\":{\"arg.properties\":{\"options\":[\"RFC5424\",\"RFC3164\",\"CEF\",\"UNKNOWN\"]},\"type\":\"string\"}},{\"name\":\"message\",\"type\":{\"arg.properties\":{\"regex\":\"[a-z ]{10,15}\"},\"type\":\"string\"}},{\"name\":\"host\",\"type\":{\"arg.properties\":{\"options\":[\"121.46.66.201\",\"127.26.223.241\",\"185.167.200.143\",\"137.92.22.136\",\"191.84.20.142\",\"151.253.100.45\",\"76.115.125.169\",\"25.19.61.124\",\"140.136.224.11\",\"107.226.4.123\"]},\"type\":\"string\"}},{\"name\":\"version\",\"type\":{\"arg.properties\":{\"options\":[\"3.25.1\"]},\"type\":\"string\"}},{\"name\":\"tag\",\"type\":{\"arg.properties\":{\"options\":[\".source.s_src\"]},\"type\":\"string\"}},{\"name\":\"level\",\"type\":{\"arg.properties\":{\"range\":{\"max\":191,\"min\":0}},\"type\":\"int\"}},{\"name\":\"facility\",\"type\":{\"arg.properties\":{\"options\":[\"syslog\",\"authpriv\",\"cron\"]},\"type\":\"string\"}},{\"name\":\"severity\",\"type\":{\"arg.properties\":{\"range\":{\"max\":8,\"min\":0}},\"type\":\"int\"}},{\"name\":\"appName\",\"type\":{\"arg.properties\":{\"regex\":\"[A-Z]{5,8}\"},\"type\":\"string\"}},{\"name\":\"remoteAddress\",\"type\":{\"arg.properties\":{\"options\":[\"91.253.222.9\",\"48.92.8.255\",\"107.150.81.0\",\"254.11.108.139\",\"14.53.111.201\",\"215.70.232.123\",\"122.96.193.183\",\"185.128.89.135\",\"246.46.59.238\",\"238.158.147.172\"]},\"type\":\"string\"}},{\"name\":\"rawMessage\",\"type\":{\"arg.properties\":{\"regex\":\"[a-z ]{10,15}\"},\"type\":\"string\"}},{\"name\":\"processId\",\"type\":{\"arg.properties\":{\"regex\":\"[1-9]{1}[0-9]{6}\"},\"type\":\"string\"}},{\"name\":\"messageId\",\"type\":{\"arg.properties\":{\"regex\":\"[1-9]{1}[0-9]{2}\"},\"type\":\"string\"}},{\"name\":\"deviceVendor\",\"type\":{\"arg.properties\":{\"regex\":\"[a-z]{5}\"},\"type\":\"string\"}},{\"name\":\"deviceProduct\",\"type\":{\"arg.properties\":{\"regex\":\"[a-z]{5}\"},\"type\":\"string\"}},{\"name\":\"deviceVersion\",\"type\":{\"arg.properties\":{\"options\":[\"1.0\",\"2.0\",\"3.0\",\"4.0\",\"5.0\"]},\"type\":\"string\"}},{\"name\":\"ts\",\"type\":{\"arg.properties\":{\"iteration\":{\"start\":1609459200000,\"step\":100}},\"type\":\"long\"}}],\"name\":\"syslogs.SyslogLogs\",\"type\":\"record\"}"
 }
 
-func (r Sysloglogs) SchemaName() string {
-	return "syslogs.sysloglogs"
+func (r SyslogLogs) SchemaName() string {
+	return "syslogs.SyslogLogs"
 }
 
-func (_ Sysloglogs) SetBoolean(v bool)    { panic("Unsupported operation") }
-func (_ Sysloglogs) SetInt(v int32)       { panic("Unsupported operation") }
-func (_ Sysloglogs) SetLong(v int64)      { panic("Unsupported operation") }
-func (_ Sysloglogs) SetFloat(v float32)   { panic("Unsupported operation") }
-func (_ Sysloglogs) SetDouble(v float64)  { panic("Unsupported operation") }
-func (_ Sysloglogs) SetBytes(v []byte)    { panic("Unsupported operation") }
-func (_ Sysloglogs) SetString(v string)   { panic("Unsupported operation") }
-func (_ Sysloglogs) SetUnionElem(v int64) { panic("Unsupported operation") }
+func (_ SyslogLogs) SetBoolean(v bool)    { panic("Unsupported operation") }
+func (_ SyslogLogs) SetInt(v int32)       { panic("Unsupported operation") }
+func (_ SyslogLogs) SetLong(v int64)      { panic("Unsupported operation") }
+func (_ SyslogLogs) SetFloat(v float32)   { panic("Unsupported operation") }
+func (_ SyslogLogs) SetDouble(v float64)  { panic("Unsupported operation") }
+func (_ SyslogLogs) SetBytes(v []byte)    { panic("Unsupported operation") }
+func (_ SyslogLogs) SetString(v string)   { panic("Unsupported operation") }
+func (_ SyslogLogs) SetUnionElem(v int64) { panic("Unsupported operation") }
 
-func (r *Sysloglogs) Get(i int) types.Field {
+func (r *SyslogLogs) Get(i int) types.Field {
 	switch i {
 	case 0:
 		w := types.String{Target: &r.Name}
@@ -318,28 +318,28 @@ func (r *Sysloglogs) Get(i int) types.Field {
 	panic("Unknown field index")
 }
 
-func (r *Sysloglogs) SetDefault(i int) {
+func (r *SyslogLogs) SetDefault(i int) {
 	switch i {
 	}
 	panic("Unknown field index")
 }
 
-func (r *Sysloglogs) NullField(i int) {
+func (r *SyslogLogs) NullField(i int) {
 	switch i {
 	}
 	panic("Not a nullable field index")
 }
 
-func (_ Sysloglogs) AppendMap(key string) types.Field { panic("Unsupported operation") }
-func (_ Sysloglogs) AppendArray() types.Field         { panic("Unsupported operation") }
-func (_ Sysloglogs) HintSize(int)                     { panic("Unsupported operation") }
-func (_ Sysloglogs) Finalize()                        {}
+func (_ SyslogLogs) AppendMap(key string) types.Field { panic("Unsupported operation") }
+func (_ SyslogLogs) AppendArray() types.Field         { panic("Unsupported operation") }
+func (_ SyslogLogs) HintSize(int)                     { panic("Unsupported operation") }
+func (_ SyslogLogs) Finalize()                        {}
 
-func (_ Sysloglogs) AvroCRC64Fingerprint() []byte {
-	return []byte(SysloglogsAvroCRC64Fingerprint)
+func (_ SyslogLogs) AvroCRC64Fingerprint() []byte {
+	return []byte(SyslogLogsAvroCRC64Fingerprint)
 }
 
-func (r Sysloglogs) MarshalJSON() ([]byte, error) {
+func (r SyslogLogs) MarshalJSON() ([]byte, error) {
 	var err error
 	output := make(map[string]json.RawMessage)
 	output["name"], err = json.Marshal(r.Name)
@@ -417,7 +417,7 @@ func (r Sysloglogs) MarshalJSON() ([]byte, error) {
 	return json.Marshal(output)
 }
 
-func (r *Sysloglogs) UnmarshalJSON(data []byte) error {
+func (r *SyslogLogs) UnmarshalJSON(data []byte) error {
 	var fields map[string]json.RawMessage
 	if err := json.Unmarshal(data, &fields); err != nil {
 		return err

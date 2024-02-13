@@ -117,7 +117,7 @@ var stock_trade StockTrade
 
 var stores Stores
 
-var sysloglogs Sysloglogs
+var syslog_logs SyslogLogs
 
 var transactions Transactions
 
@@ -304,8 +304,8 @@ func GetType(templateType string) interface{} {
 	case "stores":
 		return &stores
 
-	case "sysloglogs":
-		return &sysloglogs
+	case "syslog_logs":
+		return &syslog_logs
 
 	case "transactions":
 		return &transactions

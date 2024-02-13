@@ -21,7 +21,7 @@
  *     net_device.avsc
  *     orders.avsc
  *     page_views.avsc
- *     payrollbonus.avsc
+ *     payroll_bonus.avsc
  *     payrollemployee.avsc
  *     payrollemployeelocation.avsc
  *     pizzaorders.avsc
@@ -56,7 +56,7 @@ import (
 
 var _ = fmt.Printf
 
-type Payrollbonus struct {
+type PayrollBonus struct {
 	Employee_id int32 `json:"employee_id"`
 
 	Bonus int32 `json:"bonus"`
@@ -64,15 +64,15 @@ type Payrollbonus struct {
 	Ts int64 `json:"ts"`
 }
 
-const PayrollbonusAvroCRC64Fingerprint = "nN\x97\xf36\x05e$"
+const PayrollBonusAvroCRC64Fingerprint = "6\xcfΊˌ\xa40"
 
-func NewPayrollbonus() Payrollbonus {
-	r := Payrollbonus{}
+func NewPayrollBonus() PayrollBonus {
+	r := PayrollBonus{}
 	return r
 }
 
-func DeserializePayrollbonus(r io.Reader) (Payrollbonus, error) {
-	t := NewPayrollbonus()
+func DeserializePayrollBonus(r io.Reader) (PayrollBonus, error) {
+	t := NewPayrollBonus()
 	deser, err := compiler.CompileSchemaBytes([]byte(t.Schema()), []byte(t.Schema()))
 	if err != nil {
 		return t, err
@@ -82,8 +82,8 @@ func DeserializePayrollbonus(r io.Reader) (Payrollbonus, error) {
 	return t, err
 }
 
-func DeserializePayrollbonusFromSchema(r io.Reader, schema string) (Payrollbonus, error) {
-	t := NewPayrollbonus()
+func DeserializePayrollBonusFromSchema(r io.Reader, schema string) (PayrollBonus, error) {
+	t := NewPayrollBonus()
 
 	deser, err := compiler.CompileSchemaBytes([]byte(schema), []byte(t.Schema()))
 	if err != nil {
@@ -94,7 +94,7 @@ func DeserializePayrollbonusFromSchema(r io.Reader, schema string) (Payrollbonus
 	return t, err
 }
 
-func writePayrollbonus(r Payrollbonus, w io.Writer) error {
+func writePayrollBonus(r PayrollBonus, w io.Writer) error {
 	var err error
 	err = vm.WriteInt(r.Employee_id, w)
 	if err != nil {
@@ -111,28 +111,28 @@ func writePayrollbonus(r Payrollbonus, w io.Writer) error {
 	return err
 }
 
-func (r Payrollbonus) Serialize(w io.Writer) error {
-	return writePayrollbonus(r, w)
+func (r PayrollBonus) Serialize(w io.Writer) error {
+	return writePayrollBonus(r, w)
 }
 
-func (r Payrollbonus) Schema() string {
-	return "{\"fields\":[{\"name\":\"employee_id\",\"type\":{\"arg.properties\":{\"range\":{\"max\":1100,\"min\":1000}},\"type\":\"int\"}},{\"name\":\"bonus\",\"type\":{\"arg.properties\":{\"range\":{\"max\":50,\"min\":10}},\"type\":\"int\"}},{\"name\":\"ts\",\"type\":{\"arg.properties\":{\"range\":{\"max\":1640995199000,\"min\":1609459200000}},\"logicalType\":\"timestamp-millis\",\"type\":\"long\"}}],\"name\":\"payroll.payrollbonus\",\"type\":\"record\"}"
+func (r PayrollBonus) Schema() string {
+	return "{\"fields\":[{\"name\":\"employee_id\",\"type\":{\"arg.properties\":{\"range\":{\"max\":1100,\"min\":1000}},\"type\":\"int\"}},{\"name\":\"bonus\",\"type\":{\"arg.properties\":{\"range\":{\"max\":50,\"min\":10}},\"type\":\"int\"}},{\"name\":\"ts\",\"type\":{\"arg.properties\":{\"range\":{\"max\":1640995199000,\"min\":1609459200000}},\"logicalType\":\"timestamp-millis\",\"type\":\"long\"}}],\"name\":\"payroll.PayrollBonus\",\"type\":\"record\"}"
 }
 
-func (r Payrollbonus) SchemaName() string {
-	return "payroll.payrollbonus"
+func (r PayrollBonus) SchemaName() string {
+	return "payroll.PayrollBonus"
 }
 
-func (_ Payrollbonus) SetBoolean(v bool)    { panic("Unsupported operation") }
-func (_ Payrollbonus) SetInt(v int32)       { panic("Unsupported operation") }
-func (_ Payrollbonus) SetLong(v int64)      { panic("Unsupported operation") }
-func (_ Payrollbonus) SetFloat(v float32)   { panic("Unsupported operation") }
-func (_ Payrollbonus) SetDouble(v float64)  { panic("Unsupported operation") }
-func (_ Payrollbonus) SetBytes(v []byte)    { panic("Unsupported operation") }
-func (_ Payrollbonus) SetString(v string)   { panic("Unsupported operation") }
-func (_ Payrollbonus) SetUnionElem(v int64) { panic("Unsupported operation") }
+func (_ PayrollBonus) SetBoolean(v bool)    { panic("Unsupported operation") }
+func (_ PayrollBonus) SetInt(v int32)       { panic("Unsupported operation") }
+func (_ PayrollBonus) SetLong(v int64)      { panic("Unsupported operation") }
+func (_ PayrollBonus) SetFloat(v float32)   { panic("Unsupported operation") }
+func (_ PayrollBonus) SetDouble(v float64)  { panic("Unsupported operation") }
+func (_ PayrollBonus) SetBytes(v []byte)    { panic("Unsupported operation") }
+func (_ PayrollBonus) SetString(v string)   { panic("Unsupported operation") }
+func (_ PayrollBonus) SetUnionElem(v int64) { panic("Unsupported operation") }
 
-func (r *Payrollbonus) Get(i int) types.Field {
+func (r *PayrollBonus) Get(i int) types.Field {
 	switch i {
 	case 0:
 		w := types.Int{Target: &r.Employee_id}
@@ -153,28 +153,28 @@ func (r *Payrollbonus) Get(i int) types.Field {
 	panic("Unknown field index")
 }
 
-func (r *Payrollbonus) SetDefault(i int) {
+func (r *PayrollBonus) SetDefault(i int) {
 	switch i {
 	}
 	panic("Unknown field index")
 }
 
-func (r *Payrollbonus) NullField(i int) {
+func (r *PayrollBonus) NullField(i int) {
 	switch i {
 	}
 	panic("Not a nullable field index")
 }
 
-func (_ Payrollbonus) AppendMap(key string) types.Field { panic("Unsupported operation") }
-func (_ Payrollbonus) AppendArray() types.Field         { panic("Unsupported operation") }
-func (_ Payrollbonus) HintSize(int)                     { panic("Unsupported operation") }
-func (_ Payrollbonus) Finalize()                        {}
+func (_ PayrollBonus) AppendMap(key string) types.Field { panic("Unsupported operation") }
+func (_ PayrollBonus) AppendArray() types.Field         { panic("Unsupported operation") }
+func (_ PayrollBonus) HintSize(int)                     { panic("Unsupported operation") }
+func (_ PayrollBonus) Finalize()                        {}
 
-func (_ Payrollbonus) AvroCRC64Fingerprint() []byte {
-	return []byte(PayrollbonusAvroCRC64Fingerprint)
+func (_ PayrollBonus) AvroCRC64Fingerprint() []byte {
+	return []byte(PayrollBonusAvroCRC64Fingerprint)
 }
 
-func (r Payrollbonus) MarshalJSON() ([]byte, error) {
+func (r PayrollBonus) MarshalJSON() ([]byte, error) {
 	var err error
 	output := make(map[string]json.RawMessage)
 	output["employee_id"], err = json.Marshal(r.Employee_id)
@@ -192,7 +192,7 @@ func (r Payrollbonus) MarshalJSON() ([]byte, error) {
 	return json.Marshal(output)
 }
 
-func (r *Payrollbonus) UnmarshalJSON(data []byte) error {
+func (r *PayrollBonus) UnmarshalJSON(data []byte) error {
 	var fields map[string]json.RawMessage
 	if err := json.Unmarshal(data, &fields); err != nil {
 		return err

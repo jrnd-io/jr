@@ -21,7 +21,7 @@
  *     net_device.avsc
  *     orders.avsc
  *     page_views.avsc
- *     payrollbonus.avsc
+ *     payroll_bonus.avsc
  *     payrollemployee.avsc
  *     payrollemployeelocation.avsc
  *     pizzaorders.avsc

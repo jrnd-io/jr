@@ -83,7 +83,7 @@ var orders Orders
 
 var page_views PageViews
 
-var payrollbonus Payrollbonus
+var payroll_bonus PayrollBonus
 
 var payrollemployee Payrollemployee
 
@@ -253,8 +253,8 @@ func GetType(templateType string) interface{} {
 	case "page_views":
 		return &page_views
 
-	case "payrollbonus":
-		return &payrollbonus
+	case "payroll_bonus":
+		return &payroll_bonus
 
 	case "payrollemployee":
 		return &payrollemployee

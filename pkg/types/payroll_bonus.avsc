@@ -1,7 +1,7 @@
 {
     "type": "record",
     "namespace": "payroll",
-    "name": "payrollbonus",
+    "name": "PayrollBonus",
     "fields": [
         {
             "name": "employee_id",

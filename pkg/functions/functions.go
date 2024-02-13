@@ -49,7 +49,7 @@ var data = map[string][]string{}
 var fmap = map[string]interface{}{
 
 	// text utilities
-	"atoi":                     strconv.Atoi,
+	"atoi":                     Atoi,
 	"itoa":                     strconv.Itoa,
 	"concat":                   func(a string, b string) string { return a + b },
 	"counter":                  Counter,
@@ -198,6 +198,15 @@ var fmap = map[string]interface{}{
 	"get_v":                    GetV,
 	"set_v":                    SetV,
 	"fromcsv":                  fromcsv,
+}
+
+func Atoi(s string) int {
+	if len(s) == 0 {
+		return 0
+	} else {
+		i, _ := strconv.Atoi(s)
+		return i
+	}
 }
 
 // Seed sets seeds and can be used in a template

@@ -1,7 +1,7 @@
 {
     "type" : "record",
     "namespace" : "shoes",
-    "name" : "shoeorder",
+    "name" : "ShoeOrder",
     "fields" : [
         { "name" : "order_id" , "type" : "int" },
         { "name" : "product_id" , "type" : "string"},

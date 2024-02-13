@@ -1,7 +1,7 @@
 {
   "type" : "record",
   "namespace" : "shoes",
-  "name" : "shoe",
+  "name" : "Shoe",
   "fields" : [
     { "name" : "id" , "type" : "string"},
     { "name" : "sale_price" , "type" : "string" },

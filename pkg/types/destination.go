@@ -7,9 +7,9 @@
  *     clickstreamusers.avsc
  *     creditcards.avsc
  *     deviceinformation.avsc
- *     fleetmgmtdescription.avsc
- *     fleetmgmtlocation.avsc
- *     fleetmgmtsensors.avsc
+ *     fleet_mgmt_description.avsc
+ *     fleet_mgmt_location.avsc
+ *     fleet_mgmt_sensors.avsc
  *     gaming_games.avsc
  *     gaming_player_activity.avsc
  *     gaming_players.avsc

@@ -1,6 +1,6 @@
 {
     "namespace": "fleet_mgmt",
-    "name": "fleetmgmtdescription",
+    "name": "FleetMgmtDescription",
     "type": "record",
     "fields": [
         {

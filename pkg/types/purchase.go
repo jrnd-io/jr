@@ -24,7 +24,7 @@
  *     payroll_bonus.avsc
  *     payroll_employee.avsc
  *     payroll_employee_location.avsc
- *     pizzaorders.avsc
+ *     pizza_orders.avsc
  *     pizzaorderscancelled.avsc
  *     pizzaorderscompleted.avsc
  *     product.avsc

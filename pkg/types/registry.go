@@ -89,7 +89,7 @@ var payroll_employee PayrollEmployee
 
 var payroll_employee_location PayrollEmployeeLocation
 
-var pizzaorders Pizzaorders
+var pizza_orders PizzaOrders
 
 var pizzaorderscancelled Pizzaorderscancelled
 
@@ -262,8 +262,8 @@ func GetType(templateType string) interface{} {
 	case "payroll_employee_location":
 		return &payroll_employee_location
 
-	case "pizzaorders":
-		return &pizzaorders
+	case "pizza_orders":
+		return &pizza_orders
 
 	case "pizzaorderscancelled":
 		return &pizzaorderscancelled

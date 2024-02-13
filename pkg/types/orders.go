@@ -35,7 +35,7 @@
  *     shoe_customer.avsc
  *     shoe_order.avsc
  *     siemlogs.avsc
- *     stockTrades.avsc
+ *     stock_trades.avsc
  *     stores.avsc
  *     sysloglogs.avsc
  *     transactions.avsc

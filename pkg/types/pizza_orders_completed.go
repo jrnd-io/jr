@@ -41,6 +41,7 @@
  *     transactions.avsc
  *     user.avsc
  *     users.avsc
+ *     users_array_map.avsc
  */
 package types
 

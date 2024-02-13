@@ -1,6 +1,6 @@
 {
   "namespace": "ksql",
-  "name": "StockTrade",
+  "name": "StockTrades",
   "doc": "Defines a hypothetical stock trade using some known test stock symbols.",
   "type": "record",
   "fields": [

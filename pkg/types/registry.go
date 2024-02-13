@@ -5,6 +5,8 @@ var address Address
 
 var array_orderline_wrapper ArrayOrderlineWrapper
 
+var array_string_wrapper ArrayStringWrapper
+
 var bytes Bytes
 
 var campaign_finance CampaignFinance
@@ -113,7 +115,7 @@ var siem_logs SiemLogs
 
 var source Source
 
-var stock_trade StockTrade
+var stock_trades StockTrades
 
 var stores Stores
 
@@ -125,6 +127,8 @@ var user User
 
 var users Users
 
+var users_array_map UsersArrayMap
+
 //gocyclo:ignore
 func GetType(templateType string) interface{} {
 
@@ -135,6 +139,9 @@ func GetType(templateType string) interface{} {
 
 	case "array_orderline_wrapper":
 		return &array_orderline_wrapper
+
+	case "array_string_wrapper":
+		return &array_string_wrapper
 
 	case "bytes":
 		return &bytes
@@ -298,8 +305,8 @@ func GetType(templateType string) interface{} {
 	case "source":
 		return &source
 
-	case "stock_trade":
-		return &stock_trade
+	case "stock_trades":
+		return &stock_trades
 
 	case "stores":
 		return &stores
@@ -315,6 +322,9 @@ func GetType(templateType string) interface{} {
 
 	case "users":
 		return &users
+
+	case "users_array_map":
+		return &users_array_map
 	}
 	return nil
 }

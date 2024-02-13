@@ -2,9 +2,9 @@
 /*
  * SOURCES:
  *     campaignfinance.avsc
- *     clickstream.avsc
+ *     click_stream.avsc
+ *     click_stream_users.avsc
  *     clickstreamcodes.avsc
- *     clickstreamusers.avsc
  *     creditcards.avsc
  *     device_information.avsc
  *     fleet_mgmt_description.avsc

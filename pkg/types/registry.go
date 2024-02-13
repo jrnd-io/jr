@@ -9,6 +9,10 @@ var bytes Bytes
 
 var campaignfinance Campaignfinance
 
+var click_stream_codes ClickStreamCodes
+
+var click_stream_users ClickStreamUsers
+
 var clickstream Clickstream
 
 var clickstreamusers Clickstreamusers
@@ -137,6 +141,12 @@ func GetType(templateType string) interface{} {
 
 	case "campaignfinance":
 		return &campaignfinance
+
+	case "click_stream_codes":
+		return &click_stream_codes
+
+	case "click_stream_users":
+		return &click_stream_users
 
 	case "clickstream":
 		return &clickstream

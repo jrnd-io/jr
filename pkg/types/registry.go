@@ -109,7 +109,7 @@ var shoe_customer ShoeCustomer
 
 var shoe_order ShoeOrder
 
-var siemlogs Siemlogs
+var siem_logs SiemLogs
 
 var source Source
 
@@ -292,8 +292,8 @@ func GetType(templateType string) interface{} {
 	case "shoe_order":
 		return &shoe_order
 
-	case "siemlogs":
-		return &siemlogs
+	case "siem_logs":
+		return &siem_logs
 
 	case "source":
 		return &source

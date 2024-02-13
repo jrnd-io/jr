@@ -13,9 +13,9 @@
  *     gaminggames.avsc
  *     gamingplayeractivity.avsc
  *     gamingplayers.avsc
- *     insurancecustomeractivity.avsc
- *     insurancecustomers.avsc
- *     insuranceoffers.avsc
+ *     insurance_customer_activity.avsc
+ *     insurance_customers.avsc
+ *     insurance_offers.avsc
  *     inventory.avsc
  *     map_dumb_schema.avsc
  *     netdevice.avsc

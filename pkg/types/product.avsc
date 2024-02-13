@@ -1,6 +1,6 @@
 {
         "namespace": "ksql",
-        "name": "product",
+        "name": "Product",
         "type": "record",
         "fields": [
                 {"name": "id", "type": {

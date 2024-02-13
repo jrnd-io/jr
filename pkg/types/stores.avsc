@@ -1,6 +1,6 @@
 {
         "namespace": "datagen.example",
-        "name": "stores",
+        "name": "Stores",
         "type": "record",
         "fields": [
                 {

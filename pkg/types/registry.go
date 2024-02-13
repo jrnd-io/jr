@@ -7,37 +7,39 @@ var array_orderline_wrapper ArrayOrderlineWrapper
 
 var bytes Bytes
 
-var campaignfinance Campaignfinance
+var campaign_finance CampaignFinance
 
 var clickstream Clickstream
 
-var clickstreamusers Clickstreamusers
+var clickstream_codes ClickstreamCodes
+
+var clickstream_users ClickstreamUsers
 
 var codes Codes
 
-var creditcards Creditcards
+var credit_cards CreditCards
 
 var destination Destination
 
-var deviceinformation Deviceinformation
+var device_information DeviceInformation
 
-var fleetmgmtdescription Fleetmgmtdescription
+var fleet_mgmt_description FleetMgmtDescription
 
-var fleetmgmtlocation Fleetmgmtlocation
+var fleet_mgmt_location FleetMgmtLocation
 
-var fleetmgmtsensors Fleetmgmtsensors
+var fleet_mgmt_sensors FleetMgmtSensors
 
-var gaminggames Gaminggames
+var gaming_games GamingGames
 
-var gamingplayeractivity Gamingplayeractivity
+var gaming_player_activity GamingPlayerActivity
 
-var gamingplayers Gamingplayers
+var gaming_players GamingPlayers
 
-var insurancecustomeractivity Insurancecustomeractivity
+var insurance_customer_activity InsuranceCustomerActivity
 
-var insurancecustomers Insurancecustomers
+var insurance_customers InsuranceCustomers
 
-var insuranceoffers Insuranceoffers
+var insurance_offers InsuranceOffers
 
 var inventory Inventory
 
@@ -63,19 +65,21 @@ var orderline Orderline
 
 var orders Orders
 
-var pageviews Pageviews
+var page_views PageViews
 
-var payrollbonus Payrollbonus
+var payroll_bonus PayrollBonus
 
-var payrollemployee Payrollemployee
+var payroll_employee PayrollEmployee
 
-var payrollemployeelocation Payrollemployeelocation
+var payroll_employee_location PayrollEmployeeLocation
+
+var pizza_orders PizzaOrders
+
+var pizza_orders_cancelled PizzaOrdersCancelled
+
+var pizza_orders_completed PizzaOrdersCompleted
 
 var pizzaorders Pizzaorders
-
-var pizzaorderscancelled Pizzaorderscancelled
-
-var pizzaorderscompleted Pizzaorderscompleted
 
 var product Product
 
@@ -91,6 +95,8 @@ var shoe_customer ShoeCustomer
 
 var shoe_order ShoeOrder
 
+var siem_logs SiemLogs
+
 var siemlogs Siemlogs
 
 var source Source
@@ -99,7 +105,7 @@ var stock_trade StockTrade
 
 var stores Stores
 
-var sysloglogs Sysloglogs
+var syslog_logs SyslogLogs
 
 var transactions Transactions
 
@@ -121,53 +127,56 @@ func GetType(templateType string) interface{} {
 	case "bytes":
 		return &bytes
 
-	case "campaignfinance":
-		return &campaignfinance
+	case "campaign_finance":
+		return &campaign_finance
 
 	case "clickstream":
 		return &clickstream
 
-	case "clickstreamusers":
-		return &clickstreamusers
+	case "clickstream_codes":
+		return &clickstream_codes
+
+	case "clickstream_users":
+		return &clickstream_users
 
 	case "codes":
 		return &codes
 
-	case "creditcards":
-		return &creditcards
+	case "credit_cards":
+		return &credit_cards
 
 	case "destination":
 		return &destination
 
-	case "deviceinformation":
-		return &deviceinformation
+	case "device_information":
+		return &device_information
 
-	case "fleetmgmtdescription":
-		return &fleetmgmtdescription
+	case "fleet_mgmt_description":
+		return &fleet_mgmt_description
 
-	case "fleetmgmtlocation":
-		return &fleetmgmtlocation
+	case "fleet_mgmt_location":
+		return &fleet_mgmt_location
 
-	case "fleetmgmtsensors":
-		return &fleetmgmtsensors
+	case "fleet_mgmt_sensors":
+		return &fleet_mgmt_sensors
 
-	case "gaminggames":
-		return &gaminggames
+	case "gaming_games":
+		return &gaming_games
 
-	case "gamingplayeractivity":
-		return &gamingplayeractivity
+	case "gaming_player_activity":
+		return &gaming_player_activity
 
-	case "gamingplayers":
-		return &gamingplayers
+	case "gaming_players":
+		return &gaming_players
 
-	case "insurancecustomeractivity":
-		return &insurancecustomeractivity
+	case "insurance_customer_activity":
+		return &insurance_customer_activity
 
-	case "insurancecustomers":
-		return &insurancecustomers
+	case "insurance_customers":
+		return &insurance_customers
 
-	case "insuranceoffers":
-		return &insuranceoffers
+	case "insurance_offers":
+		return &insurance_offers
 
 	case "inventory":
 		return &inventory
@@ -205,26 +214,29 @@ func GetType(templateType string) interface{} {
 	case "orders":
 		return &orders
 
-	case "pageviews":
-		return &pageviews
+	case "page_views":
+		return &page_views
 
-	case "payrollbonus":
-		return &payrollbonus
+	case "payroll_bonus":
+		return &payroll_bonus
 
-	case "payrollemployee":
-		return &payrollemployee
+	case "payroll_employee":
+		return &payroll_employee
 
-	case "payrollemployeelocation":
-		return &payrollemployeelocation
+	case "payroll_employee_location":
+		return &payroll_employee_location
+
+	case "pizza_orders":
+		return &pizza_orders
+
+	case "pizza_orders_cancelled":
+		return &pizza_orders_cancelled
+
+	case "pizza_orders_completed":
+		return &pizza_orders_completed
 
 	case "pizzaorders":
 		return &pizzaorders
-
-	case "pizzaorderscancelled":
-		return &pizzaorderscancelled
-
-	case "pizzaorderscompleted":
-		return &pizzaorderscompleted
 
 	case "product":
 		return &product
@@ -247,6 +259,9 @@ func GetType(templateType string) interface{} {
 	case "shoe_order":
 		return &shoe_order
 
+	case "siem_logs":
+		return &siem_logs
+
 	case "siemlogs":
 		return &siemlogs
 
@@ -259,8 +274,8 @@ func GetType(templateType string) interface{} {
 	case "stores":
 		return &stores
 
-	case "sysloglogs":
-		return &sysloglogs
+	case "syslog_logs":
+		return &syslog_logs
 
 	case "transactions":
 		return &transactions

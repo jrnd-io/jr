@@ -1,6 +1,6 @@
 {
     "namespace": "datagen.example",
-    "name": "transactions",
+    "name": "Transactions",
     "type": "record",
     "fields": [
         {

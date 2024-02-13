@@ -1,6 +1,6 @@
 # Emitter usage guide
 
-This is a list of `jr` commands to run the templates that are linked togheter using emitters.
+This is a list of `jr` commands to run the templates that are linked together using emitters.
 
 The preconfigured emitters examples have Kafka as output.
 

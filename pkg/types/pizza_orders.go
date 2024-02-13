@@ -6,6 +6,8 @@
  *     click_stream_users.avsc
  *     clickstreamcodes.avsc
  *     credit_cards.avsc
+ *     csv_product.avsc
+ *     csv_user.avsc
  *     device_information.avsc
  *     fleet_mgmt_description.avsc
  *     fleet_mgmt_location.avsc

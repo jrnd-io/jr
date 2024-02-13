@@ -1,0 +1,19 @@
+{
+        "namespace": "clickstream",
+        "name": "CsvProduct",
+        "type": "record",
+        "fields": [
+          {"name": "product_id", "type": {
+              "type": "string"
+          }},
+          {"name": "name", "type": {
+            "type": "string"
+          }},
+          {"name": "brand", "type": {
+            "type": "string"
+          }},
+          {"name": "page_url", "type": {
+            "type": "string"
+          }}
+        ]
+}

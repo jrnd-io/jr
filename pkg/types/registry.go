@@ -23,6 +23,10 @@ var codes Codes
 
 var credit_cards CreditCards
 
+var csv_product CsvProduct
+
+var csv_user CsvUser
+
 var destination Destination
 
 var device_information DeviceInformation
@@ -166,6 +170,12 @@ func GetType(templateType string) interface{} {
 
 	case "credit_cards":
 		return &credit_cards
+
+	case "csv_product":
+		return &csv_product
+
+	case "csv_user":
+		return &csv_user
 
 	case "destination":
 		return &destination

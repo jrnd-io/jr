@@ -1,0 +1,29 @@
+{
+        "namespace": "clickstream",
+        "name": "CsvUser",
+        "type": "record",
+        "fields": [
+          {"name": "age", "type": {
+              "type": "int"
+          }},
+          {"name": "eyeColor", "type": {
+            "type": "string"
+          }},
+          {"name": "name", "type": {
+            "type": "string"
+          }},
+          {"name": "surname", "type": {
+            "type": "string"
+          }},
+          {"name": "company", "type": {
+            "type": "string"
+          }},
+
+          {"name": "email", "type": {
+            "type": "string"
+          }}
+
+
+
+        ]
+}

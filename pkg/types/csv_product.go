@@ -59,25 +59,25 @@ import (
 
 var _ = fmt.Printf
 
-type Product struct {
-	Id int64 `json:"id"`
+type CsvProduct struct {
+	Product_id string `json:"product_id"`
 
 	Name string `json:"name"`
 
-	Description string `json:"description"`
+	Brand string `json:"brand"`
 
-	Price float64 `json:"price"`
+	Page_url string `json:"page_url"`
 }
 
-const ProductAvroCRC64Fingerprint = "\x11\x95\xf9C\xff4\xa8\x9c"
+const CsvProductAvroCRC64Fingerprint = "\x9eU\xf1\x89>C!;"
 
-func NewProduct() Product {
-	r := Product{}
+func NewCsvProduct() CsvProduct {
+	r := CsvProduct{}
 	return r
 }
 
-func DeserializeProduct(r io.Reader) (Product, error) {
-	t := NewProduct()
+func DeserializeCsvProduct(r io.Reader) (CsvProduct, error) {
+	t := NewCsvProduct()
 	deser, err := compiler.CompileSchemaBytes([]byte(t.Schema()), []byte(t.Schema()))
 	if err != nil {
 		return t, err
@@ -87,8 +87,8 @@ func DeserializeProduct(r io.Reader) (Product, error) {
 	return t, err
 }
 
-func DeserializeProductFromSchema(r io.Reader, schema string) (Product, error) {
-	t := NewProduct()
+func DeserializeCsvProductFromSchema(r io.Reader, schema string) (CsvProduct, error) {
+	t := NewCsvProduct()
 
 	deser, err := compiler.CompileSchemaBytes([]byte(schema), []byte(t.Schema()))
 	if err != nil {
@@ -99,9 +99,9 @@ func DeserializeProductFromSchema(r io.Reader, schema string) (Product, error) {
 	return t, err
 }
 
-func writeProduct(r Product, w io.Writer) error {
+func writeCsvProduct(r CsvProduct, w io.Writer) error {
 	var err error
-	err = vm.WriteLong(r.Id, w)
+	err = vm.WriteString(r.Product_id, w)
 	if err != nil {
 		return err
 	}
@@ -109,42 +109,42 @@ func writeProduct(r Product, w io.Writer) error {
 	if err != nil {
 		return err
 	}
-	err = vm.WriteString(r.Description, w)
+	err = vm.WriteString(r.Brand, w)
 	if err != nil {
 		return err
 	}
-	err = vm.WriteDouble(r.Price, w)
+	err = vm.WriteString(r.Page_url, w)
 	if err != nil {
 		return err
 	}
 	return err
 }
 
-func (r Product) Serialize(w io.Writer) error {
-	return writeProduct(r, w)
+func (r CsvProduct) Serialize(w io.Writer) error {
+	return writeCsvProduct(r, w)
 }
 
-func (r Product) Schema() string {
-	return "{\"fields\":[{\"name\":\"id\",\"type\":{\"arg.properties\":{\"iteration\":{\"start\":0}},\"type\":\"long\"}},{\"name\":\"name\",\"type\":{\"arg.properties\":{\"iteration\":{\"start\":0}},\"type\":\"string\"}},{\"name\":\"description\",\"type\":{\"arg.properties\":{\"iteration\":{\"start\":0}},\"type\":\"string\"}},{\"name\":\"price\",\"type\":{\"arg.properties\":{\"iteration\":{\"start\":0}},\"type\":\"double\"}}],\"name\":\"ksql.product\",\"type\":\"record\"}"
+func (r CsvProduct) Schema() string {
+	return "{\"fields\":[{\"name\":\"product_id\",\"type\":{\"type\":\"string\"}},{\"name\":\"name\",\"type\":{\"type\":\"string\"}},{\"name\":\"brand\",\"type\":{\"type\":\"string\"}},{\"name\":\"page_url\",\"type\":{\"type\":\"string\"}}],\"name\":\"clickstream.CsvProduct\",\"type\":\"record\"}"
 }
 
-func (r Product) SchemaName() string {
-	return "ksql.product"
+func (r CsvProduct) SchemaName() string {
+	return "clickstream.CsvProduct"
 }
 
-func (_ Product) SetBoolean(v bool)    { panic("Unsupported operation") }
-func (_ Product) SetInt(v int32)       { panic("Unsupported operation") }
-func (_ Product) SetLong(v int64)      { panic("Unsupported operation") }
-func (_ Product) SetFloat(v float32)   { panic("Unsupported operation") }
-func (_ Product) SetDouble(v float64)  { panic("Unsupported operation") }
-func (_ Product) SetBytes(v []byte)    { panic("Unsupported operation") }
-func (_ Product) SetString(v string)   { panic("Unsupported operation") }
-func (_ Product) SetUnionElem(v int64) { panic("Unsupported operation") }
+func (_ CsvProduct) SetBoolean(v bool)    { panic("Unsupported operation") }
+func (_ CsvProduct) SetInt(v int32)       { panic("Unsupported operation") }
+func (_ CsvProduct) SetLong(v int64)      { panic("Unsupported operation") }
+func (_ CsvProduct) SetFloat(v float32)   { panic("Unsupported operation") }
+func (_ CsvProduct) SetDouble(v float64)  { panic("Unsupported operation") }
+func (_ CsvProduct) SetBytes(v []byte)    { panic("Unsupported operation") }
+func (_ CsvProduct) SetString(v string)   { panic("Unsupported operation") }
+func (_ CsvProduct) SetUnionElem(v int64) { panic("Unsupported operation") }
 
-func (r *Product) Get(i int) types.Field {
+func (r *CsvProduct) Get(i int) types.Field {
 	switch i {
 	case 0:
-		w := types.Long{Target: &r.Id}
+		w := types.String{Target: &r.Product_id}
 
 		return w
 
@@ -154,12 +154,12 @@ func (r *Product) Get(i int) types.Field {
 		return w
 
 	case 2:
-		w := types.String{Target: &r.Description}
+		w := types.String{Target: &r.Brand}
 
 		return w
 
 	case 3:
-		w := types.Double{Target: &r.Price}
+		w := types.String{Target: &r.Page_url}
 
 		return w
 
@@ -167,31 +167,31 @@ func (r *Product) Get(i int) types.Field {
 	panic("Unknown field index")
 }
 
-func (r *Product) SetDefault(i int) {
+func (r *CsvProduct) SetDefault(i int) {
 	switch i {
 	}
 	panic("Unknown field index")
 }
 
-func (r *Product) NullField(i int) {
+func (r *CsvProduct) NullField(i int) {
 	switch i {
 	}
 	panic("Not a nullable field index")
 }
 
-func (_ Product) AppendMap(key string) types.Field { panic("Unsupported operation") }
-func (_ Product) AppendArray() types.Field         { panic("Unsupported operation") }
-func (_ Product) HintSize(int)                     { panic("Unsupported operation") }
-func (_ Product) Finalize()                        {}
+func (_ CsvProduct) AppendMap(key string) types.Field { panic("Unsupported operation") }
+func (_ CsvProduct) AppendArray() types.Field         { panic("Unsupported operation") }
+func (_ CsvProduct) HintSize(int)                     { panic("Unsupported operation") }
+func (_ CsvProduct) Finalize()                        {}
 
-func (_ Product) AvroCRC64Fingerprint() []byte {
-	return []byte(ProductAvroCRC64Fingerprint)
+func (_ CsvProduct) AvroCRC64Fingerprint() []byte {
+	return []byte(CsvProductAvroCRC64Fingerprint)
 }
 
-func (r Product) MarshalJSON() ([]byte, error) {
+func (r CsvProduct) MarshalJSON() ([]byte, error) {
 	var err error
 	output := make(map[string]json.RawMessage)
-	output["id"], err = json.Marshal(r.Id)
+	output["product_id"], err = json.Marshal(r.Product_id)
 	if err != nil {
 		return nil, err
 	}
@@ -199,18 +199,18 @@ func (r Product) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	output["description"], err = json.Marshal(r.Description)
+	output["brand"], err = json.Marshal(r.Brand)
 	if err != nil {
 		return nil, err
 	}
-	output["price"], err = json.Marshal(r.Price)
+	output["page_url"], err = json.Marshal(r.Page_url)
 	if err != nil {
 		return nil, err
 	}
 	return json.Marshal(output)
 }
 
-func (r *Product) UnmarshalJSON(data []byte) error {
+func (r *CsvProduct) UnmarshalJSON(data []byte) error {
 	var fields map[string]json.RawMessage
 	if err := json.Unmarshal(data, &fields); err != nil {
 		return err
@@ -218,18 +218,18 @@ func (r *Product) UnmarshalJSON(data []byte) error {
 
 	var val json.RawMessage
 	val = func() json.RawMessage {
-		if v, ok := fields["id"]; ok {
+		if v, ok := fields["product_id"]; ok {
 			return v
 		}
 		return nil
 	}()
 
 	if val != nil {
-		if err := json.Unmarshal([]byte(val), &r.Id); err != nil {
+		if err := json.Unmarshal([]byte(val), &r.Product_id); err != nil {
 			return err
 		}
 	} else {
-		return fmt.Errorf("no value specified for id")
+		return fmt.Errorf("no value specified for product_id")
 	}
 	val = func() json.RawMessage {
 		if v, ok := fields["name"]; ok {
@@ -246,32 +246,32 @@ func (r *Product) UnmarshalJSON(data []byte) error {
 		return fmt.Errorf("no value specified for name")
 	}
 	val = func() json.RawMessage {
-		if v, ok := fields["description"]; ok {
+		if v, ok := fields["brand"]; ok {
 			return v
 		}
 		return nil
 	}()
 
 	if val != nil {
-		if err := json.Unmarshal([]byte(val), &r.Description); err != nil {
+		if err := json.Unmarshal([]byte(val), &r.Brand); err != nil {
 			return err
 		}
 	} else {
-		return fmt.Errorf("no value specified for description")
+		return fmt.Errorf("no value specified for brand")
 	}
 	val = func() json.RawMessage {
-		if v, ok := fields["price"]; ok {
+		if v, ok := fields["page_url"]; ok {
 			return v
 		}
 		return nil
 	}()
 
 	if val != nil {
-		if err := json.Unmarshal([]byte(val), &r.Price); err != nil {
+		if err := json.Unmarshal([]byte(val), &r.Page_url); err != nil {
 			return err
 		}
 	} else {
-		return fmt.Errorf("no value specified for price")
+		return fmt.Errorf("no value specified for page_url")
 	}
 	return nil
 }

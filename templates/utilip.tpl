@@ -1,1 +1,1 @@
-{{$ipAddress := ip "0.0.0.0/1"}}{{add_v_to_list "ipAddress_list"  $ipAddress }} Added to ctx ipAddress_list {{$ipAddress}}
+{{$ipAddress := ip "0.0.0.0/1"}}{{add_v_to_list "ipAddress_list"  $ipAddress }}

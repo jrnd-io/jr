@@ -13,7 +13,7 @@
  *     gaming_games.avsc
  *     gaming_player_activity.avsc
  *     gaming_players.avsc
- *     insurancecustomeractivity.avsc
+ *     insurance_customer_activity.avsc
  *     insurancecustomers.avsc
  *     insuranceoffers.avsc
  *     inventory.avsc

@@ -51,7 +51,7 @@ var gamingplayeractivity Gamingplayeractivity
 
 var gamingplayers Gamingplayers
 
-var insurancecustomeractivity Insurancecustomeractivity
+var insurance_customer_activity InsuranceCustomerActivity
 
 var insurancecustomers Insurancecustomers
 
@@ -205,8 +205,8 @@ func GetType(templateType string) interface{} {
 	case "gamingplayers":
 		return &gamingplayers
 
-	case "insurancecustomeractivity":
-		return &insurancecustomeractivity
+	case "insurance_customer_activity":
+		return &insurance_customer_activity
 
 	case "insurancecustomers":
 		return &insurancecustomers

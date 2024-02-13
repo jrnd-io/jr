@@ -13,7 +13,7 @@
  *     gaming_games.avsc
  *     gaming_player_activity.avsc
  *     gaming_players.avsc
- *     insurancecustomeractivity.avsc
+ *     insurance_customer_activity.avsc
  *     insurancecustomers.avsc
  *     insuranceoffers.avsc
  *     inventory.avsc
@@ -56,7 +56,7 @@ import (
 
 var _ = fmt.Printf
 
-type Insurancecustomeractivity struct {
+type InsuranceCustomerActivity struct {
 	Activity_id int32 `json:"activity_id"`
 
 	Customer_id int32 `json:"customer_id"`
@@ -68,15 +68,15 @@ type Insurancecustomeractivity struct {
 	Ip_address string `json:"ip_address"`
 }
 
-const InsurancecustomeractivityAvroCRC64Fingerprint = "\xfa\x7f\xfd륻\x95v"
+const InsuranceCustomerActivityAvroCRC64Fingerprint = "\xd2\xe8Vu\x9a\xbe{\xe9"
 
-func NewInsurancecustomeractivity() Insurancecustomeractivity {
-	r := Insurancecustomeractivity{}
+func NewInsuranceCustomerActivity() InsuranceCustomerActivity {
+	r := InsuranceCustomerActivity{}
 	return r
 }
 
-func DeserializeInsurancecustomeractivity(r io.Reader) (Insurancecustomeractivity, error) {
-	t := NewInsurancecustomeractivity()
+func DeserializeInsuranceCustomerActivity(r io.Reader) (InsuranceCustomerActivity, error) {
+	t := NewInsuranceCustomerActivity()
 	deser, err := compiler.CompileSchemaBytes([]byte(t.Schema()), []byte(t.Schema()))
 	if err != nil {
 		return t, err
@@ -86,8 +86,8 @@ func DeserializeInsurancecustomeractivity(r io.Reader) (Insurancecustomeractivit
 	return t, err
 }
 
-func DeserializeInsurancecustomeractivityFromSchema(r io.Reader, schema string) (Insurancecustomeractivity, error) {
-	t := NewInsurancecustomeractivity()
+func DeserializeInsuranceCustomerActivityFromSchema(r io.Reader, schema string) (InsuranceCustomerActivity, error) {
+	t := NewInsuranceCustomerActivity()
 
 	deser, err := compiler.CompileSchemaBytes([]byte(schema), []byte(t.Schema()))
 	if err != nil {
@@ -98,7 +98,7 @@ func DeserializeInsurancecustomeractivityFromSchema(r io.Reader, schema string) 
 	return t, err
 }
 
-func writeInsurancecustomeractivity(r Insurancecustomeractivity, w io.Writer) error {
+func writeInsuranceCustomerActivity(r InsuranceCustomerActivity, w io.Writer) error {
 	var err error
 	err = vm.WriteInt(r.Activity_id, w)
 	if err != nil {
@@ -123,28 +123,28 @@ func writeInsurancecustomeractivity(r Insurancecustomeractivity, w io.Writer) er
 	return err
 }
 
-func (r Insurancecustomeractivity) Serialize(w io.Writer) error {
-	return writeInsurancecustomeractivity(r, w)
+func (r InsuranceCustomerActivity) Serialize(w io.Writer) error {
+	return writeInsuranceCustomerActivity(r, w)
 }
 
-func (r Insurancecustomeractivity) Schema() string {
-	return "{\"fields\":[{\"name\":\"activity_id\",\"type\":{\"arg.properties\":{\"iteration\":{\"start\":1,\"step\":1}},\"type\":\"int\"}},{\"name\":\"customer_id\",\"type\":{\"arg.properties\":{\"options\":[415,871,597,210,833,371,387,313,882,854,895,198,468,860,383,226,630,546,949,276,595,406,565,129,973,10,579,167,273,548,175,957,45,582,66,472,578,825,572,322,864,272,910,507,942,368,643,421,92,433,75,305,173,863,315,344,526,264,225,40,866,473,662,611,401,993,158,997,43,36,843,814,965,967,470,55,615,30,894,333,763,929,994,771,601,634,955,310,463,887,770,386,188,62,41,465,932,832,819,103,377,216,958,39,699,557,195,966,382,796,223,58,232,486,462,441,731,388,395,606,307,137,56,719,104,493,114,392,343,640,102,268,294,169,57,35,956,49,752,522,845,980,204,581,886,694,229,753,190,206]},\"type\":\"int\"}},{\"name\":\"activity_type\",\"type\":{\"arg.properties\":{\"options\":[\"web_open\",\"mobile_open\",\"new_account\"]},\"type\":\"string\"}},{\"name\":\"propensity_to_churn\",\"type\":{\"arg.properties\":{\"range\":{\"max\":1,\"min\":0.01}},\"type\":\"double\"}},{\"name\":\"ip_address\",\"type\":{\"arg.properties\":{\"options\":[\"223.135.0.204\",\"36.149.179.191\",\"60.194.249.18\",\"136.186.114.150\",\"74.124.70.237\",\"69.212.203.214\",\"70.1.63.102\",\"37.130.125.130\",\"193.33.103.229\",\"32.61.200.245\",\"51.196.238.21\",\"111.187.166.26\",\"217.237.199.242\",\"202.194.220.196\",\"205.196.213.241\",\"137.209.182.50\",\"198.43.175.27\",\"124.166.107.190\",\"192.61.188.203\",\"57.125.102.149\",\"74.163.164.66\",\"67.66.179.220\",\"201.63.8.144\",\"50.57.65.143\",\"135.146.254.138\",\"225.103.12.27\",\"147.187.228.215\",\"94.87.184.82\",\"88.145.28.140\",\"208.216.1.101\",\"175.36.181.120\",\"194.7.156.81\",\"30.209.200.179\",\"72.112.128.155\",\"77.82.56.87\",\"76.241.80.115\",\"177.13.65.63\",\"92.160.162.102\",\"216.212.0.222\",\"76.119.252.185\",\"134.186.192.26\",\"85.228.219.76\",\"195.82.242.168\",\"109.187.240.70\",\"125.191.141.103\",\"176.58.219.253\",\"98.53.186.67\",\"21.127.2.182\",\"58.73.132.227\",\"251.119.237.69\"]},\"type\":\"string\"}}],\"name\":\"insurance.insurancecustomeractivity\",\"type\":\"record\"}"
+func (r InsuranceCustomerActivity) Schema() string {
+	return "{\"fields\":[{\"name\":\"activity_id\",\"type\":{\"arg.properties\":{\"iteration\":{\"start\":1,\"step\":1}},\"type\":\"int\"}},{\"name\":\"customer_id\",\"type\":{\"arg.properties\":{\"options\":[415,871,597,210,833,371,387,313,882,854,895,198,468,860,383,226,630,546,949,276,595,406,565,129,973,10,579,167,273,548,175,957,45,582,66,472,578,825,572,322,864,272,910,507,942,368,643,421,92,433,75,305,173,863,315,344,526,264,225,40,866,473,662,611,401,993,158,997,43,36,843,814,965,967,470,55,615,30,894,333,763,929,994,771,601,634,955,310,463,887,770,386,188,62,41,465,932,832,819,103,377,216,958,39,699,557,195,966,382,796,223,58,232,486,462,441,731,388,395,606,307,137,56,719,104,493,114,392,343,640,102,268,294,169,57,35,956,49,752,522,845,980,204,581,886,694,229,753,190,206]},\"type\":\"int\"}},{\"name\":\"activity_type\",\"type\":{\"arg.properties\":{\"options\":[\"web_open\",\"mobile_open\",\"new_account\"]},\"type\":\"string\"}},{\"name\":\"propensity_to_churn\",\"type\":{\"arg.properties\":{\"range\":{\"max\":1,\"min\":0.01}},\"type\":\"double\"}},{\"name\":\"ip_address\",\"type\":{\"arg.properties\":{\"options\":[\"223.135.0.204\",\"36.149.179.191\",\"60.194.249.18\",\"136.186.114.150\",\"74.124.70.237\",\"69.212.203.214\",\"70.1.63.102\",\"37.130.125.130\",\"193.33.103.229\",\"32.61.200.245\",\"51.196.238.21\",\"111.187.166.26\",\"217.237.199.242\",\"202.194.220.196\",\"205.196.213.241\",\"137.209.182.50\",\"198.43.175.27\",\"124.166.107.190\",\"192.61.188.203\",\"57.125.102.149\",\"74.163.164.66\",\"67.66.179.220\",\"201.63.8.144\",\"50.57.65.143\",\"135.146.254.138\",\"225.103.12.27\",\"147.187.228.215\",\"94.87.184.82\",\"88.145.28.140\",\"208.216.1.101\",\"175.36.181.120\",\"194.7.156.81\",\"30.209.200.179\",\"72.112.128.155\",\"77.82.56.87\",\"76.241.80.115\",\"177.13.65.63\",\"92.160.162.102\",\"216.212.0.222\",\"76.119.252.185\",\"134.186.192.26\",\"85.228.219.76\",\"195.82.242.168\",\"109.187.240.70\",\"125.191.141.103\",\"176.58.219.253\",\"98.53.186.67\",\"21.127.2.182\",\"58.73.132.227\",\"251.119.237.69\"]},\"type\":\"string\"}}],\"name\":\"insurance.InsuranceCustomerActivity\",\"type\":\"record\"}"
 }
 
-func (r Insurancecustomeractivity) SchemaName() string {
-	return "insurance.insurancecustomeractivity"
+func (r InsuranceCustomerActivity) SchemaName() string {
+	return "insurance.InsuranceCustomerActivity"
 }
 
-func (_ Insurancecustomeractivity) SetBoolean(v bool)    { panic("Unsupported operation") }
-func (_ Insurancecustomeractivity) SetInt(v int32)       { panic("Unsupported operation") }
-func (_ Insurancecustomeractivity) SetLong(v int64)      { panic("Unsupported operation") }
-func (_ Insurancecustomeractivity) SetFloat(v float32)   { panic("Unsupported operation") }
-func (_ Insurancecustomeractivity) SetDouble(v float64)  { panic("Unsupported operation") }
-func (_ Insurancecustomeractivity) SetBytes(v []byte)    { panic("Unsupported operation") }
-func (_ Insurancecustomeractivity) SetString(v string)   { panic("Unsupported operation") }
-func (_ Insurancecustomeractivity) SetUnionElem(v int64) { panic("Unsupported operation") }
+func (_ InsuranceCustomerActivity) SetBoolean(v bool)    { panic("Unsupported operation") }
+func (_ InsuranceCustomerActivity) SetInt(v int32)       { panic("Unsupported operation") }
+func (_ InsuranceCustomerActivity) SetLong(v int64)      { panic("Unsupported operation") }
+func (_ InsuranceCustomerActivity) SetFloat(v float32)   { panic("Unsupported operation") }
+func (_ InsuranceCustomerActivity) SetDouble(v float64)  { panic("Unsupported operation") }
+func (_ InsuranceCustomerActivity) SetBytes(v []byte)    { panic("Unsupported operation") }
+func (_ InsuranceCustomerActivity) SetString(v string)   { panic("Unsupported operation") }
+func (_ InsuranceCustomerActivity) SetUnionElem(v int64) { panic("Unsupported operation") }
 
-func (r *Insurancecustomeractivity) Get(i int) types.Field {
+func (r *InsuranceCustomerActivity) Get(i int) types.Field {
 	switch i {
 	case 0:
 		w := types.Int{Target: &r.Activity_id}
@@ -175,28 +175,28 @@ func (r *Insurancecustomeractivity) Get(i int) types.Field {
 	panic("Unknown field index")
 }
 
-func (r *Insurancecustomeractivity) SetDefault(i int) {
+func (r *InsuranceCustomerActivity) SetDefault(i int) {
 	switch i {
 	}
 	panic("Unknown field index")
 }
 
-func (r *Insurancecustomeractivity) NullField(i int) {
+func (r *InsuranceCustomerActivity) NullField(i int) {
 	switch i {
 	}
 	panic("Not a nullable field index")
 }
 
-func (_ Insurancecustomeractivity) AppendMap(key string) types.Field { panic("Unsupported operation") }
-func (_ Insurancecustomeractivity) AppendArray() types.Field         { panic("Unsupported operation") }
-func (_ Insurancecustomeractivity) HintSize(int)                     { panic("Unsupported operation") }
-func (_ Insurancecustomeractivity) Finalize()                        {}
+func (_ InsuranceCustomerActivity) AppendMap(key string) types.Field { panic("Unsupported operation") }
+func (_ InsuranceCustomerActivity) AppendArray() types.Field         { panic("Unsupported operation") }
+func (_ InsuranceCustomerActivity) HintSize(int)                     { panic("Unsupported operation") }
+func (_ InsuranceCustomerActivity) Finalize()                        {}
 
-func (_ Insurancecustomeractivity) AvroCRC64Fingerprint() []byte {
-	return []byte(InsurancecustomeractivityAvroCRC64Fingerprint)
+func (_ InsuranceCustomerActivity) AvroCRC64Fingerprint() []byte {
+	return []byte(InsuranceCustomerActivityAvroCRC64Fingerprint)
 }
 
-func (r Insurancecustomeractivity) MarshalJSON() ([]byte, error) {
+func (r InsuranceCustomerActivity) MarshalJSON() ([]byte, error) {
 	var err error
 	output := make(map[string]json.RawMessage)
 	output["activity_id"], err = json.Marshal(r.Activity_id)
@@ -222,7 +222,7 @@ func (r Insurancecustomeractivity) MarshalJSON() ([]byte, error) {
 	return json.Marshal(output)
 }
 
-func (r *Insurancecustomeractivity) UnmarshalJSON(data []byte) error {
+func (r *InsuranceCustomerActivity) UnmarshalJSON(data []byte) error {
 	var fields map[string]json.RawMessage
 	if err := json.Unmarshal(data, &fields); err != nil {
 		return err

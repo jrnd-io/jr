@@ -1,6 +1,6 @@
 {
     "namespace": "insurance",
-    "name": "insurancecustomeractivity",
+    "name": "InsuranceCustomerActivity",
     "type": "record",
     "fields": [
         {

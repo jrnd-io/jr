@@ -15,7 +15,7 @@
  *     gaming_players.avsc
  *     insurance_customer_activity.avsc
  *     insurance_customers.avsc
- *     insuranceoffers.avsc
+ *     insurance_offers.avsc
  *     inventory.avsc
  *     map_dumb_schema.avsc
  *     net_device.avsc
@@ -56,7 +56,7 @@ import (
 
 var _ = fmt.Printf
 
-type Insuranceoffers struct {
+type InsuranceOffers struct {
 	Offer_id int32 `json:"offer_id"`
 
 	Offer_name string `json:"offer_name"`
@@ -64,15 +64,15 @@ type Insuranceoffers struct {
 	Offer_url string `json:"offer_url"`
 }
 
-const InsuranceoffersAvroCRC64Fingerprint = "\xbbx\x99\xb2\xab\xf7uE"
+const InsuranceOffersAvroCRC64Fingerprint = ":\x18\xd3Ȼ֒x"
 
-func NewInsuranceoffers() Insuranceoffers {
-	r := Insuranceoffers{}
+func NewInsuranceOffers() InsuranceOffers {
+	r := InsuranceOffers{}
 	return r
 }
 
-func DeserializeInsuranceoffers(r io.Reader) (Insuranceoffers, error) {
-	t := NewInsuranceoffers()
+func DeserializeInsuranceOffers(r io.Reader) (InsuranceOffers, error) {
+	t := NewInsuranceOffers()
 	deser, err := compiler.CompileSchemaBytes([]byte(t.Schema()), []byte(t.Schema()))
 	if err != nil {
 		return t, err
@@ -82,8 +82,8 @@ func DeserializeInsuranceoffers(r io.Reader) (Insuranceoffers, error) {
 	return t, err
 }
 
-func DeserializeInsuranceoffersFromSchema(r io.Reader, schema string) (Insuranceoffers, error) {
-	t := NewInsuranceoffers()
+func DeserializeInsuranceOffersFromSchema(r io.Reader, schema string) (InsuranceOffers, error) {
+	t := NewInsuranceOffers()
 
 	deser, err := compiler.CompileSchemaBytes([]byte(schema), []byte(t.Schema()))
 	if err != nil {
@@ -94,7 +94,7 @@ func DeserializeInsuranceoffersFromSchema(r io.Reader, schema string) (Insurance
 	return t, err
 }
 
-func writeInsuranceoffers(r Insuranceoffers, w io.Writer) error {
+func writeInsuranceOffers(r InsuranceOffers, w io.Writer) error {
 	var err error
 	err = vm.WriteInt(r.Offer_id, w)
 	if err != nil {
@@ -111,28 +111,28 @@ func writeInsuranceoffers(r Insuranceoffers, w io.Writer) error {
 	return err
 }
 
-func (r Insuranceoffers) Serialize(w io.Writer) error {
-	return writeInsuranceoffers(r, w)
+func (r InsuranceOffers) Serialize(w io.Writer) error {
+	return writeInsuranceOffers(r, w)
 }
 
-func (r Insuranceoffers) Schema() string {
-	return "{\"arg.properties\":{\"options\":[{\"offer_id\":1,\"offer_name\":\"new_home_policy\",\"offer_url\":\"http://privacy.gov.au/in/faucibus/orci/luctus.js\"},{\"offer_id\":2,\"offer_name\":\"new_auto_policy\",\"offer_url\":\"https://reddit.com/id.html\"},{\"offer_id\":3,\"offer_name\":\"discount_existing\",\"offer_url\":\"https://cbc.ca/dui/proin/leo/odio/porttitor/id.aspx\"},{\"offer_id\":4,\"offer_name\":\"safe_driver_program\",\"offer_url\":\"http://seattletimes.com/ante/vel/ipsum/praesent.json\"},{\"offer_id\":5,\"offer_name\":\"no_offer\",\"offer_url\":\"https://sciencedaily.com/ante.aspx\"}]},\"fields\":[{\"name\":\"offer_id\",\"type\":\"int\"},{\"name\":\"offer_name\",\"type\":\"string\"},{\"name\":\"offer_url\",\"type\":\"string\"}],\"name\":\"insurance.insuranceoffers\",\"type\":\"record\"}"
+func (r InsuranceOffers) Schema() string {
+	return "{\"arg.properties\":{\"options\":[{\"offer_id\":1,\"offer_name\":\"new_home_policy\",\"offer_url\":\"http://privacy.gov.au/in/faucibus/orci/luctus.js\"},{\"offer_id\":2,\"offer_name\":\"new_auto_policy\",\"offer_url\":\"https://reddit.com/id.html\"},{\"offer_id\":3,\"offer_name\":\"discount_existing\",\"offer_url\":\"https://cbc.ca/dui/proin/leo/odio/porttitor/id.aspx\"},{\"offer_id\":4,\"offer_name\":\"safe_driver_program\",\"offer_url\":\"http://seattletimes.com/ante/vel/ipsum/praesent.json\"},{\"offer_id\":5,\"offer_name\":\"no_offer\",\"offer_url\":\"https://sciencedaily.com/ante.aspx\"}]},\"fields\":[{\"name\":\"offer_id\",\"type\":\"int\"},{\"name\":\"offer_name\",\"type\":\"string\"},{\"name\":\"offer_url\",\"type\":\"string\"}],\"name\":\"insurance.InsuranceOffers\",\"type\":\"record\"}"
 }
 
-func (r Insuranceoffers) SchemaName() string {
-	return "insurance.insuranceoffers"
+func (r InsuranceOffers) SchemaName() string {
+	return "insurance.InsuranceOffers"
 }
 
-func (_ Insuranceoffers) SetBoolean(v bool)    { panic("Unsupported operation") }
-func (_ Insuranceoffers) SetInt(v int32)       { panic("Unsupported operation") }
-func (_ Insuranceoffers) SetLong(v int64)      { panic("Unsupported operation") }
-func (_ Insuranceoffers) SetFloat(v float32)   { panic("Unsupported operation") }
-func (_ Insuranceoffers) SetDouble(v float64)  { panic("Unsupported operation") }
-func (_ Insuranceoffers) SetBytes(v []byte)    { panic("Unsupported operation") }
-func (_ Insuranceoffers) SetString(v string)   { panic("Unsupported operation") }
-func (_ Insuranceoffers) SetUnionElem(v int64) { panic("Unsupported operation") }
+func (_ InsuranceOffers) SetBoolean(v bool)    { panic("Unsupported operation") }
+func (_ InsuranceOffers) SetInt(v int32)       { panic("Unsupported operation") }
+func (_ InsuranceOffers) SetLong(v int64)      { panic("Unsupported operation") }
+func (_ InsuranceOffers) SetFloat(v float32)   { panic("Unsupported operation") }
+func (_ InsuranceOffers) SetDouble(v float64)  { panic("Unsupported operation") }
+func (_ InsuranceOffers) SetBytes(v []byte)    { panic("Unsupported operation") }
+func (_ InsuranceOffers) SetString(v string)   { panic("Unsupported operation") }
+func (_ InsuranceOffers) SetUnionElem(v int64) { panic("Unsupported operation") }
 
-func (r *Insuranceoffers) Get(i int) types.Field {
+func (r *InsuranceOffers) Get(i int) types.Field {
 	switch i {
 	case 0:
 		w := types.Int{Target: &r.Offer_id}
@@ -153,28 +153,28 @@ func (r *Insuranceoffers) Get(i int) types.Field {
 	panic("Unknown field index")
 }
 
-func (r *Insuranceoffers) SetDefault(i int) {
+func (r *InsuranceOffers) SetDefault(i int) {
 	switch i {
 	}
 	panic("Unknown field index")
 }
 
-func (r *Insuranceoffers) NullField(i int) {
+func (r *InsuranceOffers) NullField(i int) {
 	switch i {
 	}
 	panic("Not a nullable field index")
 }
 
-func (_ Insuranceoffers) AppendMap(key string) types.Field { panic("Unsupported operation") }
-func (_ Insuranceoffers) AppendArray() types.Field         { panic("Unsupported operation") }
-func (_ Insuranceoffers) HintSize(int)                     { panic("Unsupported operation") }
-func (_ Insuranceoffers) Finalize()                        {}
+func (_ InsuranceOffers) AppendMap(key string) types.Field { panic("Unsupported operation") }
+func (_ InsuranceOffers) AppendArray() types.Field         { panic("Unsupported operation") }
+func (_ InsuranceOffers) HintSize(int)                     { panic("Unsupported operation") }
+func (_ InsuranceOffers) Finalize()                        {}
 
-func (_ Insuranceoffers) AvroCRC64Fingerprint() []byte {
-	return []byte(InsuranceoffersAvroCRC64Fingerprint)
+func (_ InsuranceOffers) AvroCRC64Fingerprint() []byte {
+	return []byte(InsuranceOffersAvroCRC64Fingerprint)
 }
 
-func (r Insuranceoffers) MarshalJSON() ([]byte, error) {
+func (r InsuranceOffers) MarshalJSON() ([]byte, error) {
 	var err error
 	output := make(map[string]json.RawMessage)
 	output["offer_id"], err = json.Marshal(r.Offer_id)
@@ -192,7 +192,7 @@ func (r Insuranceoffers) MarshalJSON() ([]byte, error) {
 	return json.Marshal(output)
 }
 
-func (r *Insuranceoffers) UnmarshalJSON(data []byte) error {
+func (r *InsuranceOffers) UnmarshalJSON(data []byte) error {
 	var fields map[string]json.RawMessage
 	if err := json.Unmarshal(data, &fields); err != nil {
 		return err

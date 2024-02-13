@@ -55,7 +55,7 @@ var insurance_customer_activity InsuranceCustomerActivity
 
 var insurance_customers InsuranceCustomers
 
-var insuranceoffers Insuranceoffers
+var insurance_offers InsuranceOffers
 
 var inventory Inventory
 
@@ -211,8 +211,8 @@ func GetType(templateType string) interface{} {
 	case "insurance_customers":
 		return &insurance_customers
 
-	case "insuranceoffers":
-		return &insuranceoffers
+	case "insurance_offers":
+		return &insurance_offers
 
 	case "inventory":
 		return &inventory

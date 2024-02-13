@@ -15,7 +15,7 @@
  *     gaming_players.avsc
  *     insurance_customer_activity.avsc
  *     insurance_customers.avsc
- *     insuranceoffers.avsc
+ *     insurance_offers.avsc
  *     inventory.avsc
  *     map_dumb_schema.avsc
  *     net_device.avsc

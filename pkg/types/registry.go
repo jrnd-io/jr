@@ -93,7 +93,7 @@ var pizza_orders PizzaOrders
 
 var pizza_orders_cancelled PizzaOrdersCancelled
 
-var pizzaorderscompleted Pizzaorderscompleted
+var pizza_orders_completed PizzaOrdersCompleted
 
 var product Product
 
@@ -268,8 +268,8 @@ func GetType(templateType string) interface{} {
 	case "pizza_orders_cancelled":
 		return &pizza_orders_cancelled
 
-	case "pizzaorderscompleted":
-		return &pizzaorderscompleted
+	case "pizza_orders_completed":
+		return &pizza_orders_completed
 
 	case "product":
 		return &product

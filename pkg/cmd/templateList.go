@@ -49,6 +49,8 @@ var templateListCmd = &cobra.Command{
 			return
 		}
 
+		noColor, _ := cmd.Flags().GetBool("nocolor")
+
 		var Red = "\033[31m"
 		var Green = "\033[32m"
 		var Reset = "\033[0m"
@@ -59,10 +61,12 @@ var templateListCmd = &cobra.Command{
 
 				t, _ := os.ReadFile(path)
 				valid, err := isValidTemplate(t)
-				if valid {
-					fmt.Print(Green)
-				} else {
-					fmt.Print(Red)
+				if !(noColor) {
+					if valid {
+						fmt.Print(Green)
+					} else {
+						fmt.Print(Red)
+					}
 				}
 
 				if fullPath {
@@ -79,8 +83,9 @@ var templateListCmd = &cobra.Command{
 			}
 			return nil
 		})
-		fmt.Println(Reset)
-
+		if !(noColor) {
+			fmt.Println(Reset)
+		}
 		if err != nil {
 			fmt.Printf("Error in %q: %v\n", templateDir, err)
 			return
@@ -107,4 +112,5 @@ func isValidTemplate(t []byte) (bool, error) {
 func init() {
 	templateCmd.AddCommand(templateListCmd)
 	templateListCmd.Flags().BoolP("fullPath", "f", false, "Print full path")
+	templateListCmd.Flags().BoolP("nocolor", "n", false, "Do not color the output")
 }

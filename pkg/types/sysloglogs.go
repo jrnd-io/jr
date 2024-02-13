@@ -31,9 +31,9 @@
  *     purchase.avsc
  *     ratings.avsc
  *     shoe.avsc
- *     shoeclickstream.avsc
- *     shoecustomer.avsc
- *     shoeorder.avsc
+ *     shoe_clickstream.avsc
+ *     shoe_customer.avsc
+ *     shoe_order.avsc
  *     siemlogs.avsc
  *     stockTrades.avsc
  *     stores.avsc

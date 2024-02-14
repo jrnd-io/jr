@@ -1,5 +1,5 @@
 {
-        "namespace": "ksql",
+        "namespace": "user",
         "name": "UsersArrayMap",
         "type": "record",
         "fields": [

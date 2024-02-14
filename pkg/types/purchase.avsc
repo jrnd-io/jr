@@ -1,5 +1,5 @@
 {
-        "namespace": "datagen.example",
+        "namespace": "purchase",
         "name": "purchase",
         "type": "record",
         "fields": [

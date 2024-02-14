@@ -1,5 +1,5 @@
 {
-        "namespace": "ksql",
+        "namespace": "page",
         "name": "PageViews",
         "type": "record",
         "fields": [

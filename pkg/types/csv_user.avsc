@@ -1,5 +1,5 @@
 {
-        "namespace": "clickstream",
+        "namespace": "csv",
         "name": "CsvUser",
         "type": "record",
         "fields": [

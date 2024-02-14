@@ -1,5 +1,5 @@
 {
-    "namespace": "datagen.example",
+    "namespace": "tx",
     "name": "transactions",
     "type": "record",
     "fields": [

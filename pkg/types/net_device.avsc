@@ -1,6 +1,6 @@
 {
   "type" : "record",
-  "namespace" : "jr",
+  "namespace" : "netdevice",
   "name" : "NetDevice",
   "fields" : [
     { "name" : "VLAN" , "type" : "string" },

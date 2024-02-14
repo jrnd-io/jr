@@ -1,5 +1,5 @@
 {
-    "namespace": "siem_logs",
+    "namespace": "siem",
     "name": "SiemLogs",
     "type": "record",
     "fields": [

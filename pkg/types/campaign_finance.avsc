@@ -1,5 +1,5 @@
 {
-        "namespace": "datagen",
+        "namespace": "campaign",
         "name": "CampaignFinance",
         "type": "record",
         "fields": [

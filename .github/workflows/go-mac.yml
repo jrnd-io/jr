@@ -19,10 +19,10 @@ jobs:
       uses: actions/setup-go@v4
       with:
         go-version: 1.22
-    - name: Install dependencies
-      run: go get .
     - name: Run build script
       run: ./make_install.sh
       shell: bash
+    - name: Install dependencies
+      run: go get .
     - name: Test
       run: go test -v ./...

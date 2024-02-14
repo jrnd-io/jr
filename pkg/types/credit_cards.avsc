@@ -9,7 +9,7 @@
                 },
                 {
                   "name": "card_number",
-                  "type": "long"
+                  "type": "string"
                 },
                 {
                   "name": "cvv",

@@ -10,6 +10,8 @@ JR is a CLI program that helps you to stream quality random data for your applic
 ![Build](https://github.com/ugol/jr/actions/workflows/go-mac.yml/badge.svg)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Go Reference](https://pkg.go.dev/badge/github.com/ugol/jr.svg)](https://pkg.go.dev/github.com/ugol/jr)
+[![Docker](https://img.shields.io/badge/docker-latest-blue.svg)](https://hub.docker.com/r/ugol/jr)
+
 <a href="https://hub.docker.com/r/ugol/jr" rel="nofollow"><img src="https://camo.githubusercontent.com/421d553dffc10e388b434da561788794b788ac47889a4e0931eb30cd7055fbfa/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f646f636b65722d6c61746573742d626c75652e737667" alt="Docker Hub" data-canonical-src="https://img.shields.io/badge/docker-latest-blue.svg" style="max-width: 100%;"></a>
 
 ![JR-simple](https://user-images.githubusercontent.com/89472/229626362-70ddc95d-1090-4746-a20a-fbffba4193cd.gif)
@@ -20,7 +22,7 @@ For full documentation about emitters, referential integrity, how to write templ
 
 ## Building and compiling
 
-JR requires Go 1.21
+JR requires Go 1.22
 
 you can use the `make_install.sh` to install JR. This script does everything needed in one simple command.
 

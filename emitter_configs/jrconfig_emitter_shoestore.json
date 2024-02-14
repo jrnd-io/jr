@@ -1,43 +1,56 @@
 {
   "emitters": [
     {
-      "name": "gaming_game",
-      "locale": "us",
-      "num": 1,
-      "frequency": "500ms",
-      "duration": "2s",
-      "preload": 0,
-      "valueTemplate": "gaming_game",
-      "output": "kafka",
-      "keyTemplate": "null",
-      "outputTemplate": "{{.V}}\n",
-      "topic": "gaming_game"
-    },
-    {
-      "name": "gaming_player",
+      "name": "shoestore_shoe",
       "locale": "us",
       "num": 0,
       "frequency": "0s",
       "duration": "0s",
-      "preload": 200,
-      "valueTemplate": "gaming_player",
+      "preload": 10,
+      "valueTemplate": "shoestore_shoe",
       "output": "kafka",
       "keyTemplate": "null",
       "outputTemplate": "{{.V}}\n",
-      "topic": "gaming_player"
+      "topic": "shoestore_shoe"
     },
     {
-      "name": "gaming_player_activity",
+      "name": "shoestore_customer",
+      "locale": "us",
+      "num": 1,
+      "frequency": "1s",
+      "duration": "1s",
+      "preload": 5,
+      "valueTemplate": "shoestore_customer",
+      "output": "kafka",
+      "keyTemplate": "null",
+      "outputTemplate": "{{.V}}\n",
+      "topic": "shoestore_customer"
+    },
+    {
+      "name": "shoestore_order",
+      "locale": "us",
+      "num": 1,
+      "frequency": "500ms",
+      "duration": "1s",
+      "preload": 0,
+      "valueTemplate": "shoestore_order",
+      "output": "kafka",
+      "keyTemplate": "null",
+      "outputTemplate": "{{.V}}\n",
+      "topic": "shoestore_order"
+    },
+    {
+      "name": "shoestore_clickstream",
       "locale": "us",
       "num": 1,
       "frequency": "100ms",
-      "duration": "3s",
+      "duration": "1s",
       "preload": 0,
-      "valueTemplate": "gaming_player_activity",
+      "valueTemplate": "shoestore_clickstream",
       "output": "kafka",
       "keyTemplate": "null",
       "outputTemplate": "{{.V}}\n",
-      "topic": "gaming_player_activity"
+      "topic": "shoestore_clickstream"
     }
   ],
   "global": {

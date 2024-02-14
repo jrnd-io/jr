@@ -1,0 +1,11 @@
+{
+    "type" : "record",
+    "namespace" : "shoes",
+    "name" : "ShoestoreOrder",
+    "fields" : [
+        { "name" : "order_id" , "type" : "int" },
+        { "name" : "product_id" , "type" : "string"},
+        { "name" : "customer_id" , "type" : "string" },
+        { "name" : "ts" , "type" : "long" }
+    ]
+}

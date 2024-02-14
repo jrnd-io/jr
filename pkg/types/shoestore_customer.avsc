@@ -1,0 +1,17 @@
+{
+  "type" : "record",
+  "namespace" : "shoes",
+  "name" : "ShoestoreCustomer",
+  "fields" : [
+    { "name" : "id" , "type" : "string" },
+    { "name" : "first_name" , "type" : "string"},
+    { "name" : "last_name" , "type" : "string" },
+    { "name" : "email" , "type" : "string" },
+    { "name" : "phone_number" , "type" : "string" },
+    { "name" : "street_address" , "type" : "string" },
+    { "name" : "state" , "type" : "string" },
+    { "name" : "zip_code" , "type" : "string" },
+    { "name" : "country" , "type" : "string" },
+    { "name" : "country_code" , "type" : "string" }
+  ]
+}

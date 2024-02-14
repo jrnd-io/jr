@@ -1,30 +1,30 @@
 {
   "emitters": [
     {
-      "name": "insurance_offers",
+      "name": "insurance_offer",
       "locale": "us",
       "num": 1,
       "frequency": "500ms",
       "duration": "2s",
       "preload": 0,
-      "valueTemplate": "insurance_offers",
+      "valueTemplate": "insurance_offer",
       "output": "kafka",
       "keyTemplate": "null",
       "outputTemplate": "{{.V}}\n",
-      "topic": "insurance_offers"
+      "topic": "insurance_offer"
     },
     {
-      "name": "insurance_customers",
+      "name": "insurance_customer",
       "locale": "us",
       "num": 0,
       "frequency": "0s",
       "duration": "0s",
       "preload": 200,
-      "valueTemplate": "insurance_customers",
+      "valueTemplate": "insurance_customer",
       "output": "kafka",
       "keyTemplate": "null",
       "outputTemplate": "{{.V}}\n",
-      "topic": "insurance_customers"
+      "topic": "insurance_customer"
     },
     {
       "name": "insurance_customer_activity",

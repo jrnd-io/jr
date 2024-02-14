@@ -1,43 +1,43 @@
 {
   "emitters": [
     {
-      "name": "gaming_game",
-      "locale": "us",
-      "num": 1,
-      "frequency": "500ms",
-      "duration": "2s",
-      "preload": 0,
-      "valueTemplate": "gaming_game",
-      "output": "kafka",
-      "keyTemplate": "null",
-      "outputTemplate": "{{.V}}\n",
-      "topic": "gaming_game"
-    },
-    {
-      "name": "gaming_player",
+      "name": "util_userid",
       "locale": "us",
       "num": 0,
       "frequency": "0s",
       "duration": "0s",
-      "preload": 200,
-      "valueTemplate": "gaming_player",
+      "preload": 50,
+      "valueTemplate": "util_userid",
+      "output": "stdout",
+      "keyTemplate": "null",
+      "outputTemplate": "{{.V}}\n",
+      "topic": "util_userid"
+    },
+    {
+      "name": "payment_credit_card",
+      "locale": "us",
+      "num": 0,
+      "frequency": "0s",
+      "duration": "0s",
+      "preload": 30,
+      "valueTemplate": "payment_credit_card",
       "output": "kafka",
       "keyTemplate": "null",
       "outputTemplate": "{{.V}}\n",
-      "topic": "gaming_player"
+      "topic": "payment_credit_card"
     },
     {
-      "name": "gaming_player_activity",
+      "name": "payment_transaction",
       "locale": "us",
       "num": 1,
       "frequency": "100ms",
       "duration": "3s",
       "preload": 0,
-      "valueTemplate": "gaming_player_activity",
+      "valueTemplate": "payment_transaction",
       "output": "kafka",
       "keyTemplate": "null",
       "outputTemplate": "{{.V}}\n",
-      "topic": "gaming_player_activity"
+      "topic": "payment_transaction"
     }
   ],
   "global": {

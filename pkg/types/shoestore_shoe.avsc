@@ -1,0 +1,12 @@
+{
+  "type" : "record",
+  "namespace" : "shoestore",
+  "name" : "ShoestoreShoe",
+  "fields" : [
+    { "name" : "id" , "type" : "string"},
+    { "name" : "sale_price" , "type" : "string" },
+    { "name" : "brand" , "type" : "string" },
+    { "name" : "name" , "type" : "string" },
+    { "name" : "rating" , "type" : "float" }
+  ]
+}

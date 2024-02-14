@@ -1,43 +1,30 @@
 {
-  "emitters": [
+  "emitters": [ 
     {
-      "name": "gaming_game",
-      "locale": "us",
-      "num": 1,
-      "frequency": "500ms",
-      "duration": "2s",
-      "preload": 0,
-      "valueTemplate": "gaming_game",
-      "output": "kafka",
-      "keyTemplate": "null",
-      "outputTemplate": "{{.V}}\n",
-      "topic": "gaming_game"
-    },
-    {
-      "name": "gaming_player",
+      "name": "util_userid",
       "locale": "us",
       "num": 0,
       "frequency": "0s",
       "duration": "0s",
-      "preload": 200,
-      "valueTemplate": "gaming_player",
-      "output": "kafka",
+      "preload": 50,
+      "valueTemplate": "util_userid",
+      "output": "stdout",
       "keyTemplate": "null",
       "outputTemplate": "{{.V}}\n",
-      "topic": "gaming_player"
-    },
+      "topic": "util_userid"
+    }, 
     {
-      "name": "gaming_player_activity",
+      "name": "finance_stock_trade",
       "locale": "us",
       "num": 1,
       "frequency": "100ms",
       "duration": "3s",
       "preload": 0,
-      "valueTemplate": "gaming_player_activity",
+      "valueTemplate": "finance_stock_trade",
       "output": "kafka",
       "keyTemplate": "null",
       "outputTemplate": "{{.V}}\n",
-      "topic": "gaming_player_activity"
+      "topic": "finance_stock_trade"
     }
   ],
   "global": {

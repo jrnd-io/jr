@@ -1,43 +1,56 @@
 {
   "emitters": [
     {
-      "name": "gaming_game",
-      "locale": "us",
-      "num": 1,
-      "frequency": "500ms",
-      "duration": "2s",
-      "preload": 0,
-      "valueTemplate": "gaming_game",
-      "output": "kafka",
-      "keyTemplate": "null",
-      "outputTemplate": "{{.V}}\n",
-      "topic": "gaming_game"
-    },
-    {
-      "name": "gaming_player",
+      "name": "pizza_store_util",
       "locale": "us",
       "num": 0,
       "frequency": "0s",
       "duration": "0s",
-      "preload": 200,
-      "valueTemplate": "gaming_player",
+      "preload": 10,
+      "valueTemplate": "pizzastore_util",
+      "output": "stdout",
+      "keyTemplate": "null",
+      "outputTemplate": "{{.V}}\n",
+      "topic": "pizzastore_util"
+    },
+    {
+      "name": "pizzastore_order",
+      "locale": "us",
+      "num": 1,
+      "frequency": "100ms",
+      "duration": "5s",
+      "preload": 0,
+      "valueTemplate": "pizzastore_order",
       "output": "kafka",
       "keyTemplate": "null",
       "outputTemplate": "{{.V}}\n",
-      "topic": "gaming_player"
+      "topic": "pizzastore_order"
     },
     {
-      "name": "gaming_player_activity",
+      "name": "pizzastore_order_cancelled",
       "locale": "us",
       "num": 1,
       "frequency": "100ms",
       "duration": "3s",
       "preload": 0,
-      "valueTemplate": "gaming_player_activity",
+      "valueTemplate": "pizzastore_order_cancelled",
       "output": "kafka",
       "keyTemplate": "null",
       "outputTemplate": "{{.V}}\n",
-      "topic": "gaming_player_activity"
+      "topic": "pizzastore_order_cancelled"
+    },
+    {
+      "name": "pizzastore_order_completed",
+      "locale": "us",
+      "num": 1,
+      "frequency": "500ms",
+      "duration": "3s",
+      "preload": 0,
+      "valueTemplate": "pizzastore_order_completed",
+      "output": "kafka",
+      "keyTemplate": "null",
+      "outputTemplate": "{{.V}}\n",
+      "topic": "pizzastore_order_completed"
     }
   ],
   "global": {

@@ -1,43 +1,43 @@
 {
   "emitters": [
     {
-      "name": "gaming_game",
+      "name": "fleetmgmt_sensor",
       "locale": "us",
       "num": 1,
-      "frequency": "500ms",
-      "duration": "2s",
-      "preload": 0,
-      "valueTemplate": "gaming_game",
+      "frequency": "1s",
+      "duration": "1s",
+      "preload": 10,
+      "valueTemplate": "fleetmgmt_sensor",
       "output": "kafka",
       "keyTemplate": "null",
       "outputTemplate": "{{.V}}\n",
-      "topic": "gaming_game"
+      "topic": "fleetmgmt_sensor"
     },
     {
-      "name": "gaming_player",
-      "locale": "us",
-      "num": 0,
-      "frequency": "0s",
-      "duration": "0s",
-      "preload": 200,
-      "valueTemplate": "gaming_player",
-      "output": "kafka",
-      "keyTemplate": "null",
-      "outputTemplate": "{{.V}}\n",
-      "topic": "gaming_player"
-    },
-    {
-      "name": "gaming_player_activity",
+      "name": "fleetmgmt_location",
       "locale": "us",
       "num": 1,
       "frequency": "100ms",
-      "duration": "3s",
+      "duration": "1s",
       "preload": 0,
-      "valueTemplate": "gaming_player_activity",
+      "valueTemplate": "fleetmgmt_location",
       "output": "kafka",
       "keyTemplate": "null",
       "outputTemplate": "{{.V}}\n",
-      "topic": "gaming_player_activity"
+      "topic": "fleetmgmt_location"
+    },
+    {
+      "name": "fleetmgmt_description",
+      "locale": "us",
+      "num": 1,
+      "frequency": "100ms",
+      "duration": "1s",
+      "preload": 0,
+      "valueTemplate": "fleetmgmt_description",
+      "output": "kafka",
+      "keyTemplate": "null",
+      "outputTemplate": "{{.V}}\n",
+      "topic": "fleetmgmt_description"
     }
   ],
   "global": {

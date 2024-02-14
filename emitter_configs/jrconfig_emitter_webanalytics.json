@@ -1,43 +1,56 @@
 {
   "emitters": [
     {
-      "name": "gaming_game",
-      "locale": "us",
-      "num": 1,
-      "frequency": "500ms",
-      "duration": "2s",
-      "preload": 0,
-      "valueTemplate": "gaming_game",
-      "output": "kafka",
-      "keyTemplate": "null",
-      "outputTemplate": "{{.V}}\n",
-      "topic": "gaming_game"
-    },
-    {
-      "name": "gaming_player",
+      "name": "webanalytics_user",
       "locale": "us",
       "num": 0,
       "frequency": "0s",
       "duration": "0s",
-      "preload": 200,
-      "valueTemplate": "gaming_player",
+      "preload": 30,
+      "valueTemplate": "webanalytics_user",
       "output": "kafka",
       "keyTemplate": "null",
       "outputTemplate": "{{.V}}\n",
-      "topic": "gaming_player"
+      "topic": "webanalytics_user"
+    } ,
+    {
+      "name": "webanalytics_clickstream",
+      "locale": "us",
+      "num": 1,
+      "frequency": "500ms",
+      "duration": "3s",
+      "preload": 0,
+      "valueTemplate": "webanalytics_clickstream",
+      "output": "kafka",
+      "keyTemplate": "null",
+      "outputTemplate": "{{.V}}\n",
+      "topic": "webanalytics_clickstream"
     },
     {
-      "name": "gaming_player_activity",
+      "name": "webanalytics_code",
+      "locale": "us",
+      "num": 1,
+      "frequency": "500ms",
+      "duration": "3s",
+      "preload": 0,
+      "valueTemplate": "webanalytics_code",
+      "output": "kafka",
+      "keyTemplate": "null",
+      "outputTemplate": "{{.V}}\n",
+      "topic": "webanalytics_code"
+    },
+    {
+      "name": "webanalytics_page_view",
       "locale": "us",
       "num": 1,
       "frequency": "100ms",
       "duration": "3s",
       "preload": 0,
-      "valueTemplate": "gaming_player_activity",
+      "valueTemplate": "webanalytics_page_view",
       "output": "kafka",
       "keyTemplate": "null",
       "outputTemplate": "{{.V}}\n",
-      "topic": "gaming_player_activity"
+      "topic": "webanalytics_page_view"
     }
   ],
   "global": {

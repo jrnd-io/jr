@@ -51,3 +51,5 @@ pkg/producers/kafka/*.properties
 pkg/producers/redis/config.json
 pkg/producers/elastic/*.json
 pkg/producers/mongoDB/*.json
+pkg/producers/gcs/*.json
+pkg/producers/s3/*.json

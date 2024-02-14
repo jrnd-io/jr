@@ -46,6 +46,7 @@ _testmain.go
 # Specific project files
 releases
 build
+pkg/types/*.go
 pkg/producers/kafka/*.properties
 pkg/producers/redis/config.json
 pkg/producers/elastic/*.json

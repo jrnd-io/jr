@@ -3,8 +3,8 @@
  * SOURCES:
  *     campaign_finance.avsc
  *     click_stream.avsc
+ *     click_stream_codes.avsc
  *     click_stream_users.avsc
- *     clickstreamcodes.avsc
  *     credit_cards.avsc
  *     csv_product.avsc
  *     csv_user.avsc

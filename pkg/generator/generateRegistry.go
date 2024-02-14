@@ -18,6 +18,7 @@ import (
 func main() {
 
 	cwd, err := os.Getwd()
+	typesDir := cwd + "/../types"
 
 	if err != nil {
 		panic(err)
@@ -45,8 +46,8 @@ func main() {
 		}`
 
 	var typesList []string
-	err = filepath.Walk(cwd, func(path string, info os.FileInfo, err error) error {
-		if !info.IsDir() && isAGoFile(path) && !isAGenerateFile(path) {
+	err = filepath.Walk(typesDir, func(path string, info os.FileInfo, err error) error {
+		if !info.IsDir() && isAGoFile(path) && !isAGeneratedFile(path) {
 			name := strings.Split(filepath.Base(path), ".")
 
 			if !(strings.HasPrefix(name[0], "array_") || strings.HasPrefix(name[0], "map_")) {
@@ -70,7 +71,8 @@ func main() {
 	}
 
 	d := &data{
-		Package:   os.Getenv("GOPACKAGE"),
+		//Package:   os.Getenv("GOPACKAGE"),
+		Package:   "types",
 		TypesList: typesList,
 	}
 
@@ -86,7 +88,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	initFile, err := os.OpenFile("registry.go", os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0755)
+	initFile, err := os.OpenFile("../types/registry.go", os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0755)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -103,7 +105,7 @@ func isAGoFile(path string) bool {
 	return strings.HasSuffix(path, "go")
 }
 
-func isAGenerateFile(path string) bool {
+func isAGeneratedFile(path string) bool {
 	return strings.HasSuffix(path, "generateRegistry.go") || strings.HasSuffix(path, "registry.go") || strings.HasSuffix(path, "generate.go")
 }
 

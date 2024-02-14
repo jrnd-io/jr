@@ -17,10 +17,6 @@ var click_stream_codes ClickStreamCodes
 
 var click_stream_users ClickStreamUsers
 
-var clickstreamusers Clickstreamusers
-
-var codes Codes
-
 var credit_cards CreditCards
 
 var csv_product CsvProduct
@@ -31,31 +27,17 @@ var destination Destination
 
 var device_information DeviceInformation
 
-var deviceinformation Deviceinformation
-
 var fleet_mgmt_description FleetMgmtDescription
 
 var fleet_mgmt_location FleetMgmtLocation
 
 var fleet_mgmt_sensors FleetMgmtSensors
 
-var fleetmgmtdescription Fleetmgmtdescription
-
-var fleetmgmtlocation Fleetmgmtlocation
-
-var fleetmgmtsensors Fleetmgmtsensors
-
 var gaming_games GamingGames
 
 var gaming_player_activity GamingPlayerActivity
 
 var gaming_players GamingPlayers
-
-var gaminggames Gaminggames
-
-var gamingplayeractivity Gamingplayeractivity
-
-var gamingplayers Gamingplayers
 
 var insurance_customer_activity InsuranceCustomerActivity
 
@@ -162,12 +144,6 @@ func GetType(templateType string) interface{} {
 	case "click_stream_users":
 		return &click_stream_users
 
-	case "clickstreamusers":
-		return &clickstreamusers
-
-	case "codes":
-		return &codes
-
 	case "credit_cards":
 		return &credit_cards
 
@@ -183,9 +159,6 @@ func GetType(templateType string) interface{} {
 	case "device_information":
 		return &device_information
 
-	case "deviceinformation":
-		return &deviceinformation
-
 	case "fleet_mgmt_description":
 		return &fleet_mgmt_description
 
@@ -195,15 +168,6 @@ func GetType(templateType string) interface{} {
 	case "fleet_mgmt_sensors":
 		return &fleet_mgmt_sensors
 
-	case "fleetmgmtdescription":
-		return &fleetmgmtdescription
-
-	case "fleetmgmtlocation":
-		return &fleetmgmtlocation
-
-	case "fleetmgmtsensors":
-		return &fleetmgmtsensors
-
 	case "gaming_games":
 		return &gaming_games
 
@@ -212,15 +176,6 @@ func GetType(templateType string) interface{} {
 
 	case "gaming_players":
 		return &gaming_players
-
-	case "gaminggames":
-		return &gaminggames
-
-	case "gamingplayeractivity":
-		return &gamingplayeractivity
-
-	case "gamingplayers":
-		return &gamingplayers
 
 	case "insurance_customer_activity":
 		return &insurance_customer_activity

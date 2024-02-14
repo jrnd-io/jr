@@ -13,7 +13,7 @@
                 },
                 {
                   "name": "cvv",
-                  "type": "int"
+                  "type": "string"
                 },
                 {
                   "name": "expiration_date",

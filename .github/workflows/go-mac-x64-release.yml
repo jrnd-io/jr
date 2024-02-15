@@ -28,6 +28,6 @@ jobs:
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
         prerelease: false
-        title: darwin-amd64
+        title: jr_darwin
         files: |
           build/jr

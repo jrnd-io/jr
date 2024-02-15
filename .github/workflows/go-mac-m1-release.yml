@@ -12,7 +12,7 @@ jobs:
 
   build:
     name: "Automatic releasing"
-    runs-on: macos-latest
+    runs-on: macos-14
     steps:
     - uses: actions/checkout@v3
     - name: Set up Go
@@ -28,6 +28,6 @@ jobs:
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
         prerelease: false
-        title: jr_amd64
+        title: jr_arm64
         files: |
           build/jr

@@ -68,6 +68,10 @@ func Initialize(emitterNames []string, es []Emitter, dryrun bool) []Emitter {
 }
 
 func DoLoop(es []Emitter) {
+
+	for _, e := range es {
+		addEmitterToExpectedObjects(e)
+	}
 	numTimers := len(es)
 	timers := make([]*time.Timer, numTimers)
 	stopChannels := make([]chan struct{}, numTimers)
@@ -133,6 +137,7 @@ func doTemplate(emitter Emitter) {
 		ctx.JrContext.GeneratedObjects++
 		ctx.JrContext.GeneratedBytes += int64(len(v))
 	}
+
 }
 
 func CloseProducers(es []Emitter) {
@@ -147,11 +152,28 @@ func CloseProducers(es []Emitter) {
 	time.Sleep(100 * time.Millisecond)
 }
 
+func addEmitterToExpectedObjects(e Emitter) {
+	d := e.Duration.Milliseconds()
+	f := e.Frequency.Milliseconds()
+	n := e.Num
+	fmt.Printf("%d %d %d\n", d, f, n)
+
+	if d > 0 && f > 0 && n > 0 {
+		expected := (d / f) * int64(n)
+		ctx.JrContext.ExpectedObjects += expected
+	}
+}
+
 func WriteStats() {
 	_, _ = fmt.Fprintln(os.Stderr)
 	elapsed := time.Since(ctx.JrContext.StartTime)
 	_, _ = fmt.Fprintf(os.Stderr, "Elapsed time: %v\n", elapsed.Round(1*time.Second))
 	_, _ = fmt.Fprintf(os.Stderr, "Data Generated (Objects): %d\n", ctx.JrContext.GeneratedObjects)
+
+	ungenerated := ctx.JrContext.ExpectedObjects - ctx.JrContext.GeneratedObjects
+	if ungenerated > 0 {
+		_, _ = fmt.Fprintf(os.Stderr, "Data NOT Generated (Objects): %d\n", ungenerated)
+	}
 	_, _ = fmt.Fprintf(os.Stderr, "Data Generated (bytes): %d\n", ctx.JrContext.GeneratedBytes)
 	_, _ = fmt.Fprintf(os.Stderr, "Throughput (bytes per second): %9.f\n", float64(ctx.JrContext.GeneratedBytes)/elapsed.Seconds())
 	_, _ = fmt.Fprintln(os.Stderr)

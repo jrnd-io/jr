@@ -29,22 +29,23 @@ var JrContext Context
 
 // Context is the object passed on the templates which contains all the needed details.
 type Context struct {
-	StartTime        time.Time
-	GeneratedObjects int64
-	GeneratedBytes   int64
-	Locale           string
-	CtxCounters      map[string]int
-	CtxCountersLock  sync.RWMutex
-	Ctx              map[string]string
-	CtxLock          sync.RWMutex
-	CtxList          map[string][]string
-	CtxListLock      sync.RWMutex
-	CtxCSV           map[int]map[string]string
-	CtxCSVLock 		 sync.RWMutex	
-	LastIndex        int
-	CountryIndex     int
-	CityIndex        int
-	CurrentIterationLoopIndex int	
+	StartTime                 time.Time
+	GeneratedObjects          int64
+	ExpectedObjects           int64
+	GeneratedBytes            int64
+	Locale                    string
+	CtxCounters               map[string]int
+	CtxCountersLock           sync.RWMutex
+	Ctx                       map[string]string
+	CtxLock                   sync.RWMutex
+	CtxList                   map[string][]string
+	CtxListLock               sync.RWMutex
+	CtxCSV                    map[int]map[string]string
+	CtxCSVLock                sync.RWMutex
+	LastIndex                 int
+	CountryIndex              int
+	CityIndex                 int
+	CurrentIterationLoopIndex int
 }
 
 func init() {
@@ -61,7 +62,7 @@ func init() {
 		CtxList:          make(map[string][]string),
 		CtxListLock:      sync.RWMutex{},
 		CtxCSV:           make(map[int]map[string]string),
-		CtxCSVLock:       sync.RWMutex{},		
+		CtxCSVLock:       sync.RWMutex{},
 		LastIndex:        -1,
 		CountryIndex:     232,
 		CityIndex:        -1,

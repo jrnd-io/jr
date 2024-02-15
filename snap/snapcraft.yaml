@@ -1,6 +1,6 @@
 name: jrnd
 base: core22
-version: 0.3.4
+version: 0.3.7
 summary: Random data generator
 description: |
   Command line generator of random data.

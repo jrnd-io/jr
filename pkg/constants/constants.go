@@ -20,14 +20,12 @@
 
 package constants
 
-import "time"
-
 var JRhome string
 
 const NUM = 1
 const LOCALE = "us"
 const FREQUENCY = -1
-const YEAR = time.Hour * 24 * 7 * 365
+const INFINITE = 1<<63 - 1
 const DEFAULT_HOMEDIR = "$HOME/.jr"
 const DEFAULT_KEY = "null"
 const DEFAULT_OUTPUT = "stdout"

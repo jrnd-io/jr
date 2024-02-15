@@ -143,7 +143,7 @@ func init() {
 	templateCmd.AddCommand(templateRunCmd)
 	templateRunCmd.Flags().IntP("num", "n", constants.NUM, "Number of elements to create for each pass")
 	templateRunCmd.Flags().DurationP("frequency", "f", constants.FREQUENCY, "how much time to wait for next generation pass")
-	templateRunCmd.Flags().DurationP("duration", "d", constants.YEAR, "If frequency is enabled, with Duration you can set a finite amount of time")
+	templateRunCmd.Flags().DurationP("duration", "d", constants.INFINITE, "If frequency is enabled, with Duration you can set a finite amount of time")
 	templateRunCmd.Flags().String("throughput", "", "You can set throughput, JR will calculate frequency automatically.")
 
 	templateRunCmd.Flags().Int64("seed", time.Now().UTC().UnixNano(), "Seed to init pseudorandom generator")

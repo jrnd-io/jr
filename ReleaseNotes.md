@@ -2,6 +2,7 @@ v0.3.6
 - bumped to go 1.22
 - fixed several avro schemas  
 - fixed several templates
+- removed OLD_DG templates
 - added more emitters
 - refactored the generator code in a separate dir than types to make it easier to work with types/schemas
 - added a --nocolor option to several cli commands to make the commands usable in pipes

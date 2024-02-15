@@ -827,7 +827,7 @@ var funcDesc = map[string]FunctionDescription{
 	"nearby_gps": {
 		Name:        "nearby_gps",
 		Category:    "address",
-		Description: "returns a random latitude longitude withing a given radius in meters",
+		Description: "returns a random latitude longitude within a given radius in meters",
 		Parameters:  "latitude float64, longitude float64, radius int",
 		Localizable: false,
 		Return:      "string",

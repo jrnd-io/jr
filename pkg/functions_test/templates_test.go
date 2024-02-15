@@ -308,7 +308,7 @@ func TestTemplatesWithValueFromListAtIndex(t *testing.T) {
 
 }
 
-func TestTemplatesWithValueFromListAtIndex_greater_than_lenght(t *testing.T) {
+func TestTemplatesWithValueFromListAtIndex_greater_than_length(t *testing.T) {
 	templateOne := `{{add_v_to_list "aList" "a"}}`
 	templateTwo := `{{add_v_to_list "aList" "b"}}`
 	checkTemplate := `{{get_v_from_list_at_index "aList" 10}}{{get_v_from_list_at_index "aList" 10}}`

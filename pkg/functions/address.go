@@ -106,7 +106,7 @@ func Longitude() string {
 	return fmt.Sprintf("%.4f", longitude)
 }
 
-// NearbyGPS returns a random latitude longitude withing a given radius in meters
+// NearbyGPS returns a random latitude longitude within a given radius in meters
 func NearbyGPS(latitude float64, longitude float64, radius int) string {
 	radiusInMeters := float64(radius)
 

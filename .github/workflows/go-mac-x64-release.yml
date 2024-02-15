@@ -6,7 +6,7 @@ name: Go-mac-amd64-release
 on:
   push:
     tags:
-      - "v*"
+      - "DISABLED"
 
 jobs:
 

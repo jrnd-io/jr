@@ -22,13 +22,12 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/spf13/cobra"
 	"github.com/ugol/jr/pkg/constants"
 	"log"
 	"os"
 	"runtime"
 	"strings"
-
-	"github.com/spf13/cobra"
 )
 
 var templateShowCmd = &cobra.Command{

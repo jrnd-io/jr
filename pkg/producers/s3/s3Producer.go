@@ -3,13 +3,12 @@ package s3
 import (
 	"bytes"
 	"encoding/json"
-	"io/ioutil"
-	"log"
-
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/google/uuid"
+	"io/ioutil"
+	"log"
 )
 
 type Config struct {
@@ -26,8 +25,8 @@ func (p *S3Producer) Initialize(configFile string) {
 	var config Config
 	file, err := ioutil.ReadFile(configFile)
 	if err != nil {
-        log.Fatalf("Failed to ReadFile: %s", err)
-    }
+		log.Fatalf("Failed to ReadFile: %s", err)
+	}
 	err = json.Unmarshal(file, &config)
 	if err != nil {
 		log.Fatalf("Failed to parse configuration parameters: %s", err)

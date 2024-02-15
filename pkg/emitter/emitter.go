@@ -28,11 +28,11 @@ import (
 	"github.com/ugol/jr/pkg/functions"
 	"github.com/ugol/jr/pkg/producers/console"
 	"github.com/ugol/jr/pkg/producers/elastic"
+	"github.com/ugol/jr/pkg/producers/gcs"
 	"github.com/ugol/jr/pkg/producers/kafka"
 	"github.com/ugol/jr/pkg/producers/mongoDB"
 	"github.com/ugol/jr/pkg/producers/redis"
 	"github.com/ugol/jr/pkg/producers/s3"
-	"github.com/ugol/jr/pkg/producers/gcs"
 	"github.com/ugol/jr/pkg/producers/server"
 	"github.com/ugol/jr/pkg/tpl"
 	"log"
@@ -55,7 +55,7 @@ type Emitter struct {
 	Topic            string        `mapstructure:"topic"`
 	Kcat             bool          `mapstructure:"kcat"`
 	Oneline          bool          `mapstructure:"oneline"`
-	Csv            	 string        `mapstructure:"csv"`
+	Csv              string        `mapstructure:"csv"`
 	Producer         Producer
 	KTpl             tpl.Tpl
 	VTpl             tpl.Tpl
@@ -75,7 +75,6 @@ func (e *Emitter) Initialize(conf configuration.GlobalConfiguration) {
 			log.Printf("Template '%s' not found in %s\n", templateName, path)
 		}
 	}
-	
 
 	keyTpl, err := tpl.NewTpl("key", e.KeyTemplate, functions.FunctionsMap(), &ctx.JrContext)
 	if err != nil {
@@ -125,9 +124,9 @@ func (e *Emitter) Initialize(conf configuration.GlobalConfiguration) {
 	}
 
 	if e.Output == "gcs" {
-    	e.Producer = createGCSProducer(conf.GCSConfig)
-    	return
-    }
+		e.Producer = createGCSProducer(conf.GCSConfig)
+		return
+	}
 
 	if e.Output == "http" {
 		e.Producer = &server.JsonProducer{OutputTpl: &o}

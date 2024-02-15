@@ -5,14 +5,13 @@ package main
 import (
 	"bytes"
 	"go/format"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 	"log"
 	"os"
 	"path/filepath"
 	"strings"
 	"text/template"
-
-	"golang.org/x/text/cases"
-	"golang.org/x/text/language"
 )
 
 func main() {

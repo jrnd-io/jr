@@ -24,6 +24,11 @@ import (
 	"bufio"
 	"encoding/csv"
 	"fmt"
+	"github.com/google/uuid"
+	"github.com/ugol/jr/pkg/constants"
+	"github.com/ugol/jr/pkg/ctx"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 	"log"
 	"math"
 	"math/rand"
@@ -32,12 +37,6 @@ import (
 	"strconv"
 	"strings"
 	"text/template"
-
-	"github.com/google/uuid"
-	"github.com/ugol/jr/pkg/constants"
-	"github.com/ugol/jr/pkg/ctx"
-	"golang.org/x/text/cases"
-	"golang.org/x/text/language"
 )
 
 func FunctionsMap() template.FuncMap {

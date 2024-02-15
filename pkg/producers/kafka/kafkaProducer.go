@@ -25,18 +25,17 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"log"
-	"os"
-	"strconv"
-	"strings"
-	"time"
-
 	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
 	"github.com/confluentinc/confluent-kafka-go/v2/schemaregistry"
 	"github.com/confluentinc/confluent-kafka-go/v2/schemaregistry/serde"
 	"github.com/confluentinc/confluent-kafka-go/v2/schemaregistry/serde/avro"
 	"github.com/confluentinc/confluent-kafka-go/v2/schemaregistry/serde/jsonschema"
 	"github.com/ugol/jr/pkg/types"
+	"log"
+	"os"
+	"strconv"
+	"strings"
+	"time"
 )
 
 type KafkaManager struct {

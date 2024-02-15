@@ -23,11 +23,10 @@ package functions_test
 import (
 	"bytes"
 	"fmt"
-	"testing"
-	"text/template"
-
 	"github.com/ugol/jr/pkg/ctx"
 	"github.com/ugol/jr/pkg/functions"
+	"testing"
+	"text/template"
 )
 
 func TestSubstr(t *testing.T) {

@@ -6,13 +6,6 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"log"
-	"net/http"
-	"path/filepath"
-	"strings"
-	"text/template"
-	"time"
-
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/spf13/cobra"
@@ -20,6 +13,12 @@ import (
 	"github.com/ugol/jr/pkg/constants"
 	"github.com/ugol/jr/pkg/emitter"
 	"github.com/ugol/jr/pkg/functions"
+	"log"
+	"net/http"
+	"path/filepath"
+	"strings"
+	"text/template"
+	"time"
 )
 
 //go:embed html/index.html

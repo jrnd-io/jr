@@ -3,11 +3,10 @@ package mongoDB
 import (
 	"context"
 	"encoding/json"
-	"io/ioutil"
-	"log"
-
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"io/ioutil"
+	"log"
 )
 
 type Config struct {
@@ -28,8 +27,8 @@ func (p *MongoProducer) Initialize(configFile string) {
 	var config Config
 	file, err := ioutil.ReadFile(configFile)
 	if err != nil {
-    	log.Fatalf("Failed to ReadFile: %s", err)
-    }
+		log.Fatalf("Failed to ReadFile: %s", err)
+	}
 	err = json.Unmarshal(file, &config)
 	if err != nil {
 		log.Fatalf("Failed to parse configuration parameters: %s", err)

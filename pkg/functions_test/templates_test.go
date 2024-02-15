@@ -22,12 +22,11 @@ package functions_test
 
 import (
 	"bytes"
+	"github.com/ugol/jr/pkg/functions"
 	"log"
 	"strconv"
 	"testing"
 	"text/template"
-
-	"github.com/ugol/jr/pkg/functions"
 )
 
 func TestSimpleContext(t *testing.T) {

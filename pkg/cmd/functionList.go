@@ -22,12 +22,11 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/spf13/cobra"
+	"github.com/ugol/jr/pkg/functions"
 	"os"
 	"os/exec"
 	"strings"
-
-	"github.com/spf13/cobra"
-	"github.com/ugol/jr/pkg/functions"
 )
 
 var functionListCmd = &cobra.Command{

@@ -3,11 +3,10 @@ package redis
 import (
 	"context"
 	"encoding/json"
+	"github.com/redis/go-redis/v9"
 	"log"
 	"os"
 	"time"
-
-	"github.com/redis/go-redis/v9"
 )
 
 type RedisProducer struct {

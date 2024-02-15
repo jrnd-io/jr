@@ -4,16 +4,15 @@ import (
 	"context"
 	"crypto/tls"
 	"encoding/json"
+	"github.com/elastic/go-elasticsearch/v8"
+	"github.com/elastic/go-elasticsearch/v8/esapi"
+	"github.com/google/uuid"
 	"io/ioutil"
 	"log"
 	"net"
 	"net/http"
 	"strings"
 	"time"
-
-	"github.com/elastic/go-elasticsearch/v8"
-	"github.com/elastic/go-elasticsearch/v8/esapi"
-	"github.com/google/uuid"
 )
 
 type Config struct {
@@ -33,8 +32,8 @@ func (p *ElasticProducer) Initialize(configFile string) {
 	file, err := ioutil.ReadFile(configFile)
 	err = json.Unmarshal(file, &config)
 	if err != nil {
-        log.Fatalf("Failed to ReadFile: %s", err)
-    }
+		log.Fatalf("Failed to ReadFile: %s", err)
+	}
 	if err != nil {
 		log.Fatalf("Failed to parse configuration parameters: %s", err)
 	}

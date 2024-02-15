@@ -31,18 +31,20 @@ var emitterRunCmd = &cobra.Command{
 	Long:  `Run all or selected configured emitters`,
 	Run: func(cmd *cobra.Command, args []string) {
 
-		RunEmitters(args, emitters)
+		dryrun, _ := cmd.Flags().GetBool("dryrun")
+		RunEmitters(args, emitters, dryrun)
 
 	},
 }
 
-func RunEmitters(emitterNames []string, ems []emitter.Emitter) {
+func RunEmitters(emitterNames []string, ems []emitter.Emitter, dryrun bool) {
 	defer emitter.WriteStats()
 	defer emitter.CloseProducers(ems)
-	emittersToRun := emitter.Initialize(emitterNames, ems)
+	emittersToRun := emitter.Initialize(emitterNames, ems, dryrun)
 	emitter.DoLoop(emittersToRun)
 }
 
 func init() {
 	emitterCmd.AddCommand(emitterRunCmd)
+	emitterRunCmd.Flags().BoolP("dryrun", "d", false, "dryrun: output of the emitters overrode to  stdout")
 }

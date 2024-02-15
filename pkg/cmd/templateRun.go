@@ -134,7 +134,7 @@ jr template run --template "{{name}}"
 		functions.SetSeed(seed)
 		es := []emitter.Emitter{e}
 
-		RunEmitters([]string{e.Name}, es)
+		RunEmitters([]string{e.Name}, es, false)
 
 	},
 }

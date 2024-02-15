@@ -39,11 +39,14 @@ type Producer interface {
 	io.Closer
 }
 
-func Initialize(emitterNames []string, es []Emitter) []Emitter {
+func Initialize(emitterNames []string, es []Emitter, dryrun bool) []Emitter {
 
 	howManyEmitters := len(emitterNames)
 	if howManyEmitters == 0 {
 		for i := 0; i < len(es); i++ {
+			if dryrun {
+				es[i].Output = "stdout"
+			}
 			es[i].Initialize(configuration.GlobalCfg)
 			es[i].Run(es[i].Preload, nil)
 		}
@@ -52,6 +55,9 @@ func Initialize(emitterNames []string, es []Emitter) []Emitter {
 		emittersToRun := make([]Emitter, 0, howManyEmitters)
 		for i := 0; i < len(es); i++ {
 			if functions.Contains(emitterNames, es[i].Name) {
+				if dryrun {
+					es[i].Output = "stdout"
+				}
 				es[i].Initialize(configuration.GlobalCfg)
 				emittersToRun = append(emittersToRun, es[i])
 				es[i].Run(es[i].Preload, nil)
@@ -73,7 +79,6 @@ func DoLoop(es []Emitter) {
 	defer stop()
 
 	for i := 0; i < numTimers; i++ {
-		
 
 		index := i
 
@@ -81,7 +86,7 @@ func DoLoop(es []Emitter) {
 
 		go func(timerIndex int) {
 			defer wg.Done()
-			
+
 			frequency := es[timerIndex].Frequency
 			if frequency > 0 {
 				ticker := time.NewTicker(es[timerIndex].Frequency)
@@ -115,12 +120,9 @@ func doTemplate(emitter Emitter) {
 	ctx.JrContext.Locale = emitter.Locale
 	ctx.JrContext.CountryIndex = functions.IndexOf(strings.ToUpper(emitter.Locale), "country")
 
-
-	
-	
 	for i := 0; i < emitter.Num; i++ {
-		ctx.JrContext.CurrentIterationLoopIndex++		
-	
+		ctx.JrContext.CurrentIterationLoopIndex++
+
 		k := emitter.KTpl.Execute()
 		v := emitter.VTpl.Execute()
 		if emitter.Oneline {

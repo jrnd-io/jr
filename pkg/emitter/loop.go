@@ -156,7 +156,7 @@ func addEmitterToExpectedObjects(e Emitter) {
 	d := e.Duration.Milliseconds()
 	f := e.Frequency.Milliseconds()
 	n := e.Num
-	fmt.Printf("%d %d %d\n", d, f, n)
+	//fmt.Printf("%d %d %d\n", d, f, n)
 
 	if d > 0 && f > 0 && n > 0 {
 		expected := (d / f) * int64(n)

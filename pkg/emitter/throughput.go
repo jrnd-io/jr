@@ -32,6 +32,7 @@ const (
 	bitMultiplier = 8
 )
 
+//gocyclo:ignore
 func parseThroughput(input string) (Throughput, error) {
 
 	if input == "" {

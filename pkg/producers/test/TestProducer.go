@@ -21,6 +21,9 @@ func (c *TestProducer) Produce(key []byte, value []byte, o interface{}) {
 		respWriter := o.(*bytes.Buffer)
 		if string(key) != "null" {
 			_, err := (respWriter).Write(key)
+			if err != nil {
+				log.Println(err.Error())
+			}
 			_, err = (respWriter).Write([]byte(","))
 			if err != nil {
 				log.Println(err.Error())

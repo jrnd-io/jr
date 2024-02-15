@@ -22,6 +22,10 @@ type GCSProducer struct {
 func (p *GCSProducer) Initialize(configFile string) {
 	var config Config
 	file, err := ioutil.ReadFile(configFile)
+	if err != nil {
+		log.Fatalf("Failed to read configuration file: %s", err)
+	}
+
 	err = json.Unmarshal(file, &config)
 	if err != nil {
 		log.Fatalf("Failed to parse configuration parameters: %s", err)

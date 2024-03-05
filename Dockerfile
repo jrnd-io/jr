@@ -9,6 +9,8 @@ RUN useradd jr
 
 WORKDIR /go/src/github.com/ugol/jr
 COPY . .
+RUN go install github.com/actgardner/gogen-avro/v10/cmd/...@latest
+RUN go generate pkg/generator/generate.go
 RUN go get -u -d -v
 RUN CGO_ENABLED=1 GOOS=linux go build -tags static_all -v -ldflags="-X 'github.com/ugol/jr/pkg/cmd.Version=${VERSION}' -X 'github.com/ugol/jr/pkg/cmd.BuildUser=${USER}' -X 'github.com/ugol/jr/pkg/cmd.BuildTime=${TIME}'" -o build/jr jr.go
 

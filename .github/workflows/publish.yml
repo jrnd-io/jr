@@ -1,4 +1,4 @@
-name: Create and publish a Docker image
+name: JR Docker image
 
 # trigger on creation of a new tag
 on:

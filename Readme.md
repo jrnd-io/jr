@@ -91,7 +91,7 @@ If you want to use your own template, you can:
 For a quick and dirty test, the best option is to embed directly a template in the command:
 
 ```bash
-jr run --template "name:{{name}}"
+jr run --embedded "name:{{name}}"
 ```
 
 ### Create more random data 

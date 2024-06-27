@@ -22,6 +22,7 @@
 # Folders
 _obj
 _test
+kafka
 
 # Architecture specific extensions/prefixes
 *.[568vq]

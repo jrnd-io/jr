@@ -39,32 +39,37 @@ type Producer interface {
 	io.Closer
 }
 
-func Initialize(emitterNames []string, es []Emitter, dryrun bool) []Emitter {
+func Initialize(emitterNames []string, es map[string][]Emitter, dryrun bool) []Emitter {
 
-	howManyEmitters := len(emitterNames)
-	if howManyEmitters == 0 {
-		for i := 0; i < len(es); i++ {
-			if dryrun {
-				es[i].Output = "stdout"
-			}
-			es[i].Initialize(configuration.GlobalCfg)
-			es[i].Run(es[i].Preload, nil)
+	runAll := len(emitterNames) == 0
+	emittersToRun := make([]Emitter, 0, len(es))
+
+	if runAll {
+		for _, emitters := range es {
+			emittersToRun = InitializeEmitters(emitters, dryrun, emittersToRun)
 		}
-		return es
 	} else {
-		emittersToRun := make([]Emitter, 0, howManyEmitters)
-		for i := 0; i < len(es); i++ {
-			if functions.Contains(emitterNames, es[i].Name) {
-				if dryrun {
-					es[i].Output = "stdout"
-				}
-				es[i].Initialize(configuration.GlobalCfg)
-				emittersToRun = append(emittersToRun, es[i])
-				es[i].Run(es[i].Preload, nil)
+		for _, name := range emitterNames {
+			emitters, enabled := es[name]
+			if enabled {
+				emittersToRun = InitializeEmitters(emitters, dryrun, emittersToRun)
 			}
 		}
-		return emittersToRun
 	}
+
+	return emittersToRun
+}
+
+func InitializeEmitters(emitters []Emitter, dryrun bool, emittersToRun []Emitter) []Emitter {
+	for i := 0; i < len(emitters); i++ {
+		if dryrun {
+			emitters[i].Output = "stdout"
+		}
+		emitters[i].Initialize(configuration.GlobalCfg)
+		emittersToRun = append(emittersToRun, emitters[i])
+		emitters[i].Run(emitters[i].Preload, nil)
+	}
+	return emittersToRun
 }
 
 func DoLoop(es []Emitter) {
@@ -140,12 +145,14 @@ func doTemplate(emitter Emitter) {
 
 }
 
-func CloseProducers(es []Emitter) {
-	for i := 0; i < len(es); i++ {
-		p := es[i].Producer
-		if p != nil {
-			if err := p.Close(); err != nil {
-				fmt.Printf("Error in closing producers: %v\n", err)
+func CloseProducers(es map[string][]Emitter) {
+	for _, v := range es {
+		for i := 0; i < len(v); i++ {
+			p := v[i].Producer
+			if p != nil {
+				if err := p.Close(); err != nil {
+					fmt.Printf("Error in closing producers: %v\n", err)
+				}
 			}
 		}
 	}

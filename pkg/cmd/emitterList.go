@@ -32,6 +32,7 @@ var emitterListCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 
 		noColor, _ := cmd.Flags().GetBool("nocolor")
+		all, _ := cmd.Flags().GetBool("full")
 
 		var Green = ""
 		var Reset = ""
@@ -44,8 +45,18 @@ var emitterListCmd = &cobra.Command{
 		fmt.Println("List of JR emitters:")
 		fmt.Println()
 
-		for _, v := range emitters {
-			fmt.Printf("%s%s%s\n", Green, v.Name, Reset)
+		for k, v := range emitters2 {
+			if all {
+				fmt.Printf("%s%s%s", Green, k, Reset)
+				fmt.Print(" -> (")
+				for _, e := range v {
+					fmt.Printf(" %s ", e.Name)
+				}
+				fmt.Println(")")
+
+			} else {
+				fmt.Printf("%s%s%s\n", Green, k, Reset)
+			}
 		}
 		fmt.Println()
 
@@ -55,5 +66,6 @@ var emitterListCmd = &cobra.Command{
 func init() {
 	emitterCmd.AddCommand(emitterListCmd)
 	emitterListCmd.Flags().BoolP("nocolor", "n", false, "Do not color output")
+	emitterListCmd.Flags().BoolP("full", "f", false, "Do not color output")
 
 }

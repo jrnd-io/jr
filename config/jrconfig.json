@@ -1,5 +1,6 @@
 {
-  "emitters": [
+"emitters": {
+  "shoe": [
     {
       "name": "shoe",
       "locale": "us",
@@ -53,7 +54,558 @@
       "topic": "shoe_clickstream"
     }
   ],
-  "global": {
+
+  "stock": [
+    {
+      "name": "util_userid",
+      "locale": "us",
+      "num": 0,
+      "frequency": "0s",
+      "duration": "0s",
+      "preload": 50,
+      "valueTemplate": "util_userid",
+      "output": "stdout",
+      "keyTemplate": "null",
+      "outputTemplate": "{{.V}}\n",
+      "topic": "util_userid"
+    },
+    {
+      "name": "finance_stock_trade",
+      "locale": "us",
+      "num": 1,
+      "frequency": "100ms",
+      "duration": "3s",
+      "preload": 0,
+      "valueTemplate": "finance_stock_trade",
+      "output": "kafka",
+      "keyTemplate": "null",
+      "outputTemplate": "{{.V}}\n",
+      "topic": "finance_stock_trade"
+    }
+  ],
+
+  "fleetmgmt": [
+    {
+      "name": "fleetmgmt_sensor",
+      "locale": "us",
+      "num": 1,
+      "frequency": "1s",
+      "duration": "1s",
+      "preload": 10,
+      "valueTemplate": "fleetmgmt_sensor",
+      "output": "kafka",
+      "keyTemplate": "null",
+      "outputTemplate": "{{.V}}\n",
+      "topic": "fleetmgmt_sensor"
+    },
+    {
+      "name": "fleetmgmt_location",
+      "locale": "us",
+      "num": 1,
+      "frequency": "100ms",
+      "duration": "1s",
+      "preload": 0,
+      "valueTemplate": "fleetmgmt_location",
+      "output": "kafka",
+      "keyTemplate": "null",
+      "outputTemplate": "{{.V}}\n",
+      "topic": "fleetmgmt_location"
+    },
+    {
+      "name": "fleetmgmt_description",
+      "locale": "us",
+      "num": 1,
+      "frequency": "100ms",
+      "duration": "1s",
+      "preload": 0,
+      "valueTemplate": "fleetmgmt_description",
+      "output": "kafka",
+      "keyTemplate": "null",
+      "outputTemplate": "{{.V}}\n",
+      "topic": "fleetmgmt_description"
+    }
+  ],
+
+  "gaming": [
+    {
+      "name": "gaming_game",
+      "locale": "us",
+      "num": 1,
+      "frequency": "500ms",
+      "duration": "2s",
+      "preload": 0,
+      "valueTemplate": "gaming_game",
+      "output": "kafka",
+      "keyTemplate": "null",
+      "outputTemplate": "{{.V}}\n",
+      "topic": "gaming_game"
+    },
+    {
+      "name": "gaming_player",
+      "locale": "us",
+      "num": 0,
+      "frequency": "0s",
+      "duration": "0s",
+      "preload": 200,
+      "valueTemplate": "gaming_player",
+      "output": "kafka",
+      "keyTemplate": "null",
+      "outputTemplate": "{{.V}}\n",
+      "topic": "gaming_player"
+    },
+    {
+      "name": "gaming_player_activity",
+      "locale": "us",
+      "num": 1,
+      "frequency": "100ms",
+      "duration": "3s",
+      "preload": 0,
+      "valueTemplate": "gaming_player_activity",
+      "output": "kafka",
+      "keyTemplate": "null",
+      "outputTemplate": "{{.V}}\n",
+      "topic": "gaming_player_activity"
+    }
+  ],
+
+  "insurance": [
+    {
+      "name": "insurance_offer",
+      "locale": "us",
+      "num": 1,
+      "frequency": "500ms",
+      "duration": "2s",
+      "preload": 0,
+      "valueTemplate": "insurance_offer",
+      "output": "kafka",
+      "keyTemplate": "null",
+      "outputTemplate": "{{.V}}\n",
+      "topic": "insurance_offer"
+    },
+    {
+      "name": "insurance_customer",
+      "locale": "us",
+      "num": 0,
+      "frequency": "0s",
+      "duration": "0s",
+      "preload": 200,
+      "valueTemplate": "insurance_customer",
+      "output": "kafka",
+      "keyTemplate": "null",
+      "outputTemplate": "{{.V}}\n",
+      "topic": "insurance_customer"
+    },
+    {
+      "name": "insurance_customer_activity",
+      "locale": "us",
+      "num": 1,
+      "frequency": "100ms",
+      "duration": "3s",
+      "preload": 0,
+      "valueTemplate": "insurance_customer_activity",
+      "output": "kafka",
+      "keyTemplate": "null",
+      "outputTemplate": "{{.V}}\n",
+      "topic": "insurance_customer_activity"
+    }
+  ],
+
+  "inventorymgmt": [
+    {
+      "name": "inventorymgmt_product",
+      "locale": "us",
+      "num": 0,
+      "frequency": "0s",
+      "duration": "0s",
+      "preload": 50,
+      "valueTemplate": "inventorymgmt_product",
+      "output": "kafka",
+      "keyTemplate": "null",
+      "outputTemplate": "{{.V}}\n",
+      "topic": "inventorymgmt_product"
+    },
+    {
+      "name": "inventorymgmt_inventory",
+      "locale": "us",
+      "num": 1,
+      "frequency": "100ms",
+      "duration": "3s",
+      "preload": 0,
+      "valueTemplate": "inventorymgmt_inventory",
+      "output": "kafka",
+      "keyTemplate": "null",
+      "outputTemplate": "{{.V}}\n",
+      "topic": "inventorymgmt_inventory"
+    }
+  ],
+  "iot": [
+    {
+      "name": "iot_device_information",
+      "locale": "us",
+      "num": 1,
+      "frequency": "100ms",
+      "duration": "3s",
+      "preload": 0,
+      "valueTemplate": "iot_device_information",
+      "output": "kafka",
+      "keyTemplate": "null",
+      "outputTemplate": "{{.V}}\n",
+      "topic": "iot_device_information"
+    }
+  ],
+
+  "marketing": [
+    {
+      "name": "util_userid",
+      "locale": "us",
+      "num": 0,
+      "frequency": "0s",
+      "duration": "0s",
+      "preload": 50,
+      "valueTemplate": "util_userid",
+      "output": "stdout",
+      "keyTemplate": "null",
+      "outputTemplate": "{{.V}}\n",
+      "topic": "util_userid"
+    },
+    {
+      "name": "marketing_campaign_finance",
+      "locale": "us",
+      "num": 1,
+      "frequency": "100ms",
+      "duration": "3s",
+      "preload": 0,
+      "valueTemplate": "marketing_campaign_finance",
+      "output": "kafka",
+      "keyTemplate": "null",
+      "outputTemplate": "{{.V}}\n",
+      "topic": "marketing_campaign_finance"
+    }
+  ],
+
+  "payment": [
+    {
+      "name": "util_userid",
+      "locale": "us",
+      "num": 0,
+      "frequency": "0s",
+      "duration": "0s",
+      "preload": 50,
+      "valueTemplate": "util_userid",
+      "output": "stdout",
+      "keyTemplate": "null",
+      "outputTemplate": "{{.V}}\n",
+      "topic": "util_userid"
+    },
+    {
+      "name": "payment_credit_card",
+      "locale": "us",
+      "num": 0,
+      "frequency": "0s",
+      "duration": "0s",
+      "preload": 30,
+      "valueTemplate": "payment_credit_card",
+      "output": "kafka",
+      "keyTemplate": "null",
+      "outputTemplate": "{{.V}}\n",
+      "topic": "payment_credit_card"
+    },
+    {
+      "name": "payment_transaction",
+      "locale": "us",
+      "num": 1,
+      "frequency": "100ms",
+      "duration": "3s",
+      "preload": 0,
+      "valueTemplate": "payment_transaction",
+      "output": "kafka",
+      "keyTemplate": "null",
+      "outputTemplate": "{{.V}}\n",
+      "topic": "payment_transaction"
+    }
+  ],
+
+  "payroll": [
+    {
+      "name": "payroll_employee",
+      "locale": "us",
+      "num": 0,
+      "frequency": "0s",
+      "duration": "0s",
+      "preload": 300,
+      "valueTemplate": "payroll_employee",
+      "output": "kafka",
+      "keyTemplate": "null",
+      "outputTemplate": "{{.V}}\n",
+      "topic": "payroll_employee"
+    },
+    {
+      "name": "payroll_employee_location",
+      "locale": "us",
+      "num": 0,
+      "frequency": "0s",
+      "duration": "0s",
+      "preload": 300,
+      "valueTemplate": "payroll_employee_location",
+      "output": "kafka",
+      "keyTemplate": "null",
+      "outputTemplate": "{{.V}}\n",
+      "topic": "payroll_employee_location"
+    },
+    {
+      "name": "payroll_bonus",
+      "locale": "us",
+      "num": 1,
+      "frequency": "100ms",
+      "duration": "3s",
+      "preload": 0,
+      "valueTemplate": "payroll_bonus",
+      "output": "kafka",
+      "keyTemplate": "null",
+      "outputTemplate": "{{.V}}\n",
+      "topic": "payroll_bonus"
+    }
+  ],
+
+  "pizzastore": [
+    {
+      "name": "pizza_store_util",
+      "locale": "us",
+      "num": 0,
+      "frequency": "0s",
+      "duration": "0s",
+      "preload": 10,
+      "valueTemplate": "pizzastore_util",
+      "output": "stdout",
+      "keyTemplate": "null",
+      "outputTemplate": "{{.V}}\n",
+      "topic": "pizzastore_util"
+    },
+    {
+      "name": "pizzastore_order",
+      "locale": "us",
+      "num": 1,
+      "frequency": "100ms",
+      "duration": "5s",
+      "preload": 0,
+      "valueTemplate": "pizzastore_order",
+      "output": "kafka",
+      "keyTemplate": "null",
+      "outputTemplate": "{{.V}}\n",
+      "topic": "pizzastore_order"
+    },
+    {
+      "name": "pizzastore_order_cancelled",
+      "locale": "us",
+      "num": 1,
+      "frequency": "100ms",
+      "duration": "3s",
+      "preload": 0,
+      "valueTemplate": "pizzastore_order_cancelled",
+      "output": "kafka",
+      "keyTemplate": "null",
+      "outputTemplate": "{{.V}}\n",
+      "topic": "pizzastore_order_cancelled"
+    },
+    {
+      "name": "pizzastore_order_completed",
+      "locale": "us",
+      "num": 1,
+      "frequency": "500ms",
+      "duration": "3s",
+      "preload": 0,
+      "valueTemplate": "pizzastore_order_completed",
+      "output": "kafka",
+      "keyTemplate": "null",
+      "outputTemplate": "{{.V}}\n",
+      "topic": "pizzastore_order_completed"
+    }
+  ],
+
+  "shoestore": [
+    {
+      "name": "shoestore_shoe",
+      "locale": "us",
+      "num": 0,
+      "frequency": "0s",
+      "duration": "0s",
+      "preload": 10,
+      "valueTemplate": "shoestore_shoe",
+      "output": "kafka",
+      "keyTemplate": "null",
+      "outputTemplate": "{{.V}}\n",
+      "topic": "shoestore_shoe"
+    },
+    {
+      "name": "shoestore_customer",
+      "locale": "us",
+      "num": 1,
+      "frequency": "1s",
+      "duration": "1s",
+      "preload": 5,
+      "valueTemplate": "shoestore_customer",
+      "output": "kafka",
+      "keyTemplate": "null",
+      "outputTemplate": "{{.V}}\n",
+      "topic": "shoestore_customer"
+    },
+    {
+      "name": "shoestore_order",
+      "locale": "us",
+      "num": 1,
+      "frequency": "500ms",
+      "duration": "1s",
+      "preload": 0,
+      "valueTemplate": "shoestore_order",
+      "output": "kafka",
+      "keyTemplate": "null",
+      "outputTemplate": "{{.V}}\n",
+      "topic": "shoestore_order"
+    },
+    {
+      "name": "shoestore_clickstream",
+      "locale": "us",
+      "num": 1,
+      "frequency": "100ms",
+      "duration": "1s",
+      "preload": 0,
+      "valueTemplate": "shoestore_clickstream",
+      "output": "kafka",
+      "keyTemplate": "null",
+      "outputTemplate": "{{.V}}\n",
+      "topic": "shoestore_clickstream"
+    }
+  ],
+
+  "shopping": [
+    {
+      "name": "util_userid",
+      "locale": "us",
+      "num": 0,
+      "frequency": "0s",
+      "duration": "0s",
+      "preload": 50,
+      "valueTemplate": "util_userid",
+      "output": "stdout",
+      "keyTemplate": "null",
+      "outputTemplate": "{{.V}}\n",
+      "topic": "util_userid"
+    },
+    {
+      "name": "shopping_rating",
+      "locale": "us",
+      "num": 1,
+      "frequency": "100ms",
+      "duration": "3s",
+      "preload": 0,
+      "valueTemplate": "shopping_rating",
+      "output": "kafka",
+      "keyTemplate": "null",
+      "outputTemplate": "{{.V}}\n",
+      "topic": "shopping_rating"
+    },
+    {
+      "name": "shopping_order",
+      "locale": "us",
+      "num": 1,
+      "frequency": "100ms",
+      "duration": "3s",
+      "preload": 0,
+      "valueTemplate": "shopping_order",
+      "output": "kafka",
+      "keyTemplate": "null",
+      "outputTemplate": "{{.V}}\n",
+      "topic": "shopping_order"
+    }
+  ],
+
+  "siem": [
+    {
+      "name": "util_ip",
+      "locale": "us",
+      "num": 0,
+      "frequency": "0s",
+      "duration": "0s",
+      "preload": 50,
+      "valueTemplate": "util_ip",
+      "output": "stdout",
+      "keyTemplate": "null",
+      "outputTemplate": "{{.V}}\n",
+      "topic": "util_ip"
+    },
+    {
+      "name": "siem_log",
+      "locale": "us",
+      "num": 1,
+      "frequency": "100ms",
+      "duration": "3s",
+      "preload": 0,
+      "valueTemplate": "siem_log",
+      "output": "kafka",
+      "keyTemplate": "null",
+      "outputTemplate": "{{.V}}\n",
+      "topic": "siem_log"
+    }
+  ],
+
+  "webanalytics": [
+    {
+      "name": "webanalytics_user",
+      "locale": "us",
+      "num": 0,
+      "frequency": "0s",
+      "duration": "0s",
+      "preload": 30,
+      "valueTemplate": "webanalytics_user",
+      "output": "kafka",
+      "keyTemplate": "null",
+      "outputTemplate": "{{.V}}\n",
+      "topic": "webanalytics_user"
+    } ,
+    {
+      "name": "webanalytics_clickstream",
+      "locale": "us",
+      "num": 1,
+      "frequency": "500ms",
+      "duration": "3s",
+      "preload": 0,
+      "valueTemplate": "webanalytics_clickstream",
+      "output": "kafka",
+      "keyTemplate": "null",
+      "outputTemplate": "{{.V}}\n",
+      "topic": "webanalytics_clickstream"
+    },
+    {
+      "name": "webanalytics_code",
+      "locale": "us",
+      "num": 1,
+      "frequency": "500ms",
+      "duration": "3s",
+      "preload": 0,
+      "valueTemplate": "webanalytics_code",
+      "output": "kafka",
+      "keyTemplate": "null",
+      "outputTemplate": "{{.V}}\n",
+      "topic": "webanalytics_code"
+    },
+    {
+      "name": "webanalytics_page_view",
+      "locale": "us",
+      "num": 1,
+      "frequency": "100ms",
+      "duration": "3s",
+      "preload": 0,
+      "valueTemplate": "webanalytics_page_view",
+      "output": "kafka",
+      "keyTemplate": "null",
+      "outputTemplate": "{{.V}}\n",
+      "topic": "webanalytics_page_view"
+    }
+  ]
+},
+
+
+"global": {
     "seed": -1,
     "kafkaConfig": "./kafka/config.properties",
     "schemaRegistry": true,

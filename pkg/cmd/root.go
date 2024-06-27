@@ -87,7 +87,8 @@ func initConfig() {
 		log.Println(err)
 	}
 
-	err = viper.UnmarshalKey("emitters", &emitters)
+	//err = viper.UnmarshalKey("emitters", &emitters)
+	err = viper.UnmarshalKey("emitters", &emitters2)
 	if err != nil {
 		log.Println(err)
 	}

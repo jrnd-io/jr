@@ -32,6 +32,7 @@ var emitterCmd = &cobra.Command{
 	GroupID: "resource",
 }
 
+var emitters2 map[string][]emitter.Emitter
 var emitters []emitter.Emitter
 
 func init() {

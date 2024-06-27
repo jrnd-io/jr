@@ -43,21 +43,23 @@ jr emitter show net_device`,
 		}
 
 		fmt.Println()
-		for _, v := range emitters {
-			if v.Name == args[0] {
-				fmt.Printf("%sName:%s%s\n", Green, Reset, v.Name)
-				fmt.Printf("%sLocale: %s%s\n", Green, Reset, v.Locale)
-				fmt.Printf("%sNum: %s%d\n", Green, Reset, v.Num)
-				fmt.Printf("%sFrequency: %s%s\n", Green, Reset, v.Frequency)
-				fmt.Printf("%sDuration: %s%s\n", Green, Reset, v.Duration)
-				fmt.Printf("%sPreload: %s%d\n", Green, Reset, v.Preload)
-				fmt.Printf("%sOutput: %s%s\n", Green, Reset, v.Output)
-				fmt.Printf("%sTopic: %s%s\n", Green, Reset, v.Topic)
-				fmt.Printf("%sKcat: %s%v\n", Green, Reset, v.Kcat)
-				fmt.Printf("%sOneline: %s%v\n", Green, Reset, v.Oneline)
-				fmt.Printf("%sKey Template: %s%s\n", Green, Reset, v.KeyTemplate)
-				fmt.Printf("%sValue Template: %s%s\n", Green, Reset, v.ValueTemplate)
-				fmt.Printf("%sOutput Template: %s%s\n", Green, Reset, v.OutputTemplate)
+		for k, v := range emitters2 {
+			if k == args[0] {
+				for _, e := range v {
+					fmt.Printf("%sName:%s%s\n", Green, Reset, e.Name)
+					fmt.Printf("%sLocale: %s%s\n", Green, Reset, e.Locale)
+					fmt.Printf("%sNum: %s%d\n", Green, Reset, e.Num)
+					fmt.Printf("%sFrequency: %s%s\n", Green, Reset, e.Frequency)
+					fmt.Printf("%sDuration: %s%s\n", Green, Reset, e.Duration)
+					fmt.Printf("%sPreload: %s%d\n", Green, Reset, e.Preload)
+					fmt.Printf("%sOutput: %s%s\n", Green, Reset, e.Output)
+					fmt.Printf("%sTopic: %s%s\n", Green, Reset, e.Topic)
+					fmt.Printf("%sKcat: %s%v\n", Green, Reset, e.Kcat)
+					fmt.Printf("%sOneline: %s%v\n", Green, Reset, e.Oneline)
+					fmt.Printf("%sKey Template: %s%s\n", Green, Reset, e.KeyTemplate)
+					fmt.Printf("%sValue Template: %s%s\n", Green, Reset, e.ValueTemplate)
+					fmt.Printf("%sOutput Template: %s%s\n", Green, Reset, e.OutputTemplate)
+				}
 			}
 		}
 		fmt.Println()

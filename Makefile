@@ -5,8 +5,10 @@ TIME=$(shell date)
 hello:
 	@echo "JR,the JSON Random Generator"
 
-generate:
+install-gogen:
 	go install github.com/actgardner/gogen-avro/v10/cmd/...@latest
+
+generate:
 	go generate pkg/generator/generate.go
 
 compile:
@@ -50,6 +52,7 @@ copy_config:
 install:
 	install build/jr /usr/local/bin
 
-all: hello generate compile
+all: hello install-gogen generate compile
+all_offline: hello generate compile
 
 

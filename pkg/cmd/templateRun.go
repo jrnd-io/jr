@@ -114,7 +114,7 @@ jr template run --template "{{name}}"
 		})
 
 		e := emitter.Emitter{
-			Name:             name,
+			Name:             "cli",
 			Locale:           locale,
 			Num:              num,
 			Frequency:        frequency,
@@ -132,10 +132,8 @@ jr template run --template "{{name}}"
 		}
 
 		functions.SetSeed(seed)
-		es := []emitter.Emitter{e}
-
+		es := map[string][]emitter.Emitter{"cli": {e}}
 		RunEmitters([]string{e.Name}, es, false)
-
 	},
 }
 

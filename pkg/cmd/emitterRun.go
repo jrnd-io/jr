@@ -32,12 +32,12 @@ var emitterRunCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 
 		dryrun, _ := cmd.Flags().GetBool("dryrun")
-		RunEmitters(args, emitters, dryrun)
+		RunEmitters(args, emitters2, dryrun)
 
 	},
 }
 
-func RunEmitters(emitterNames []string, ems []emitter.Emitter, dryrun bool) {
+func RunEmitters(emitterNames []string, ems map[string][]emitter.Emitter, dryrun bool) {
 	defer emitter.WriteStats()
 	defer emitter.CloseProducers(ems)
 	emittersToRun := emitter.Initialize(emitterNames, ems, dryrun)

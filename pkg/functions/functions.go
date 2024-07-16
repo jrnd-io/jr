@@ -24,11 +24,6 @@ import (
 	"bufio"
 	"encoding/csv"
 	"fmt"
-	"github.com/google/uuid"
-	"github.com/ugol/jr/pkg/constants"
-	"github.com/ugol/jr/pkg/ctx"
-	"golang.org/x/text/cases"
-	"golang.org/x/text/language"
 	"log"
 	"math"
 	"math/rand"
@@ -37,6 +32,12 @@ import (
 	"strconv"
 	"strings"
 	"text/template"
+
+	"github.com/google/uuid"
+	"github.com/ugol/jr/pkg/constants"
+	"github.com/ugol/jr/pkg/ctx"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 func FunctionsMap() template.FuncMap {
@@ -46,6 +47,8 @@ func FunctionsMap() template.FuncMap {
 var Random = rand.New(rand.NewSource(0))
 var data = map[string][]string{}
 var fmap = map[string]interface{}{
+
+	"inject": Inject,
 
 	// text utilities
 	"atoi":                     Atoi,
@@ -522,4 +525,11 @@ func InitCSV(csvpath string) {
 		defer file.Close()
 	}
 
+}
+
+func Inject(perc float64, injected, orig string) string {
+	if rand.Float64() < perc {
+		return injected
+	}
+	return orig
 }

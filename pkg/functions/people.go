@@ -22,11 +22,12 @@ package functions
 
 import (
 	"fmt"
-	"github.com/squeeze69/generacodicefiscale"
-	"github.com/ugol/jr/pkg/ctx"
 	"log"
 	"strconv"
 	"strings"
+
+	"github.com/squeeze69/generacodicefiscale"
+	"github.com/ugol/jr/pkg/ctx"
 )
 
 // CodiceFiscale return a valid Italian Codice Fiscale
@@ -51,7 +52,7 @@ func CodiceFiscale() string {
 		birthdate = BirthDate(18, 75)
 	}
 	if city == "" {
-		city = City()
+		city = string(City())
 	}
 
 	if city == "Bolzano" {

@@ -22,8 +22,9 @@ package functions
 
 import (
 	"fmt"
-	"github.com/ugol/jr/pkg/ctx"
 	"math"
+
+	"github.com/ugol/jr/pkg/ctx"
 )
 
 const (
@@ -61,12 +62,21 @@ func Cardinal(short bool) string {
 	}
 }
 
+type CityFaulter string
+
+func (c CityFaulter) Fault(fail bool) string {
+	if fail {
+		return "XXX"
+	}
+	return string(c)
+}
+
 // City returns a random City
-func City() string {
+func City() CityFaulter {
 	c := Word("city")
 	ctx.JrContext.Ctx["_city"] = c
 	ctx.JrContext.CityIndex = ctx.JrContext.LastIndex
-	return c
+	return CityFaulter(c)
 }
 
 // CityAt returns City at given index

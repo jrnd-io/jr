@@ -24,11 +24,6 @@ import (
 	"bufio"
 	"encoding/csv"
 	"fmt"
-	"github.com/google/uuid"
-	"github.com/ugol/jr/pkg/constants"
-	"github.com/ugol/jr/pkg/ctx"
-	"golang.org/x/text/cases"
-	"golang.org/x/text/language"
 	"log"
 	"math"
 	"math/rand"
@@ -37,15 +32,27 @@ import (
 	"strconv"
 	"strings"
 	"text/template"
+
+	"github.com/google/uuid"
+	"github.com/ugol/jr/pkg/constants"
+	"github.com/ugol/jr/pkg/ctx"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 func FunctionsMap() template.FuncMap {
 	return fmap
 }
 
+type Faulter interface {
+	Fault(fail bool) string
+}
+
 var Random = rand.New(rand.NewSource(0))
 var data = map[string][]string{}
 var fmap = map[string]interface{}{
+
+	"fault": func(perc float64, f Faulter) string { return f.Fault(rand.Float64() < perc) },
 
 	// text utilities
 	"atoi":                     Atoi,

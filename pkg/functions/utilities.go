@@ -90,6 +90,14 @@ func Contains(s []string, str string) bool {
 	return false
 }
 
+// Inject is used to inject a different string value with a given probability, typically used to generate a bad value
+func Inject(probability float64, injected, original string) string {
+	if Random.Float64() < probability {
+		return injected
+	}
+	return original
+}
+
 // get the label value from csv file
 func fromcsv(c string) string {
 	ctx.JrContext.CtxCSVLock.Lock()

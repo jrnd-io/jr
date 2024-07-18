@@ -525,11 +525,3 @@ func InitCSV(csvpath string) {
 	}
 
 }
-
-// Inject is used to inject a different string value with a given probability, typically used to generate a bad value
-func Inject(probability float64, injected, original string) string {
-	if rand.Float64() < probability {
-		return injected
-	}
-	return original
-}

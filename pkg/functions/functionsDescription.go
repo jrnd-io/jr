@@ -554,6 +554,16 @@ var funcDesc = map[string]FunctionDescription{
 		Example:     "jr template run --embedded '{{imei}}'",
 		Output:      "334238791972527",
 	},
+	"inject": {
+		Name:        "inject",
+		Category:    "utilities",
+		Description: "inject a string with a given probability: useful to inject errors",
+		Parameters:  "probability float64, injected string, original string",
+		Localizable: false,
+		Return:      "string",
+		Example:     "jr template run --embedded '{{$bad:=regex \"[A-Z]{5}\"}}{{city | inject 0.5 $bad }}'",
+		Output:      "Portland|ZPTAC",
+	},
 	"integer": {
 		Name:        "integer",
 		Category:    "math",

@@ -48,8 +48,6 @@ var Random = rand.New(rand.NewSource(0))
 var data = map[string][]string{}
 var fmap = map[string]interface{}{
 
-	"inject": Inject,
-
 	// text utilities
 	"atoi":                     Atoi,
 	"itoa":                     strconv.Itoa,
@@ -191,6 +189,7 @@ var fmap = map[string]interface{}{
 	"seed":     Seed,
 	"uuid":     UniqueId,
 	"yesorno":  YesOrNo,
+	"inject":   Inject,
 
 	// context utilities
 	"add_v_to_list":            AddValueToList,
@@ -527,9 +526,10 @@ func InitCSV(csvpath string) {
 
 }
 
-func Inject(perc float64, injected, orig string) string {
-	if rand.Float64() < perc {
+// Inject is used to inject a different string value with a given probability, typically used to generate a bad value
+func Inject(probability float64, injected, original string) string {
+	if rand.Float64() < probability {
 		return injected
 	}
-	return orig
+	return original
 }

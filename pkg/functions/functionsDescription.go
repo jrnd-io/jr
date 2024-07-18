@@ -557,7 +557,7 @@ var funcDesc = map[string]FunctionDescription{
 	"inject": {
 		Name:        "inject",
 		Category:    "utilities",
-		Description: "inject a string with a given probability: useful to inject errors",
+		Description: "inject a string with a given probability between 0 (never) and 1 (always): useful to inject errors",
 		Parameters:  "probability float64, injected string, original string",
 		Localizable: false,
 		Return:      "string",

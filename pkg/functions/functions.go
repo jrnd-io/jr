@@ -198,7 +198,7 @@ var fmap = map[string]interface{}{
 	"get_v_from_list_at_index": GetValueFromListAtIndex,
 	"get_v":                    GetV,
 	"set_v":                    SetV,
-	"fromcsv":                  Fromcsv,
+	"fromcsv":                  FromCsv,
 }
 
 func Atoi(s string) int {

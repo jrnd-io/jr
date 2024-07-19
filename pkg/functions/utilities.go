@@ -98,8 +98,8 @@ func Inject(probability float64, injected, original any) any {
 	return original
 }
 
-// get the label value from csv file
-func fromcsv(c string) string {
+// Fromcsv gets the label value from csv file
+func Fromcsv(c string) string {
 	ctx.JrContext.CtxCSVLock.Lock()
 	defer ctx.JrContext.CtxCSVLock.Unlock()
 

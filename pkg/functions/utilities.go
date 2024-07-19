@@ -90,8 +90,8 @@ func Contains(s []string, str string) bool {
 	return false
 }
 
-// Inject is used to inject a different string value with a given probability, typically used to generate a bad value
-func Inject(probability float64, injected, original string) string {
+// Inject is used to inject a different value with a given probability, typically used to generate a bad value
+func Inject(probability float64, injected, original any) any {
 	if Random.Float64() < probability {
 		return injected
 	}

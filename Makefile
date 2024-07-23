@@ -5,8 +5,9 @@ TIME=$(shell date)
 hello:
 	@echo "JR,the JSON Random Generator"
 
-install-avrogen:
-	go install github.com/hamba/avro/v2/cmd/avrogen@latest
+install-gogen:
+	go install github.com/actgardner/gogen-avro/v10/cmd/...@latest
+	#go install github.com/hamba/avro/v2/cmd/avrogen@latest
 
 generate:
 	go generate pkg/generator/generate.go
@@ -52,7 +53,7 @@ copy_config:
 install:
 	install build/jr /usr/local/bin
 
-all: hello install-avrogen generate compile
+all: hello install-gogen generate compile
 all_offline: hello generate compile
 
 

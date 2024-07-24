@@ -1,4 +1,4 @@
-VERSION=0.3.8
+VERSION=0.3.9
 USER=$(shell id -u -n)
 TIME=$(shell date)
 
@@ -55,5 +55,3 @@ install:
 
 all: hello install-gogen generate compile
 all_offline: hello generate compile
-
-

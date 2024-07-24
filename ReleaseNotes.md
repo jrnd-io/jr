@@ -1,3 +1,9 @@
+v0.3.8
+- moved to librdkafka 2.5.0
+- added inject function
+- some templates fixed
+- improved emitter default configuration
+
 v0.3.6
 - bumped to go 1.22
 - fixed several avro schemas  

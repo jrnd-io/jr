@@ -5,7 +5,7 @@
       "locale": "us",
       "num": 1,
       "frequency": "100ms",
-      "duration": "3s",
+      "duration": "30s",
       "preload": 0,
       "valueTemplate": "iot_device_information",
       "output": "kafka",

@@ -1,6 +1,6 @@
 name: jrnd
 base: core22
-version: 0.3.7
+version: 0.3.8
 summary: Random data generator
 description: |
   Command line generator of random data.
@@ -22,7 +22,7 @@ parts:
     source-type: git
     source-branch: main
     source: https://github.com/ugol/jr
-    build-snaps: [go/1.21/stable]
+    build-snaps: [go/1.22/stable]
 
   jr-copy-files-templates:
     plugin: dump

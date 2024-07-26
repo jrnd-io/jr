@@ -27,12 +27,21 @@ import (
 	"fmt"
 	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
 	"github.com/confluentinc/confluent-kafka-go/v2/schemaregistry"
+	"github.com/confluentinc/confluent-kafka-go/v2/schemaregistry/rules/encryption"
+	"github.com/confluentinc/confluent-kafka-go/v2/schemaregistry/rules/encryption/awskms"
+	"github.com/confluentinc/confluent-kafka-go/v2/schemaregistry/rules/encryption/azurekms"
+	"github.com/confluentinc/confluent-kafka-go/v2/schemaregistry/rules/encryption/gcpkms"
+	"github.com/confluentinc/confluent-kafka-go/v2/schemaregistry/rules/encryption/hcvault"
 	"github.com/confluentinc/confluent-kafka-go/v2/schemaregistry/serde"
-	"github.com/confluentinc/confluent-kafka-go/v2/schemaregistry/serde/avro"
+	"github.com/confluentinc/confluent-kafka-go/v2/schemaregistry/serde/avrov2"
 	"github.com/confluentinc/confluent-kafka-go/v2/schemaregistry/serde/jsonschema"
 	"github.com/ugol/jr/pkg/types"
+	"io/ioutil"
 	"log"
 	"os"
+	"path/filepath"
+	"regexp"
+	"runtime"
 	"strconv"
 	"strings"
 	"time"
@@ -46,6 +55,7 @@ type KafkaManager struct {
 	Topic          string
 	Serializer     string
 	TemplateType   string
+	fleEnabled     bool
 }
 
 func (k *KafkaManager) Initialize(configFile string) {
@@ -75,6 +85,89 @@ func (k *KafkaManager) InitializeSchemaRegistry(configFile string) {
 		log.Fatalf("Failed to create schema registry client: %s", err)
 	}
 
+	if k.Serializer == "avro" || k.Serializer == "avro-generic" {
+		// verify if CSFLE must be enabled
+		if conf["kekName"] != "" && conf["kmsType"] != "" && conf["kmsKeyID"] != "" {
+			// register kms providers
+			awskms.Register()
+			azurekms.Register()
+			gcpkms.Register()
+			hcvault.Register()
+			encryption.Register()
+
+			// load avro schema file: CSFLE requires schema registration
+			_, currentFilePath, _, _ := runtime.Caller(0)
+			currentDir := filepath.Dir(currentFilePath)
+			filePath := filepath.Join(currentDir, "../../types/"+k.TemplateType+".avsc")
+			file, err := os.Open(filePath)
+			if err != nil {
+				log.Fatalf("Failed to open file: %s", err)
+			}
+			defer file.Close()
+
+			content, err := ioutil.ReadAll(file)
+			if err != nil {
+				log.Fatalf("Failed to read file: %s", err)
+			}
+			contentString := string(content)
+
+			// check presence of PII in schema
+			substring := `"confluent:tags": [ "PII" ]`
+			normalizedJSON := normalizeWhitespace(contentString)
+			normalizedSubstring := normalizeWhitespace(substring)
+
+			if strings.Contains(normalizedJSON, normalizedSubstring) {
+				// upper-casing the first letter of the fields --> name - required by https://pkg.go.dev/github.com/actgardner/gogen-avro#readme-naming
+				re := regexp.MustCompile(`"name"\s*:\s*"([^"]+)"`)
+				result := re.ReplaceAllStringFunc(contentString, func(match string) string {
+					// extract the name part after "name: "
+					parts := re.FindStringSubmatch(match)
+					fmt.Print(len(parts))
+					if len(parts) > 1 {
+						name := parts[1]
+						// capitalize the first letter of the name
+						capitalized := capitalizeFirstLetter(name)
+						// replace the original match with the new capitalized version
+						return "\"name\":" + "\"" + capitalized + "\""
+					}
+					return match
+				})
+
+				// register the avro schema adding rule set: PII
+				schema := schemaregistry.SchemaInfo{
+					Schema:     result,
+					SchemaType: "AVRO",
+					RuleSet: &schemaregistry.RuleSet{
+						DomainRules: []schemaregistry.Rule{
+							{
+								Name: "encryptPII",
+								Kind: "TRANSFORM",
+								Mode: "WRITEREAD",
+								Type: "ENCRYPT",
+								Tags: []string{"PII"},
+								Params: map[string]string{
+									"encrypt.kek.name":   conf["kekName"],
+									"encrypt.kms.type":   conf["kmsType"],
+									"encrypt.kms.key.id": conf["kmsKeyID"],
+								},
+								OnFailure: "ERROR,NONE",
+							},
+						},
+					},
+				}
+				_, err = k.schema.Register(k.Topic+"-value", schema, true)
+				if err != nil {
+					fmt.Printf("Failed to register schema: %s\n", err)
+					os.Exit(1)
+				}
+
+				k.fleEnabled = true
+
+			}
+
+		}
+	}
+
 	k.schemaRegistry = true
 }
 
@@ -93,10 +186,15 @@ func (k *KafkaManager) Produce(key []byte, data []byte, o any) {
 
 	if k.schemaRegistry {
 		var err error
-		if k.Serializer == "avro" {
-			ser, err = avro.NewSpecificSerializer(k.schema, serde.ValueSerde, avro.NewSerializerConfig())
-		} else if k.Serializer == "avro-generic" {
-			ser, err = avro.NewGenericSerializer(k.schema, serde.ValueSerde, avro.NewSerializerConfig())
+
+		if k.Serializer == "avro" || k.Serializer == "avro-generic" {
+			serConfig := avrov2.NewSerializerConfig()
+			// CSFLE requires auto register to false
+			if k.fleEnabled {
+				serConfig.AutoRegisterSchemas = false
+				serConfig.UseLatestVersion = true
+			}
+			ser, err = avrov2.NewSerializer(k.schema, serde.ValueSerde, serConfig)
 		} else if k.Serializer == "protobuf" {
 			//ser, err = protobuf.NewSerializer(k.schema, serde.ValueSerde, protobuf.NewSerializerConfig())
 			log.Fatal("Protobuf not yet implemented")
@@ -122,6 +220,7 @@ func (k *KafkaManager) Produce(key []byte, data []byte, o any) {
 			} else {
 				data = payload
 			}
+
 		}
 	}
 
@@ -258,4 +357,16 @@ func convertInKafkaConfig(m map[string]string) kafka.ConfigMap {
 		conf[k] = v
 	}
 	return conf
+}
+
+func capitalizeFirstLetter(s string) string {
+	if len(s) == 0 {
+		return s
+	}
+	return strings.ToUpper(string(s[0])) + s[1:]
+}
+
+func normalizeWhitespace(s string) string {
+    re := regexp.MustCompile(`\s+`)
+    return re.ReplaceAllString(s, " ")
 }

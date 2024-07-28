@@ -3,3 +3,8 @@
 schemaRegistryURL=
 schemaRegistryUser=
 schemaRegistryPassword=
+
+# Properties for Field Level Encryption (FLE)
+kekName=
+kmsType=
+kmsKeyID=

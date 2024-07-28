@@ -9,7 +9,8 @@
                 },
                 {
                   "name": "card_number",
-                  "type": "string"
+                  "type": "string",
+                  "confluent:tags": [ "PII" ]
                 },
                 {
                   "name": "cvv",

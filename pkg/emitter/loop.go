@@ -137,7 +137,13 @@ func doTemplate(emitter Emitter) {
 		if emitter.Oneline {
 			v = strings.ReplaceAll(v, "\n", "")
 		}
-		emitter.Producer.Produce([]byte(k), []byte(v), nil)
+		kInValue := functions.GetV("KEY")
+
+		if (kInValue) != "" {
+			emitter.Producer.Produce([]byte(kInValue), []byte(v), nil)
+		} else {
+			emitter.Producer.Produce([]byte(k), []byte(v), nil)
+		}
 
 		ctx.JrContext.GeneratedObjects++
 		ctx.JrContext.GeneratedBytes += int64(len(v))

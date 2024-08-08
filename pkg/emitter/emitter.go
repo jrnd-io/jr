@@ -140,7 +140,12 @@ func (e *Emitter) Run(num int, o any) {
 	for i := 0; i < num; i++ {
 		k := e.KTpl.Execute()
 		v := e.VTpl.Execute()
-		e.Producer.Produce([]byte(k), []byte(v), o)
+		kInValue := functions.GetV("KEY")
+		if kInValue == "" {
+			e.Producer.Produce([]byte(kInValue), []byte(v), o)
+		} else {
+			e.Producer.Produce([]byte(k), []byte(v), o)
+		}
 		ctx.JrContext.GeneratedObjects++
 		ctx.JrContext.GeneratedBytes += int64(len(v))
 	}

@@ -1,0 +1,32 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: jr-test
+data:
+  jr.js: |
+    import exec from 'k6/x/exec';
+
+    export const options = {
+      vus: 20,
+      duration: '1m',
+    };
+    export default ()=> {
+       console.log(exec.command("/usr/bin/jr", ["run",
+                                                "net_device"
+                                                ]))
+
+    }
+---
+apiVersion: k6.io/v1alpha1
+kind: TestRun
+metadata:
+  name: k6-jr-example
+spec:
+  parallelism: 4
+  script:
+    configMap:
+      name: jr-test
+      file: jr.js
+  runner:
+    image: registry.localhost:5000/k6-jr:latest

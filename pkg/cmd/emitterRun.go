@@ -46,5 +46,5 @@ func RunEmitters(emitterNames []string, ems map[string][]emitter.Emitter, dryrun
 
 func init() {
 	emitterCmd.AddCommand(emitterRunCmd)
-	emitterRunCmd.Flags().BoolP("dryrun", "d", false, "dryrun: output of the emitters overrode to  stdout")
+	emitterRunCmd.Flags().BoolP("dryrun", "d", false, "dryrun: output of the emitters to stdout")
 }

@@ -10,7 +10,7 @@ JR is a CLI program that helps you to stream quality random data for your applic
 ![Build](https://github.com/ugol/jr/actions/workflows/go-mac.yml/badge.svg)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Go Reference](https://pkg.go.dev/badge/github.com/ugol/jr.svg)](https://pkg.go.dev/github.com/ugol/jr)
-[![Docker](https://img.shields.io/badge/docker-latest-blue.svg)](https://hub.docker.com/r/ugol/jr)
+[![Docker](https://img.shields.io/badge/docker-latest-blue.svg)](https://hub.docker.com/r/jrndio/jr)
 
 ![JR-simple](https://user-images.githubusercontent.com/89472/229626362-70ddc95d-1090-4746-a20a-fbffba4193cd.gif)
 

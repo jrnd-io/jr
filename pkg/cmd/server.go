@@ -2,30 +2,30 @@ package cmd
 
 import (
 	"bytes"
+	"context"
 	_ "embed"
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/chi/v5/middleware"
-	"github.com/spf13/cobra"
-	"github.com/ugol/jr/pkg/configuration"
-	"github.com/ugol/jr/pkg/constants"
-	"github.com/ugol/jr/pkg/emitter"
-	"github.com/ugol/jr/pkg/functions"
 	"log"
 	"net/http"
 	"path/filepath"
 	"strings"
 	"text/template"
 	"time"
+
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
+	"github.com/gorilla/sessions"
+	"github.com/spf13/cobra"
+	"github.com/ugol/jr/pkg/configuration"
+	"github.com/ugol/jr/pkg/constants"
+	"github.com/ugol/jr/pkg/emitter"
+	"github.com/ugol/jr/pkg/functions"
 )
 
 //go:embed html/index.html
 var index_html string
-
-//go:embed html/emitters.html
-var emitters_html string
 
 //go:embed html/templatedev.html
 var templatedev_html string
@@ -63,11 +63,10 @@ var font_awesome_js string
 //go:embed html/images/jr_logo.png
 var jr_logo_png []byte
 
-var lastTemplateSubmittedValue []byte
-var lastTemplateSubmittedisJsonOutputValue []byte
-
 var firstRun = make(map[string]bool)
 var emitterToRun = make(map[string][]emitter.Emitter)
+
+var store = sessions.NewCookieStore([]byte("templates"))
 
 var serverCmd = &cobra.Command{
 	Use:     "server",
@@ -95,6 +94,7 @@ var serverCmd = &cobra.Command{
 		router.Use(middleware.Logger)
 		router.Use(middleware.Recoverer)
 		router.Use(middleware.Timeout(60 * time.Second))
+		router.Use(SessionMiddleware)
 
 		//comment for local dev
 		embeddedFileRoutes(router)
@@ -135,6 +135,14 @@ var serverCmd = &cobra.Command{
 	},
 }
 
+func SessionMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		session, _ := store.Get(r, "session-name")
+		r = r.WithContext(context.WithValue(r.Context(), "session", session))
+		next.ServeHTTP(w, r)
+	})
+}
+
 func embeddedFileRoutes(router chi.Router) {
 
 	router.Get("/", func(w http.ResponseWriter, r *http.Request) {
@@ -143,10 +151,6 @@ func embeddedFileRoutes(router chi.Router) {
 
 	router.Get("/index.html", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(index_html))
-	})
-
-	router.Get("/emitters.html", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte(emitters_html))
 	})
 
 	router.Get("/templatedev.html", func(w http.ResponseWriter, r *http.Request) {
@@ -357,9 +361,18 @@ func loadLastStatus(w http.ResponseWriter, r *http.Request) {
 	var response bytes.Buffer
 
 	response.WriteString("{")
-	lastTemplateSubmittedValueB64 := base64.StdEncoding.EncodeToString(lastTemplateSubmittedValue)
+
+	session := r.Context().Value("session").(*sessions.Session)
+	lastTemplateSubmittedValue_without_type, _ := session.Values["lastTemplateSubmittedValue"]
+	lastTemplateSubmittedValue, _ := lastTemplateSubmittedValue_without_type.(string)
+
+	lastTemplateSubmittedisJsonOutputValue_without_type, _ := session.Values["lastTemplateSubmittedisJsonOutputValue"]
+	lastTemplateSubmittedisJsonOutputValue, _ := lastTemplateSubmittedisJsonOutputValue_without_type.(string)
+
+	lastTemplateSubmittedValueB64 := base64.StdEncoding.EncodeToString([]byte(lastTemplateSubmittedValue))
+
 	response.WriteString("\"template\": \"" + lastTemplateSubmittedValueB64 + "\",")
-	response.WriteString("\"isJsonOutput\": \"" + string(lastTemplateSubmittedisJsonOutputValue) + "\"")
+	response.WriteString("\"isJsonOutput\": \"" + lastTemplateSubmittedisJsonOutputValue + "\"")
 	response.WriteString("}")
 
 	_, err := w.Write(response.Bytes())
@@ -371,16 +384,22 @@ func loadLastStatus(w http.ResponseWriter, r *http.Request) {
 func executeTemplate(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "plain/text")
+
 	errorFormParse := r.ParseForm()
 	if errorFormParse != nil {
 		log.Println("errorFormParse ", errorFormParse)
 		http.Error(w, errorFormParse.Error(), http.StatusInternalServerError)
 	}
 
-	lastTemplateSubmittedValue = []byte(r.Form.Get("template"))
-	lastTemplateSubmittedisJsonOutputValue = []byte(r.Form.Get("isJsonOutput"))
+	var lastTemplateSubmittedValue = r.Form.Get("template")
+	var lastTemplateSubmittedisJsonOutputValue = r.Form.Get("isJsonOutput")
 
-	templateParsed, errValidity := template.New("").Funcs(functions.FunctionsMap()).Parse(string(lastTemplateSubmittedValue))
+	session := r.Context().Value("session").(*sessions.Session)
+	session.Values["lastTemplateSubmittedValue"] = lastTemplateSubmittedValue
+	session.Values["lastTemplateSubmittedisJsonOutputValue"] = lastTemplateSubmittedisJsonOutputValue
+	session.Save(r, w)
+
+	templateParsed, errValidity := template.New("").Funcs(functions.FunctionsMap()).Parse(lastTemplateSubmittedValue)
 
 	if errValidity != nil {
 		log.Println("errValidity ", errValidity)

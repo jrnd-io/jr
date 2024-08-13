@@ -4,29 +4,17 @@ kind: ConfigMap
 metadata:
   name: jr-configmap
 data:
-  mongoconfig.json: |
-    {
-      "mongo_uri": "mongodb+srv://jr:jrpassword@example-mongodb-svc.jr-test.svc.cluster.local/admin?replicaSet=example-mongodb&ssl=false",
-      "database": "admin",
-      "collection": "jr"
-    }
   jr.js: |
     import exec from 'k6/x/exec';
 
     export const options = {
       vus: 20,
       duration: '5m',
-      cloud: {
-        projectID: 3708988,
-        name: "jr-test-01"
-      }
     };
     export default ()=> {
       try{
           var output = exec.command("/usr/bin/jr", ["run",
                                                     "net_device",
-                                                    "--output","mongo",
-                                                    "--mongoConfig", "/jrconfig/mongoconfig.json"
                                                     ],{"continue_on_error": true});
       }catch (e) {
         console.log("ERROR: " + e);
@@ -48,18 +36,5 @@ spec:
     configMap:
       name: jr-configmap
       file: jr.js
-  arguments: -o experimental-prometheus-rw
   runner:
     image: registry.localhost:5000/k6-jr:latest
-    env: 
-      - name: K6_PROMETHEUS_RW_SERVER_URL
-        value: http://prometheus-server.observability.svc.cluster.local:80/api/v1/write
-      - name: K6_PROMETHEUS_RW_TREND_STATS
-        value: "p(95),p(99),min,max"
-    volumeMounts:
-    - name: config-volume
-      mountPath: /jrconfig
-    volumes:
-    - name: config-volume
-      configMap:
-        name: jr-configmap

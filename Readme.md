@@ -141,3 +141,11 @@ jr run net_device -n 2 -f 100ms -d 1m --kcat | jq
 
 parse error: Expected value before ',' at line 1, column 5
 ```
+
+## Distributed Testing
+
+JR can be run as a synthetic data generator for distributed testing. 
+At present the following testing tools are supported:
+
+- [k6](./k6/exec/)
+- [locust](./locust/)

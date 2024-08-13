@@ -78,7 +78,7 @@ You can also use a [![Docker](https://img.shields.io/badge/docker-latest-blue.sv
 image if you prefer.
 
 ```bash
-docker run -it ugol/jr:latest jr run net_device
+docker run -it jrndio/jr:latest jr run net_device
 ```
 
 ### Other options for templates

@@ -74,7 +74,7 @@ jr run net_device
 
 ### Using Docker
 
-You can also use a [![Docker](https://img.shields.io/badge/docker-latest-blue.svg)](https://hub.docker.com/r/ugol/jr)
+You can also use a [![Docker](https://img.shields.io/badge/docker-latest-blue.svg)](https://hub.docker.com/r/jrndio/jr)
 image if you prefer.
 
 ```bash

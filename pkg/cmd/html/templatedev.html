@@ -208,16 +208,25 @@
 					if (data.ok) {
 						data.json().then(function_found => {
 							$('#functionslist').empty();
-							$('#functionslist').append(`<b>Name</b>: ${function_found.Name}</br>`);
-							$('#functionslist').append(`<b>Category</b>: ${function_found.Category}</br>`);
-							$('#functionslist').append(`<b>Description</b>: ${function_found.Description}</br>`);
-							if (function_found.Parameters.length > 0) {
-								$('#functionslist').append(`<b>Parameters</b>: ${function_found.Parameters}</br>`);
-							}
-							$('#functionslist').append(`<b>Localizable</b>: ${function_found.Localizable}</br>`);
-							$('#functionslist').append(`<b>Return</b>: ${function_found.Return}</br>`);
-							$('#functionslist').append(`<b>Example</b>: <pre>${function_found.Example}</pre>`);
-							$('#functionslist').append(`<b>Output</b>: <pre>${function_found.Output}</pre></br>`);
+							function_found.functions.forEach(aFunction => {
+
+
+
+								$('#functionslist').append(`<b>Name</b>: ${aFunction.Name}</br>`);
+								$('#functionslist').append(`<b>Category</b>: ${aFunction.Category}</br>`);
+								$('#functionslist').append(`<b>Description</b>: ${aFunction.Description}</br>`);
+								if (aFunction.Parameters.length > 0) {
+									$('#functionslist').append(`<b>Parameters</b>: ${aFunction.Parameters}</br>`);
+								}
+								$('#functionslist').append(`<b>Localizable</b>: ${aFunction.Localizable}</br>`);
+								$('#functionslist').append(`<b>Return</b>: ${aFunction.Return}</br>`);
+								$('#functionslist').append(`<b>Example</b>: <pre>${aFunction.Example}</pre>`);
+								$('#functionslist').append(`<b>Output</b>: <pre>${aFunction.Output}</pre></br>`);
+
+
+							});
+
+
 
 						})
 					} else if (!data.ok) {

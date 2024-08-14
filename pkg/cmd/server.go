@@ -10,6 +10,8 @@ import (
 	"log"
 	"net/http"
 	"path/filepath"
+	"regexp"
+	"sort"
 	"strings"
 	"text/template"
 	"time"
@@ -436,23 +438,68 @@ func webFunctionList(w http.ResponseWriter, r *http.Request) {
 }
 
 func webPrintFunction(web_function_to_find string, w http.ResponseWriter, r *http.Request) {
-	f, found := functions.Description(web_function_to_find)
 
-	if found {
-		b, errMarshal := json.Marshal(f)
-		if errMarshal != nil {
-			fmt.Println(errMarshal)
-			return
-		}
+	matchingFunction := findFunctonsByRegex(web_function_to_find)
+
+	sort.Strings(matchingFunction)
+
+	if len(matchingFunction) > 0 {
+
 		w.Header().Set("Content-Type", "application/json")
-		_, err := w.Write(b)
-		if err != nil {
-			log.Println(err)
+		_, err := w.Write([]byte("{\"functions\":["))
+
+		for i, function_name := range matchingFunction {
+
+			f, _ := functions.Description(function_name)
+
+			b, errMarshal := json.Marshal(f)
+
+			if errMarshal != nil {
+				fmt.Println(errMarshal)
+				return
+			}
+
+			if err != nil {
+				log.Println(err)
+			}
+
+			_, err = w.Write(b)
+
+			if i < len(matchingFunction)-1 {
+				_, err = w.Write([]byte(","))
+			}
+
+			if err != nil {
+				log.Println(err)
+			}
 		}
+
+		_, err = w.Write([]byte("]}"))
+
 	} else {
 		http.Error(w, "No function found", http.StatusNotFound)
 	}
 
+}
+
+func findFunctonsByRegex(name string) []string {
+	var matchedKeys []string
+
+	// Compile the regular expression pattern
+	re, err := regexp.Compile(name)
+	if err != nil {
+		fmt.Println("Invalid regex pattern:", err)
+		return nil
+	}
+
+	// Iterate over the map and match the keys against the regex pattern
+	for key := range functions.DescriptionMap() {
+		if re.MatchString(key) {
+			matchedKeys = append(matchedKeys, key)
+		}
+	}
+
+	return matchedKeys
 }
 
 func init() {

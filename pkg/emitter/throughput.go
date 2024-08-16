@@ -67,6 +67,7 @@ func ParseThroughput(input string) (Throughput, error) {
 	}
 
 	switch unitStr {
+
 	case "b":
 		return Throughput(value * bitMultiplier), nil
 	case "B":

@@ -16,9 +16,10 @@ const (
 )
 
 type Endpoint struct {
-	URL     string        `json:"url"`
-	Method  Method        `json:"method"`
-	Timeout time.Duration `json:"timeout"`
+	URL     string `json:"url"`
+	Method  Method `json:"method"`
+	Timeout string `json:"timeout"`
+	timeout time.Duration
 }
 
 type Session struct {
@@ -28,7 +29,6 @@ type Session struct {
 type ErrorHandling struct {
 	ExpectStatusCode int  `json:"expect_status_code"`
 	IgnoreStatusCode bool `json:"ignore_status_code"`
-	// MaxErrors        int `json:"max_errors"`
 }
 
 type Headers map[string]string

@@ -31,9 +31,25 @@ func (p *Producer) Initialize(configFile string) {
 		log.Fatalf("Failed to unmarshal config: %v", err)
 	}
 
+	p.InitializeFromConfig(config)
+}
+
+func (p *Producer) InitializeFromConfig(config Config) {
+
+	var err error
 	p.configuration = config
-	if p.configuration.Endpoint.Timeout == 0 {
-		p.configuration.Endpoint.Timeout = time.Second * 10
+	if p.configuration.Endpoint.Timeout == "" {
+		p.configuration.Endpoint.timeout = time.Second * 10
+	} else {
+		p.configuration.Endpoint.timeout, err = time.ParseDuration(p.configuration.Endpoint.Timeout)
+		if err != nil {
+			log.Fatalf("Failed to parse timeout: %v", err)
+		}
+
+	}
+
+	if p.configuration.ErrorHandling.ExpectStatusCode == 0 {
+		p.configuration.ErrorHandling.ExpectStatusCode = 200
 	}
 
 	if p.configuration.TLS.CertFile != "" && p.configuration.TLS.KeyFile == "" {
@@ -58,7 +74,7 @@ func (p *Producer) Initialize(configFile string) {
 	}
 
 	p.client = resty.New().
-		SetTimeout(p.configuration.Endpoint.Timeout).
+		SetTimeout(p.configuration.Endpoint.timeout).
 		SetTLSClientConfig(&tls.Config{
 			InsecureSkipVerify: p.configuration.TLS.InsecureSkipVerify,
 		}).
@@ -90,6 +106,10 @@ func (p *Producer) Initialize(configFile string) {
 			p.configuration.Authentication.Digest.Password)
 	default:
 
+	}
+
+	if p.configuration.Endpoint.Method == "" {
+		p.configuration.Endpoint.Method = POST
 	}
 
 }
@@ -125,4 +145,8 @@ func (p *Producer) Produce(k []byte, v []byte, o any) {
 
 func (p *Producer) Close() error {
 	return nil
+}
+
+func (p *Producer) GetClient() *resty.Client {
+	return p.client
 }

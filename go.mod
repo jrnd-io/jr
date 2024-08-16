@@ -10,8 +10,10 @@ require (
 	github.com/elastic/go-elasticsearch/v8 v8.14.0
 	github.com/go-chi/chi/v5 v5.1.0
 	github.com/go-resty/resty/v2 v2.14.0
+	github.com/google/go-cmp v0.6.0
 	github.com/google/uuid v1.6.0
 	github.com/gorilla/sessions v1.3.0
+	github.com/jarcoal/httpmock v1.3.1
 	github.com/redis/go-redis/v9 v9.5.3
 	github.com/spf13/cobra v1.8.1
 	github.com/spf13/viper v1.19.0

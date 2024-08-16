@@ -1,3 +1,11 @@
+v0.3.9
+- added key calculation directly from the template value
+- added distributed JR with Locust and K6
+- new Docker image from scratch
+- added several GUI features 
+- added http producer
+- 
+
 v0.3.8
 - moved to librdkafka 2.5.0
 - added inject function

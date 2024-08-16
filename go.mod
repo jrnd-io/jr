@@ -5,6 +5,7 @@ go 1.22.4
 require (
 	cloud.google.com/go/storage v1.43.0
 	github.com/actgardner/gogen-avro/v10 v10.2.1
+	github.com/adrg/xdg v0.5.0
 	github.com/aws/aws-sdk-go v1.54.14
 	github.com/confluentinc/confluent-kafka-go/v2 v2.5.0
 	github.com/elastic/go-elasticsearch/v8 v8.14.0

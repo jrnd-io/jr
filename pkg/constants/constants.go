@@ -20,13 +20,20 @@
 
 package constants
 
+import (
+	"github.com/adrg/xdg"
+)
+
 var JRhome string
 
 const NUM = 1
 const LOCALE = "us"
 const FREQUENCY = -1
 const INFINITE = 1<<63 - 1
-const DEFAULT_HOMEDIR = "$HOME/.jr"
+
+// var DEFAULT_SYSTEMDIR = xdg.DataHome + "jr"
+var DEFAULT_HOMEDIR = xdg.ConfigHome + ".jr"
+
 const DEFAULT_KEY = "null"
 const DEFAULT_OUTPUT = "stdout"
 const DEFAULT_OUTPUT_TEMPLATE = "{{.V}}\n"
@@ -36,7 +43,7 @@ const DEFAULT_PARTITIONS = 6
 const DEFAULT_REPLICA = 3
 const DEFAULT_PRELOAD_SIZE = 0
 const DEFAULT_ENV_PREFIX = "JR"
-const DEFAULT_EMITTER_NAME = "emitter"
+const DEFAULT_EMITTER_NAME = "cli"
 const DEFAULT_VALUE_TEMPLATE = "user"
 const DEFAULT_TOPIC = "test"
 const DEFAULT_HTTP_PORT = 7482

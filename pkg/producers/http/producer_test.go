@@ -3,6 +3,7 @@ package http_test
 import (
 	"encoding/base64"
 	"fmt"
+	"io"
 	"net/http"
 	"strings"
 	"testing"
@@ -11,6 +12,8 @@ import (
 	"github.com/jarcoal/httpmock"
 	phttp "github.com/ugol/jr/pkg/producers/http"
 )
+
+var defaultBody = []byte("{\"property\": \"value\"}")
 
 type mockResponder struct {
 	name          string
@@ -23,6 +26,15 @@ type mockResponder struct {
 }
 
 func (m *mockResponder) serveHTTP(req *http.Request) (*http.Response, error) {
+
+	body, err := io.ReadAll(req.Body)
+	defer req.Body.Close()
+	if err != nil {
+		m.t.Errorf("%s: cannot read request body", m.name)
+	}
+	if diff := cmp.Diff(defaultBody, body); diff != "" {
+		m.t.Errorf("%s: mismatch challenge (-want +got):\n%s", m.name, diff)
+	}
 
 	if m.expectHeaders != nil {
 		// flatten request headers
@@ -220,7 +232,7 @@ func TestProducer(t *testing.T) {
 				fakeUrl,
 				mr.serveHTTP)
 
-			producer.Produce([]byte("key"), []byte("{\"property\": \"value\"}"), nil)
+			producer.Produce([]byte("key"), defaultBody, nil)
 			httpmock.DeactivateAndReset()
 		})
 	}

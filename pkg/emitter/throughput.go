@@ -89,5 +89,6 @@ func ParseThroughput(input string) (Throughput, error) {
 		return Throughput(value * 1024 * 1024 * 1024 * 1024), nil
 	default:
 		return 0, fmt.Errorf("unsupported unit: %s", unitStr)
+
 	}
 }

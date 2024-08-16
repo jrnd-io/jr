@@ -22,6 +22,7 @@ package cmd
 
 import (
 	"fmt"
+
 	"github.com/spf13/cobra"
 )
 
@@ -47,6 +48,7 @@ var producerListCmd = &cobra.Command{
 
 		fmt.Printf("%sConsole *%s (--output = stdout)\n", Green, Reset)
 		fmt.Printf("%sKafka%s (--output = kafka)\n", Green, Reset)
+		fmt.Printf("%sHTTP%s (--output = http)\n", Green, Reset)
 		fmt.Printf("%sRedis%s (--output = redis)\n", Green, Reset)
 		fmt.Printf("%sMongodb%s (--output = mongo)\n", Green, Reset)
 		fmt.Printf("%sElastic%s (--output = elastic)\n", Green, Reset)

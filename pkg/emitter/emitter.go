@@ -22,6 +22,10 @@ package emitter
 
 import (
 	"fmt"
+	"log"
+	"os"
+	"time"
+
 	"github.com/ugol/jr/pkg/configuration"
 	"github.com/ugol/jr/pkg/constants"
 	"github.com/ugol/jr/pkg/ctx"
@@ -29,15 +33,13 @@ import (
 	"github.com/ugol/jr/pkg/producers/console"
 	"github.com/ugol/jr/pkg/producers/elastic"
 	"github.com/ugol/jr/pkg/producers/gcs"
+	"github.com/ugol/jr/pkg/producers/http"
 	"github.com/ugol/jr/pkg/producers/kafka"
 	"github.com/ugol/jr/pkg/producers/mongoDB"
 	"github.com/ugol/jr/pkg/producers/redis"
 	"github.com/ugol/jr/pkg/producers/s3"
 	"github.com/ugol/jr/pkg/producers/server"
 	"github.com/ugol/jr/pkg/tpl"
-	"log"
-	"os"
-	"time"
 )
 
 type Emitter struct {
@@ -128,8 +130,13 @@ func (e *Emitter) Initialize(conf configuration.GlobalConfiguration) {
 		return
 	}
 
-	if e.Output == "http" {
+	if e.Output == "json" {
 		e.Producer = &server.JsonProducer{OutputTpl: &o}
+		return
+	}
+
+	if e.Output == "http" {
+		e.Producer = createHTTPProducer(conf.HTTPConfig)
 		return
 	}
 
@@ -189,6 +196,13 @@ func createGCSProducer(gcsConfig string) Producer {
 	gProducer.Initialize(gcsConfig)
 
 	return gProducer
+}
+
+func createHTTPProducer(httpConfig string) Producer {
+	httpProducer := &http.Producer{}
+	httpProducer.Initialize(httpConfig)
+
+	return httpProducer
 }
 
 func createKafkaProducer(conf configuration.GlobalConfiguration, topic string, templateType string) *kafka.KafkaManager {

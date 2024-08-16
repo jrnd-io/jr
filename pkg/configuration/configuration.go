@@ -37,6 +37,7 @@ type GlobalConfiguration struct {
 	ElasticConfig    string
 	S3Config         string
 	GCSConfig        string
+	HTTPConfig       string
 	Url              string
 	EmbeddedTemplate bool
 	FileNameTemplate bool

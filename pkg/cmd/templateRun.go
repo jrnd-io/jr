@@ -21,14 +21,15 @@
 package cmd
 
 import (
+	"log"
+	"time"
+
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"github.com/ugol/jr/pkg/configuration"
 	"github.com/ugol/jr/pkg/constants"
 	"github.com/ugol/jr/pkg/emitter"
 	"github.com/ugol/jr/pkg/functions"
-	"log"
-	"time"
 )
 
 var templateRunCmd = &cobra.Command{
@@ -110,6 +111,8 @@ jr template run --template "{{name}}"
 					configuration.GlobalCfg.S3Config, _ = cmd.Flags().GetString(f.Name)
 				case "gcsConfig":
 					configuration.GlobalCfg.GCSConfig, _ = cmd.Flags().GetString(f.Name)
+				case "httpConfig":
+					configuration.GlobalCfg.HTTPConfig, _ = cmd.Flags().GetString(f.Name)
 				}
 			}
 		})
@@ -167,6 +170,7 @@ func init() {
 	templateRunCmd.Flags().BoolP("schemaRegistry", "s", false, "If you want to use Confluent Schema Registry")
 	templateRunCmd.Flags().String("serializer", "", "Type of serializer: json-schema, avro-generic, avro, protobuf")
 	templateRunCmd.Flags().Duration("redis.ttl", -1, "If output is redis, ttl of the object")
+	templateRunCmd.Flags().String("httpConfig", "", "HTTP configuration")
 	templateRunCmd.Flags().String("redisConfig", "", "Redis configuration")
 	templateRunCmd.Flags().String("mongoConfig", "", "MongoDB configuration")
 	templateRunCmd.Flags().String("elasticConfig", "", "Elastic Search configuration")

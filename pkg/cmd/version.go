@@ -26,6 +26,7 @@ import (
 )
 
 var Version = "DEV"
+var GoVersion string
 var BuildTime string
 var BuildUser string
 
@@ -35,8 +36,9 @@ var versionCmd = &cobra.Command{
 	Long:  `prints JR version number`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Printf("JR Version: %s\n", Version)
-		fmt.Printf("Built by %s\n", BuildUser)
-		fmt.Printf("Build time: %s\n", BuildTime)
+		fmt.Printf("Built with: %s\n", GoVersion)
+		fmt.Printf("        by: %s\n", BuildUser)
+		fmt.Printf("        at: %s\n", BuildTime)
 	},
 }
 

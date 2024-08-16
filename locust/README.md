@@ -1,6 +1,6 @@
 ## JR and Locust distributed in Kubernetes
 
-JR can run with  [Locust K6](https://locust.io)
+JR can run with  [Locust](https://locust.io)
 
 ### Prerequisites
 

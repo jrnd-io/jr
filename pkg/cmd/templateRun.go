@@ -21,6 +21,7 @@
 package cmd
 
 import (
+	"log"
 	"time"
 
 	"github.com/spf13/cobra"
@@ -54,7 +55,7 @@ jr template run --template "{{name}}"
 		num, _ := cmd.Flags().GetInt("num")
 		frequency, _ := cmd.Flags().GetDuration("frequency")
 		duration, _ := cmd.Flags().GetDuration("duration")
-		//throughputString, _ := cmd.Flags().GetString("throughput")
+		throughputString, _ := cmd.Flags().GetString("throughput")
 		seed, _ := cmd.Flags().GetInt64("seed")
 		topic, _ := cmd.Flags().GetString("topic")
 		preload, _ := cmd.Flags().GetInt("preload")
@@ -75,16 +76,16 @@ jr template run --template "{{name}}"
 			vTemplate = args[0]
 			eTemplate = ""
 		}
-		/*
-			throughput, err := parseThroughput(throughputString)
-			if err != nil {
-				log.Panicf("Throughput format error:%v", err)
-			}
 
-			if throughput > 0 {
-				// @TODO
-			}
-		*/
+		throughput, err := emitter.ParseThroughput(throughputString)
+		if err != nil {
+			log.Panicf("Throughput format error:%v", err)
+		}
+
+		if throughput > 0 {
+			// @TODO
+		}
+
 		cmd.Flags().VisitAll(func(f *pflag.Flag) {
 			if f.Changed {
 				switch f.Name {

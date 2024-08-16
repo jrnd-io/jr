@@ -21,9 +21,9 @@
 package cmd
 
 import (
-	"log"
 	"time"
 
+	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"github.com/ugol/jr/pkg/configuration"
@@ -79,7 +79,7 @@ jr template run --template "{{name}}"
 
 		throughput, err := emitter.ParseThroughput(throughputString)
 		if err != nil {
-			log.Panicf("Throughput format error:%v", err)
+			log.Panic().Err(err).Msg("Throughput format error")
 		}
 
 		if throughput > 0 {

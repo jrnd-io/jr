@@ -3,12 +3,13 @@ package s3
 import (
 	"bytes"
 	"encoding/json"
+	"os"
+
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/google/uuid"
-	"io/ioutil"
-	"log"
+	"github.com/rs/zerolog/log"
 )
 
 type Config struct {
@@ -23,19 +24,19 @@ type S3Producer struct {
 
 func (p *S3Producer) Initialize(configFile string) {
 	var config Config
-	file, err := ioutil.ReadFile(configFile)
+	file, err := os.ReadFile(configFile)
 	if err != nil {
-		log.Fatalf("Failed to ReadFile: %s", err)
+		log.Fatal().Err(err).Msg("Failed to ReadFile")
 	}
 	err = json.Unmarshal(file, &config)
 	if err != nil {
-		log.Fatalf("Failed to parse configuration parameters: %s", err)
+		log.Fatal().Err(err).Msg("Failed to parse configuration parameters")
 	}
 
 	sess, err := session.NewSession(&aws.Config{Region: &config.AWSRegion})
 
 	if err != nil {
-		log.Fatalf("Can't establish a session to S3: %s", err)
+		log.Fatal().Err(err).Msg("Can't establish a session to S3")
 		return
 	}
 
@@ -67,11 +68,11 @@ func (p *S3Producer) Produce(k []byte, v []byte, o any) {
 	})
 
 	if err != nil {
-		log.Fatalf("Failed to write data in s3:\n%s", err)
+		log.Fatal().Err(err).Msg("Failed to write data in s3")
 	}
 }
 
 func (p *S3Producer) Close() error {
-	log.Println("S3 Client doesn't provide a close method!")
+	log.Warn().Msg("S3 Client doesn't provide a close method!")
 	return nil
 }

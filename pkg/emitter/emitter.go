@@ -22,10 +22,10 @@ package emitter
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"time"
 
+	"github.com/rs/zerolog/log"
 	"github.com/ugol/jr/pkg/configuration"
 	"github.com/ugol/jr/pkg/constants"
 	"github.com/ugol/jr/pkg/ctx"
@@ -80,11 +80,11 @@ func (e *Emitter) Initialize(conf configuration.GlobalConfiguration) {
 
 	keyTpl, err := tpl.NewTpl("key", e.KeyTemplate, functions.FunctionsMap(), &ctx.JrContext)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal().Err(err).Msg("Failed to create key template")
 	}
 	valueTpl, err := tpl.NewTpl("value", e.EmbeddedTemplate, functions.FunctionsMap(), &ctx.JrContext)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal().Err(err).Msg("Failed to create value template")
 	}
 
 	e.KTpl = keyTpl
@@ -101,7 +101,7 @@ func (e *Emitter) Initialize(conf configuration.GlobalConfiguration) {
 		return
 	} else {
 		if conf.SchemaRegistry {
-			log.Println("Ignoring schemaRegistry and/or serializer when output not set to kafka")
+			log.Warn().Msg("Ignoring schemaRegistry and/or serializer when output not set to kafka")
 		}
 	}
 

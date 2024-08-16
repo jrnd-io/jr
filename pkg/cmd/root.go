@@ -22,16 +22,17 @@ package cmd
 
 import (
 	"fmt"
+	"os"
+	"strings"
+	"time"
+
+	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 	"github.com/ugol/jr/pkg/configuration"
 	"github.com/ugol/jr/pkg/constants"
 	"github.com/ugol/jr/pkg/functions"
-	"log"
-	"os"
-	"strings"
-	"time"
 )
 
 var rootCmd = &cobra.Command{
@@ -78,19 +79,19 @@ func initConfig() {
 	viper.AddConfigPath(constants.JRhome)
 
 	if err := viper.ReadInConfig(); err == nil {
-		log.Println("JR configuration:", viper.ConfigFileUsed())
+		log.Debug().Str("file", viper.ConfigFileUsed()).Msg("JR configuration")
 	} else {
-		log.Println("JR configuration not found")
+		log.Error().Err(err).Msg("JR configuration not found")
 	}
 	err := viper.UnmarshalKey("global", &configuration.GlobalCfg)
 	if err != nil {
-		log.Println(err)
+		log.Error().Err(err).Msg("Failed to unmarshal global configuration")
 	}
 
 	//err = viper.UnmarshalKey("emitters", &emitters)
 	err = viper.UnmarshalKey("emitters", &emitters2)
 	if err != nil {
-		log.Println(err)
+		log.Error().Err(err).Msg("Failed to unmarshal emitter configuration")
 	}
 	seed := configuration.GlobalCfg.Seed
 	if seed != -1 {

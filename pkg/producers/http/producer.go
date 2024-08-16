@@ -3,13 +3,13 @@ package http
 import (
 	"crypto/tls"
 	"encoding/json"
-	"log"
 	"net/http"
 	"net/http/cookiejar"
 	"os"
 	"time"
 
 	"github.com/go-resty/resty/v2"
+	"github.com/rs/zerolog/log"
 )
 
 type Producer struct {
@@ -23,12 +23,12 @@ type Producer struct {
 func (p *Producer) Initialize(configFile string) {
 	cfgBytes, err := os.ReadFile(configFile)
 	if err != nil {
-		log.Fatalf("Failed to read config file: %v", err)
+		log.Fatal().Err(err).Msg("Failed to read config file")
 	}
 
 	config := Config{}
 	if err := json.Unmarshal(cfgBytes, &config); err != nil {
-		log.Fatalf("Failed to unmarshal config: %v", err)
+		log.Fatal().Err(err).Msg("Failed to unmarshal config")
 	}
 
 	p.InitializeFromConfig(config)
@@ -43,7 +43,7 @@ func (p *Producer) InitializeFromConfig(config Config) {
 	} else {
 		p.configuration.Endpoint.timeout, err = time.ParseDuration(p.configuration.Endpoint.Timeout)
 		if err != nil {
-			log.Fatalf("Failed to parse timeout: %v", err)
+			log.Fatal().Err(err).Msg("Failed to parse timeout")
 		}
 
 	}
@@ -53,17 +53,17 @@ func (p *Producer) InitializeFromConfig(config Config) {
 	}
 
 	if p.configuration.TLS.CertFile != "" && p.configuration.TLS.KeyFile == "" {
-		log.Fatalf("CertFile is set but KeyFile is not")
+		log.Fatal().Err(err).Msg("CertFile is set but KeyFile is not")
 	}
 	if p.configuration.TLS.CertFile == "" && p.configuration.TLS.KeyFile != "" {
-		log.Fatalf("KeyFile is set but CertFile is not")
+		log.Fatal().Err(err).Msg("KeyFile is set but CertFile is not")
 	}
 
 	certificates := make([]tls.Certificate, 0)
 	if p.configuration.TLS.CertFile != "" {
 		p.certificate, err = tls.LoadX509KeyPair(p.configuration.TLS.CertFile, p.configuration.TLS.KeyFile)
 		if err != nil {
-			log.Fatalf("Failed to load certificate: %v", err)
+			log.Fatal().Err(err).Msg("Failed to load certificate")
 		}
 		certificates = append(certificates, p.certificate)
 	}
@@ -71,7 +71,7 @@ func (p *Producer) InitializeFromConfig(config Config) {
 	if p.configuration.Session.UseCookieJar {
 		p.cookiejar, err = cookiejar.New(nil)
 		if err != nil {
-			log.Fatalf("Failed to create cookie jar: %v", err)
+			log.Fatal().Err(err).Msg("Failed to create cookie jar")
 		}
 	}
 
@@ -132,12 +132,12 @@ func (p *Producer) Produce(k []byte, v []byte, o any) {
 	}
 
 	if err != nil {
-		log.Fatalf("Failed to send request: %v", err)
+		log.Fatal().Err(err).Msg("Failed to send request")
 	}
 
 	if resp.StatusCode() != p.configuration.ErrorHandling.ExpectStatusCode &&
 		!p.configuration.ErrorHandling.IgnoreStatusCode {
-		log.Fatalf("Unexpected status code: %d", resp.StatusCode())
+		log.Fatal().Int("statusCode", resp.StatusCode()).Msg("Unexpected status code")
 	}
 
 }

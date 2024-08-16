@@ -22,11 +22,11 @@ package functions_test
 
 import (
 	"bytes"
-	"github.com/ugol/jr/pkg/functions"
-	"log"
 	"strconv"
 	"testing"
 	"text/template"
+
+	"github.com/ugol/jr/pkg/functions"
 )
 
 func TestSimpleContext(t *testing.T) {
@@ -196,11 +196,11 @@ func Test2TemplatesWithCommonId(t *testing.T) {
 
 	user, err := v.New("user").Parse(userTemplate)
 	if err != nil {
-		log.Fatal(err)
+		t.Fatal(err)
 	}
 	order, err := v.New("order").Parse(orderTemplate)
 	if err != nil {
-		log.Fatal(err)
+		t.Fatal(err)
 	}
 
 	var expectUser bytes.Buffer
@@ -231,15 +231,15 @@ func Test2TemplatesWithValueFromList(t *testing.T) {
 
 	user, err := v.New("user").Parse(userTemplate)
 	if err != nil {
-		log.Fatal(err)
+		t.Fatal(err)
 	}
 	user2, err := v.New("user").Parse(userTemplate2)
 	if err != nil {
-		log.Fatal(err)
+		t.Fatal(err)
 	}
 	order, err := v.New("order").Parse(orderTemplate)
 	if err != nil {
-		log.Fatal(err)
+		t.Fatal(err)
 	}
 
 	var expectUser bytes.Buffer
@@ -277,7 +277,7 @@ func TestTemplatesWithValueFromListAtIndex(t *testing.T) {
 
 	tOne, err := v.New("user").Parse(templateOne)
 	if err != nil {
-		log.Fatal(err)
+		t.Fatal(err)
 	}
 
 	var expectedOne bytes.Buffer
@@ -285,7 +285,7 @@ func TestTemplatesWithValueFromListAtIndex(t *testing.T) {
 
 	tTwo, err := v.New("user").Parse(templateTwo)
 	if err != nil {
-		log.Fatal(err)
+		t.Fatal(err)
 	}
 
 	var expectedTwo bytes.Buffer
@@ -293,7 +293,7 @@ func TestTemplatesWithValueFromListAtIndex(t *testing.T) {
 
 	check, err := v.New("order").Parse(checkTemplate)
 	if err != nil {
-		log.Fatal(err)
+		t.Fatal(err)
 	}
 
 	var expectCheck bytes.Buffer
@@ -317,7 +317,7 @@ func TestTemplatesWithValueFromListAtIndex_greater_than_length(t *testing.T) {
 
 	tOne, err := v.New("user").Parse(templateOne)
 	if err != nil {
-		log.Fatal(err)
+		t.Fatal(err)
 	}
 
 	var expectedOne bytes.Buffer
@@ -325,7 +325,7 @@ func TestTemplatesWithValueFromListAtIndex_greater_than_length(t *testing.T) {
 
 	tTwo, err := v.New("user").Parse(templateTwo)
 	if err != nil {
-		log.Fatal(err)
+		t.Fatal(err)
 	}
 
 	var expectedTwo bytes.Buffer
@@ -333,7 +333,7 @@ func TestTemplatesWithValueFromListAtIndex_greater_than_length(t *testing.T) {
 
 	check, err := v.New("order").Parse(checkTemplate)
 	if err != nil {
-		log.Fatal(err)
+		t.Fatal(err)
 	}
 
 	var expectCheck bytes.Buffer
@@ -360,7 +360,7 @@ func TestManyTemplates(t *testing.T) {
 	for i := 0; i < len(v); i++ {
 		_, err := tpl.New(strconv.Itoa(i)).Parse((v[i]))
 		if err != nil {
-			log.Fatal(err)
+			t.Fatal(err)
 		}
 	}
 

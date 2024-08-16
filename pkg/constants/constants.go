@@ -21,6 +21,9 @@
 package constants
 
 import (
+	"fmt"
+	"os"
+
 	"github.com/adrg/xdg"
 )
 
@@ -32,7 +35,7 @@ const FREQUENCY = -1
 const INFINITE = 1<<63 - 1
 
 // var DEFAULT_SYSTEMDIR = xdg.DataHome + "jr"
-var DEFAULT_HOMEDIR = xdg.ConfigHome + ".jr"
+var DEFAULT_HOMEDIR = fmt.Sprintf("%s%c%s", xdg.ConfigHome, os.PathSeparator, "jr")
 
 const DEFAULT_KEY = "null"
 const DEFAULT_OUTPUT = "stdout"

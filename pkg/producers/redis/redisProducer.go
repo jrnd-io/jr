@@ -3,10 +3,11 @@ package redis
 import (
 	"context"
 	"encoding/json"
-	"github.com/redis/go-redis/v9"
-	"log"
 	"os"
 	"time"
+
+	"github.com/redis/go-redis/v9"
+	"github.com/rs/zerolog/log"
 )
 
 type RedisProducer struct {
@@ -19,12 +20,12 @@ func (p *RedisProducer) Initialize(configFile string) {
 
 	data, err := os.ReadFile(configFile)
 	if err != nil {
-		log.Fatalf("Failed to load Redis configFile: %s", err)
+		log.Fatal().Err(err).Msg("Failed to load Redis configFile")
 	}
 
 	err = json.Unmarshal(data, &options)
 	if err != nil {
-		log.Fatalf("Failed to parsa configuration parameters: %s", err)
+		log.Fatal().Err(err).Msg("Failed to parse configuration parameters")
 	}
 
 	p.client = *redis.NewClient(&options)
@@ -33,7 +34,7 @@ func (p *RedisProducer) Initialize(configFile string) {
 func (p *RedisProducer) Close() error {
 	err := p.client.Close()
 	if err != nil {
-		log.Printf("Failed to close Redis connection:\n%s", err)
+		log.Warn().Err(err).Msg("Failed to close Redis connection")
 	}
 	return err
 }
@@ -42,6 +43,6 @@ func (p *RedisProducer) Produce(k []byte, v []byte, o any) {
 	ctx := context.Background()
 	err := p.client.Set(ctx, string(k), string(v), p.Ttl).Err()
 	if err != nil {
-		log.Fatalf("Failed to write data in Redis:\n%s", err)
+		log.Fatal().Err(err).Msg("Failed to write data in Redis")
 	}
 }

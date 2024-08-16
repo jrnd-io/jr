@@ -22,12 +22,13 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/spf13/cobra"
-	"github.com/ugol/jr/pkg/constants"
-	"log"
 	"os"
 	"runtime"
 	"strings"
+
+	"github.com/rs/zerolog/log"
+	"github.com/spf13/cobra"
+	"github.com/ugol/jr/pkg/constants"
 )
 
 var templateShowCmd = &cobra.Command{
@@ -37,7 +38,7 @@ var templateShowCmd = &cobra.Command{
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) == 0 {
-			log.Println("Template missing. Try the list command to see available templates")
+			log.Error().Msg("Template missing. Try the list command to see available templates")
 			os.Exit(1)
 		}
 
@@ -46,11 +47,11 @@ var templateShowCmd = &cobra.Command{
 		templatePath := fmt.Sprintf("%s/%s.tpl", templateDir, args[0])
 		templateScript, err := os.ReadFile(templatePath)
 		if err != nil {
-			log.Fatalf("Failed to ReadFile: %s", err)
+			log.Fatal().Err(err).Msg("Failed to ReadFile")
 		}
 		valid, err := isValidTemplate([]byte(templateScript))
 		if err != nil {
-			log.Fatalf("Failed to read a template: %s", err)
+			log.Fatal().Err(err).Msg("Failed to read a template")
 		}
 		templateString := string(templateScript)
 
@@ -65,7 +66,7 @@ var templateShowCmd = &cobra.Command{
 		fmt.Println(templateString)
 		fmt.Print(Reset)
 		if !valid {
-			log.Println(err)
+			log.Fatal().Msg("Invalid template")
 		}
 	},
 }

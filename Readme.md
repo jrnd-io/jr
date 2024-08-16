@@ -144,8 +144,8 @@ parse error: Expected value before ',' at line 1, column 5
 
 ## Distributed Testing
 
-JR can be run as a synthetic data generator for distributed testing. 
-At present the following testing tools are supported:
+JR can be run as a distributed data generation. 
+At the moment the following testing tools are supported:
 
 - [k6](./k6/exec/)
 - [locust](./locust/)

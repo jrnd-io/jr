@@ -5,10 +5,12 @@ TIME=$(shell date)
 
 hello:
 	@echo "JR,the JSON Random Generator"
-    CONFIG_HOME=$XDG_CONFIG_HOME
-    ifeq (CONFIG_HOME, "" )
-      HOME = "~"
+    CONFIG_HOME=${XDG_CONFIG_HOME}
+    ifeq (${CONFIG_HOME}, "" )
+      CONFIG_HOME=~
     endif
+    CONFIG_HOME=~
+
 install-gogen:
 	go install github.com/actgardner/gogen-avro/v10/cmd/...@latest
 	#go install github.com/hamba/avro/v2/cmd/avrogen@latest
@@ -49,10 +51,10 @@ help: hello
 	@echo ''
 
 copy_templates:
-	mkdir -p $CONFIG_HOME/.jr/kafka && cp -r templates $CONFIG_HOME/.jr/ && cp -r pkg/producers/kafka/*.properties.example $CONFIG_HOME/.jr/kafka/
+	mkdir -p ${CONFIG_HOME}/.jr/kafka && cp -r templates ${CONFIG_HOME}/.jr/ && cp -r pkg/producers/kafka/*.properties.example ${CONFIG_HOME}/.jr/kafka/
 
 copy_config:
-	mkdir -p $CONFIG_HOME/.jr && cp config/* $CONFIG_HOME/.jr/
+	mkdir -p ${CONFIG_HOME}/.jr && cp config/* ${CONFIG_HOME}/.jr/
 
 install:
 	install build/jr /usr/local/bin

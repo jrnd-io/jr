@@ -82,7 +82,8 @@ jr template run --template "{{name}}"
 		}
 
 		if throughput > 0 {
-			// @TODO
+			// get size of the template result
+			// calculate frequency
 		}
 
 		cmd.Flags().VisitAll(func(f *pflag.Flag) {

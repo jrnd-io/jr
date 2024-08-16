@@ -59,11 +59,13 @@ func (p *Producer) InitializeFromConfig(config Config) {
 		log.Fatalf("KeyFile is set but CertFile is not")
 	}
 
+	certificates := make([]tls.Certificate, 0)
 	if p.configuration.TLS.CertFile != "" {
 		p.certificate, err = tls.LoadX509KeyPair(p.configuration.TLS.CertFile, p.configuration.TLS.KeyFile)
 		if err != nil {
 			log.Fatalf("Failed to load certificate: %v", err)
 		}
+		certificates = append(certificates, p.certificate)
 	}
 
 	if p.configuration.Session.UseCookieJar {
@@ -77,15 +79,12 @@ func (p *Producer) InitializeFromConfig(config Config) {
 		SetTimeout(p.configuration.Endpoint.timeout).
 		SetTLSClientConfig(&tls.Config{
 			InsecureSkipVerify: p.configuration.TLS.InsecureSkipVerify,
+			Certificates:       certificates,
 		}).
 		SetHeaders(p.configuration.Headers)
 
 	if p.configuration.Session.UseCookieJar {
 		p.client.SetCookieJar(p.cookiejar)
-	}
-
-	if p.configuration.TLS.CertFile != "" {
-		p.client.SetCertificates(p.certificate)
 	}
 
 	if p.configuration.TLS.RootCAFile != "" {

@@ -33,7 +33,7 @@ const (
 )
 
 //gocyclo:ignore
-func parseThroughput(input string) (Throughput, error) {
+func ParseThroughput(input string) (Throughput, error) {
 
 	if input == "" {
 		return -1, nil

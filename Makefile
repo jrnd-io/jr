@@ -49,10 +49,10 @@ help: hello
 	@echo ''
 
 copy_templates:
-	mkdir -p CONFIG_HOME/.jr/kafka && cp -r templates CONFIG_HOME/.jr/ && cp -r pkg/producers/kafka/*.properties.example CONFIG_HOME/.jr/kafka/
+	mkdir -p $CONFIG_HOME/.jr/kafka && cp -r templates $CONFIG_HOME/.jr/ && cp -r pkg/producers/kafka/*.properties.example $CONFIG_HOME/.jr/kafka/
 
 copy_config:
-	mkdir -p CONFIG_HOME/.jr && cp config/* CONFIG_HOME/.jr/
+	mkdir -p $CONFIG_HOME/.jr && cp config/* $CONFIG_HOME/.jr/
 
 install:
 	install build/jr /usr/local/bin

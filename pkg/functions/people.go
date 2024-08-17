@@ -22,11 +22,13 @@ package functions
 
 import (
 	"fmt"
-	"github.com/squeeze69/generacodicefiscale"
-	"github.com/ugol/jr/pkg/ctx"
-	"log"
 	"strconv"
 	"strings"
+
+	"github.com/squeeze69/generacodicefiscale"
+	"github.com/ugol/jr/pkg/ctx"
+
+	"github.com/rs/zerolog/log"
 )
 
 // CodiceFiscale return a valid Italian Codice Fiscale
@@ -66,11 +68,11 @@ func CodiceFiscale() string {
 
 	codicecitta, erc := generacodicefiscale.CercaComune(city)
 	if erc != nil {
-		log.Fatal(erc)
+		log.Fatal().Err(erc).Msg("Error in searching city")
 	}
 	cf, erg := generacodicefiscale.Genera(surname, name, gender, codicecitta.Codice, birthdate)
 	if erg != nil {
-		log.Fatal(erg)
+		log.Fatal().Err(erg).Msg("Error in generating Codice Fiscale")
 	}
 	return cf
 }

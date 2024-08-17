@@ -1,9 +1,10 @@
 package server
 
 import (
-	"github.com/ugol/jr/pkg/tpl"
-	"log"
 	"net/http"
+
+	"github.com/rs/zerolog/log"
+	"github.com/ugol/jr/pkg/tpl"
 )
 
 type JsonProducer struct {
@@ -22,19 +23,19 @@ func (c *JsonProducer) Produce(key []byte, value []byte, o interface{}) {
 		if string(key) != "null" {
 			_, err := (respWriter).Write(key)
 			if err != nil {
-				log.Println(err.Error())
+				log.Error().Err(err).Msg("Error writing key")
 			}
 			_, err = (respWriter).Write([]byte(","))
 			if err != nil {
-				log.Println(err.Error())
+				log.Error().Err(err).Msg("Error writing comma")
 			}
 		}
 		_, err := (respWriter).Write(value)
 		if err != nil {
-			log.Println(err.Error())
+			log.Error().Err(err).Msg("Error writing value")
 		}
 	} else {
-		log.Printf("Server producer must produce to a http.ResponseWriter, but was a %T\n", o)
+		log.Warn().Interface("o", o).Msg("Server producer must produce to a http.ResponseWriter")
 	}
 
 }

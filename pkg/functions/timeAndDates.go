@@ -21,8 +21,9 @@
 package functions
 
 import (
-	"log"
 	"time"
+
+	"github.com/rs/zerolog/log"
 )
 
 // UnixTimeStamp returns a random unix timestamp not older than the given number of days
@@ -38,12 +39,12 @@ func UnixTimeStamp(days int) int64 {
 func DateBetween(fromDate string, toDate string) string {
 	start, err := time.Parse(time.DateOnly, fromDate)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal().Err(err).Msg("Error parsing date")
 	}
 
 	end, err := time.Parse(time.DateOnly, toDate)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal().Err(err).Msg("Error parsing date")
 	}
 
 	delta := end.Sub(start).Nanoseconds()

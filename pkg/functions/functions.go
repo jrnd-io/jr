@@ -24,7 +24,6 @@ import (
 	"bufio"
 	"encoding/csv"
 	"fmt"
-	"log"
 	"math"
 	"math/rand"
 	"os"
@@ -34,6 +33,7 @@ import (
 	"text/template"
 
 	"github.com/google/uuid"
+	"github.com/rs/zerolog/log"
 	"github.com/ugol/jr/pkg/constants"
 	"github.com/ugol/jr/pkg/ctx"
 	"golang.org/x/text/cases"
@@ -391,7 +391,7 @@ func Maxint(a, b int) int {
 // Cache is used to internally Cache data from word files
 func Cache(name string) (bool, error) {
 
-	templateDir := fmt.Sprintf("%s/%s", constants.JRhome, "templates")
+	templateDir := fmt.Sprintf("%s/%s", constants.JR_SYSTEM_DIR, "templates")
 
 	v := data[name]
 	if v == nil {
@@ -449,12 +449,12 @@ func contains(values []int, value int) bool {
 func initialize(filename string) []string {
 	file, err := os.Open(filename)
 	if err != nil {
-		log.Printf("Failed to open file: %s", err)
+		log.Error().Err(err).Msg("Failed to open file")
 	}
 	defer func(file *os.File) {
 		err := file.Close()
 		if err != nil {
-			log.Printf("Error in closing file: %s", err)
+			log.Error().Err(err).Msg("Error in closing file")
 		}
 	}(file)
 

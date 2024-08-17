@@ -50,10 +50,10 @@ JR is very straightforward to use. Here are some examples:
 ```bash
 jr template list
 ````
-Templates are in the directory `$JR_HOME/templates`. JR_HOME defaults to `~/.jr` and can be changed to a different dir, for example:
+Templates are in the directory `$JR_SYSTEM_DIR/templates`. JR_SYSTEM_DIR defaults to `$XDG_CONFIGDIR` and can be changed to a different dir, for example:
 
 ```bash
-JR_HOME=~/jrconfig/ jr template list
+JR_SYSTEM_DIR=~/jrconfig/ jr template list
 ````
 
 Templates with parsing issues are showed in <font color='red'>red</font>, Templates with no parsing issues are showed in <font color='green'>green</font>

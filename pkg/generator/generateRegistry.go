@@ -5,13 +5,14 @@ package main
 import (
 	"bytes"
 	"go/format"
-	"golang.org/x/text/cases"
-	"golang.org/x/text/language"
-	"log"
 	"os"
 	"path/filepath"
 	"strings"
 	"text/template"
+
+	"github.com/rs/zerolog/log"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 func main() {
@@ -79,23 +80,23 @@ func main() {
 	var b bytes.Buffer
 	err = t.Execute(&b, d)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal().Err(err).Msg("Error executing template")
 	}
 
 	bb, err := format.Source(b.Bytes())
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal().Err(err).Msg("Error formatting source")
 	}
 
 	initFile, err := os.OpenFile("../types/registry.go", os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0755)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal().Err(err).Msg("Error opening file")
 	}
 	defer initFile.Close()
 
 	_, err = initFile.WriteString(string(bb))
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal().Err(err).Msg("Error writing to init file")
 	}
 
 }

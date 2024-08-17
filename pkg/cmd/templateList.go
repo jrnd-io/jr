@@ -35,14 +35,14 @@ import (
 var templateListCmd = &cobra.Command{
 	Use:   "list",
 	Short: "List all available templates",
-	Long:  `List all available templates, which are in '$JR_HOME/templates' directory`,
+	Long:  `List all available templates, which are in '$JR_SYSTEM_DIR/templates' directory`,
 	Run: func(cmd *cobra.Command, args []string) {
 
 		fmt.Println()
 		fmt.Println("List of available JR templates:")
 		fmt.Println()
 
-		templateDir := os.ExpandEnv(fmt.Sprintf("%s/%s", constants.JRhome, "templates"))
+		templateDir := os.ExpandEnv(fmt.Sprintf("%s/%s", constants.JR_SYSTEM_DIR, "templates"))
 
 		if _, err := os.Stat(templateDir); os.IsNotExist(err) {
 			return

@@ -22,8 +22,9 @@ package tpl
 
 import (
 	"bytes"
-	"log"
 	"text/template"
+
+	"github.com/rs/zerolog/log"
 )
 
 type Tpl struct {
@@ -50,7 +51,7 @@ func (t *Tpl) ExecuteWith(data any) string {
 	var buffer bytes.Buffer
 	err := t.Template.Execute(&buffer, data)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal().Err(err).Msg("Error executing template")
 	}
 	return buffer.String()
 }

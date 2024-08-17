@@ -22,17 +22,21 @@ package cmd
 
 import (
 	"fmt"
+	"os"
+	"strings"
+	"time"
+
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 	"github.com/ugol/jr/pkg/configuration"
 	"github.com/ugol/jr/pkg/constants"
 	"github.com/ugol/jr/pkg/functions"
-	"log"
-	"os"
-	"strings"
-	"time"
 )
+
+var logLevel = constants.DEFAULT_LOG_LEVEL
 
 var rootCmd = &cobra.Command{
 	Use:   "jr",
@@ -57,10 +61,19 @@ func init() {
 		ID:    "server",
 		Title: "HTTP Server",
 	})
-	rootCmd.PersistentFlags().StringVar(&constants.JRhome, "home", "", "JR home dir")
+	rootCmd.PersistentFlags().StringVar(&constants.JR_SYSTEM_DIR, "system_dir", "", "JR system dir")
+	rootCmd.PersistentFlags().StringVar(&constants.JR_USER_DIR, "user_dir", "", "JR user dir")
+	rootCmd.PersistentFlags().StringVar(&logLevel, "log_level", constants.DEFAULT_LOG_LEVEL, "HR Log Level")
 }
 
 func initConfig() {
+
+	// setting zerolog level
+	zlogLevel, err := zerolog.ParseLevel(logLevel)
+	if err != nil {
+		zlogLevel = zerolog.PanicLevel
+	}
+	zerolog.SetGlobalLevel(zlogLevel)
 
 	viper.SetConfigName("jrconfig")
 	viper.SetConfigType("json")
@@ -72,25 +85,25 @@ func initConfig() {
 	viper.SetEnvKeyReplacer(strings.NewReplacer("-", "_"))
 	viper.AutomaticEnv()
 	bindFlags(rootCmd, viper.GetViper())
-	if constants.JRhome == "" {
-		constants.JRhome = constants.DEFAULT_HOMEDIR
+	if constants.JR_SYSTEM_DIR == "" {
+		constants.JR_SYSTEM_DIR = constants.SYSTEM_DIR
 	}
-	viper.AddConfigPath(constants.JRhome)
+	viper.AddConfigPath(constants.JR_SYSTEM_DIR)
 
 	if err := viper.ReadInConfig(); err == nil {
-		log.Println("JR configuration:", viper.ConfigFileUsed())
+		log.Debug().Str("file", viper.ConfigFileUsed()).Msg("JR configuration")
 	} else {
-		log.Println("JR configuration not found")
+		log.Error().Err(err).Msg("JR configuration not found")
 	}
-	err := viper.UnmarshalKey("global", &configuration.GlobalCfg)
+	err = viper.UnmarshalKey("global", &configuration.GlobalCfg)
 	if err != nil {
-		log.Println(err)
+		log.Error().Err(err).Msg("Failed to unmarshal global configuration")
 	}
 
 	//err = viper.UnmarshalKey("emitters", &emitters)
 	err = viper.UnmarshalKey("emitters", &emitters2)
 	if err != nil {
-		log.Println(err)
+		log.Error().Err(err).Msg("Failed to unmarshal emitter configuration")
 	}
 	seed := configuration.GlobalCfg.Seed
 	if seed != -1 {

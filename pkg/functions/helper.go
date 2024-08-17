@@ -22,10 +22,11 @@ package functions
 
 import (
 	"bytes"
-	"github.com/ugol/jr/pkg/ctx"
-	"log"
 	"regexp"
 	"text/template"
+
+	"github.com/rs/zerolog/log"
+	"github.com/ugol/jr/pkg/ctx"
 )
 
 func ExecuteTemplate(key *template.Template, value *template.Template, oneline bool) (string, string, error) {
@@ -34,12 +35,12 @@ func ExecuteTemplate(key *template.Template, value *template.Template, oneline b
 	var err error
 
 	if err = key.Execute(&kBuffer, ctx.JrContext); err != nil {
-		log.Println(err)
+		log.Error().Err(err).Msg("Error executing key template")
 	}
 	k := kBuffer.String()
 
 	if err = value.Execute(&vBuffer, ctx.JrContext); err != nil {
-		log.Println(err)
+		log.Error().Err(err).Msg("Error executing value template")
 	}
 	v := vBuffer.String()
 

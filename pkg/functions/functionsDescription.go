@@ -445,7 +445,7 @@ var funcDesc = map[string]FunctionDescription{
 	"from": {
 		Name:        "from",
 		Category:    "text utilities",
-		Description: "returns a random string from a list of strings in a file. Files are in '$JR_HOME/templates/data/locale'",
+		Description: "returns a random string from a list of strings in a file. Files are in '$JR_SYSTEM_DIR/templates/data/locale'",
 		Parameters:  "set string",
 		Localizable: true,
 		Return:      "string",
@@ -455,7 +455,7 @@ var funcDesc = map[string]FunctionDescription{
 	"from_at": {
 		Name:        "from_at",
 		Category:    "text utilities",
-		Description: "returns a string at a given position in a list of strings in a file. Files are in '$JR_HOME/templates/data/locale'",
+		Description: "returns a string at a given position in a list of strings in a file. Files are in '$JR_SYSTEM_DIR/templates/data/locale'",
 		Parameters:  "index int",
 		Localizable: true,
 		Return:      "string",
@@ -465,7 +465,7 @@ var funcDesc = map[string]FunctionDescription{
 	"from_n": {
 		Name:        "from_n",
 		Category:    "text utilities",
-		Description: "return a subset of elements in a list of string in a file. Files are in '$JR_HOME/templates/data/locale'",
+		Description: "return a subset of elements in a list of string in a file. Files are in '$JR_SYSTEM_DIR/templates/data/locale'",
 		Parameters:  "set string, number int",
 		Localizable: true,
 		Return:      "[]string",
@@ -475,7 +475,7 @@ var funcDesc = map[string]FunctionDescription{
 	"from_shuffle": {
 		Name:        "from_shuffle",
 		Category:    "text utilities",
-		Description: "returns a shuffled list of strings in a file. Files are in '$JR_HOME/templates/data/locale'",
+		Description: "returns a shuffled list of strings in a file. Files are in '$JR_SYSTEM_DIR/templates/data/locale'",
 		Parameters:  "set string",
 		Localizable: true,
 		Return:      "[]string",
@@ -679,7 +679,7 @@ var funcDesc = map[string]FunctionDescription{
 		Category:    "text utilities",
 		Parameters:  "set string",
 		Localizable: true,
-		Description: "returns the length a list of strings in a file. Files are in '$JR_HOME/templates/data/locale'",
+		Description: "returns the length a list of strings in a file. Files are in '$JR_SYSTEM_DIR/templates/data/locale'",
 		Return:      "string",
 		Example:     "jr template run --embedded '{{len \"city\"}}'",
 		Output:      "46",
@@ -909,7 +909,7 @@ var funcDesc = map[string]FunctionDescription{
 		Category:    "text utilities",
 		Parameters:  "set string",
 		Localizable: true,
-		Description: "returns a random index from a list of strings in a file. Files are in '$JR_HOME/templates/data/locale'",
+		Description: "returns a random index from a list of strings in a file. Files are in '$JR_SYSTEM_DIR/templates/data/locale'",
 		Return:      "string",
 		Example:     "jr template run --embedded '{{random_index \"city\"}}'",
 		Output:      "12",

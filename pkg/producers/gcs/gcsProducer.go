@@ -1,13 +1,15 @@
 package gcs
 
 import (
-	"cloud.google.com/go/storage"
 	"context"
 	"encoding/json"
 	"fmt"
+	"os"
+
+	"cloud.google.com/go/storage"
 	"github.com/google/uuid"
-	"io/ioutil"
-	"log"
+
+	"github.com/rs/zerolog/log"
 )
 
 type Config struct {
@@ -21,14 +23,14 @@ type GCSProducer struct {
 
 func (p *GCSProducer) Initialize(configFile string) {
 	var config Config
-	file, err := ioutil.ReadFile(configFile)
+	file, err := os.ReadFile(configFile)
 	if err != nil {
-		log.Fatalf("Failed to read configuration file: %s", err)
+		log.Fatal().Err(err).Msg("Failed to read configuration file")
 	}
 
 	err = json.Unmarshal(file, &config)
 	if err != nil {
-		log.Fatalf("Failed to parse configuration parameters: %s", err)
+		log.Fatal().Err(err).Msg("Failed to parse configuration parameters")
 	}
 
 	ctx := context.Background()
@@ -37,7 +39,7 @@ func (p *GCSProducer) Initialize(configFile string) {
 	// https://developers.google.com/identity/protocols/application-default-credentials.
 	client, err := storage.NewClient(ctx)
 	if err != nil {
-		log.Fatalf("Failed to create client: %v", err)
+		log.Fatal().Err(err).Msg("Failed to create client")
 	}
 
 	p.client = *client
@@ -64,7 +66,7 @@ func (p *GCSProducer) Produce(k []byte, v []byte, o any) {
 
 	_, err := writer.Write([]byte(kvPair))
 	if err != nil {
-		log.Fatalf("Failed to write to GCS: %v", err)
+		log.Fatal().Err(err).Msg("Failed to write to GCS")
 	}
 
 	writer.Close()

@@ -3,10 +3,11 @@ package mongoDB
 import (
 	"context"
 	"encoding/json"
+	"os"
+
+	"github.com/rs/zerolog/log"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"io/ioutil"
-	"log"
 )
 
 type Config struct {
@@ -25,13 +26,13 @@ type MongoProducer struct {
 
 func (p *MongoProducer) Initialize(configFile string) {
 	var config Config
-	file, err := ioutil.ReadFile(configFile)
+	file, err := os.ReadFile(configFile)
 	if err != nil {
-		log.Fatalf("Failed to ReadFile: %s", err)
+		log.Fatal().Err(err).Msg("Failed to read configuration file")
 	}
 	err = json.Unmarshal(file, &config)
 	if err != nil {
-		log.Fatalf("Failed to parse configuration parameters: %s", err)
+		log.Fatal().Err(err).Msg("Failed to parse configuration parameters")
 	}
 
 	clientOptions := options.Client().ApplyURI(config.MongoURI)
@@ -48,7 +49,7 @@ func (p *MongoProducer) Initialize(configFile string) {
 	client, err := mongo.Connect(context.Background(), clientOptions)
 
 	if err != nil {
-		log.Fatalf("Can't connect to Mongo: %s", err)
+		log.Fatal().Err(err).Msg("Can't connect to Mongo")
 	}
 
 	p.client = *client
@@ -61,7 +62,7 @@ func (p *MongoProducer) Produce(k []byte, v []byte, o any) {
 	var dev map[string]interface{}
 	err := json.Unmarshal(v, &dev)
 	if err != nil {
-		log.Fatalf("Failed to unmarshal json:\n%s", err)
+		log.Fatal().Err(err).Msg("Failed to unmarshal json")
 	}
 
 	if k == nil || len(k) == 0 {
@@ -70,14 +71,14 @@ func (p *MongoProducer) Produce(k []byte, v []byte, o any) {
 
 	_, err = collection.InsertOne(context.Background(), dev)
 	if err != nil {
-		log.Fatalf("Failed to write data in Mongo:\n%s", err)
+		log.Fatal().Err(err).Msg("Failed to write data in Mongo")
 	}
 }
 
 func (p *MongoProducer) Close() error {
 	err := p.client.Disconnect(context.Background())
 	if err != nil {
-		log.Printf("Failed to close Mongo connection:\n%s", err)
+		log.Warn().Err(err).Msg("Failed to close Mongo connection")
 	}
 	return err
 }

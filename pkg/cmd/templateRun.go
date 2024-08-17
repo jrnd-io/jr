@@ -21,9 +21,9 @@
 package cmd
 
 import (
-	"log"
 	"time"
 
+	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"github.com/ugol/jr/pkg/configuration"
@@ -36,7 +36,7 @@ var templateRunCmd = &cobra.Command{
 	Use:   "run [template]",
 	Short: "Execute a template",
 	Long: `Execute a template. 
-  Without any other flag, [template] is just the name of a template in the templates directory, which is '$JR_HOME/templates'. Example: 
+  Without any other flag, [template] is just the name of a template in the templates directory, which is '$JR_SYSTEM_DIR/templates'. Example: 
 jr template run net_device
   With the --embedded flag, [template] is a string containing a full template. Example:
 jr template run --template "{{name}}"
@@ -79,7 +79,7 @@ jr template run --template "{{name}}"
 
 		throughput, err := emitter.ParseThroughput(throughputString)
 		if err != nil {
-			log.Panicf("Throughput format error:%v", err)
+			log.Panic().Err(err).Msg("Throughput format error")
 		}
 
 		if throughput > 0 {

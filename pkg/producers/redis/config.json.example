@@ -1,6 +1,9 @@
 {
+  "options":{
   "host": "localhost",
   "port": "6379",
   "username": "default",
   "password": "occhiomalocchioprezzemoloefinocchio"
+  },
+  "ttl": "-1ns"
 }

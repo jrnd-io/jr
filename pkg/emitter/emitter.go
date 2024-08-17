@@ -31,13 +31,7 @@ import (
 	"github.com/ugol/jr/pkg/ctx"
 	"github.com/ugol/jr/pkg/functions"
 	"github.com/ugol/jr/pkg/producers/console"
-	"github.com/ugol/jr/pkg/producers/elastic"
-	"github.com/ugol/jr/pkg/producers/gcs"
-	"github.com/ugol/jr/pkg/producers/http"
 	"github.com/ugol/jr/pkg/producers/kafka"
-	"github.com/ugol/jr/pkg/producers/mongoDB"
-	"github.com/ugol/jr/pkg/producers/redis"
-	"github.com/ugol/jr/pkg/producers/s3"
 	"github.com/ugol/jr/pkg/producers/server"
 	"github.com/ugol/jr/pkg/tpl"
 )
@@ -91,11 +85,27 @@ func (e *Emitter) Initialize(conf configuration.GlobalConfiguration) {
 	e.VTpl = valueTpl
 
 	o, _ := tpl.NewTpl("out", e.OutputTemplate, functions.FunctionsMap(), nil)
+
+	// Producer configuration
+	// TODO: refactor to uniform
 	if e.Output == "stdout" {
 		e.Producer = &console.ConsoleProducer{OutputTpl: &o}
 		return
 	}
+	// TODO: refactor to uniform or remove
+	if e.Output == "json" {
+		e.Producer = &server.JsonProducer{OutputTpl: &o}
+		return
+	}
 
+	// reading config
+	configBytes, err := os.ReadFile(conf.ProducerConfig)
+	if err != nil {
+		log.Fatal().Err(err).Msg("Failed to ReadFile")
+	}
+
+	// Kafka handled in a special manner
+	// TODO: refactor to uniform
 	if e.Output == "kafka" {
 		e.Producer = createKafkaProducer(conf, e.Topic, templateName)
 		return
@@ -105,40 +115,12 @@ func (e *Emitter) Initialize(conf configuration.GlobalConfiguration) {
 		}
 	}
 
-	if e.Output == "redis" {
-		e.Producer = createRedisProducer(conf.RedisTtl, conf.RedisConfig)
-		return
+	// creating from factory
+	if ProducerFactories[e.Output] == nil {
+		log.Fatal().Str("producer", e.Output).Msg("Producer not supported")
 	}
 
-	if e.Output == "mongo" || e.Output == "mongodb" {
-		e.Producer = createMongoProducer(conf.MongoConfig)
-		return
-	}
-
-	if e.Output == "elastic" {
-		e.Producer = createElasticProducer(conf.ElasticConfig)
-		return
-	}
-
-	if e.Output == "s3" {
-		e.Producer = createS3Producer(conf.S3Config)
-		return
-	}
-
-	if e.Output == "gcs" {
-		e.Producer = createGCSProducer(conf.GCSConfig)
-		return
-	}
-
-	if e.Output == "json" {
-		e.Producer = &server.JsonProducer{OutputTpl: &o}
-		return
-	}
-
-	if e.Output == "http" {
-		e.Producer = createHTTPProducer(conf.HTTPConfig)
-		return
-	}
+	e.Producer = ProducerFactories[e.Output](configBytes)
 
 }
 
@@ -162,49 +144,6 @@ func (e *Emitter) Run(num int, o any) {
 
 }
 
-func createRedisProducer(ttl time.Duration, redisConfig string) Producer {
-	rProducer := &redis.RedisProducer{
-		Ttl: ttl,
-	}
-	rProducer.Initialize(redisConfig)
-	return rProducer
-}
-
-func createMongoProducer(mongoConfig string) Producer {
-	mProducer := &mongoDB.MongoProducer{}
-	mProducer.Initialize(mongoConfig)
-
-	return mProducer
-}
-
-func createElasticProducer(elasticConfig string) Producer {
-	eProducer := &elastic.ElasticProducer{}
-	eProducer.Initialize(elasticConfig)
-
-	return eProducer
-}
-
-func createS3Producer(s3Config string) Producer {
-	sProducer := &s3.S3Producer{}
-	sProducer.Initialize(s3Config)
-
-	return sProducer
-}
-
-func createGCSProducer(gcsConfig string) Producer {
-	gProducer := &gcs.GCSProducer{}
-	gProducer.Initialize(gcsConfig)
-
-	return gProducer
-}
-
-func createHTTPProducer(httpConfig string) Producer {
-	httpProducer := &http.Producer{}
-	httpProducer.Initialize(httpConfig)
-
-	return httpProducer
-}
-
 func createKafkaProducer(conf configuration.GlobalConfiguration, topic string, templateType string) *kafka.KafkaManager {
 
 	kManager := &kafka.KafkaManager{
@@ -213,7 +152,7 @@ func createKafkaProducer(conf configuration.GlobalConfiguration, topic string, t
 		TemplateType: templateType,
 	}
 
-	kManager.Initialize(conf.KafkaConfig)
+	kManager.Initialize(conf.ProducerConfig)
 
 	if conf.SchemaRegistry {
 		kManager.InitializeSchemaRegistry(conf.RegistryConfig)

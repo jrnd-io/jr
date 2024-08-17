@@ -25,19 +25,20 @@ import "time"
 var GlobalCfg GlobalConfiguration
 
 type GlobalConfiguration struct {
-	Seed             int64
-	KafkaConfig      string
-	SchemaRegistry   bool
-	RegistryConfig   string
-	Serializer       string
-	AutoCreate       bool
-	RedisTtl         time.Duration
-	RedisConfig      string
-	MongoConfig      string
-	ElasticConfig    string
-	S3Config         string
-	GCSConfig        string
-	HTTPConfig       string
+	Seed int64
+	//	KafkaConfig      string
+	ProducerConfig string
+	SchemaRegistry bool
+	RegistryConfig string
+	Serializer     string
+	AutoCreate     bool
+	RedisTtl       time.Duration
+	//	RedisConfig      string
+	//	MongoConfig      string
+	//	ElasticConfig    string
+	//	S3Config         string
+	//	GCSConfig        string
+	//	HTTPConfig       string
 	Url              string
 	EmbeddedTemplate bool
 	FileNameTemplate bool

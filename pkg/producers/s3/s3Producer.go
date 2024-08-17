@@ -3,7 +3,6 @@ package s3
 import (
 	"bytes"
 	"encoding/json"
-	"os"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -22,13 +21,9 @@ type S3Producer struct {
 	bucket string
 }
 
-func (p *S3Producer) Initialize(configFile string) {
+func (p *S3Producer) Initialize(configBytes []byte) {
 	var config Config
-	file, err := os.ReadFile(configFile)
-	if err != nil {
-		log.Fatal().Err(err).Msg("Failed to ReadFile")
-	}
-	err = json.Unmarshal(file, &config)
+	err := json.Unmarshal(configBytes, &config)
 	if err != nil {
 		log.Fatal().Err(err).Msg("Failed to parse configuration parameters")
 	}

@@ -89,8 +89,8 @@ jr template run --template "{{name}}"
 		cmd.Flags().VisitAll(func(f *pflag.Flag) {
 			if f.Changed {
 				switch f.Name {
-				case "kafkaConfig":
-					configuration.GlobalCfg.KafkaConfig, _ = cmd.Flags().GetString(f.Name)
+				case "producerConfig":
+					configuration.GlobalCfg.ProducerConfig, _ = cmd.Flags().GetString(f.Name)
 				case "registryConfig":
 					configuration.GlobalCfg.RegistryConfig, _ = cmd.Flags().GetString(f.Name)
 				case "autocreate":
@@ -99,20 +99,22 @@ jr template run --template "{{name}}"
 					configuration.GlobalCfg.SchemaRegistry, _ = cmd.Flags().GetBool(f.Name)
 				case "serializer":
 					configuration.GlobalCfg.Serializer, _ = cmd.Flags().GetString(f.Name)
-				case "redisTtl":
-					configuration.GlobalCfg.RedisTtl, _ = cmd.Flags().GetDuration(f.Name)
-				case "redisConfig":
-					configuration.GlobalCfg.RedisConfig, _ = cmd.Flags().GetString(f.Name)
-				case "mongoConfig":
-					configuration.GlobalCfg.MongoConfig, _ = cmd.Flags().GetString(f.Name)
-				case "elasticConfig":
-					configuration.GlobalCfg.ElasticConfig, _ = cmd.Flags().GetString(f.Name)
-				case "s3Config":
-					configuration.GlobalCfg.S3Config, _ = cmd.Flags().GetString(f.Name)
-				case "gcsConfig":
-					configuration.GlobalCfg.GCSConfig, _ = cmd.Flags().GetString(f.Name)
-				case "httpConfig":
-					configuration.GlobalCfg.HTTPConfig, _ = cmd.Flags().GetString(f.Name)
+					/*
+						case "redisTtl":
+							configuration.GlobalCfg.RedisTtl, _ = cmd.Flags().GetDuration(f.Name)
+						case "redisConfig":
+							configuration.GlobalCfg.RedisConfig, _ = cmd.Flags().GetString(f.Name)
+						case "mongoConfig":
+							configuration.GlobalCfg.MongoConfig, _ = cmd.Flags().GetString(f.Name)
+						case "elasticConfig":
+							configuration.GlobalCfg.ElasticConfig, _ = cmd.Flags().GetString(f.Name)
+						case "s3Config":
+							configuration.GlobalCfg.S3Config, _ = cmd.Flags().GetString(f.Name)
+						case "gcsConfig":
+							configuration.GlobalCfg.GCSConfig, _ = cmd.Flags().GetString(f.Name)
+						case "httpConfig":
+							configuration.GlobalCfg.HTTPConfig, _ = cmd.Flags().GetString(f.Name)
+					*/
 				}
 			}
 		})
@@ -152,7 +154,6 @@ func init() {
 
 	templateRunCmd.Flags().String("csv", "", "Path to csv file to use")
 
-	templateRunCmd.Flags().StringP("kafkaConfig", "F", "", "Kafka configuration")
 	templateRunCmd.Flags().String("registryConfig", "", "Kafka configuration")
 	templateRunCmd.Flags().Bool("embedded", false, "If enabled, [template] must be a string containing a template, to be embedded directly in the script")
 	templateRunCmd.Flags().Int("preload", constants.DEFAULT_PRELOAD_SIZE, "Number of elements to create during the preload phase")
@@ -170,11 +171,16 @@ func init() {
 	templateRunCmd.Flags().BoolP("schemaRegistry", "s", false, "If you want to use Confluent Schema Registry")
 	templateRunCmd.Flags().String("serializer", "", "Type of serializer: json-schema, avro-generic, avro, protobuf")
 	templateRunCmd.Flags().Duration("redis.ttl", -1, "If output is redis, ttl of the object")
-	templateRunCmd.Flags().String("httpConfig", "", "HTTP configuration")
-	templateRunCmd.Flags().String("redisConfig", "", "Redis configuration")
-	templateRunCmd.Flags().String("mongoConfig", "", "MongoDB configuration")
-	templateRunCmd.Flags().String("elasticConfig", "", "Elastic Search configuration")
-	templateRunCmd.Flags().String("s3Config", "", "Amazon S3 configuration")
-	templateRunCmd.Flags().String("gcsConfig", "", "Google GCS configuration")
+
+	/*
+		templateRunCmd.Flags().String("httpConfig", "", "HTTP configuration")
+		templateRunCmd.Flags().String("redisConfig", "", "Redis configuration")
+		templateRunCmd.Flags().String("mongoConfig", "", "MongoDB configuration")
+		templateRunCmd.Flags().String("elasticConfig", "", "Elastic Search configuration")
+		templateRunCmd.Flags().String("s3Config", "", "Amazon S3 configuration")
+		templateRunCmd.Flags().String("gcsConfig", "", "Google GCS configuration")
+	*/
+	//	templateRunCmd.Flags().StringP("kafkaConfig", "F", "", "Kafka configuration")
+	templateRunCmd.Flags().String("producerConfig", "", "Producer configuration")
 
 }

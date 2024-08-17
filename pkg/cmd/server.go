@@ -431,7 +431,7 @@ func webFunctionList(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func webPrintFunction(web_function_to_find string, w http.ResponseWriter, r *http.Request) {
+func webPrintFunction(web_function_to_find string, w http.ResponseWriter, _ *http.Request) {
 
 	matchingFunction := findFunctonsByRegex(web_function_to_find)
 

@@ -3,32 +3,43 @@ package redis
 import (
 	"context"
 	"encoding/json"
-	"os"
 	"time"
 
 	"github.com/redis/go-redis/v9"
 	"github.com/rs/zerolog/log"
 )
 
+type Config struct {
+	Options redis.Options `json:"options"`
+	TTL     string        `json:"ttl"`
+}
 type RedisProducer struct {
 	client redis.Client
 	Ttl    time.Duration
 }
 
-func (p *RedisProducer) Initialize(configFile string) {
-	var options redis.Options
+func (p *RedisProducer) Initialize(configBytes []byte) {
+	//var options redis.Options
 
-	data, err := os.ReadFile(configFile)
-	if err != nil {
-		log.Fatal().Err(err).Msg("Failed to load Redis configFile")
-	}
+	config := &Config{}
 
-	err = json.Unmarshal(data, &options)
+	err := json.Unmarshal(configBytes, config)
 	if err != nil {
 		log.Fatal().Err(err).Msg("Failed to parse configuration parameters")
 	}
 
-	p.client = *redis.NewClient(&options)
+	p.client = *redis.NewClient(&config.Options)
+
+	if config.TTL == "" {
+		p.Ttl = -1 * time.Nanosecond
+	}
+
+	ttl, err := time.ParseDuration(config.TTL)
+	if err != nil {
+		p.Ttl = -1 * time.Nanosecond
+	}
+
+	p.Ttl = ttl
 }
 
 func (p *RedisProducer) Close() error {

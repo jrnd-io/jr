@@ -25,12 +25,14 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/cookiejar"
-	"os"
 	"time"
 
 	"github.com/go-resty/resty/v2"
 	"github.com/rs/zerolog/log"
+	"github.com/ugol/jr/pkg/producers"
 )
+
+var Name = "http"
 
 type Producer struct {
 	configuration Config
@@ -40,14 +42,16 @@ type Producer struct {
 	cookiejar   http.CookieJar
 }
 
-func (p *Producer) Initialize(configFile string) {
-	cfgBytes, err := os.ReadFile(configFile)
-	if err != nil {
-		log.Fatal().Err(err).Msg("Failed to read config file")
-	}
+func Create(configBytes []byte) producers.Producer {
+	producer := &Producer{}
+	producer.Initialize(configBytes)
+	return producer
+}
+
+func (p *Producer) Initialize(configBytes []byte) {
 
 	config := Config{}
-	if err := json.Unmarshal(cfgBytes, &config); err != nil {
+	if err := json.Unmarshal(configBytes, &config); err != nil {
 		log.Fatal().Err(err).Msg("Failed to unmarshal config")
 	}
 

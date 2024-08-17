@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"os"
 
 	"cloud.google.com/go/storage"
 	"github.com/google/uuid"
@@ -21,14 +20,10 @@ type GCSProducer struct {
 	bucket string
 }
 
-func (p *GCSProducer) Initialize(configFile string) {
+func (p *GCSProducer) Initialize(configBytes []byte) {
 	var config Config
-	file, err := os.ReadFile(configFile)
-	if err != nil {
-		log.Fatal().Err(err).Msg("Failed to read configuration file")
-	}
 
-	err = json.Unmarshal(file, &config)
+	err := json.Unmarshal(configBytes, &config)
 	if err != nil {
 		log.Fatal().Err(err).Msg("Failed to parse configuration parameters")
 	}

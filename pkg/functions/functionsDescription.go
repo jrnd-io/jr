@@ -1258,7 +1258,7 @@ var funcDesc = map[string]FunctionDescription{
 		Name:        "username",
 		Category:    "people",
 		Description: "returns a random Username using Name, Surname",
-		Parameters:  "name string, surname stringt",
+		Parameters:  "name string, surname string",
 		Localizable: true,
 		Return:      "string",
 		Example:     "jr template run --embedded '{{username \"barack\" \"obama\" }}'",

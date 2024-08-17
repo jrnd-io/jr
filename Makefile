@@ -4,7 +4,7 @@ USER=$(shell id -u -n)
 TIME=$(shell date)
 JR_HOME=jr
 
-ifndef XDG_CONFIG_HOME
+ifndef XDG_DATA_DIRS
 ifeq ($(OS), Windows_NT)
 	detectedOS := Windows
 else
@@ -21,7 +21,7 @@ ifeq ($(detectedOS), Windows_NT)
 	JR_SYSTEM_DIR="$(LOCALAPPDATA)"
 endif
 else
-	JR_SYSTEM_DIR=$(XDG_CONFIG_HOME)
+	JR_SYSTEM_DIR=$(XDG_DATA_DIRS)
 endif
 
 ifndef XDG_DATA_HOME

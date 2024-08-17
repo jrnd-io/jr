@@ -26,7 +26,7 @@ JR is a CLI program that helps you to create quality random data for your applic
 JR is very straightforward to use. To list existing templates:
 > jr list
 
-Templates are in the directory $JR_SYSTEM_DIR/.jr/templates.
+Templates are in the directory $JR_SYSTEM_DIR/jr/templates.
 You can override with the --system_dir command flag. Templates with parsing issues are showed in red, Templates with no parsing issues are showed in green
 
 To use for example one of the predefined templates, net_device:

@@ -69,7 +69,7 @@ func (e *Emitter) Initialize(conf configuration.GlobalConfiguration) {
 
 	templateName := e.ValueTemplate
 	if e.EmbeddedTemplate == "" {
-		path := os.ExpandEnv(fmt.Sprintf("%s/%s", constants.JRhome, "templates"))
+		path := os.ExpandEnv(fmt.Sprintf("%s/%s", constants.JR_SYSTEM_DIR, "templates"))
 		templateFullPath := fmt.Sprintf("%s/%s.tpl", path, templateName)
 		vt, err := os.ReadFile(templateFullPath)
 		e.EmbeddedTemplate = string(vt)

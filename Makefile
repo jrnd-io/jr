@@ -12,16 +12,36 @@ else
 endif
 
 ifeq ($(detectedOS), Darwin)
-	CONFIG_HOME="$(HOME)/Library/Application Support"
+	JR_SYSTEM_DIR="$(HOME)/Library/Application Support"
 endif
 ifeq ($(detectedOS),  Linux)
-	CONFIG_HOME="$(HOME)/.config"
+	JR_SYSTEM_DIR="$(HOME)/.config"
 endif
 ifeq ($(detectedOS), Windows_NT)
-	CONFIG_HOME="$(LOCALAPPDATA)"
+	JR_SYSTEM_DIR="$(LOCALAPPDATA)"
 endif
 else
-	CONFIG_HOME=$(XDG_CONFIG_HOME)
+	JR_SYSTEM_DIR=$(XDG_CONFIG_HOME)
+endif
+
+ifndef XDG_DATA_HOME
+ifeq ($(OS), Windows_NT)
+	detectedOS := Windows
+else
+	detectedOS := $(shell sh -c 'uname 2>/dev/null || echo Unknown')
+endif
+
+ifeq ($(detectedOS), Darwin)
+	JR_USER_DIR="$(HOME)/.local/share"
+endif
+ifeq ($(detectedOS),  Linux)
+	JR_USER_DIR="$(HOME)/.local/share"
+endif
+ifeq ($(detectedOS), Windows_NT)
+	JR_USER_DIR="$(LOCALAPPDATA)" //@TODO
+endif
+else
+	JR_USER_DIR=$(XDG_DATA_HOME)
 endif
 
 hello:
@@ -31,7 +51,8 @@ hello:
 	@echo " Build User: $(USER)"
 	@echo " Build Time: $(TIME)"
 	@echo " Detected OS: $(detectedOS)"
-	@echo " Config Home: $(CONFIG_HOME)"
+	@echo " JR System Dir: $(JR_SYSTEM_DIR)"
+	@echo " JR User Dir: $(JR_USER_DIR)"
 
 install-gogen:
 	go install github.com/actgardner/gogen-avro/v10/cmd/...@latest
@@ -77,13 +98,13 @@ help: hello
 	@echo ''
 
 copy_templates:
-	mkdir -p $(CONFIG_HOME)/$(JR_HOME)/kafka && \
-	cp -r templates $(CONFIG_HOME)/$(JR_HOME) && \
-	cp -r pkg/producers/kafka/*.properties.example $(CONFIG_HOME)/$(JR_HOME)/kafka/
+	mkdir -p $(JR_SYSTEM_DIR)/$(JR_HOME)/kafka && \
+	cp -r templates $(JR_SYSTEM_DIR)/$(JR_HOME) && \
+	cp -r pkg/producers/kafka/*.properties.example $(JR_SYSTEM_DIR)/$(JR_HOME)/kafka/
 
 copy_config:
-	mkdir -p $(CONFIG_HOME)/$(JR_HOME) && \
-	cp config/* $(CONFIG_HOME)/$(JR_HOME)/
+	mkdir -p $(JR_SYSTEM_DIR)/$(JR_HOME) && \
+	cp config/* $(JR_SYSTEM_DIR)/$(JR_HOME)/
 
 install:
 	install build/jr /usr/local/bin

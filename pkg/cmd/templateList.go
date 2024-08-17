@@ -42,7 +42,7 @@ var templateListCmd = &cobra.Command{
 		fmt.Println("List of available JR templates:")
 		fmt.Println()
 
-		templateDir := os.ExpandEnv(fmt.Sprintf("%s/%s", constants.JRhome, "templates"))
+		templateDir := os.ExpandEnv(fmt.Sprintf("%s/%s", constants.JR_SYSTEM_DIR, "templates"))
 
 		if _, err := os.Stat(templateDir); os.IsNotExist(err) {
 			return

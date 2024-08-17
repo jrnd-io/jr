@@ -43,7 +43,7 @@ var templateShowCmd = &cobra.Command{
 		}
 
 		noColor, _ := cmd.Flags().GetBool("nocolor")
-		templateDir := os.ExpandEnv(fmt.Sprintf("%s/%s", constants.JRhome, "templates"))
+		templateDir := os.ExpandEnv(fmt.Sprintf("%s/%s", constants.JR_SYSTEM_DIR, "templates"))
 		templatePath := fmt.Sprintf("%s/%s.tpl", templateDir, args[0])
 		templateScript, err := os.ReadFile(templatePath)
 		if err != nil {

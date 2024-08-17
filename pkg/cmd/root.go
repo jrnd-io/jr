@@ -58,7 +58,8 @@ func init() {
 		ID:    "server",
 		Title: "HTTP Server",
 	})
-	rootCmd.PersistentFlags().StringVar(&constants.JRhome, "home", "", "JR home dir")
+	rootCmd.PersistentFlags().StringVar(&constants.JR_SYSTEM_DIR, "system_dir", "", "JR system dir")
+	rootCmd.PersistentFlags().StringVar(&constants.JR_USER_DIR, "user_dir", "", "JR user dir")
 }
 
 func initConfig() {
@@ -73,10 +74,10 @@ func initConfig() {
 	viper.SetEnvKeyReplacer(strings.NewReplacer("-", "_"))
 	viper.AutomaticEnv()
 	bindFlags(rootCmd, viper.GetViper())
-	if constants.JRhome == "" {
-		constants.JRhome = constants.DEFAULT_HOMEDIR
+	if constants.JR_SYSTEM_DIR == "" {
+		constants.JR_SYSTEM_DIR = constants.SYSTEM_DIR
 	}
-	viper.AddConfigPath(constants.JRhome)
+	viper.AddConfigPath(constants.JR_SYSTEM_DIR)
 
 	if err := viper.ReadInConfig(); err == nil {
 		log.Debug().Str("file", viper.ConfigFileUsed()).Msg("JR configuration")

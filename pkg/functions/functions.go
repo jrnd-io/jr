@@ -391,7 +391,7 @@ func Maxint(a, b int) int {
 // Cache is used to internally Cache data from word files
 func Cache(name string) (bool, error) {
 
-	templateDir := fmt.Sprintf("%s/%s", constants.JRhome, "templates")
+	templateDir := fmt.Sprintf("%s/%s", constants.JR_SYSTEM_DIR, "templates")
 
 	v := data[name]
 	if v == nil {

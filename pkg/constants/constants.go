@@ -27,15 +27,16 @@ import (
 	"github.com/adrg/xdg"
 )
 
-var JRhome string
+var JR_SYSTEM_DIR string
+var JR_USER_DIR string
 
 const NUM = 1
 const LOCALE = "us"
 const FREQUENCY = -1
 const INFINITE = 1<<63 - 1
 
-// var DEFAULT_SYSTEMDIR = xdg.DataHome + "jr"
-var DEFAULT_HOMEDIR = fmt.Sprintf("%s%c%s", xdg.ConfigHome, os.PathSeparator, "jr")
+var SYSTEM_DIR = fmt.Sprintf("%s%c%s", xdg.ConfigHome, os.PathSeparator, "jr")
+var USER_DIR = fmt.Sprintf("%s%c%s", xdg.DataHome, os.PathSeparator, "jr")
 
 const DEFAULT_KEY = "null"
 const DEFAULT_OUTPUT = "stdout"

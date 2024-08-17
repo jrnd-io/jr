@@ -26,6 +26,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
@@ -34,6 +35,8 @@ import (
 	"github.com/ugol/jr/pkg/constants"
 	"github.com/ugol/jr/pkg/functions"
 )
+
+var logLevel = "panic"
 
 var rootCmd = &cobra.Command{
 	Use:   "jr",
@@ -60,9 +63,17 @@ func init() {
 	})
 	rootCmd.PersistentFlags().StringVar(&constants.JR_SYSTEM_DIR, "system_dir", "", "JR system dir")
 	rootCmd.PersistentFlags().StringVar(&constants.JR_USER_DIR, "user_dir", "", "JR user dir")
+	rootCmd.PersistentFlags().StringVar(&logLevel, "log_level", "panic", "HR Log Level")
 }
 
 func initConfig() {
+
+	// setting zerolog level
+	zlogLevel, err := zerolog.ParseLevel(logLevel)
+	if err != nil {
+		zlogLevel = zerolog.PanicLevel
+	}
+	zerolog.SetGlobalLevel(zlogLevel)
 
 	viper.SetConfigName("jrconfig")
 	viper.SetConfigType("json")
@@ -84,7 +95,7 @@ func initConfig() {
 	} else {
 		log.Error().Err(err).Msg("JR configuration not found")
 	}
-	err := viper.UnmarshalKey("global", &configuration.GlobalCfg)
+	err = viper.UnmarshalKey("global", &configuration.GlobalCfg)
 	if err != nil {
 		log.Error().Err(err).Msg("Failed to unmarshal global configuration")
 	}

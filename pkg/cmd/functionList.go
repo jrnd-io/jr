@@ -39,18 +39,6 @@ var functionListCmd = &cobra.Command{
 	},
 }
 
-/*
-var functionManMarkdownCmd = &cobra.Command{
-	Use:   "manmd",
-	Short: "describes available functions as markdown",
-	Long: "describes available functions as markdown. Example usage:\n" +
-		"jr function manmd",
-	Run: func(cmd *cobra.Command, args []string) {
-		doList(cmd, args, false)
-	},
-}
-*/
-
 var functionManCmd = &cobra.Command{
 	Use:   "man",
 	Short: "describes available functions",
@@ -68,13 +56,13 @@ func doList(cmd *cobra.Command, args []string) {
 	isMarkdown, _ := cmd.Flags().GetBool("markdown")
 	noColor, _ := cmd.Flags().GetBool("nocolor")
 
-	if category {
+	if category && len(args) > 0 {
 		for k, v := range functions.DescriptionMap() {
 			if strings.Contains(v.Category, args[0]) {
 				printFunction(k, isMarkdown, noColor)
 			}
 		}
-	} else if find {
+	} else if find && len(args) > 0 {
 		for k, v := range functions.DescriptionMap() {
 			if strings.Contains(v.Description, args[0]) || strings.Contains(v.Name, args[0]) {
 				printFunction(k, isMarkdown, noColor)

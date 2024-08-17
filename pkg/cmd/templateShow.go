@@ -34,7 +34,7 @@ import (
 var templateShowCmd = &cobra.Command{
 	Use:   "show [template]",
 	Short: "Show a template",
-	Long:  `Show a template. Templates must be in templates directory, which is '$JR_HOME/templates'`,
+	Long:  `Show a template. Templates must be in templates directory, which is '$JR_SYSTEM_DIR/templates'`,
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) == 0 {

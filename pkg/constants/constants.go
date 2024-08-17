@@ -51,3 +51,5 @@ const DEFAULT_EMITTER_NAME = "cli"
 const DEFAULT_VALUE_TEMPLATE = "user"
 const DEFAULT_TOPIC = "test"
 const DEFAULT_HTTP_PORT = 7482
+
+const DEFAULT_LOG_LEVEL = "fatal"

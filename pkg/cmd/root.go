@@ -36,7 +36,7 @@ import (
 	"github.com/ugol/jr/pkg/functions"
 )
 
-var logLevel = "panic"
+var logLevel = constants.DEFAULT_LOG_LEVEL
 
 var rootCmd = &cobra.Command{
 	Use:   "jr",
@@ -63,7 +63,7 @@ func init() {
 	})
 	rootCmd.PersistentFlags().StringVar(&constants.JR_SYSTEM_DIR, "system_dir", "", "JR system dir")
 	rootCmd.PersistentFlags().StringVar(&constants.JR_USER_DIR, "user_dir", "", "JR user dir")
-	rootCmd.PersistentFlags().StringVar(&logLevel, "log_level", "panic", "HR Log Level")
+	rootCmd.PersistentFlags().StringVar(&logLevel, "log_level", constants.DEFAULT_LOG_LEVEL, "HR Log Level")
 }
 
 func initConfig() {

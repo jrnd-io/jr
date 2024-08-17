@@ -26,24 +26,24 @@ JR is a CLI program that helps you to create quality random data for your applic
 JR is very straightforward to use. To list existing templates:
 > jr list
 
-Templates are in the directory $HOME/.jr/templates.
-You can override with the --templatePath command flag Templates with parsing issues are showed in red, Templates with no parsing issues are showed in green
+Templates are in the directory $JR_SYSTEM_DIR/.jr/templates.
+You can override with the --system_dir command flag. Templates with parsing issues are showed in red, Templates with no parsing issues are showed in green
 
-To use for example one of the predefined templates, net-device:
+To use for example one of the predefined templates, net_device:
 
-> jr template run net-device
+> jr template run net_device
 
-Using -n option you can create more data in each pass. This example creates 3 net-device objects at once:
+Using -n option you can create more data in each pass. This example creates 3 net_device objects at once:
 
-> jr template run net-device -n 3
+> jr template run net_device -n 3
 
-Using --frequency option you can repeat the creation every f milliseconds. This example creates 2 net-device every second, for ever:
+Using --frequency option you can repeat the creation every f milliseconds. This example creates 2 net_device every second, for ever:
 
-> jr template run net-device -n 2 -f 1s
+> jr template run net_device -n 2 -f 1s
 
-Using --duration option you can time bound the entire object creation. This example creates 2 net-device every 100ms for 1 minute:
+Using --duration option you can time bound the entire object creation. This example creates 2 net_device every 100ms for 1 minute:
 
-> jr template run net-device -n 2 -f 100ms -d 1m
+> jr template run net_device -n 2 -f 100ms -d 1m
 */
 package main
 

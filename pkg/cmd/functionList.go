@@ -127,7 +127,7 @@ func printFunction(name string, isMarkdown bool, noColor bool) (functions.Functi
 	if found {
 		if isMarkdown {
 			fmt.Println()
-			fmt.Printf("## Name: %s \n", f.Name)
+			fmt.Printf("### %s \n", f.Name)
 			fmt.Printf("**Category:** %s\\\n", f.Category)
 			fmt.Printf("**Description:** %s\\\n", f.Description)
 

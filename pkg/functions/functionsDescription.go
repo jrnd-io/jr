@@ -1030,7 +1030,7 @@ var funcDesc = map[string]FunctionDescription{
 		Description: "set seed directly in a template",
 		Parameters:  "rndSeed int64",
 		Localizable: false,
-		Return:      "",
+		Return:      " ",
 		Example:     "jr template run --embedded '{{seed 12345}}'",
 		Output:      "",
 	},

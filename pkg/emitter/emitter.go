@@ -30,6 +30,7 @@ import (
 	"github.com/ugol/jr/pkg/constants"
 	"github.com/ugol/jr/pkg/ctx"
 	"github.com/ugol/jr/pkg/functions"
+	"github.com/ugol/jr/pkg/producers/azblobstorage"
 	"github.com/ugol/jr/pkg/producers/console"
 	"github.com/ugol/jr/pkg/producers/elastic"
 	"github.com/ugol/jr/pkg/producers/gcs"
@@ -130,6 +131,11 @@ func (e *Emitter) Initialize(conf configuration.GlobalConfiguration) {
 		return
 	}
 
+	if e.Output == "azblobstorage" {
+		e.Producer = createAZBlobStorageProducer(conf.AzBlobStorageConfig)
+		return
+	}
+
 	if e.Output == "json" {
 		e.Producer = &server.JsonProducer{OutputTpl: &o}
 		return
@@ -189,6 +195,13 @@ func createS3Producer(s3Config string) Producer {
 	sProducer.Initialize(s3Config)
 
 	return sProducer
+}
+
+func createAZBlobStorageProducer(azConfig string) Producer {
+	producer := &azblobstorage.Producer{}
+	producer.Initialize(azConfig)
+
+	return producer
 }
 
 func createGCSProducer(gcsConfig string) Producer {

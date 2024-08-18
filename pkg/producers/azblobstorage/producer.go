@@ -86,10 +86,9 @@ func (p *Producer) Produce(k []byte, v []byte, _ any) {
 	var key string
 	if len(k) == 0 || strings.ToLower(string(k)) == "null" {
 		// generate a UUID as index
-		id := uuid.New()
-		key = fmt.Sprintf("%s.json", id.String())
+		key = uuid.New().String()
 	} else {
-		key = fmt.Sprintf("%s.json", string(k))
+		key = string(k)
 	}
 
 	resp, err := p.client.UploadBuffer(

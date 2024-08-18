@@ -94,7 +94,7 @@ var funcDesc = map[string]FunctionDescription{
 	},
 	"atoi": {
 		Name:        "atoi",
-		Category:    "text utilities",
+		Category:    "text",
 		Description: "converts a string to an integer",
 		Parameters:  "string",
 		Localizable: false,
@@ -104,7 +104,7 @@ var funcDesc = map[string]FunctionDescription{
 	},
 	"itoa": {
 		Name:        "itoa",
-		Category:    "text utilities",
+		Category:    "text",
 		Description: "converts an integer to a string",
 		Parameters:  "int",
 		Localizable: false,
@@ -114,7 +114,7 @@ var funcDesc = map[string]FunctionDescription{
 	},
 	"concat": {
 		Name:        "concat",
-		Category:    "text utilities",
+		Category:    "text",
 		Description: "converts an integer to a string",
 		Parameters:  "string string",
 		Localizable: false,
@@ -404,7 +404,7 @@ var funcDesc = map[string]FunctionDescription{
 	},
 	"first": {
 		Name:        "first",
-		Category:    "text utilities",
+		Category:    "text",
 		Description: "returns the first character of a string",
 		Parameters:  "text string",
 		Localizable: false,
@@ -414,7 +414,7 @@ var funcDesc = map[string]FunctionDescription{
 	},
 	"firstword": {
 		Name:        "firstword",
-		Category:    "text utilities",
+		Category:    "text",
 		Description: "returns the first word of a text",
 		Parameters:  "text string",
 		Localizable: false,
@@ -444,7 +444,7 @@ var funcDesc = map[string]FunctionDescription{
 	},
 	"from": {
 		Name:        "from",
-		Category:    "text utilities",
+		Category:    "text",
 		Description: "returns a random string from a list of strings in a file. Files are in '$JR_SYSTEM_DIR/templates/data/locale'",
 		Parameters:  "set string",
 		Localizable: true,
@@ -454,7 +454,7 @@ var funcDesc = map[string]FunctionDescription{
 	},
 	"from_at": {
 		Name:        "from_at",
-		Category:    "text utilities",
+		Category:    "text",
 		Description: "returns a string at a given position in a list of strings in a file. Files are in '$JR_SYSTEM_DIR/templates/data/locale'",
 		Parameters:  "index int",
 		Localizable: true,
@@ -464,7 +464,7 @@ var funcDesc = map[string]FunctionDescription{
 	},
 	"from_n": {
 		Name:        "from_n",
-		Category:    "text utilities",
+		Category:    "text",
 		Description: "return a subset of elements in a list of string in a file. Files are in '$JR_SYSTEM_DIR/templates/data/locale'",
 		Parameters:  "set string, number int",
 		Localizable: true,
@@ -474,7 +474,7 @@ var funcDesc = map[string]FunctionDescription{
 	},
 	"from_shuffle": {
 		Name:        "from_shuffle",
-		Category:    "text utilities",
+		Category:    "text",
 		Description: "returns a shuffled list of strings in a file. Files are in '$JR_SYSTEM_DIR/templates/data/locale'",
 		Parameters:  "set string",
 		Localizable: true,
@@ -646,7 +646,7 @@ var funcDesc = map[string]FunctionDescription{
 	},
 	"join": {
 		Name:        "join",
-		Category:    "text utilities",
+		Category:    "text",
 		Description: "joins a list of strings with a separator",
 		Parameters:  "strings []string",
 		Localizable: false,
@@ -666,7 +666,7 @@ var funcDesc = map[string]FunctionDescription{
 	},
 	"index_of": {
 		Name:        "index_of",
-		Category:    "text utilities",
+		Category:    "text",
 		Description: "returns the index of s in 'name' file ",
 		Parameters:  "s string, name string",
 		Localizable: false,
@@ -686,7 +686,7 @@ var funcDesc = map[string]FunctionDescription{
 	},
 	"len": {
 		Name:        "len",
-		Category:    "text utilities",
+		Category:    "text",
 		Parameters:  "set string",
 		Localizable: true,
 		Description: "returns the length a list of strings in a file. Files are in '$JR_SYSTEM_DIR/templates/data/locale'",
@@ -706,7 +706,7 @@ var funcDesc = map[string]FunctionDescription{
 	},
 	"lower": {
 		Name:        "lower",
-		Category:    "text utilities",
+		Category:    "text",
 		Description: "converts a string to lowercase",
 		Parameters:  "text string",
 		Localizable: false,
@@ -716,7 +716,7 @@ var funcDesc = map[string]FunctionDescription{
 	},
 	"lorem": {
 		Name:        "lorem",
-		Category:    "text utilities",
+		Category:    "text",
 		Description: "generates a Lorem ipsum string",
 		Parameters:  "words int",
 		Localizable: false,
@@ -756,7 +756,7 @@ var funcDesc = map[string]FunctionDescription{
 	},
 	"markov": {
 		Name:        "markov",
-		Category:    "text utilities",
+		Category:    "text",
 		Description: "generates a markov chain from a string",
 		Parameters:  "chain int, text string",
 		Localizable: false,
@@ -916,7 +916,7 @@ var funcDesc = map[string]FunctionDescription{
 	},
 	"random": {
 		Name:        "random",
-		Category:    "text utilities",
+		Category:    "text",
 		Description: "returns a random string from a list of strings",
 		Parameters:  "list []string",
 		Localizable: false,
@@ -926,7 +926,7 @@ var funcDesc = map[string]FunctionDescription{
 	},
 	"randoms": {
 		Name:        "randoms",
-		Category:    "text utilities",
+		Category:    "text",
 		Parameters:  "list string",
 		Localizable: false,
 		Description: "returns a random strings from a | separated list string",
@@ -936,7 +936,7 @@ var funcDesc = map[string]FunctionDescription{
 	},
 	"random_index": {
 		Name:        "random_index",
-		Category:    "text utilities",
+		Category:    "text",
 		Parameters:  "set string",
 		Localizable: true,
 		Description: "returns a random index from a list of strings in a file. Files are in '$JR_SYSTEM_DIR/templates/data/locale'",
@@ -946,7 +946,7 @@ var funcDesc = map[string]FunctionDescription{
 	},
 	"random_string": {
 		Name:        "random_string",
-		Category:    "text utilities",
+		Category:    "text",
 		Description: "returns a random string long between min and max characters",
 		Parameters:  "min int, max int, vocabulary string",
 		Localizable: false,
@@ -956,7 +956,7 @@ var funcDesc = map[string]FunctionDescription{
 	},
 	"random_string_vocabulary": {
 		Name:        "random_string_vocabulary",
-		Category:    "text utilities",
+		Category:    "text",
 		Description: "returns a random string long between min and max characters using a vocabulary",
 		Parameters:  "min int, max int, vocabulary string",
 		Localizable: false,
@@ -996,7 +996,7 @@ var funcDesc = map[string]FunctionDescription{
 	},
 	"regex": {
 		Name:        "regex",
-		Category:    "text utilities",
+		Category:    "text",
 		Description: "returns a random string matching the Regex",
 		Parameters:  "regex string",
 		Localizable: false,
@@ -1006,7 +1006,7 @@ var funcDesc = map[string]FunctionDescription{
 	},
 	"repeat": {
 		Name:        "repeat",
-		Category:    "text utilities",
+		Category:    "text",
 		Description: "repeats a string a number of times",
 		Parameters:  "text string, number int",
 		Localizable: false,
@@ -1016,7 +1016,7 @@ var funcDesc = map[string]FunctionDescription{
 	},
 	"replaceall": {
 		Name:        "replaceall",
-		Category:    "text utilities",
+		Category:    "text",
 		Description: "replaces all instances of a string with another string",
 		Parameters:  "set string, original string, replaced string",
 		Localizable: false,
@@ -1046,7 +1046,7 @@ var funcDesc = map[string]FunctionDescription{
 	},
 	"sentence": {
 		Name:        "sentence",
-		Category:    "text utilities",
+		Category:    "text",
 		Description: "generates a random Sentence of n words",
 		Parameters:  "words int",
 		Localizable: false,
@@ -1056,7 +1056,7 @@ var funcDesc = map[string]FunctionDescription{
 	},
 	"sentence_prefix": {
 		Name:        "sentence_prefix",
-		Category:    "text utilities",
+		Category:    "text",
 		Description: "generates a random Sentence of n words, with a prefix length",
 		Parameters:  "prefix int, length int",
 		Localizable: false,
@@ -1086,7 +1086,7 @@ var funcDesc = map[string]FunctionDescription{
 	},
 	"split": {
 		Name:        "split",
-		Category:    "text utilities",
+		Category:    "text",
 		Description: "splits a string into a list of strings",
 		Parameters:  "text string, separator string",
 		Localizable: false,
@@ -1106,7 +1106,7 @@ var funcDesc = map[string]FunctionDescription{
 	},
 	"squeezechars": {
 		Name:        "squeezechars",
-		Category:    "text utilities",
+		Category:    "text",
 		Description: "removes all instances of a character from a string",
 		Parameters:  "set string, chars string",
 		Localizable: false,
@@ -1206,7 +1206,7 @@ var funcDesc = map[string]FunctionDescription{
 	},
 	"squeeze": {
 		Name:        "squeeze",
-		Category:    "text utilities",
+		Category:    "text",
 		Description: "removes all spaces from a string",
 		Parameters:  "text string",
 		Localizable: false,
@@ -1216,7 +1216,7 @@ var funcDesc = map[string]FunctionDescription{
 	},
 	"substr": {
 		Name:        "substr",
-		Category:    "text utilities",
+		Category:    "text",
 		Description: "returns a substring of a string",
 		Parameters:  "from int, to int, text string",
 		Localizable: false,
@@ -1226,7 +1226,7 @@ var funcDesc = map[string]FunctionDescription{
 	},
 	"title": {
 		Name:        "title",
-		Category:    "text utilities",
+		Category:    "text",
 		Description: "converts a string to title case",
 		Parameters:  "text string",
 		Localizable: false,
@@ -1236,7 +1236,7 @@ var funcDesc = map[string]FunctionDescription{
 	},
 	"trim": {
 		Name:        "trim",
-		Category:    "text utilities",
+		Category:    "text",
 		Description: "trims whitespace from a string",
 		Parameters:  "text string",
 		Localizable: false,
@@ -1246,7 +1246,7 @@ var funcDesc = map[string]FunctionDescription{
 	},
 	"trimchars": {
 		Name:        "trimchars",
-		Category:    "text utilities",
+		Category:    "text",
 		Description: "trims all characters in the given set from the beginning and end of a string",
 		Parameters:  "set string, chars string",
 		Localizable: false,
@@ -1266,7 +1266,7 @@ var funcDesc = map[string]FunctionDescription{
 	},
 	"upper": {
 		Name:        "upper",
-		Category:    "text utilities",
+		Category:    "text",
 		Description: "converts a string to uppercase",
 		Parameters:  "text string",
 		Localizable: false,

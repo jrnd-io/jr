@@ -60,7 +60,7 @@ func doList(cmd *cobra.Command, args []string) {
 	if category && len(args) > 0 {
 		var functionNames []string
 		for k, v := range functions.DescriptionMap() {
-			if strings.Contains(v.Category, args[0]) {
+			if v.Category == args[0] {
 				functionNames = append(functionNames, k)
 			}
 		}

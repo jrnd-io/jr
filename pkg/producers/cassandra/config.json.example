@@ -1,0 +1,10 @@
+{
+        "hosts":["host1:port1","host2:port2",...],
+        "keyspace": "<keyspacename>",
+        "table":"<table_name>",
+        "username": "<username>",
+        "password": "<password>",
+        "timeout": "<timeout>",
+        "consistencyLevel": "<consistencyLevel>"
+
+}

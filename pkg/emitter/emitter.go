@@ -30,6 +30,7 @@ import (
 	"github.com/ugol/jr/pkg/constants"
 	"github.com/ugol/jr/pkg/ctx"
 	"github.com/ugol/jr/pkg/functions"
+	"github.com/ugol/jr/pkg/producers/cassandra"
 	"github.com/ugol/jr/pkg/producers/console"
 	"github.com/ugol/jr/pkg/producers/elastic"
 	"github.com/ugol/jr/pkg/producers/gcs"
@@ -140,6 +141,11 @@ func (e *Emitter) Initialize(conf configuration.GlobalConfiguration) {
 		return
 	}
 
+	if e.Output == "cassandra" {
+		e.Producer = createCassandraProducer(conf.CassandraConfig)
+		return
+	}
+
 }
 
 func (e *Emitter) Run(num int, o any) {
@@ -203,6 +209,13 @@ func createHTTPProducer(httpConfig string) Producer {
 	httpProducer.Initialize(httpConfig)
 
 	return httpProducer
+}
+
+func createCassandraProducer(config string) Producer {
+	producer := &cassandra.Producer{}
+	producer.Initialize(config)
+
+	return producer
 }
 
 func createKafkaProducer(conf configuration.GlobalConfiguration, topic string, templateType string) *kafka.KafkaManager {

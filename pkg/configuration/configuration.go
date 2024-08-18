@@ -38,6 +38,7 @@ type GlobalConfiguration struct {
 	S3Config         string
 	GCSConfig        string
 	HTTPConfig       string
+	CassandraConfig  string
 	Url              string
 	EmbeddedTemplate bool
 	FileNameTemplate bool

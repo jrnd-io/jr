@@ -35,8 +35,8 @@ import (
 var templateRunCmd = &cobra.Command{
 	Use:   "run [template]",
 	Short: "Execute a template",
-	Long: `Execute a template. 
-  Without any other flag, [template] is just the name of a template in the templates directory, which is '$JR_SYSTEM_DIR/templates'. Example: 
+	Long: `Execute a template.
+  Without any other flag, [template] is just the name of a template in the templates directory, which is '$JR_SYSTEM_DIR/templates'. Example:
 jr template run net_device
   With the --embedded flag, [template] is a string containing a full template. Example:
 jr template run --template "{{name}}"
@@ -113,6 +113,8 @@ jr template run --template "{{name}}"
 					configuration.GlobalCfg.GCSConfig, _ = cmd.Flags().GetString(f.Name)
 				case "httpConfig":
 					configuration.GlobalCfg.HTTPConfig, _ = cmd.Flags().GetString(f.Name)
+				case "cassandraConfig":
+					configuration.GlobalCfg.CassandraConfig, _ = cmd.Flags().GetString(f.Name)
 				}
 			}
 		})
@@ -176,5 +178,6 @@ func init() {
 	templateRunCmd.Flags().String("elasticConfig", "", "Elastic Search configuration")
 	templateRunCmd.Flags().String("s3Config", "", "Amazon S3 configuration")
 	templateRunCmd.Flags().String("gcsConfig", "", "Google GCS configuration")
+	templateRunCmd.Flags().String("cassandraConfig", "", "Cassandra configuration")
 
 }

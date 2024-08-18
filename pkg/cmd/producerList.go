@@ -54,7 +54,8 @@ var producerListCmd = &cobra.Command{
 		fmt.Printf("%sElastic%s (--output = elastic)\n", Green, Reset)
 		fmt.Printf("%sS3%s (--output = s3)\n", Green, Reset)
 		fmt.Printf("%sGCS%s (--output = gcs)\n", Green, Reset)
-		fmt.Printf("%sCassandr%s (--output = cassandra)\n", Green, Reset)
+		fmt.Printf("%sAZBlobStorage%s (--output = azblobstorage)\n", Green, Reset)
+    fmt.Printf("%sCassandra%s (--output = cassandra)\n", Green, Reset)
 		fmt.Println()
 
 	},

@@ -54,15 +54,15 @@ func (p *S3Producer) Produce(k []byte, v []byte, o any) {
 	if k == nil || len(k) == 0 {
 		// generate a UUID as index
 		id := uuid.New()
-		key = id.String() + "/.json"
+		key = id.String()
 	} else {
-		key = string(k) + "/.json"
+		key = string(k)
 	}
 
-	buffer := bytes.NewReader(v)
 
+        //object will be stored with no content type 
 	_, err := p.client.PutObject(&s3.PutObjectInput{
-		Body:   buffer,
+		Body:   bytes.NewReader(v),
 		Bucket: aws.String(bucket),
 		Key:    aws.String(key),
 	})

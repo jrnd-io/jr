@@ -55,9 +55,9 @@ func (p *GCSProducer) Produce(k []byte, v []byte, o any) {
 	if k == nil || len(k) == 0 {
 		// generate a UUID as index
 		id := uuid.New()
-		key = id.String() + "/.json"
+		key = id.String()
 	} else {
-		key = string(k) + "/.json"
+		key = string(k)
 	}
 
 	objectHandle := p.client.Bucket(bucket).Object(key)

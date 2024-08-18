@@ -35,8 +35,8 @@ import (
 var templateRunCmd = &cobra.Command{
 	Use:   "run [template]",
 	Short: "Execute a template",
-	Long: `Execute a template. 
-  Without any other flag, [template] is just the name of a template in the templates directory, which is '$JR_SYSTEM_DIR/templates'. Example: 
+	Long: `Execute a template.
+  Without any other flag, [template] is just the name of a template in the templates directory, which is '$JR_SYSTEM_DIR/templates'. Example:
 jr template run net_device
   With the --embedded flag, [template] is a string containing a full template. Example:
 jr template run --template "{{name}}"

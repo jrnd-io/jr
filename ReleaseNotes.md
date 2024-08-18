@@ -4,7 +4,7 @@ v0.3.9
 - new Docker image from scratch
 - added several GUI features 
 - added http producer
-- 
+- added Azure Blob Storage producer
 
 v0.3.8
 - moved to librdkafka 2.5.0

@@ -5,6 +5,7 @@ v0.3.9
 - added several GUI features 
 - added http producer
 - added Azure Blob Storage producer
+- added Cassandra producer
 
 v0.3.8
 - moved to librdkafka 2.5.0

@@ -51,10 +51,9 @@ func (p *S3Producer) Produce(k []byte, v []byte, o any) {
 	bucket := p.bucket
 	var key string
 
-	if k == nil || len(k) == 0 {
+	if len(k) == 0 || strings.ToLower(string(k)) == "null" {
 		// generate a UUID as index
-		id := uuid.New()
-		key = id.String()
+		key = uuid.New().String()
 	} else {
 		key = string(k)
 	}

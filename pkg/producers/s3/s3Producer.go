@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"os"
-
+        "strings"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
@@ -51,18 +51,17 @@ func (p *S3Producer) Produce(k []byte, v []byte, o any) {
 	bucket := p.bucket
 	var key string
 
-	if k == nil || len(k) == 0 {
+	if len(k) == 0 || strings.ToLower(string(k)) == "null" {
 		// generate a UUID as index
-		id := uuid.New()
-		key = id.String() + "/.json"
+		key = uuid.New().String()
 	} else {
-		key = string(k) + "/.json"
+		key = string(k)
 	}
 
-	buffer := bytes.NewReader(v)
 
+        //object will be stored with no content type 
 	_, err := p.client.PutObject(&s3.PutObjectInput{
-		Body:   buffer,
+		Body:   bytes.NewReader(v),
 		Bucket: aws.String(bucket),
 		Key:    aws.String(key),
 	})

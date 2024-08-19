@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
-
+        "strings"
 	"cloud.google.com/go/storage"
 	"github.com/google/uuid"
 
@@ -52,12 +52,11 @@ func (p *GCSProducer) Produce(k []byte, v []byte, o any) {
 	bucket := p.bucket
 	var key string
 
-	if k == nil || len(k) == 0 {
+	if len(k) == 0 || strings.ToLower(string(k)) == "null" {
 		// generate a UUID as index
-		id := uuid.New()
-		key = id.String() + "/.json"
+		key = uuid.New().String()
 	} else {
-		key = string(k) + "/.json"
+		key = string(k)
 	}
 
 	objectHandle := p.client.Bucket(bucket).Object(key)

@@ -4,6 +4,7 @@ go 1.22.4
 
 require (
 	cloud.google.com/go/storage v1.43.0
+	github.com/Azure/azure-sdk-for-go/sdk/data/azcosmos v1.0.3
 	github.com/Azure/azure-sdk-for-go/sdk/storage/azblob v1.4.0
 	github.com/actgardner/gogen-avro/v10 v10.2.1
 	github.com/adrg/xdg v0.5.0
@@ -32,6 +33,7 @@ require (
 	cloud.google.com/go/auth/oauth2adapt v0.2.2 // indirect
 	cloud.google.com/go/compute/metadata v0.3.0 // indirect
 	cloud.google.com/go/iam v1.1.8 // indirect
+	github.com/Azure/azure-sdk-for-go v68.0.0+incompatible // indirect
 	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.13.0 // indirect
 	github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.7.0 // indirect
 	github.com/Azure/azure-sdk-for-go/sdk/internal v1.10.0 // indirect

@@ -35,11 +35,12 @@ type GlobalConfiguration struct {
 	RedisConfig         string
 	MongoConfig         string
 	AzBlobStorageConfig string
+	AzCosmosDBConfig    string
 	ElasticConfig       string
 	S3Config            string
 	GCSConfig           string
 	HTTPConfig          string
-  CassandraConfig     string
+	CassandraConfig     string
 	Url                 string
 	EmbeddedTemplate    bool
 	FileNameTemplate    bool

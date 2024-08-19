@@ -1,0 +1,23 @@
+repos:
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v4.4.0
+  hooks:
+  - id: trailing-whitespace
+    args: [--markdown-linebreak-ext=md]
+  - id: end-of-file-fixer
+  - id: fix-byte-order-marker
+  - id: mixed-line-ending
+  - id: check-merge-conflict
+  - id: check-case-conflict
+  - id: check-docstring-first
+- repo: https://github.com/Lucas-C/pre-commit-hooks
+  rev: v1.3.1
+  hooks:
+  - id: remove-crlf
+- repo: https://github.com/golangci/golangci-lint
+  rev: v1.54.2
+  hooks:
+    - id: golangci-lint
+      args:
+        - --config
+        - .localci/lint/golangci.yml

@@ -113,6 +113,8 @@ jr template run --template "{{name}}"
 					configuration.GlobalCfg.GCSConfig, _ = cmd.Flags().GetString(f.Name)
 				case "azBlobStorageConfig":
 					configuration.GlobalCfg.AzBlobStorageConfig, _ = cmd.Flags().GetString(f.Name)
+				case "azCosmosDBConfig":
+					configuration.GlobalCfg.AzCosmosDBConfig, _ = cmd.Flags().GetString(f.Name)
 				case "httpConfig":
 					configuration.GlobalCfg.HTTPConfig, _ = cmd.Flags().GetString(f.Name)
 				case "cassandraConfig":
@@ -181,6 +183,7 @@ func init() {
 	templateRunCmd.Flags().String("s3Config", "", "Amazon S3 configuration")
 	templateRunCmd.Flags().String("gcsConfig", "", "Google GCS configuration")
 	templateRunCmd.Flags().String("azBlobStorageConfig", "", "Azure Blob storage configuration")
-  templateRunCmd.Flags().String("cassandraConfig", "", "Cassandra configuration")
+	templateRunCmd.Flags().String("azCosmosDBConfig", "", "Azure CosmosDB configuration")
+	templateRunCmd.Flags().String("cassandraConfig", "", "Cassandra configuration")
 
 }

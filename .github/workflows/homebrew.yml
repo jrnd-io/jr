@@ -1,0 +1,26 @@
+name: Update Homebrew formula
+
+# trigger on creation of a new tag
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  update-brew-formula:
+    runs-on: macos-latest
+
+    steps:
+      - name: Update Homebrew formula
+        uses: dawidd6/action-homebrew-bump-formula@v3
+        with:
+          # Required, custom GitHub access token with the 'public_repo' scope
+          token: ${{ secrets.HOMEBREW_TOKEN }}
+          # Optional, will create tap repo fork in organization
+          org: jrnd-io
+          # Formula name, required
+          formula: jr
+          # Optional, if don't want to check for already open PRs
+          force: false # true
+          # Optional, use the origin repository instead of forking
+          no_fork: false

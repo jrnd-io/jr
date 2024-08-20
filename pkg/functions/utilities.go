@@ -23,7 +23,7 @@ package functions
 import (
 	"fmt"
 	"github.com/google/uuid"
-	"github.com/ugol/jr/pkg/ctx"
+	"github.com/jrnd-io/jr/pkg/ctx"
 )
 
 // Counter creates a counter named c, starting from start and incrementing by step

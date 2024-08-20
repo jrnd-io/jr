@@ -44,7 +44,7 @@ import (
 	"github.com/confluentinc/confluent-kafka-go/v2/schemaregistry/serde"
 	"github.com/confluentinc/confluent-kafka-go/v2/schemaregistry/serde/avrov2"
 	"github.com/confluentinc/confluent-kafka-go/v2/schemaregistry/serde/jsonschema"
-	"github.com/ugol/jr/pkg/types"
+	"github.com/jrnd-io/jr/pkg/types"
 
 	"github.com/rs/zerolog/log"
 )

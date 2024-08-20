@@ -26,7 +26,7 @@ import (
 	"testing"
 	"text/template"
 
-	"github.com/ugol/jr/pkg/functions"
+	"github.com/jrnd-io/jr/pkg/functions"
 )
 
 func TestSimpleContext(t *testing.T) {

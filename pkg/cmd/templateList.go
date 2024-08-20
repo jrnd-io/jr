@@ -23,9 +23,9 @@ package cmd
 import (
 	"bytes"
 	"fmt"
+	"github.com/jrnd-io/jr/pkg/constants"
+	"github.com/jrnd-io/jr/pkg/functions"
 	"github.com/spf13/cobra"
-	"github.com/ugol/jr/pkg/constants"
-	"github.com/ugol/jr/pkg/functions"
 	"os"
 	"path/filepath"
 	"strings"

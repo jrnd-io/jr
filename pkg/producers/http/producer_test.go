@@ -30,7 +30,7 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/jarcoal/httpmock"
-	phttp "github.com/ugol/jr/pkg/producers/http"
+	phttp "github.com/jrnd-io/jr/pkg/producers/http"
 )
 
 var defaultBody = []byte("{\"property\": \"value\"}")

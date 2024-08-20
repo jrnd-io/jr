@@ -33,9 +33,9 @@ import (
 	"text/template"
 
 	"github.com/google/uuid"
+	"github.com/jrnd-io/jr/pkg/constants"
+	"github.com/jrnd-io/jr/pkg/ctx"
 	"github.com/rs/zerolog/log"
-	"github.com/ugol/jr/pkg/constants"
-	"github.com/ugol/jr/pkg/ctx"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 )

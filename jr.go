@@ -46,7 +46,7 @@ Using --duration option you can time bound the entire object creation. This exam
 package main
 
 import (
-	"github.com/ugol/jr/pkg/cmd"
+	"github.com/jrnd-io/jr/pkg/cmd"
 )
 
 func main() {

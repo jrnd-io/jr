@@ -23,7 +23,7 @@
 package functions_test
 
 import (
-	"github.com/ugol/jr/pkg/functions"
+	"github.com/jrnd-io/jr/pkg/functions"
 	"regexp"
 	"testing"
 )

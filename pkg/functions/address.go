@@ -22,7 +22,7 @@ package functions
 
 import (
 	"fmt"
-	"github.com/ugol/jr/pkg/ctx"
+	"github.com/jrnd-io/jr/pkg/ctx"
 	"math"
 )
 

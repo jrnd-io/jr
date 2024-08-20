@@ -26,9 +26,9 @@ import (
 	"runtime"
 	"strings"
 
+	"github.com/jrnd-io/jr/pkg/constants"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
-	"github.com/ugol/jr/pkg/constants"
 )
 
 var templateShowCmd = &cobra.Command{

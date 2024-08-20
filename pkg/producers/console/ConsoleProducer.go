@@ -22,7 +22,7 @@ package console
 
 import (
 	"fmt"
-	"github.com/ugol/jr/pkg/tpl"
+	"github.com/jrnd-io/jr/pkg/tpl"
 )
 
 type ConsoleProducer struct {

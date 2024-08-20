@@ -21,9 +21,9 @@
 package cmd
 
 import (
+	"github.com/jrnd-io/jr/pkg/constants"
+	"github.com/jrnd-io/jr/pkg/producers/kafka"
 	"github.com/spf13/cobra"
-	"github.com/ugol/jr/pkg/constants"
-	"github.com/ugol/jr/pkg/producers/kafka"
 )
 
 var createTopicCmd = &cobra.Command{

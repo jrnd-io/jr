@@ -20,7 +20,7 @@
 
 package functions
 
-import "github.com/ugol/jr/pkg/ctx"
+import "github.com/jrnd-io/jr/pkg/ctx"
 
 // CountryCode returns a random Country Code prefix
 func CountryCode() string {

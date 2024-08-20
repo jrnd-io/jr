@@ -23,8 +23,8 @@ package functions_test
 import (
 	"bytes"
 	"fmt"
-	"github.com/ugol/jr/pkg/ctx"
-	"github.com/ugol/jr/pkg/functions"
+	"github.com/jrnd-io/jr/pkg/ctx"
+	"github.com/jrnd-io/jr/pkg/functions"
 	"testing"
 	"text/template"
 )

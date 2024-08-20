@@ -1,4 +1,4 @@
-module github.com/ugol/jr
+module github.com/jrnd-io/jr
 
 go 1.22.4
 

@@ -25,8 +25,8 @@ import (
 	"regexp"
 	"text/template"
 
+	"github.com/jrnd-io/jr/pkg/ctx"
 	"github.com/rs/zerolog/log"
-	"github.com/ugol/jr/pkg/ctx"
 )
 
 func ExecuteTemplate(key *template.Template, value *template.Template, oneline bool) (string, string, error) {

@@ -26,14 +26,14 @@ import (
 	"strings"
 	"time"
 
+	"github.com/jrnd-io/jr/pkg/configuration"
+	"github.com/jrnd-io/jr/pkg/constants"
+	"github.com/jrnd-io/jr/pkg/functions"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
-	"github.com/ugol/jr/pkg/configuration"
-	"github.com/ugol/jr/pkg/constants"
-	"github.com/ugol/jr/pkg/functions"
 )
 
 var logLevel = constants.DEFAULT_LOG_LEVEL

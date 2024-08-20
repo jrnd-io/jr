@@ -38,12 +38,12 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/gorilla/sessions"
+	"github.com/jrnd-io/jr/pkg/configuration"
+	"github.com/jrnd-io/jr/pkg/constants"
+	"github.com/jrnd-io/jr/pkg/emitter"
+	"github.com/jrnd-io/jr/pkg/functions"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
-	"github.com/ugol/jr/pkg/configuration"
-	"github.com/ugol/jr/pkg/constants"
-	"github.com/ugol/jr/pkg/emitter"
-	"github.com/ugol/jr/pkg/functions"
 )
 
 //go:embed html/index.html

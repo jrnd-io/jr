@@ -21,8 +21,8 @@
 package cmd
 
 import (
+	"github.com/jrnd-io/jr/pkg/emitter"
 	"github.com/spf13/cobra"
-	"github.com/ugol/jr/pkg/emitter"
 )
 
 var emitterRunCmd = &cobra.Command{

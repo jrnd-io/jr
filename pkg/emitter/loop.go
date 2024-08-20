@@ -23,9 +23,9 @@ package emitter
 import (
 	"context"
 	"fmt"
-	"github.com/ugol/jr/pkg/configuration"
-	"github.com/ugol/jr/pkg/ctx"
-	"github.com/ugol/jr/pkg/functions"
+	"github.com/jrnd-io/jr/pkg/configuration"
+	"github.com/jrnd-io/jr/pkg/ctx"
+	"github.com/jrnd-io/jr/pkg/functions"
 	"io"
 	"os"
 	"os/signal"

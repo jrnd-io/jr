@@ -23,8 +23,8 @@ package server
 import (
 	"net/http"
 
+	"github.com/jrnd-io/jr/pkg/tpl"
 	"github.com/rs/zerolog/log"
-	"github.com/ugol/jr/pkg/tpl"
 )
 
 type JsonProducer struct {

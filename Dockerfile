@@ -8,7 +8,7 @@ ARG TIME=$(date)
 
 RUN useradd jr
 
-WORKDIR /go/src/github.com/ugol/jr
+WORKDIR /go/src/github.com/jrnd-io/jr
 COPY . .
 RUN go install github.com/actgardner/gogen-avro/v10/cmd/...@latest
 RUN go generate pkg/generator/generate.go

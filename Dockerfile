@@ -19,9 +19,9 @@ FROM registry.access.redhat.com/ubi9/ubi-micro
     
 COPY --from=builder /etc/passwd /etc/passwd
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
-COPY --from=builder /go/src/github.com/ugol/jr/templates/ /home/jr/.jr/templates/
-COPY --from=builder /go/src/github.com/ugol/jr/config/ /home/jr/.jr/
-COPY --from=builder /go/src/github.com/ugol/jr/pkg/producers/kafka/*.example /home/jr/.jr/kafka/
-COPY --from=builder /go/src/github.com/ugol/jr/build/jr /bin
+COPY --from=builder /go/src/github.com/jrnd-io/jr/templates/ /home/jr/.jr/templates/
+COPY --from=builder /go/src/github.com/jrnd-io/jr/config/ /home/jr/.jr/
+COPY --from=builder /go/src/github.com/jrnd-io/jr/pkg/producers/kafka/*.example /home/jr/.jr/kafka/
+COPY --from=builder /go/src/github.com/jrnd-io/jr/build/jr /bin
 
 USER jr

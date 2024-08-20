@@ -21,13 +21,13 @@ parts:
     plugin: go
     source-type: git
     source-branch: main
-    source: https://github.com/ugol/jr
+    source: https://github.com/jrnd-io/jr
     build-snaps: [go/1.22/stable]
 
   jr-copy-files-templates:
     plugin: dump
     source-type: git
-    source: https://github.com/ugol/jr
+    source: https://github.com/jrnd-io/jr
     source-subdir: "templates"
     organize:
       "*": templates/
@@ -35,5 +35,5 @@ parts:
   jr-copy-files-config:
     plugin: dump
     source-type: git
-    source: https://github.com/ugol/jr
+    source: https://github.com/jrnd-io/jr
     source-subdir: "config"

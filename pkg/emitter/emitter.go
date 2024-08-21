@@ -37,6 +37,7 @@ import (
 	"github.com/jrnd-io/jr/pkg/producers/gcs"
 	"github.com/jrnd-io/jr/pkg/producers/http"
 	"github.com/jrnd-io/jr/pkg/producers/kafka"
+	"github.com/jrnd-io/jr/pkg/producers/luascript"
 	"github.com/jrnd-io/jr/pkg/producers/mongoDB"
 	"github.com/jrnd-io/jr/pkg/producers/redis"
 	"github.com/jrnd-io/jr/pkg/producers/s3"
@@ -156,6 +157,10 @@ func (e *Emitter) Initialize(conf configuration.GlobalConfiguration) {
 		e.Producer = createCassandraProducer(conf.CassandraConfig)
 		return
 	}
+	if e.Output == "luascript" {
+		e.Producer = createLUAScriptProducer(conf.LUAScriptConfig)
+		return
+	}
 
 }
 
@@ -238,6 +243,13 @@ func createHTTPProducer(httpConfig string) Producer {
 
 func createCassandraProducer(config string) Producer {
 	producer := &cassandra.Producer{}
+	producer.Initialize(config)
+
+	return producer
+}
+
+func createLUAScriptProducer(config string) Producer {
+	producer := &luascript.Producer{}
 	producer.Initialize(config)
 
 	return producer

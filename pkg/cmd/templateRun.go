@@ -119,6 +119,8 @@ jr template run --template "{{name}}"
 					configuration.GlobalCfg.HTTPConfig, _ = cmd.Flags().GetString(f.Name)
 				case "cassandraConfig":
 					configuration.GlobalCfg.CassandraConfig, _ = cmd.Flags().GetString(f.Name)
+				case "luascriptConfig":
+					configuration.GlobalCfg.LUAScriptConfig, _ = cmd.Flags().GetString(f.Name)
 				}
 			}
 		})
@@ -185,5 +187,6 @@ func init() {
 	templateRunCmd.Flags().String("azBlobStorageConfig", "", "Azure Blob storage configuration")
 	templateRunCmd.Flags().String("azCosmosDBConfig", "", "Azure CosmosDB configuration")
 	templateRunCmd.Flags().String("cassandraConfig", "", "Cassandra configuration")
+	templateRunCmd.Flags().String("luascriptConfig", "", "LUA Script configuration")
 
 }

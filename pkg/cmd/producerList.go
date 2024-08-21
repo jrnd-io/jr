@@ -57,6 +57,7 @@ var producerListCmd = &cobra.Command{
 		fmt.Printf("%sAZBlobStorage%s (--output = azblobstorage)\n", Green, Reset)
 		fmt.Printf("%sAZCosmosDB%s (--output = azcosmosdb)\n", Green, Reset)
 		fmt.Printf("%sCassandra%s (--output = cassandra)\n", Green, Reset)
+		fmt.Printf("%sLUA Script%s (--output = luascript)\n", Green, Reset)
 		fmt.Println()
 
 	},

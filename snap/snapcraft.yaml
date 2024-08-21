@@ -5,10 +5,6 @@ summary: Random data generator
 description: |
   Command line generator of random data.
 
-architectures:
-  - build-on: amd64
-  - build-on: arm64
-
 grade: stable
 confinement: strict
 

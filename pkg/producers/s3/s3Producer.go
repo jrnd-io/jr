@@ -22,23 +22,24 @@ package s3
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/s3"
-	"github.com/google/uuid"
-	"github.com/rs/zerolog/log"
 	"os"
 	"strings"
+
+	"github.com/aws/aws-sdk-go-v2/aws"
+	awsconfig "github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
+	"github.com/google/uuid"
+	"github.com/rs/zerolog/log"
 )
 
 type Config struct {
-	AWSRegion string `json:"aws_region"`
-	Bucket    string `json:"bucket"`
+	Bucket string `json:"bucket"`
 }
 
 type S3Producer struct {
-	client s3.S3
+	client *s3.Client
 	bucket string
 }
 
@@ -53,16 +54,14 @@ func (p *S3Producer) Initialize(configFile string) {
 		log.Fatal().Err(err).Msg("Failed to parse configuration parameters")
 	}
 
-	sess, err := session.NewSession(&aws.Config{Region: &config.AWSRegion})
-
+	awsConfig, err := awsconfig.LoadDefaultConfig(context.TODO())
 	if err != nil {
-		log.Fatal().Err(err).Msg("Can't establish a session to S3")
-		return
+		log.Fatal().Err(err).Msg("Failed to load default AWS config")
 	}
 
-	s3Client := s3.New(sess)
+	client := s3.NewFromConfig(awsConfig)
 
-	p.client = *s3Client
+	p.client = client
 	p.bucket = config.Bucket
 }
 
@@ -79,7 +78,7 @@ func (p *S3Producer) Produce(k []byte, v []byte, o any) {
 	}
 
 	//object will be stored with no content type
-	_, err := p.client.PutObject(&s3.PutObjectInput{
+	_, err := p.client.PutObject(context.TODO(), &s3.PutObjectInput{
 		Body:   bytes.NewReader(v),
 		Bucket: aws.String(bucket),
 		Key:    aws.String(key),

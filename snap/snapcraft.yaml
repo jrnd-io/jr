@@ -5,6 +5,10 @@ summary: Random data generator
 description: |
   Command line generator of random data.
 
+architectures:
+  - build-on: amd64
+  - build-on: arm64
+
 grade: stable
 confinement: strict
 
@@ -18,15 +22,22 @@ apps:
 
 parts:
   jr:
-    plugin: go
+    plugin: make
     source-type: git
-    source-branch: main
+    source-tag: v0.3.8
     source: https://github.com/jrnd-io/jr
     build-snaps: [go/1.22/stable]
+    disable-parallel: true
+    override-build: |-
+      make
+      sed -i 's|USER=$(shell id -u -n)|USER=snapcraft|g' Makefile
+      make all
+      install -DT "./build/jr" "$SNAPCRAFT_PART_INSTALL/bin/jr"
 
   jr-copy-files-templates:
     plugin: dump
     source-type: git
+    source-tag: v0.3.8
     source: https://github.com/jrnd-io/jr
     source-subdir: "templates"
     organize:
@@ -35,5 +46,6 @@ parts:
   jr-copy-files-config:
     plugin: dump
     source-type: git
+    source-tag: v0.3.8
     source: https://github.com/jrnd-io/jr
     source-subdir: "config"

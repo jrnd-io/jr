@@ -4,15 +4,22 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - ".github/workflows/snap.yml"
+      - "snap/snapcraft.yaml"
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        platform:
+          - amd64
+          - arm64
     steps:
       - uses: actions/checkout@v4
-      - uses: snapcore/action-build@v1
-        id: build
+      - uses: docker/setup-qemu-action@v1
+      - uses: diddlesnaps/snapcraft-multiarch-action@v1
+        with:
+          architecture: ${{ matrix.platform }}
       - uses: snapcore/action-publish@v1
         env:
           SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAP_STORE_LOGIN }}

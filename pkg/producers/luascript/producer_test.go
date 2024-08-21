@@ -1,5 +1,4 @@
 // Copyright © 2024 JR team
-//
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
@@ -17,32 +16,38 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
+package luascript_test
 
-package configuration
+import (
+	"testing"
 
-import "time"
+	"github.com/jrnd-io/jr/pkg/producers/luascript"
+)
 
-var GlobalCfg GlobalConfiguration
+func TestProducer(t *testing.T) {
 
-type GlobalConfiguration struct {
-	Seed                int64
-	KafkaConfig         string
-	SchemaRegistry      bool
-	RegistryConfig      string
-	Serializer          string
-	AutoCreate          bool
-	RedisTtl            time.Duration
-	RedisConfig         string
-	MongoConfig         string
-	AzBlobStorageConfig string
-	AzCosmosDBConfig    string
-	ElasticConfig       string
-	S3Config            string
-	GCSConfig           string
-	HTTPConfig          string
-	CassandraConfig     string
-	LUAScriptConfig     string
-	Url                 string
-	EmbeddedTemplate    bool
-	FileNameTemplate    bool
+	testCases := []struct {
+		name   string
+		config luascript.Config
+	}{
+		{
+			name: "testprint",
+			config: luascript.Config{
+				Script: ` json = require "json"
+				          print(k) 
+						  json.decode(v)`,
+			},
+		},
+	}
+	for _, tc := range testCases {
+		tc := tc
+		someJson := `{"key": "value"}`
+
+		t.Run(tc.name, func(t *testing.T) {
+			p := &luascript.Producer{}
+			p.InitializeFromConfig(tc.config)
+			p.Produce([]byte("somekey"), []byte(someJson), nil)
+		})
+
+	}
 }

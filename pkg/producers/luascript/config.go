@@ -17,32 +17,9 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
+package luascript
 
-package configuration
-
-import "time"
-
-var GlobalCfg GlobalConfiguration
-
-type GlobalConfiguration struct {
-	Seed                int64
-	KafkaConfig         string
-	SchemaRegistry      bool
-	RegistryConfig      string
-	Serializer          string
-	AutoCreate          bool
-	RedisTtl            time.Duration
-	RedisConfig         string
-	MongoConfig         string
-	AzBlobStorageConfig string
-	AzCosmosDBConfig    string
-	ElasticConfig       string
-	S3Config            string
-	GCSConfig           string
-	HTTPConfig          string
-	CassandraConfig     string
-	LUAScriptConfig     string
-	Url                 string
-	EmbeddedTemplate    bool
-	FileNameTemplate    bool
+type Config struct {
+	ScriptFile string `json:"script_file"`
+	Script     string `json:"script"`
 }

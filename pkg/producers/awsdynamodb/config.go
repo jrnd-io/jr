@@ -18,32 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-package configuration
+package awsdynamodb
 
-import "time"
-
-var GlobalCfg GlobalConfiguration
-
-type GlobalConfiguration struct {
-	Seed                int64
-	KafkaConfig         string
-	SchemaRegistry      bool
-	RegistryConfig      string
-	Serializer          string
-	AutoCreate          bool
-	RedisTtl            time.Duration
-	RedisConfig         string
-	MongoConfig         string
-	AzBlobStorageConfig string
-	AzCosmosDBConfig    string
-	ElasticConfig       string
-	S3Config            string
-	GCSConfig           string
-	HTTPConfig          string
-	CassandraConfig     string
-	AWSDynamoDBConfig   string
-	LUAScriptConfig     string
-	Url                 string
-	EmbeddedTemplate    bool
-	FileNameTemplate    bool
+type Config struct {
+	Table string `json:"table"`
 }

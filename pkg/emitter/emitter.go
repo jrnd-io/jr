@@ -29,6 +29,7 @@ import (
 	"github.com/jrnd-io/jr/pkg/constants"
 	"github.com/jrnd-io/jr/pkg/ctx"
 	"github.com/jrnd-io/jr/pkg/functions"
+	"github.com/jrnd-io/jr/pkg/producers/awsdynamodb"
 	"github.com/jrnd-io/jr/pkg/producers/azblobstorage"
 	"github.com/jrnd-io/jr/pkg/producers/azcosmosdb"
 	"github.com/jrnd-io/jr/pkg/producers/cassandra"
@@ -129,6 +130,11 @@ func (e *Emitter) Initialize(conf configuration.GlobalConfiguration) {
 		return
 	}
 
+	if e.Output == "awsdynamodb" {
+		e.Producer = createAWSDynamoDB(conf.AWSDynamoDBConfig)
+		return
+	}
+
 	if e.Output == "gcs" {
 		e.Producer = createGCSProducer(conf.GCSConfig)
 		return
@@ -211,6 +217,13 @@ func createS3Producer(s3Config string) Producer {
 	sProducer.Initialize(s3Config)
 
 	return sProducer
+}
+
+func createAWSDynamoDB(config string) Producer {
+	producer := &awsdynamodb.Producer{}
+	producer.Initialize(config)
+
+	return producer
 }
 
 func createAZBlobStorageProducer(azConfig string) Producer {

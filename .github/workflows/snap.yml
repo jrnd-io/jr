@@ -7,19 +7,17 @@ on:
       - "snap/snapcraft.yaml"
 
 jobs:
-  build:
+  snapcraft:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        platform:
-          - amd64
-          - arm64
+        arch: [amd64, arm64]
     steps:
       - uses: actions/checkout@v4
-      - uses: docker/setup-qemu-action@v1
-      - uses: diddlesnaps/snapcraft-multiarch-action@v1
+      - uses: snapcore/action-build@v1
+        id: build
         with:
-          architecture: ${{ matrix.platform }}
+          snapcraft-args: --build-for=${{ matrix.arch }}
       - uses: snapcore/action-publish@v1
         env:
           SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAP_STORE_LOGIN }}

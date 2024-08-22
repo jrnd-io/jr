@@ -1,5 +1,5 @@
 Name:           jr
-Version:        0.3.9
+Version:        0.4.0
 Release:        1%{?dist}
 Summary:        JR: streaming quality random data from the command line
 
@@ -7,7 +7,7 @@ License:        MIT
 URL:            https://jrnd.io/
 Source0:        https://github.com/ugol/%{name}/archive/refs/tags/v%{version}.tar.gz
 
-BuildRequires:  golang >= 1.22.0
+BuildRequires:  golang >= 1.23.0
 BuildRequires:  make
 
 %description

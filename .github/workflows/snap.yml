@@ -9,22 +9,11 @@ on:
 jobs:
   snapcraft:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        platform:
-          - amd64
-          - arm64
+    
     steps:
       - uses: actions/checkout@v4
-      - uses: docker/setup-qemu-action@v3
-      # - uses: snapcore/action-build@v1
-      #   id: build
-      #   with:
-      #     snapcraft-args: --build-for=${{ matrix.platform }}
-      - uses: diddlesnaps/snapcraft-multiarch-action@v1
-        id: snapcraft
-        with:
-          architecture: ${{ matrix.platform }}
+      - uses: snapcore/action-build@v1
+        id: build
       - uses: snapcore/action-publish@v1
         env:
           SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAP_STORE_LOGIN }}

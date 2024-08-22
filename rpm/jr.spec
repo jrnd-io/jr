@@ -1,5 +1,5 @@
 Name:           jr
-Version:        0.3.8
+Version:        0.3.9
 Release:        1%{?dist}
 Summary:        JR: streaming quality random data from the command line
 
@@ -29,12 +29,17 @@ install -m 0755 %{_builddir}/%{name}-%{version}/build/jr %{buildroot}/usr/bin/jr
 mkdir -p %{buildroot}%{_datadir}/jr/
 cp -rf %{_builddir}/%{name}-%{version}/templates %{buildroot}%{_datadir}/jr/
 
+# Copy config section
+cp -rf %{_builddir}/%{name}-%{version}/config %{buildroot}%{_datadir}/jr/
+  
 %files
 %license LICENSE
 %{_bindir}/%{name}
-%{_datadir}/jr/templates/
+%{_datadir}/jr/
 
 %changelog
-* Mon Aug 16 2024 Gianni Salinetti <gbsalinetti@gmail.com> - v0.3.8
+* Thu Aug 22 2024 Gianni Salinetti <gbsalinetti@gmail.com> - v0.3.9
+- v0.3.9 release, includes jr default config files in /usr/share/jr
+* Fri Aug 16 2024 Gianni Salinetti <gbsalinetti@gmail.com> - v0.3.8
 - First jr package, templates included in /usr/share/jr/templates but still not seen by the program
 

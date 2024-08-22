@@ -1,0 +1,7 @@
+{
+   "endpoint": "https://<account>.documents.azure.com:443/",
+   "primary_account_key": "<security primary access key>",
+   "database": "<database name>",
+   "container":"<container name>",
+   "partition_key": "<name of partition key field>"
+}

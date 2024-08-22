@@ -1,0 +1,36 @@
+run:
+  # The default concurrency value is the number of available CPU.
+  # concurrency: 2
+  tests: true
+  timeout: 20m
+  allow-parallel-runners: true
+
+linters:
+  enable:
+    - errcheck
+    - typecheck
+    - asciicheck
+    - bidichk
+    - bodyclose
+    - dupl
+    - gocritic
+    #- gofmt
+    - gosimple
+    - gosec
+    - govet
+    - goconst
+    - ineffassign
+    - nakedret
+    - revive
+    - staticcheck
+    - unused
+  fast: false
+
+linters-settings:
+  dupl:
+    threshold: 400
+
+output:
+  formats:
+   - format: html
+     path: golangci.html

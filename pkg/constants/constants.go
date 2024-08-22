@@ -1,38 +1,42 @@
-//Copyright © 2022 Ugo Landini <ugo.landini@gmail.com>
+// Copyright © 2024 JR team
 //
-//Permission is hereby granted, free of charge, to any person obtaining a copy
-//of this software and associated documentation files (the "Software"), to deal
-//in the Software without restriction, including without limitation the rights
-//to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-//copies of the Software, and to permit persons to whom the Software is
-//furnished to do so, subject to the following conditions:
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
 //
-//The above copyright notice and this permission notice shall be included in
-//all copies or substantial portions of the Software.
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
 //
-//THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-//AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-//OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-//THE SOFTWARE.
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
 
 package constants
 
 import (
+	"fmt"
+	"os"
+
 	"github.com/adrg/xdg"
 )
 
-var JRhome string
+var JR_SYSTEM_DIR string
+var JR_USER_DIR string
 
 const NUM = 1
 const LOCALE = "us"
 const FREQUENCY = -1
 const INFINITE = 1<<63 - 1
 
-// var DEFAULT_SYSTEMDIR = xdg.DataHome + "jr"
-var DEFAULT_HOMEDIR = xdg.ConfigHome + ".jr"
+var SYSTEM_DIR = fmt.Sprintf("%s%c%s", xdg.ConfigHome, os.PathSeparator, "jr")
+var USER_DIR = fmt.Sprintf("%s%c%s", xdg.DataHome, os.PathSeparator, "jr")
 
 const DEFAULT_KEY = "null"
 const DEFAULT_OUTPUT = "stdout"
@@ -47,3 +51,5 @@ const DEFAULT_EMITTER_NAME = "cli"
 const DEFAULT_VALUE_TEMPLATE = "user"
 const DEFAULT_TOPIC = "test"
 const DEFAULT_HTTP_PORT = 7482
+
+const DEFAULT_LOG_LEVEL = "fatal"

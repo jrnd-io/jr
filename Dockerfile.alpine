@@ -20,19 +20,19 @@ RUN adduser \
     --uid "100001" \
     "jr-user"
 
-WORKDIR /go/src/github.com/ugol/jr
+WORKDIR /go/src/github.com/jrnd-io/jr
 COPY . .
 
 RUN go get -u -d -v
-RUN CGO_ENABLED=1 GOOS=linux go build -tags musl -v -ldflags="-X 'github.com/ugol/jr/cmd.Version=${VERSION}' 'github.com/ugol/jr/pkg/cmd.GoVersion=${GOVERSION}' -X 'github.com/ugol/jr/cmd.BuildUser=${USER}' -X 'github.com/ugol/jr/cmd.BuildTime=${TIME}'" -o build/jr jr.go
+RUN CGO_ENABLED=1 GOOS=linux go build -tags musl -v -ldflags="-X 'github.com/jrnd-io/jr/cmd.Version=${VERSION}' 'github.com/jrnd-io/jr/pkg/cmd.GoVersion=${GOVERSION}' -X 'github.com/jrnd-io/jr/cmd.BuildUser=${USER}' -X 'github.com/jrnd-io/jr/cmd.BuildTime=${TIME}'" -o build/jr jr.go
 
 FROM alpine
 COPY --from=builder /etc/passwd /etc/passwd
 COPY --from=builder /etc/group /etc/group
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
-COPY --from=builder /go/src/github.com/ugol/jr/templates/ /home/jr/.jr/templates/
-COPY --from=builder /go/src/github.com/ugol/jr/config/ /home/jr/.jr/
-COPY --from=builder /go/src/github.com/ugol/jr/pkg/producers/kafka/*.examples /home/jr/.jr/kafka/
-COPY --from=builder /go/src/github.com/ugol/jr/build/jr /bin
+COPY --from=builder /go/src/github.com/jrnd-io/jr/templates/ /home/jr/.jr/templates/
+COPY --from=builder /go/src/github.com/jrnd-io/jr/config/ /home/jr/.jr/
+COPY --from=builder /go/src/github.com/jrnd-io/jr/pkg/producers/kafka/*.examples /home/jr/.jr/kafka/
+COPY --from=builder /go/src/github.com/jrnd-io/jr/build/jr /bin
 
 USER jr-user:jr-user

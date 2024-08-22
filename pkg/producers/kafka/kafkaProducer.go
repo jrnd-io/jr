@@ -1,22 +1,22 @@
-//Copyright © 2022 Ugo Landini <ugo.landini@gmail.com>
+// Copyright © 2024 JR team
 //
-//Permission is hereby granted, free of charge, to any person obtaining a copy
-//of this software and associated documentation files (the "Software"), to deal
-//in the Software without restriction, including without limitation the rights
-//to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-//copies of the Software, and to permit persons to whom the Software is
-//furnished to do so, subject to the following conditions:
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
 //
-//The above copyright notice and this permission notice shall be included in
-//all copies or substantial portions of the Software.
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
 //
-//THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-//AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-//OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-//THE SOFTWARE.
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
 
 package kafka
 
@@ -25,6 +25,15 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
+	"os"
+	"path/filepath"
+	"regexp"
+	"runtime"
+	"strconv"
+	"strings"
+	"time"
+
 	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
 	"github.com/confluentinc/confluent-kafka-go/v2/schemaregistry"
 	"github.com/confluentinc/confluent-kafka-go/v2/schemaregistry/rules/encryption"
@@ -35,16 +44,9 @@ import (
 	"github.com/confluentinc/confluent-kafka-go/v2/schemaregistry/serde"
 	"github.com/confluentinc/confluent-kafka-go/v2/schemaregistry/serde/avrov2"
 	"github.com/confluentinc/confluent-kafka-go/v2/schemaregistry/serde/jsonschema"
-	"github.com/ugol/jr/pkg/types"
-	"io/ioutil"
-	"log"
-	"os"
-	"path/filepath"
-	"regexp"
-	"runtime"
-	"strconv"
-	"strings"
-	"time"
+	"github.com/jrnd-io/jr/pkg/types"
+
+	"github.com/rs/zerolog/log"
 )
 
 type KafkaManager struct {
@@ -64,11 +66,11 @@ func (k *KafkaManager) Initialize(configFile string) {
 	conf := convertInKafkaConfig(readConfig(configFile))
 	k.admin, err = kafka.NewAdminClient(&conf)
 	if err != nil {
-		log.Fatalf("Failed to create admin client: %s", err)
+		log.Fatal().Err(err).Msg("Failed to create admin client")
 	}
 	k.producer, err = kafka.NewProducer(&conf)
 	if err != nil {
-		log.Fatalf("Failed to create producer: %s", err)
+		log.Fatal().Err(err).Msg("Failed to create producer")
 	}
 }
 
@@ -82,7 +84,7 @@ func (k *KafkaManager) InitializeSchemaRegistry(configFile string) {
 		conf["schemaRegistryPassword"]))
 
 	if err != nil {
-		log.Fatalf("Failed to create schema registry client: %s", err)
+		log.Fatal().Err(err).Msg("Failed to create schema registry client")
 	}
 
 	if k.Serializer == "avro" || k.Serializer == "avro-generic" {
@@ -102,13 +104,13 @@ func verifyCSFLE(conf map[string]string, k *KafkaManager) {
 		filePath := filepath.Join(currentDir, "../../types/"+k.TemplateType+".avsc")
 		file, err := os.Open(filePath)
 		if err != nil {
-			log.Fatalf("Failed to open file: %s", err)
+			log.Fatal().Err(err).Msg("Failed to open file")
 		}
 		defer file.Close()
 
-		content, err := ioutil.ReadAll(file)
+		content, err := io.ReadAll(file)
 		if err != nil {
-			log.Fatalf("Failed to read file: %s", err)
+			log.Fatal().Err(err).Msg("Failed to read file")
 		}
 		contentString := string(content)
 
@@ -158,8 +160,7 @@ func verifyCSFLE(conf map[string]string, k *KafkaManager) {
 			}
 			_, err = k.schema.Register(k.Topic+"-value", schema, true)
 			if err != nil {
-				fmt.Printf("Failed to register schema: %s\n", err)
-				os.Exit(1)
+				log.Fatal().Err(err).Msg("Failed to register schema")
 			}
 
 			k.fleEnabled = true
@@ -203,26 +204,26 @@ func (k *KafkaManager) Produce(key []byte, data []byte, o any) {
 			ser, err = avrov2.NewSerializer(k.schema, serde.ValueSerde, serConfig)
 		} else if k.Serializer == "protobuf" {
 			//ser, err = protobuf.NewSerializer(k.schema, serde.ValueSerde, protobuf.NewSerializerConfig())
-			log.Fatal("Protobuf not yet implemented")
+			log.Fatal().Msg("Protobuf not yet implemented")
 		} else if k.Serializer == "json-schema" {
 			ser, err = jsonschema.NewSerializer(k.schema, serde.ValueSerde, jsonschema.NewSerializerConfig())
 		} else {
-			log.Fatalf("Serializer '%v' not supported", k.Serializer)
+			log.Fatal().Str("serializer", k.Serializer).Msg("Serializer not supported")
 		}
 		if err != nil {
-			log.Fatalf("Error creating serializer: %s\n", err)
+			log.Fatal().Err(err).Msg("Error creating serializer")
 		} else {
 
 			t := types.GetType(k.TemplateType)
 			err := json.Unmarshal(data, &t)
 
 			if err != nil {
-				log.Fatalf("Failed to unmarshal data: %s\n", err)
+				log.Fatal().Err(err).Msg("Failed to unmarshal data")
 			}
 
 			payload, err := ser.Serialize(k.Topic, t)
 			if err != nil {
-				log.Fatalf("Failed to serialize payload: %s\n", err)
+				log.Fatal().Err(err).Msg("Failed to serialize payload")
 			} else {
 				data = payload
 			}
@@ -248,7 +249,7 @@ func (k *KafkaManager) Produce(key []byte, data []byte, o any) {
 			//time.Sleep(time.Second)
 			//continue
 		}
-		log.Printf("Failed to produce message: %v\n", err)
+		log.Error().Err(err).Msg("Failed to produce message")
 	}
 
 }
@@ -276,14 +277,18 @@ func (k *KafkaManager) CreateTopicFull(topic string, partitions int, rf int) {
 		kafka.SetAdminOperationTimeout(maxDuration))
 
 	if err != nil {
-		log.Printf("Problem during the topic creation: %v\n", err)
+		log.Error().Err(err).Msg("Problem during the topic creation")
 
 	}
 
 	// Check for specific topic errors
 	for _, result := range results {
 		if result.Error.Code() != kafka.ErrNoError && result.Error.Code() != kafka.ErrTopicAlreadyExists {
-			log.Fatalf("Topic creation failed for %s: %v", result.Topic, result.Error.String())
+			log.Fatal().
+				Str("topic", result.Topic).
+				Str("code", result.Error.Code().String()).
+				Err(fmt.Errorf(result.Error.String())).
+				Msg("Topic creation failed")
 		}
 	}
 
@@ -298,12 +303,12 @@ func listenToEventsFrom(k *kafka.Producer, topic string) {
 		case *kafka.Message:
 			m := ev
 			if m.TopicPartition.Error != nil {
-				log.Printf("Delivery failed: %v\n", m.TopicPartition.Error)
+				log.Error().Err(m.TopicPartition.Error).Msg("Delivery failed")
 			} else {
 				//fmt.Printf("Delivered message to topic %s [%d] at offset %v\n", *m.TopicPartition.Topic, m.TopicPartition.Partition, m.TopicPartition.Offset)
 			}
 		case kafka.Error:
-			log.Printf("Error: %v\n", ev)
+			log.Error().Err(ev).Msg("Kafka error")
 		case *kafka.Stats:
 			// https://github.com/confluentinc/librdkafka/blob/master/STATISTICS.md
 			var stats map[string]interface{}
@@ -315,10 +320,13 @@ func listenToEventsFrom(k *kafka.Producer, topic string) {
 			b, _ := strconv.Atoi(strings.TrimSpace(txbytes))
 
 			if b > 0 {
-				log.Printf("%s bytes produced to topic %s \n", txbytes, topic)
+				log.Info().
+					Str("bytes", txbytes).
+					Str("topic", topic).
+					Msg("Bytes produced to topic")
 			}
 		default:
-			log.Printf("Ignored event: %s\n", ev)
+			log.Warn().Interface("ev", ev).Msg("Ignored event")
 		}
 	}
 
@@ -330,12 +338,12 @@ func readConfig(configFile string) map[string]string {
 
 	file, err := os.Open(configFile)
 	if err != nil {
-		log.Fatalf("Failed to open file: %s", err)
+		log.Fatal().Err(err).Msg("Failed to open configuration file")
 	}
 	defer func(file *os.File) {
 		err := file.Close()
 		if err != nil {
-			log.Fatalf("Error in closing file: %s", err)
+			log.Fatal().Err(err).Msg("Error in closing file")
 		}
 	}(file)
 
@@ -351,7 +359,7 @@ func readConfig(configFile string) map[string]string {
 	}
 
 	if err := scanner.Err(); err != nil {
-		log.Fatalf("Failed to read file: %s", err)
+		log.Fatal().Err(err).Msg("Failed to read file")
 	}
 	return m
 }

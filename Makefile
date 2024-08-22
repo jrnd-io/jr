@@ -2,14 +2,57 @@ VERSION=0.3.9
 GOVERSION=$(shell go version)
 USER=$(shell id -u -n)
 TIME=$(shell date)
+JR_HOME=jr
+
+ifndef XDG_DATA_DIRS
+ifeq ($(OS), Windows_NT)
+	detectedOS := Windows
+else
+	detectedOS := $(shell sh -c 'uname 2>/dev/null || echo Unknown')
+endif
+
+ifeq ($(detectedOS), Darwin)
+	JR_SYSTEM_DIR="$(HOME)/Library/Application Support"
+endif
+ifeq ($(detectedOS),  Linux)
+	JR_SYSTEM_DIR="$(HOME)/.config"
+endif
+ifeq ($(detectedOS), Windows_NT)
+	JR_SYSTEM_DIR="$(LOCALAPPDATA)"
+endif
+else
+	JR_SYSTEM_DIR=$(XDG_DATA_DIRS)
+endif
+
+ifndef XDG_DATA_HOME
+ifeq ($(OS), Windows_NT)
+	detectedOS := Windows
+else
+	detectedOS := $(shell sh -c 'uname 2>/dev/null || echo Unknown')
+endif
+
+ifeq ($(detectedOS), Darwin)
+	JR_USER_DIR="$(HOME)/.local/share"
+endif
+ifeq ($(detectedOS),  Linux)
+	JR_USER_DIR="$(HOME)/.local/share"
+endif
+ifeq ($(detectedOS), Windows_NT)
+	JR_USER_DIR="$(LOCALAPPDATA)" //@TODO
+endif
+else
+	JR_USER_DIR=$(XDG_DATA_HOME)
+endif
 
 hello:
 	@echo "JR,the JSON Random Generator"
-    CONFIG_HOME=${XDG_CONFIG_HOME}
-    ifeq (${CONFIG_HOME}, "" )
-      CONFIG_HOME=~
-    endif
-    CONFIG_HOME=~
+	@echo " Version: $(VERSION)"
+	@echo " Go Version: $(GOVERSION)"
+	@echo " Build User: $(USER)"
+	@echo " Build Time: $(TIME)"
+	@echo " Detected OS: $(detectedOS)"
+	@echo " JR System Dir: $(JR_SYSTEM_DIR)"
+	@echo " JR User Dir: $(JR_USER_DIR)"
 
 install-gogen:
 	go install github.com/actgardner/gogen-avro/v10/cmd/...@latest
@@ -20,7 +63,11 @@ generate:
 
 compile:
 	@echo "Compiling"
-	go build -v -ldflags="-X 'github.com/ugol/jr/pkg/cmd.Version=$(VERSION)' -X 'github.com/ugol/jr/pkg/cmd.GoVersion=$(GOVERSION)' -X 'github.com/ugol/jr/pkg/cmd.BuildUser=$(USER)' -X 'github.com/ugol/jr/pkg/cmd.BuildTime=$(TIME)'" -o build/jr jr.go
+	go build -v -ldflags="-X 'github.com/jrnd-io/jr/pkg/cmd.Version=$(VERSION)' \
+	-X 'github.com/jrnd-io/jr/pkg/cmd.GoVersion=$(GOVERSION)' \
+	-X 'github.com/jrnd-io/jr/pkg/cmd.BuildUser=$(USER)' \
+	-X 'github.com/jrnd-io/jr/pkg/cmd.BuildTime=$(TIME)'" \
+	-o build/jr jr.go
 
 run: compile
 	./build/jr
@@ -51,10 +98,13 @@ help: hello
 	@echo ''
 
 copy_templates:
-	mkdir -p ${CONFIG_HOME}/.jr/kafka && cp -r templates ${CONFIG_HOME}/.jr/ && cp -r pkg/producers/kafka/*.properties.example ${CONFIG_HOME}/.jr/kafka/
+	mkdir -p $(JR_SYSTEM_DIR)/$(JR_HOME)/kafka && \
+	cp -r templates $(JR_SYSTEM_DIR)/$(JR_HOME) && \
+	cp -r pkg/producers/kafka/*.properties.example $(JR_SYSTEM_DIR)/$(JR_HOME)/kafka/
 
 copy_config:
-	mkdir -p ${CONFIG_HOME}/.jr && cp config/* ${CONFIG_HOME}/.jr/
+	mkdir -p $(JR_SYSTEM_DIR)/$(JR_HOME) && \
+	cp config/* $(JR_SYSTEM_DIR)/$(JR_HOME)/
 
 install:
 	install build/jr /usr/local/bin

@@ -1,0 +1,9 @@
+{
+    "account_name": "<account name>",
+    "primary_account_key":"<primary account key>",
+    "container":{
+        "name": "<container name>",
+        "create": false
+    }
+
+}

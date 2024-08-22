@@ -1,3 +1,23 @@
+// Copyright © 2024 JR team
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
+
 package cmd
 
 import (
@@ -7,7 +27,6 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 	"path/filepath"
 	"regexp"
@@ -19,11 +38,12 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/gorilla/sessions"
+	"github.com/jrnd-io/jr/pkg/configuration"
+	"github.com/jrnd-io/jr/pkg/constants"
+	"github.com/jrnd-io/jr/pkg/emitter"
+	"github.com/jrnd-io/jr/pkg/functions"
+	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
-	"github.com/ugol/jr/pkg/configuration"
-	"github.com/ugol/jr/pkg/constants"
-	"github.com/ugol/jr/pkg/emitter"
-	"github.com/ugol/jr/pkg/functions"
 )
 
 //go:embed html/index.html
@@ -79,7 +99,7 @@ var serverCmd = &cobra.Command{
 
 		port, err := cmd.Flags().GetInt("port")
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal().Err(err).Msg("Error getting port")
 		}
 
 		for i := 0; i < len(emitters); i++ {
@@ -132,8 +152,8 @@ var serverCmd = &cobra.Command{
 		})
 
 		addr := fmt.Sprintf(":%d", port)
-		log.Printf("Starting HTTP server on port %d\n", port)
-		log.Fatal(http.ListenAndServe(addr, router))
+		log.Info().Int("port", port).Msg("Starting HTTP server")
+		log.Fatal().Err(http.ListenAndServe(addr, router))
 	},
 }
 
@@ -242,7 +262,7 @@ func listEmitters(w http.ResponseWriter, r *http.Request) {
 
 	_, err := w.Write([]byte(emitters_json))
 	if err != nil {
-		log.Println(err)
+		log.Error().Err(err).Msg("Error writing response")
 	}
 }
 
@@ -273,7 +293,7 @@ func addEmitter(w http.ResponseWriter, r *http.Request) {
 	response := fmt.Sprintf("Emitter %s added", e.Name)
 	_, err = w.Write([]byte(response))
 	if err != nil {
-		log.Println(err)
+		log.Error().Err(err).Msg("Error writing response")
 	}
 }
 
@@ -291,9 +311,8 @@ func startEmitter(w http.ResponseWriter, r *http.Request) {
 	url := chi.URLParam(r, "emitter")
 
 	_, err := w.Write([]byte("{\"started\":\"" + url + "\"}"))
-
 	if err != nil {
-		log.Println(err)
+		log.Error().Err(err).Msg("Error writing response")
 	}
 }
 
@@ -303,9 +322,8 @@ func stopEmitter(w http.ResponseWriter, r *http.Request) {
 	url := chi.URLParam(r, "emitter")
 
 	_, err := w.Write([]byte("{\"stopped\":\"" + url + "\"}"))
-
 	if err != nil {
-		log.Println(err)
+		log.Error().Err(err).Msg("Error writing response")
 	}
 }
 
@@ -315,9 +333,8 @@ func pauseEmitter(w http.ResponseWriter, r *http.Request) {
 	url := chi.URLParam(r, "emitter")
 
 	_, err := w.Write([]byte("{\"paused\":\"" + url + "\"}"))
-
 	if err != nil {
-		log.Println(err)
+		log.Error().Err(err).Msg("Error writing response")
 	}
 }
 
@@ -352,9 +369,8 @@ func statusEmitter(w http.ResponseWriter, r *http.Request) {
 	url := chi.URLParam(r, "emitter")
 
 	_, err := w.Write([]byte("{\"status\":\"" + url + "\"}"))
-
 	if err != nil {
-		log.Println(err)
+		log.Error().Err(err).Msg("Error writing response")
 	}
 }
 
@@ -379,7 +395,7 @@ func loadLastStatus(w http.ResponseWriter, r *http.Request) {
 
 	_, err := w.Write(response.Bytes())
 	if err != nil {
-		log.Println(err)
+		log.Error().Err(err).Msg("Error writing response")
 	}
 }
 
@@ -389,7 +405,7 @@ func executeTemplate(w http.ResponseWriter, r *http.Request) {
 
 	errorFormParse := r.ParseForm()
 	if errorFormParse != nil {
-		log.Println("errorFormParse ", errorFormParse)
+		log.Error().Err(errorFormParse).Msg("Error parsing form")
 		http.Error(w, errorFormParse.Error(), http.StatusInternalServerError)
 	}
 
@@ -402,9 +418,8 @@ func executeTemplate(w http.ResponseWriter, r *http.Request) {
 	session.Save(r, w)
 
 	templateParsed, errValidity := template.New("").Funcs(functions.FunctionsMap()).Parse(lastTemplateSubmittedValue)
-
 	if errValidity != nil {
-		log.Println("errValidity ", errValidity)
+		log.Error().Err(errValidity).Msg("Error parsing template")
 		http.Error(w, errValidity.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -414,15 +429,14 @@ func executeTemplate(w http.ResponseWriter, r *http.Request) {
 	errValidityRendering := templateParsed.Execute(&b, dummy)
 
 	if errValidityRendering != nil {
-		log.Println("errValidityRendering = ", errValidityRendering)
+		log.Error().Err(errValidityRendering).Msg("Error rendering template")
 		http.Error(w, errValidityRendering.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	_, err := w.Write([]byte(b.String()))
-
 	if err != nil {
-		log.Println(err)
+		log.Error().Err(err).Msg("Error writing response")
 	}
 
 }
@@ -445,36 +459,35 @@ func webPrintFunction(web_function_to_find string, w http.ResponseWriter, r *htt
 
 	if len(matchingFunction) > 0 {
 
+		buffer := bytes.Buffer{}
 		w.Header().Set("Content-Type", "application/json")
-		_, err := w.Write([]byte("{\"functions\":["))
+
+		buffer.WriteString("{\"functions\":[")
 
 		for i, function_name := range matchingFunction {
 
 			f, _ := functions.Description(function_name)
 
 			b, errMarshal := json.Marshal(f)
-
 			if errMarshal != nil {
-				fmt.Println(errMarshal)
+				log.Error().Err(errMarshal).Msg("Error marshalling function")
 				return
 			}
 
-			if err != nil {
-				log.Println(err)
-			}
-
-			_, err = w.Write(b)
+			buffer.Write(b)
 
 			if i < len(matchingFunction)-1 {
-				_, err = w.Write([]byte(","))
+				buffer.WriteString(",")
 			}
 
-			if err != nil {
-				log.Println(err)
-			}
 		}
 
-		_, err = w.Write([]byte("]}"))
+		buffer.WriteString("]}")
+
+		_, err := w.Write(buffer.Bytes())
+		if err != nil {
+			log.Error().Err(err).Msg("Error writing response")
+		}
 
 	} else {
 		http.Error(w, "No function found", http.StatusNotFound)

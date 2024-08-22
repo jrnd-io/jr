@@ -1,12 +1,33 @@
+// Copyright © 2024 JR team
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
+
 package mongoDB
 
 import (
 	"context"
 	"encoding/json"
+	"os"
+
+	"github.com/rs/zerolog/log"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"io/ioutil"
-	"log"
 )
 
 type Config struct {
@@ -25,13 +46,13 @@ type MongoProducer struct {
 
 func (p *MongoProducer) Initialize(configFile string) {
 	var config Config
-	file, err := ioutil.ReadFile(configFile)
+	file, err := os.ReadFile(configFile)
 	if err != nil {
-		log.Fatalf("Failed to ReadFile: %s", err)
+		log.Fatal().Err(err).Msg("Failed to read configuration file")
 	}
 	err = json.Unmarshal(file, &config)
 	if err != nil {
-		log.Fatalf("Failed to parse configuration parameters: %s", err)
+		log.Fatal().Err(err).Msg("Failed to parse configuration parameters")
 	}
 
 	clientOptions := options.Client().ApplyURI(config.MongoURI)
@@ -48,7 +69,7 @@ func (p *MongoProducer) Initialize(configFile string) {
 	client, err := mongo.Connect(context.Background(), clientOptions)
 
 	if err != nil {
-		log.Fatalf("Can't connect to Mongo: %s", err)
+		log.Fatal().Err(err).Msg("Can't connect to Mongo")
 	}
 
 	p.client = *client
@@ -61,7 +82,7 @@ func (p *MongoProducer) Produce(k []byte, v []byte, o any) {
 	var dev map[string]interface{}
 	err := json.Unmarshal(v, &dev)
 	if err != nil {
-		log.Fatalf("Failed to unmarshal json:\n%s", err)
+		log.Fatal().Err(err).Msg("Failed to unmarshal json")
 	}
 
 	if k == nil || len(k) == 0 {
@@ -70,14 +91,14 @@ func (p *MongoProducer) Produce(k []byte, v []byte, o any) {
 
 	_, err = collection.InsertOne(context.Background(), dev)
 	if err != nil {
-		log.Fatalf("Failed to write data in Mongo:\n%s", err)
+		log.Fatal().Err(err).Msg("Failed to write data in Mongo")
 	}
 }
 
 func (p *MongoProducer) Close() error {
 	err := p.client.Disconnect(context.Background())
 	if err != nil {
-		log.Printf("Failed to close Mongo connection:\n%s", err)
+		log.Warn().Err(err).Msg("Failed to close Mongo connection")
 	}
 	return err
 }

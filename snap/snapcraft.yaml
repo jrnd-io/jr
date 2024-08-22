@@ -18,16 +18,23 @@ apps:
 
 parts:
   jr:
-    plugin: go
+    plugin: make
     source-type: git
-    source-branch: main
-    source: https://github.com/ugol/jr
+    source-tag: v0.3.8
+    source: https://github.com/jrnd-io/jr
     build-snaps: [go/1.22/stable]
+    disable-parallel: true
+    override-build: |-
+      make
+      sed -i 's|USER=$(shell id -u -n)|USER=snapcraft|g' Makefile
+      make all
+      install -DT "./build/jr" "$SNAPCRAFT_PART_INSTALL/bin/jr"
 
   jr-copy-files-templates:
     plugin: dump
     source-type: git
-    source: https://github.com/ugol/jr
+    source-tag: v0.3.8
+    source: https://github.com/jrnd-io/jr
     source-subdir: "templates"
     organize:
       "*": templates/
@@ -35,5 +42,6 @@ parts:
   jr-copy-files-config:
     plugin: dump
     source-type: git
-    source: https://github.com/ugol/jr
+    source-tag: v0.3.8
+    source: https://github.com/jrnd-io/jr
     source-subdir: "config"

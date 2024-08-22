@@ -1,18 +1,39 @@
+// Copyright © 2024 JR team
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
+
 package elastic
 
 import (
 	"context"
 	"crypto/tls"
 	"encoding/json"
+	"net"
+	"net/http"
+	"os"
+	"strings"
+	"time"
+
 	"github.com/elastic/go-elasticsearch/v8"
 	"github.com/elastic/go-elasticsearch/v8/esapi"
 	"github.com/google/uuid"
-	"io/ioutil"
-	"log"
-	"net"
-	"net/http"
-	"strings"
-	"time"
+	"github.com/rs/zerolog/log"
 )
 
 type Config struct {
@@ -29,16 +50,16 @@ type ElasticProducer struct {
 
 func (p *ElasticProducer) Initialize(configFile string) {
 	var config Config
-	file, err := ioutil.ReadFile(configFile)
+	file, err := os.ReadFile(configFile)
 	if err != nil {
-		log.Fatalf("Failed to read configuration file: %s", err)
+		log.Fatal().Err(err).Msg("Failed to read configuration file")
 	}
 	err = json.Unmarshal(file, &config)
 	if err != nil {
-		log.Fatalf("Failed to ReadFile: %s", err)
+		log.Fatal().Err(err).Msg("Failed to ReadFile")
 	}
 	if err != nil {
-		log.Fatalf("Failed to parse configuration parameters: %s", err)
+		log.Fatal().Err(err).Msg("Failed to parse configuration parameters")
 	}
 
 	cfg := elasticsearch.Config{
@@ -58,7 +79,7 @@ func (p *ElasticProducer) Initialize(configFile string) {
 	client, err := elasticsearch.NewClient(cfg)
 
 	if err != nil {
-		log.Fatalf("Can't connect to Elastic: %s", err)
+		log.Fatal().Err(err).Msg("Can't connect to Elastic")
 	}
 
 	p.index = config.ElasticIndex
@@ -90,16 +111,16 @@ func (p *ElasticProducer) Produce(k []byte, v []byte, o any) {
 
 	res, err := req.Do(context.Background(), &p.client)
 	if err != nil {
-		log.Fatalf("Failed to write data in Elastic:\n%s", err)
+		log.Fatal().Err(err).Msg("Failed to write data in Elastic")
 	}
 	defer res.Body.Close()
 
 	if res.IsError() {
-		log.Fatalf("failed to index document: %s", res.String())
+		log.Fatal().Str("response", res.String()).Msg("failed to index document")
 	}
 }
 
 func (p *ElasticProducer) Close() error {
-	log.Println("elasticsearch Client doesn't provide a close method!")
+	log.Warn().Msg("elasticsearch Client doesn't provide a close method!")
 	return nil
 }

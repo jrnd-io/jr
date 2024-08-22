@@ -1,31 +1,32 @@
-//Copyright © 2022 Ugo Landini <ugo.landini@gmail.com>
+// Copyright © 2024 JR team
 //
-//Permission is hereby granted, free of charge, to any person obtaining a copy
-//of this software and associated documentation files (the "Software"), to deal
-//in the Software without restriction, including without limitation the rights
-//to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-//copies of the Software, and to permit persons to whom the Software is
-//furnished to do so, subject to the following conditions:
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
 //
-//The above copyright notice and this permission notice shall be included in
-//all copies or substantial portions of the Software.
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
 //
-//THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-//AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-//OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-//THE SOFTWARE.
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
 
 package cmd
 
 import (
 	"fmt"
+	"github.com/jrnd-io/jr/pkg/functions"
 	"github.com/spf13/cobra"
-	"github.com/ugol/jr/pkg/functions"
 	"os"
 	"os/exec"
+	"slices"
 	"strings"
 )
 
@@ -38,18 +39,6 @@ var functionListCmd = &cobra.Command{
 		doList(cmd, args)
 	},
 }
-
-/*
-var functionManMarkdownCmd = &cobra.Command{
-	Use:   "manmd",
-	Short: "describes available functions as markdown",
-	Long: "describes available functions as markdown. Example usage:\n" +
-		"jr function manmd",
-	Run: func(cmd *cobra.Command, args []string) {
-		doList(cmd, args, false)
-	},
-}
-*/
 
 var functionManCmd = &cobra.Command{
 	Use:   "man",
@@ -68,18 +57,22 @@ func doList(cmd *cobra.Command, args []string) {
 	isMarkdown, _ := cmd.Flags().GetBool("markdown")
 	noColor, _ := cmd.Flags().GetBool("nocolor")
 
-	if category {
+	if category && len(args) > 0 {
+		var functionNames []string
 		for k, v := range functions.DescriptionMap() {
-			if strings.Contains(v.Category, args[0]) {
-				printFunction(k, isMarkdown, noColor)
+			if v.Category == args[0] {
+				functionNames = append(functionNames, k)
 			}
 		}
-	} else if find {
+		sortAndPrint(functionNames, isMarkdown, noColor)
+	} else if find && len(args) > 0 {
+		var functionNames []string
 		for k, v := range functions.DescriptionMap() {
 			if strings.Contains(v.Description, args[0]) || strings.Contains(v.Name, args[0]) {
-				printFunction(k, isMarkdown, noColor)
+				functionNames = append(functionNames, k)
 			}
 		}
+		sortAndPrint(functionNames, isMarkdown, noColor)
 	} else if len(args) == 1 {
 
 		if run {
@@ -95,15 +88,30 @@ func doList(cmd *cobra.Command, args []string) {
 			printFunction(args[0], isMarkdown, noColor)
 		}
 	} else {
-		count := 0
-		for k := range functions.FunctionsMap() {
-			count++
-			printFunction(k, isMarkdown, noColor)
+
+		//l := len(functions.FunctionsMap())
+		l := len(functions.DescriptionMap())
+		functionNames := make([]string, l)
+
+		i := 0
+		for k := range functions.DescriptionMap() {
+			functionNames[i] = k
+			i++
 		}
-		fmt.Println()
-		fmt.Printf("Total functions: %d\n", count)
+		sortAndPrint(functionNames, isMarkdown, noColor)
+
 	}
 	fmt.Println()
+}
+
+func sortAndPrint(functionNames []string, isMarkdown bool, noColor bool) {
+	slices.Sort(functionNames)
+	for _, k := range functionNames {
+		printFunction(k, isMarkdown, noColor)
+		//fmt.Println(k)
+	}
+	fmt.Println()
+	fmt.Printf("Total functions: %d\n", len(functionNames))
 }
 
 func printFunction(name string, isMarkdown bool, noColor bool) (functions.FunctionDescription, bool) {
@@ -116,23 +124,10 @@ func printFunction(name string, isMarkdown bool, noColor bool) (functions.Functi
 		Reset = "\033[0m"
 	}
 
-	if !isMarkdown {
-
-		if found {
+	if found {
+		if isMarkdown {
 			fmt.Println()
-			fmt.Printf("%sName: %s%s\n", Cyan, Reset, f.Name)
-			fmt.Printf("%sCategory: %s%s\n", Cyan, Reset, f.Category)
-			fmt.Printf("%sDescription: %s%s\n", Cyan, Reset, f.Description)
-			fmt.Printf("%sParameters: %s%s\n", Cyan, Reset, f.Parameters)
-			fmt.Printf("%sLocalizable: %s%v\n", Cyan, Reset, f.Localizable)
-			fmt.Printf("%sReturn: %s%s\n", Cyan, Reset, f.Return)
-			fmt.Printf("%sExample: %s%s\n", Cyan, Reset, f.Example)
-			fmt.Printf("%sOutput: %s%s\n", Cyan, Reset, f.Output)
-		}
-	} else {
-		if found {
-			fmt.Println()
-			fmt.Printf("## Name: %s \n", f.Name)
+			fmt.Printf("### %s \n", f.Name)
 			fmt.Printf("**Category:** %s\\\n", f.Category)
 			fmt.Printf("**Description:** %s\\\n", f.Description)
 
@@ -145,6 +140,16 @@ func printFunction(name string, isMarkdown bool, noColor bool) (functions.Functi
 			fmt.Printf("**Return:** `%s`\\\n", f.Return)
 			fmt.Printf("**Example:** `%s`\\\n", f.Example)
 			fmt.Printf("**Output:** `%s`\n", f.Output)
+		} else {
+			fmt.Println()
+			fmt.Printf("%sName: %s%s\n", Cyan, Reset, f.Name)
+			fmt.Printf("%sCategory: %s%s\n", Cyan, Reset, f.Category)
+			fmt.Printf("%sDescription: %s%s\n", Cyan, Reset, f.Description)
+			fmt.Printf("%sParameters: %s%s\n", Cyan, Reset, f.Parameters)
+			fmt.Printf("%sLocalizable: %s%v\n", Cyan, Reset, f.Localizable)
+			fmt.Printf("%sReturn: %s%s\n", Cyan, Reset, f.Return)
+			fmt.Printf("%sExample: %s%s\n", Cyan, Reset, f.Example)
+			fmt.Printf("%sOutput: %s%s\n", Cyan, Reset, f.Output)
 		}
 	}
 	return f, found

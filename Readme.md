@@ -6,10 +6,10 @@ JR is a CLI program that helps you to stream quality random data for your applic
 
 
 [![img.png](images/goreport.png)](https://goreportcard.com/report/github.com/ugol/jr)
-![Build](https://github.com/ugol/jr/actions/workflows/go-linux.yml/badge.svg)
-![Build](https://github.com/ugol/jr/actions/workflows/go-mac.yml/badge.svg)
+![Build](https://github.com/jrnd-io/jr/actions/workflows/go-linux.yml/badge.svg)
+![Build](https://github.com/jrnd-io/jr/actions/workflows/go-mac.yml/badge.svg)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Go Reference](https://pkg.go.dev/badge/github.com/ugol/jr.svg)](https://pkg.go.dev/github.com/ugol/jr)
+[![Go Reference](https://pkg.go.dev/badge/github.com/jrnd-io/jr.svg)](https://pkg.go.dev/github.com/ugol/jr)
 [![Docker](https://img.shields.io/badge/docker-latest-blue.svg)](https://hub.docker.com/r/jrndio/jr)
 
 ![JR-simple](https://user-images.githubusercontent.com/89472/229626362-70ddc95d-1090-4746-a20a-fbffba4193cd.gif)
@@ -50,10 +50,10 @@ JR is very straightforward to use. Here are some examples:
 ```bash
 jr template list
 ````
-Templates are in the directory `$JR_HOME/templates`. JR_HOME defaults to `~/.jr` and can be changed to a different dir, for example:
+Templates are in the directory `$JR_SYSTEM_DIR/templates`. JR_SYSTEM_DIR defaults to `$XDG_CONFIGDIR` and can be changed to a different dir, for example:
 
 ```bash
-JR_HOME=~/jrconfig/ jr template list
+JR_SYSTEM_DIR=~/jrconfig/ jr template list
 ````
 
 Templates with parsing issues are showed in <font color='red'>red</font>, Templates with no parsing issues are showed in <font color='green'>green</font>
@@ -141,6 +141,44 @@ jr run net_device -n 2 -f 100ms -d 1m --kcat | jq
 
 parse error: Expected value before ',' at line 1, column 5
 ```
+
+## Producing to Kafka 
+
+Just use the `--output kafka` (which defaults to `console`) flag and `--topic` flag to indicate the topic name:
+
+```bash
+jr run net_device -n 5 -f 500ms -o kafka -t test
+```
+
+## Producing to other stores
+
+You can use JR to stream data to many different stores, not only Kafka.
+JR supports natively several different producers: you can also easily `jr run template | CLI-tool-to-your-store` if your preferred store is not natively supported.
+If you think that your preferred store should be supported, why not [implement it](#implementing-other-producers)? Or just open up [an issue](https://github.com/jrnd-io/jr/issues) and we'll do that for you!
+
+```bash
+jr producer list
+```
+
+You'll get an output similar to:
+```
+List of JR producers:
+
+Console * (--output = stdout)
+Kafka (--output = kafka)
+Redis (--output = redis)
+Mongodb (--output = mongo)
+Elastic (--output = elastic)
+S3 (--output = s3)
+GCS (--output = gcs)
+Azure Blob Storage (--output = azblobstorage)
+Azure Cosmos DB (--output = azcosmosdb)
+Cassandra (--output = cassandra)
+HTTP (--output = http)
+
+```
+to use an output, just set the corresponding value in `--output`
+
 
 ## Distributed Testing
 

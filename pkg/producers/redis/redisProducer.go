@@ -51,7 +51,7 @@ func (p *RedisProducer) Initialize(configFile string) {
 	p.client = *redis.NewClient(&options)
 }
 
-func (p *RedisProducer) Close() error {
+func (p *RedisProducer) Close(_ context.Context) error {
 	err := p.client.Close()
 	if err != nil {
 		log.Warn().Err(err).Msg("Failed to close Redis connection")
@@ -59,8 +59,7 @@ func (p *RedisProducer) Close() error {
 	return err
 }
 
-func (p *RedisProducer) Produce(k []byte, v []byte, o any) {
-	ctx := context.Background()
+func (p *RedisProducer) Produce(ctx context.Context, k []byte, v []byte, _ any) {
 	err := p.client.Set(ctx, string(k), string(v), p.Ttl).Err()
 	if err != nil {
 		log.Fatal().Err(err).Msg("Failed to write data in Redis")

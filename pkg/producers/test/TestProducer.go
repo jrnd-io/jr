@@ -22,6 +22,7 @@ package test
 
 import (
 	"bytes"
+	"context"
 
 	"github.com/jrnd-io/jr/pkg/tpl"
 	"github.com/rs/zerolog/log"
@@ -31,12 +32,12 @@ type TestProducer struct {
 	OutputTpl *tpl.Tpl
 }
 
-func (c *TestProducer) Close() error {
+func (c *TestProducer) Close(ctx context.Context) error {
 	// no need to close
 	return nil
 }
 
-func (c *TestProducer) Produce(key []byte, value []byte, o interface{}) {
+func (c *TestProducer) Produce(_ context.Context, key []byte, value []byte, o any) {
 
 	if o != nil {
 		respWriter := o.(*bytes.Buffer)

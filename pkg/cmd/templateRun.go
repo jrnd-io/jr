@@ -147,7 +147,7 @@ jr template run --template "{{name}}"
 
 		functions.SetSeed(seed)
 		es := map[string][]emitter.Emitter{constants.DEFAULT_EMITTER_NAME: {e}}
-		RunEmitters([]string{e.Name}, es, false)
+		RunEmitters(cmd.Context(), []string{e.Name}, es, false)
 	},
 }
 

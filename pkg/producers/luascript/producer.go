@@ -19,6 +19,7 @@
 package luascript
 
 import (
+	"context"
 	"encoding/json"
 	"os"
 	"strings"
@@ -82,7 +83,7 @@ func (p *Producer) InitializeFromConfig(config Config) {
 
 }
 
-func (p *Producer) Produce(k []byte, v []byte, _ any) {
+func (p *Producer) Produce(_ context.Context, k []byte, v []byte, _ any) {
 
 	L := lua.NewState()
 	libs.Preload(L)
@@ -99,6 +100,6 @@ func (p *Producer) Produce(k []byte, v []byte, _ any) {
 
 }
 
-func (p *Producer) Close() error {
+func (p *Producer) Close(ctx context.Context) error {
 	return nil
 }

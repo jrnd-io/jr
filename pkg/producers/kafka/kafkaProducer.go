@@ -178,14 +178,14 @@ func registerProviders() {
 	encryption.Register()
 }
 
-func (k *KafkaManager) Close() error {
+func (k *KafkaManager) Close(_ context.Context) error {
 	k.admin.Close()
 	k.producer.Flush(15 * 1000)
 	k.producer.Close()
 	return nil
 }
 
-func (k *KafkaManager) Produce(key []byte, data []byte, o any) {
+func (k *KafkaManager) Produce(_ context.Context, key []byte, data []byte, _ any) {
 
 	go listenToEventsFrom(k.producer, k.Topic)
 
@@ -203,7 +203,7 @@ func (k *KafkaManager) Produce(key []byte, data []byte, o any) {
 			}
 			ser, err = avrov2.NewSerializer(k.schema, serde.ValueSerde, serConfig)
 		} else if k.Serializer == "protobuf" {
-			//ser, err = protobuf.NewSerializer(k.schema, serde.ValueSerde, protobuf.NewSerializerConfig())
+			// ser, err = protobuf.NewSerializer(k.schema, serde.ValueSerde, protobuf.NewSerializerConfig())
 			log.Fatal().Msg("Protobuf not yet implemented")
 		} else if k.Serializer == "json-schema" {
 			ser, err = jsonschema.NewSerializer(k.schema, serde.ValueSerde, jsonschema.NewSerializerConfig())
@@ -239,15 +239,15 @@ func (k *KafkaManager) Produce(key []byte, data []byte, o any) {
 		TopicPartition: kafka.TopicPartition{Topic: &k.Topic, Partition: kafka.PartitionAny},
 		Key:            key,
 		Value:          data,
-		//Headers:        []kafka.Header{{Key: "myTestHeader", Value: []byte("header values are binary")}},
+		// Headers:        []kafka.Header{{Key: "myTestHeader", Value: []byte("header values are binary")}},
 	}, nil)
 
 	if err != nil {
 		if err.(kafka.Error).Code() == kafka.ErrQueueFull {
 			// Producer queue is full, wait 1s for messages
 			// to be delivered then try again.
-			//time.Sleep(time.Second)
-			//continue
+			// time.Sleep(time.Second)
+			// continue
 		}
 		log.Error().Err(err).Msg("Failed to produce message")
 	}
@@ -305,7 +305,7 @@ func listenToEventsFrom(k *kafka.Producer, topic string) {
 			if m.TopicPartition.Error != nil {
 				log.Error().Err(m.TopicPartition.Error).Msg("Delivery failed")
 			} else {
-				//fmt.Printf("Delivered message to topic %s [%d] at offset %v\n", *m.TopicPartition.Topic, m.TopicPartition.Partition, m.TopicPartition.Offset)
+				// fmt.Printf("Delivered message to topic %s [%d] at offset %v\n", *m.TopicPartition.Topic, m.TopicPartition.Partition, m.TopicPartition.Offset)
 			}
 		case kafka.Error:
 			log.Error().Err(ev).Msg("Kafka error")

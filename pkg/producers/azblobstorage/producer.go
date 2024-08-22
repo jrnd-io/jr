@@ -37,7 +37,7 @@ type Producer struct {
 	client        *azblob.Client
 }
 
-func (p *Producer) Initialize(configFile string) {
+func (p *Producer) Initialize(ctx context.Context, configFile string) {
 	cfgBytes, err := os.ReadFile(configFile)
 	if err != nil {
 		log.Fatal().Err(err).Msg("Failed to read config file")
@@ -72,7 +72,7 @@ func (p *Producer) Initialize(configFile string) {
 
 	}
 	if config.Container.Create {
-		_, err := client.CreateContainer(context.TODO(), config.Container.Name, nil)
+		_, err := client.CreateContainer(ctx, config.Container.Name, nil)
 		if err != nil {
 			log.Fatal().Err(err).Msg("Failed to create container")
 		}
@@ -82,7 +82,7 @@ func (p *Producer) Initialize(configFile string) {
 
 }
 
-func (p *Producer) Produce(k []byte, v []byte, _ any) {
+func (p *Producer) Produce(ctx context.Context, k []byte, v []byte, _ any) {
 
 	var key string
 	if len(k) == 0 || strings.ToLower(string(k)) == "null" {
@@ -93,7 +93,7 @@ func (p *Producer) Produce(k []byte, v []byte, _ any) {
 	}
 
 	resp, err := p.client.UploadBuffer(
-		context.TODO(),
+		ctx,
 		p.configuration.Container.Name,
 		key,
 		v,
@@ -111,6 +111,6 @@ func (p *Producer) Produce(k []byte, v []byte, _ any) {
 
 }
 
-func (p *Producer) Close() error {
+func (p *Producer) Close(_ context.Context) error {
 	return nil
 }

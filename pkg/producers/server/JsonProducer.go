@@ -21,6 +21,7 @@
 package server
 
 import (
+	"context"
 	"net/http"
 
 	"github.com/jrnd-io/jr/pkg/tpl"
@@ -31,12 +32,12 @@ type JsonProducer struct {
 	OutputTpl *tpl.Tpl
 }
 
-func (c *JsonProducer) Close() error {
+func (c *JsonProducer) Close(_ context.Context) error {
 	// no need to close
 	return nil
 }
 
-func (c *JsonProducer) Produce(key []byte, value []byte, o interface{}) {
+func (c *JsonProducer) Produce(_ context.Context, key []byte, value []byte, o any) {
 
 	if o != nil {
 		respWriter := o.(http.ResponseWriter)

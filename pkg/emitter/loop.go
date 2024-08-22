@@ -26,7 +26,6 @@ import (
 	"github.com/jrnd-io/jr/pkg/configuration"
 	"github.com/jrnd-io/jr/pkg/ctx"
 	"github.com/jrnd-io/jr/pkg/functions"
-	"io"
 	"os"
 	"os/signal"
 	"strings"
@@ -35,24 +34,24 @@ import (
 )
 
 type Producer interface {
-	Produce(k []byte, v []byte, o any)
-	io.Closer
+	Produce(ctx context.Context, key []byte, val []byte, o any)
+	Close(ctx context.Context) error
 }
 
-func Initialize(emitterNames []string, es map[string][]Emitter, dryrun bool) []Emitter {
+func Initialize(ctx context.Context, emitterNames []string, es map[string][]Emitter, dryrun bool) []Emitter {
 
 	runAll := len(emitterNames) == 0
 	emittersToRun := make([]Emitter, 0, len(es))
 
 	if runAll {
 		for _, emitters := range es {
-			emittersToRun = InitializeEmitters(emitters, dryrun, emittersToRun)
+			emittersToRun = InitializeEmitters(ctx, emitters, dryrun, emittersToRun)
 		}
 	} else {
 		for _, name := range emitterNames {
 			emitters, enabled := es[name]
 			if enabled {
-				emittersToRun = InitializeEmitters(emitters, dryrun, emittersToRun)
+				emittersToRun = InitializeEmitters(ctx, emitters, dryrun, emittersToRun)
 			}
 		}
 	}
@@ -60,12 +59,12 @@ func Initialize(emitterNames []string, es map[string][]Emitter, dryrun bool) []E
 	return emittersToRun
 }
 
-func InitializeEmitters(emitters []Emitter, dryrun bool, emittersToRun []Emitter) []Emitter {
+func InitializeEmitters(ctx context.Context, emitters []Emitter, dryrun bool, emittersToRun []Emitter) []Emitter {
 	for i := 0; i < len(emitters); i++ {
 		if dryrun {
 			emitters[i].Output = "stdout"
 		}
-		emitters[i].Initialize(configuration.GlobalCfg)
+		emitters[i].Initialize(ctx, configuration.GlobalCfg)
 		emittersToRun = append(emittersToRun, emitters[i])
 		emitters[i].Run(emitters[i].Preload, nil)
 	}
@@ -140,9 +139,9 @@ func doTemplate(emitter Emitter) {
 		kInValue := functions.GetV("KEY")
 
 		if (kInValue) != "" {
-			emitter.Producer.Produce([]byte(kInValue), []byte(v), nil)
+			emitter.Producer.Produce(context.TODO(), []byte(kInValue), []byte(v), nil)
 		} else {
-			emitter.Producer.Produce([]byte(k), []byte(v), nil)
+			emitter.Producer.Produce(context.TODO(), []byte(k), []byte(v), nil)
 		}
 
 		ctx.JrContext.GeneratedObjects++
@@ -151,12 +150,12 @@ func doTemplate(emitter Emitter) {
 
 }
 
-func CloseProducers(es map[string][]Emitter) {
+func CloseProducers(ctx context.Context, es map[string][]Emitter) {
 	for _, v := range es {
 		for i := 0; i < len(v); i++ {
 			p := v[i].Producer
 			if p != nil {
-				if err := p.Close(); err != nil {
+				if err := p.Close(ctx); err != nil {
 					fmt.Printf("Error in closing producers: %v\n", err)
 				}
 			}
@@ -169,7 +168,7 @@ func addEmitterToExpectedObjects(e Emitter) {
 	d := e.Duration.Milliseconds()
 	f := e.Frequency.Milliseconds()
 	n := e.Num
-	//fmt.Printf("%d %d %d\n", d, f, n)
+	// fmt.Printf("%d %d %d\n", d, f, n)
 
 	if d > 0 && f > 0 && n > 0 {
 		expected := (d / f) * int64(n)

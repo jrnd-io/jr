@@ -21,6 +21,7 @@
 package http
 
 import (
+	"context"
 	"crypto/tls"
 	"encoding/json"
 	"net/http"
@@ -133,7 +134,7 @@ func (p *Producer) InitializeFromConfig(config Config) {
 
 }
 
-func (p *Producer) Produce(k []byte, v []byte, o any) {
+func (p *Producer) Produce(_ context.Context, _ []byte, v []byte, _ any) {
 
 	var err error
 
@@ -162,7 +163,7 @@ func (p *Producer) Produce(k []byte, v []byte, o any) {
 
 }
 
-func (p *Producer) Close() error {
+func (p *Producer) Close(_ context.Context) error {
 	return nil
 }
 

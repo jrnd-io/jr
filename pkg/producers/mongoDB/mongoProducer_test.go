@@ -24,7 +24,7 @@ package mongoDB
 
 import (
 	"context"
-	"jr/storage"
+	"github.com/jrnd-io/jr/pkg/storage"
 	"testing"
 )
 

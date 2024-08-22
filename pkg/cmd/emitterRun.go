@@ -21,6 +21,7 @@
 package cmd
 
 import (
+	"context"
 	"github.com/jrnd-io/jr/pkg/emitter"
 	"github.com/spf13/cobra"
 )
@@ -32,15 +33,15 @@ var emitterRunCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 
 		dryrun, _ := cmd.Flags().GetBool("dryrun")
-		RunEmitters(args, emitters2, dryrun)
+		RunEmitters(cmd.Context(), args, emitters2, dryrun)
 
 	},
 }
 
-func RunEmitters(emitterNames []string, ems map[string][]emitter.Emitter, dryrun bool) {
+func RunEmitters(ctx context.Context, emitterNames []string, ems map[string][]emitter.Emitter, dryrun bool) {
 	defer emitter.WriteStats()
-	defer emitter.CloseProducers(ems)
-	emittersToRun := emitter.Initialize(emitterNames, ems, dryrun)
+	defer emitter.CloseProducers(ctx, ems)
+	emittersToRun := emitter.Initialize(ctx, emitterNames, ems, dryrun)
 	emitter.DoLoop(emittersToRun)
 }
 

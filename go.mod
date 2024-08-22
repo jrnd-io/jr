@@ -126,6 +126,7 @@ require (
 	github.com/sagikazarmark/slog-shim v0.1.0 // indirect
 	github.com/sourcegraph/conc v0.3.0 // indirect
 	github.com/technoweenie/multipartstreamer v1.0.1 // indirect
+	github.com/tetratelabs/wazero v1.8.0 // indirect
 	github.com/tink-crypto/tink-go-gcpkms/v2 v2.1.0 // indirect
 	github.com/tink-crypto/tink-go-hcvault/v2 v2.1.0 // indirect
 	github.com/tink-crypto/tink-go/v2 v2.1.0 // indirect

@@ -86,7 +86,7 @@ func (p *ElasticProducer) Initialize(configFile string) {
 	p.client = *client
 }
 
-func (p *ElasticProducer) Produce(k []byte, v []byte, o any) {
+func (p *ElasticProducer) Produce(ctx context.Context, k []byte, v []byte, _ any) {
 
 	var req esapi.IndexRequest
 
@@ -109,7 +109,7 @@ func (p *ElasticProducer) Produce(k []byte, v []byte, o any) {
 		}
 	}
 
-	res, err := req.Do(context.Background(), &p.client)
+	res, err := req.Do(ctx, &p.client)
 	if err != nil {
 		log.Fatal().Err(err).Msg("Failed to write data in Elastic")
 	}
@@ -120,7 +120,7 @@ func (p *ElasticProducer) Produce(k []byte, v []byte, o any) {
 	}
 }
 
-func (p *ElasticProducer) Close() error {
+func (p *ElasticProducer) Close(_ context.Context) error {
 	log.Warn().Msg("elasticsearch Client doesn't provide a close method!")
 	return nil
 }

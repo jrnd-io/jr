@@ -44,7 +44,7 @@ type MongoProducer struct {
 	collection string
 }
 
-func (p *MongoProducer) Initialize(configFile string) {
+func (p *MongoProducer) Initialize(ctx context.Context, configFile string) {
 	var config Config
 	file, err := os.ReadFile(configFile)
 	if err != nil {
@@ -66,7 +66,7 @@ func (p *MongoProducer) Initialize(configFile string) {
 	p.collection = config.Collection
 	p.database = config.Database
 
-	client, err := mongo.Connect(context.Background(), clientOptions)
+	client, err := mongo.Connect(ctx, clientOptions)
 
 	if err != nil {
 		log.Fatal().Err(err).Msg("Can't connect to Mongo")
@@ -75,7 +75,7 @@ func (p *MongoProducer) Initialize(configFile string) {
 	p.client = *client
 }
 
-func (p *MongoProducer) Produce(k []byte, v []byte, o any) {
+func (p *MongoProducer) Produce(ctx context.Context, k []byte, v []byte, _ any) {
 
 	collection := p.client.Database(p.database).Collection(p.collection)
 
@@ -89,14 +89,14 @@ func (p *MongoProducer) Produce(k []byte, v []byte, o any) {
 		dev["_id"] = string(k)
 	}
 
-	_, err = collection.InsertOne(context.Background(), dev)
+	_, err = collection.InsertOne(ctx, dev)
 	if err != nil {
 		log.Fatal().Err(err).Msg("Failed to write data in Mongo")
 	}
 }
 
-func (p *MongoProducer) Close() error {
-	err := p.client.Disconnect(context.Background())
+func (p *MongoProducer) Close(ctx context.Context) error {
+	err := p.client.Disconnect(ctx)
 	if err != nil {
 		log.Warn().Err(err).Msg("Failed to close Mongo connection")
 	}

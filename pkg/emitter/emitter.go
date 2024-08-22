@@ -21,13 +21,14 @@
 package emitter
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"time"
 
 	"github.com/jrnd-io/jr/pkg/configuration"
 	"github.com/jrnd-io/jr/pkg/constants"
-	"github.com/jrnd-io/jr/pkg/ctx"
+	jtctx "github.com/jrnd-io/jr/pkg/ctx"
 	"github.com/jrnd-io/jr/pkg/functions"
 	"github.com/jrnd-io/jr/pkg/producers/awsdynamodb"
 	"github.com/jrnd-io/jr/pkg/producers/azblobstorage"
@@ -68,7 +69,7 @@ type Emitter struct {
 	VTpl             tpl.Tpl
 }
 
-func (e *Emitter) Initialize(conf configuration.GlobalConfiguration) {
+func (e *Emitter) Initialize(ctx context.Context, conf configuration.GlobalConfiguration) {
 
 	functions.InitCSV(e.Csv)
 
@@ -83,11 +84,11 @@ func (e *Emitter) Initialize(conf configuration.GlobalConfiguration) {
 		}
 	}
 
-	keyTpl, err := tpl.NewTpl("key", e.KeyTemplate, functions.FunctionsMap(), &ctx.JrContext)
+	keyTpl, err := tpl.NewTpl("key", e.KeyTemplate, functions.FunctionsMap(), &jtctx.JrContext)
 	if err != nil {
 		log.Fatal().Err(err).Msg("Failed to create key template")
 	}
-	valueTpl, err := tpl.NewTpl("value", e.EmbeddedTemplate, functions.FunctionsMap(), &ctx.JrContext)
+	valueTpl, err := tpl.NewTpl("value", e.EmbeddedTemplate, functions.FunctionsMap(), &jtctx.JrContext)
 	if err != nil {
 		log.Fatal().Err(err).Msg("Failed to create value template")
 	}
@@ -102,7 +103,7 @@ func (e *Emitter) Initialize(conf configuration.GlobalConfiguration) {
 	}
 
 	if e.Output == "kafka" {
-		e.Producer = createKafkaProducer(conf, e.Topic, templateName)
+		e.Producer = createKafkaProducer(ctx, conf, e.Topic, templateName)
 		return
 	} else {
 		if conf.SchemaRegistry {
@@ -111,41 +112,41 @@ func (e *Emitter) Initialize(conf configuration.GlobalConfiguration) {
 	}
 
 	if e.Output == "redis" {
-		e.Producer = createRedisProducer(conf.RedisTtl, conf.RedisConfig)
+		e.Producer = createRedisProducer(ctx, conf.RedisTtl, conf.RedisConfig)
 		return
 	}
 
 	if e.Output == "mongo" || e.Output == "mongodb" {
-		e.Producer = createMongoProducer(conf.MongoConfig)
+		e.Producer = createMongoProducer(ctx, conf.MongoConfig)
 		return
 	}
 
 	if e.Output == "elastic" {
-		e.Producer = createElasticProducer(conf.ElasticConfig)
+		e.Producer = createElasticProducer(ctx, conf.ElasticConfig)
 		return
 	}
 
 	if e.Output == "s3" {
-		e.Producer = createS3Producer(conf.S3Config)
+		e.Producer = createS3Producer(ctx, conf.S3Config)
 		return
 	}
 
 	if e.Output == "awsdynamodb" {
-		e.Producer = createAWSDynamoDB(conf.AWSDynamoDBConfig)
+		e.Producer = createAWSDynamoDB(ctx, conf.AWSDynamoDBConfig)
 		return
 	}
 
 	if e.Output == "gcs" {
-		e.Producer = createGCSProducer(conf.GCSConfig)
+		e.Producer = createGCSProducer(ctx, conf.GCSConfig)
 		return
 	}
 
 	if e.Output == "azblobstorage" {
-		e.Producer = createAZBlobStorageProducer(conf.AzBlobStorageConfig)
+		e.Producer = createAZBlobStorageProducer(ctx, conf.AzBlobStorageConfig)
 		return
 	}
 	if e.Output == "azcosmosdb" {
-		e.Producer = createAZCosmosDBProducer(conf.AzCosmosDBConfig)
+		e.Producer = createAZCosmosDBProducer(ctx, conf.AzCosmosDBConfig)
 		return
 	}
 
@@ -155,16 +156,16 @@ func (e *Emitter) Initialize(conf configuration.GlobalConfiguration) {
 	}
 
 	if e.Output == "http" {
-		e.Producer = createHTTPProducer(conf.HTTPConfig)
+		e.Producer = createHTTPProducer(ctx, conf.HTTPConfig)
 		return
 	}
 
 	if e.Output == "cassandra" {
-		e.Producer = createCassandraProducer(conf.CassandraConfig)
+		e.Producer = createCassandraProducer(ctx, conf.CassandraConfig)
 		return
 	}
 	if e.Output == "luascript" {
-		e.Producer = createLUAScriptProducer(conf.LUAScriptConfig)
+		e.Producer = createLUAScriptProducer(ctx, conf.LUAScriptConfig)
 		return
 	}
 
@@ -179,18 +180,18 @@ func (e *Emitter) Run(num int, o any) {
 		kInValue := functions.GetV("KEY")
 
 		if kInValue != "" {
-			e.Producer.Produce([]byte(kInValue), []byte(v), o)
+			e.Producer.Produce(context.TODO(), []byte(kInValue), []byte(v), o)
 		} else {
-			e.Producer.Produce([]byte(k), []byte(v), o)
+			e.Producer.Produce(context.TODO(), []byte(k), []byte(v), o)
 		}
-		ctx.JrContext.GeneratedObjects++
-		ctx.JrContext.GeneratedBytes += int64(len(v))
+		jtctx.JrContext.GeneratedObjects++
+		jtctx.JrContext.GeneratedBytes += int64(len(v))
 
 	}
 
 }
 
-func createRedisProducer(ttl time.Duration, redisConfig string) Producer {
+func createRedisProducer(_ context.Context, ttl time.Duration, redisConfig string) Producer {
 	rProducer := &redis.RedisProducer{
 		Ttl: ttl,
 	}
@@ -198,77 +199,77 @@ func createRedisProducer(ttl time.Duration, redisConfig string) Producer {
 	return rProducer
 }
 
-func createMongoProducer(mongoConfig string) Producer {
+func createMongoProducer(ctx context.Context, mongoConfig string) Producer {
 	mProducer := &mongoDB.MongoProducer{}
-	mProducer.Initialize(mongoConfig)
+	mProducer.Initialize(ctx, mongoConfig)
 
 	return mProducer
 }
 
-func createElasticProducer(elasticConfig string) Producer {
+func createElasticProducer(_ context.Context, elasticConfig string) Producer {
 	eProducer := &elastic.ElasticProducer{}
 	eProducer.Initialize(elasticConfig)
 
 	return eProducer
 }
 
-func createS3Producer(s3Config string) Producer {
+func createS3Producer(ctx context.Context, s3Config string) Producer {
 	sProducer := &s3.S3Producer{}
-	sProducer.Initialize(s3Config)
+	sProducer.Initialize(ctx, s3Config)
 
 	return sProducer
 }
 
-func createAWSDynamoDB(config string) Producer {
+func createAWSDynamoDB(ctx context.Context, config string) Producer {
 	producer := &awsdynamodb.Producer{}
-	producer.Initialize(config)
+	producer.Initialize(ctx, config)
 
 	return producer
 }
 
-func createAZBlobStorageProducer(azConfig string) Producer {
+func createAZBlobStorageProducer(ctx context.Context, azConfig string) Producer {
 	producer := &azblobstorage.Producer{}
-	producer.Initialize(azConfig)
+	producer.Initialize(ctx, azConfig)
 
 	return producer
 }
 
-func createAZCosmosDBProducer(azConfig string) Producer {
+func createAZCosmosDBProducer(_ context.Context, azConfig string) Producer {
 	producer := &azcosmosdb.Producer{}
 	producer.Initialize(azConfig)
 
 	return producer
 }
 
-func createGCSProducer(gcsConfig string) Producer {
+func createGCSProducer(ctx context.Context, gcsConfig string) Producer {
 	gProducer := &gcs.GCSProducer{}
-	gProducer.Initialize(gcsConfig)
+	gProducer.Initialize(ctx, gcsConfig)
 
 	return gProducer
 }
 
-func createHTTPProducer(httpConfig string) Producer {
+func createHTTPProducer(_ context.Context, httpConfig string) Producer {
 	httpProducer := &http.Producer{}
 	httpProducer.Initialize(httpConfig)
 
 	return httpProducer
 }
 
-func createCassandraProducer(config string) Producer {
+func createCassandraProducer(_ context.Context, config string) Producer {
 	producer := &cassandra.Producer{}
 	producer.Initialize(config)
 
 	return producer
 }
 
-func createLUAScriptProducer(config string) Producer {
+func createLUAScriptProducer(_ context.Context, config string) Producer {
 	producer := &luascript.Producer{}
 	producer.Initialize(config)
 
 	return producer
 }
 
-func createKafkaProducer(conf configuration.GlobalConfiguration, topic string, templateType string) *kafka.KafkaManager {
+func createKafkaProducer(_ context.Context, conf configuration.GlobalConfiguration, topic string, templateType string) *kafka.KafkaManager {
 
 	kManager := &kafka.KafkaManager{
 		Serializer:   conf.Serializer,

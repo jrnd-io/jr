@@ -21,6 +21,7 @@
 package cassandra
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -97,7 +98,7 @@ func (p *Producer) Initialize(configFile string) {
 
 }
 
-func (p *Producer) Produce(_ []byte, v []byte, _ any) {
+func (p *Producer) Produce(_ context.Context, _ []byte, v []byte, _ any) {
 
 	stmt := fmt.Sprintf("INSERT INTO %s.%s JSON ?",
 		p.configuration.Keyspace,
@@ -108,7 +109,7 @@ func (p *Producer) Produce(_ []byte, v []byte, _ any) {
 	}
 }
 
-func (p *Producer) Close() error {
+func (p *Producer) Close(_ context.Context) error {
 	p.session.Close()
 	return nil
 }

@@ -21,6 +21,7 @@
 package http_test
 
 import (
+	"context"
 	"encoding/base64"
 	"fmt"
 	"io"
@@ -252,7 +253,7 @@ func TestProducer(t *testing.T) {
 				fakeUrl,
 				mr.serveHTTP)
 
-			producer.Produce([]byte("key"), defaultBody, nil)
+			producer.Produce(context.TODO(), []byte("key"), defaultBody, nil)
 			httpmock.DeactivateAndReset()
 		})
 	}

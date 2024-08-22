@@ -19,6 +19,7 @@
 package luascript_test
 
 import (
+	"context"
 	"testing"
 
 	"github.com/jrnd-io/jr/pkg/producers/luascript"
@@ -46,7 +47,7 @@ func TestProducer(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			p := &luascript.Producer{}
 			p.InitializeFromConfig(tc.config)
-			p.Produce([]byte("somekey"), []byte(someJson), nil)
+			p.Produce(context.TODO(), []byte("somekey"), []byte(someJson), nil)
 		})
 
 	}

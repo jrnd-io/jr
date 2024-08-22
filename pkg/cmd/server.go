@@ -118,11 +118,11 @@ var serverCmd = &cobra.Command{
 		router.Use(middleware.Timeout(60 * time.Second))
 		router.Use(SessionMiddleware)
 
-		//comment for local dev
+		// comment for local dev
 		embeddedFileRoutes(router)
 
-		//Uncomment for local dev
-		//localDevServerSetup(router)
+		// Uncomment for local dev
+		// localDevServerSetup(router)
 
 		router.Route("/emitters", func(r chi.Router) {
 			r.Get("/", listEmitters)
@@ -298,15 +298,15 @@ func addEmitter(w http.ResponseWriter, r *http.Request) {
 }
 
 func updateEmitter(w http.ResponseWriter, r *http.Request) {
-	//@TODO update emitter by name
+	// @TODO update emitter by name
 }
 
 func deleteEmitter(w http.ResponseWriter, r *http.Request) {
-	//@TODO delete emitter by name
+	// @TODO delete emitter by name
 }
 
 func startEmitter(w http.ResponseWriter, r *http.Request) {
-	//@TODO start emitter by name
+	// @TODO start emitter by name
 	w.Header().Set("Content-Type", "application/json")
 	url := chi.URLParam(r, "emitter")
 
@@ -317,7 +317,7 @@ func startEmitter(w http.ResponseWriter, r *http.Request) {
 }
 
 func stopEmitter(w http.ResponseWriter, r *http.Request) {
-	//@TODO stop emitter by name
+	// @TODO stop emitter by name
 	w.Header().Set("Content-Type", "application/json")
 	url := chi.URLParam(r, "emitter")
 
@@ -328,7 +328,7 @@ func stopEmitter(w http.ResponseWriter, r *http.Request) {
 }
 
 func pauseEmitter(w http.ResponseWriter, r *http.Request) {
-	//@TODO pause emitter by name
+	// @TODO pause emitter by name
 	w.Header().Set("Content-Type", "application/json")
 	url := chi.URLParam(r, "emitter")
 
@@ -345,7 +345,7 @@ func runEmitter(w http.ResponseWriter, r *http.Request) {
 	if firstRun[url] == false {
 		for i := 0; i < len(emitters); i++ {
 			if functions.Contains([]string{url}, emitters[i].Name) {
-				emitters[i].Initialize(configuration.GlobalCfg)
+				emitters[i].Initialize(r.Context(), configuration.GlobalCfg)
 				emitterToRun[url] = append(emitterToRun[url], emitters[i])
 				if emitters[i].Preload > 0 {
 					emitters[i].Run(emitters[i].Preload, w)
@@ -364,7 +364,7 @@ func runEmitter(w http.ResponseWriter, r *http.Request) {
 }
 
 func statusEmitter(w http.ResponseWriter, r *http.Request) {
-	//@TODO status emitter by name
+	// @TODO status emitter by name
 	w.Header().Set("Content-Type", "application/json")
 	url := chi.URLParam(r, "emitter")
 

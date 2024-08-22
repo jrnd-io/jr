@@ -43,7 +43,7 @@ type S3Producer struct {
 	bucket string
 }
 
-func (p *S3Producer) Initialize(configFile string) {
+func (p *S3Producer) Initialize(ctx context.Context, configFile string) {
 	var config Config
 	file, err := os.ReadFile(configFile)
 	if err != nil {
@@ -54,7 +54,7 @@ func (p *S3Producer) Initialize(configFile string) {
 		log.Fatal().Err(err).Msg("Failed to parse configuration parameters")
 	}
 
-	awsConfig, err := awsconfig.LoadDefaultConfig(context.TODO())
+	awsConfig, err := awsconfig.LoadDefaultConfig(ctx)
 	if err != nil {
 		log.Fatal().Err(err).Msg("Failed to load default AWS config")
 	}
@@ -65,7 +65,7 @@ func (p *S3Producer) Initialize(configFile string) {
 	p.bucket = config.Bucket
 }
 
-func (p *S3Producer) Produce(k []byte, v []byte, o any) {
+func (p *S3Producer) Produce(ctx context.Context, k []byte, v []byte, _ any) {
 
 	bucket := p.bucket
 	var key string
@@ -77,8 +77,8 @@ func (p *S3Producer) Produce(k []byte, v []byte, o any) {
 		key = string(k)
 	}
 
-	//object will be stored with no content type
-	_, err := p.client.PutObject(context.TODO(), &s3.PutObjectInput{
+	// object will be stored with no content type
+	_, err := p.client.PutObject(ctx, &s3.PutObjectInput{
 		Body:   bytes.NewReader(v),
 		Bucket: aws.String(bucket),
 		Key:    aws.String(key),
@@ -89,7 +89,7 @@ func (p *S3Producer) Produce(k []byte, v []byte, o any) {
 	}
 }
 
-func (p *S3Producer) Close() error {
+func (p *S3Producer) Close(_ context.Context) error {
 	log.Warn().Msg("S3 Client doesn't provide a close method!")
 	return nil
 }

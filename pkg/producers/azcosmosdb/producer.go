@@ -72,7 +72,7 @@ func (p *Producer) Initialize(configFile string) {
 
 }
 
-func (p *Producer) Produce(_ []byte, v []byte, _ any) {
+func (p *Producer) Produce(ctx context.Context, _ []byte, v []byte, _ any) {
 
 	// This is ugly but it works
 	var jsonMap map[string]interface{}
@@ -93,7 +93,7 @@ func (p *Producer) Produce(_ []byte, v []byte, _ any) {
 	}
 
 	pk := azcosmos.NewPartitionKeyString(pkValue.(string))
-	resp, err := container.CreateItem(context.Background(), pk, v, nil)
+	resp, err := container.CreateItem(ctx, pk, v, nil)
 	if err != nil {
 		log.Fatal().Err(err).Msg("Failed to create item")
 	}
@@ -102,6 +102,6 @@ func (p *Producer) Produce(_ []byte, v []byte, _ any) {
 
 }
 
-func (p *Producer) Close() error {
+func (p *Producer) Close(_ context.Context) error {
 	return nil
 }

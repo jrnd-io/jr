@@ -38,7 +38,7 @@ type Producer struct {
 	client *dynamodb.Client
 }
 
-func (p *Producer) Initialize(configFile string) {
+func (p *Producer) Initialize(ctx context.Context, configFile string) {
 	var config Config
 	file, err := os.ReadFile(configFile)
 	if err != nil {
@@ -53,7 +53,7 @@ func (p *Producer) Initialize(configFile string) {
 		log.Fatal().Msg("Table is mandatory")
 	}
 
-	awsConfig, err := awsconfig.LoadDefaultConfig(context.TODO())
+	awsConfig, err := awsconfig.LoadDefaultConfig(ctx)
 	if err != nil {
 		log.Fatal().Err(err).Msg("Failed to load default AWS config")
 	}
@@ -63,10 +63,10 @@ func (p *Producer) Initialize(configFile string) {
 	p.configuration = config
 }
 
-func (p *Producer) Produce(_ []byte, v []byte, _ any) {
+func (p *Producer) Produce(ctx context.Context, _ []byte, val []byte, _ any) {
 
 	var jsonMap map[string]interface{}
-	if err := json.Unmarshal(v, &jsonMap); err != nil {
+	if err := json.Unmarshal(val, &jsonMap); err != nil {
 		log.Fatal().Err(err).Msg("Failed to unmarshal json")
 	}
 
@@ -75,7 +75,7 @@ func (p *Producer) Produce(_ []byte, v []byte, _ any) {
 		log.Fatal().Err(err).Msg("Failed to marshal map")
 	}
 
-	_, err = p.client.PutItem(context.TODO(), &dynamodb.PutItemInput{
+	_, err = p.client.PutItem(ctx, &dynamodb.PutItemInput{
 		TableName: aws.String(p.configuration.Table),
 		Item:      item,
 	})
@@ -85,6 +85,6 @@ func (p *Producer) Produce(_ []byte, v []byte, _ any) {
 
 }
 
-func (p *Producer) Close() error {
+func (p *Producer) Close(_ context.Context) error {
 	return nil
 }

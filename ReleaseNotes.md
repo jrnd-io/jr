@@ -6,6 +6,8 @@ v0.3.9
 - added http producer
 - added Azure Blob Storage producer
 - added Cassandra producer
+- added Lua script producer
+- added AWS Dynamo DB producer
 
 v0.3.8
 - moved to librdkafka 2.5.0

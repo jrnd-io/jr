@@ -146,9 +146,9 @@ func Name() string {
 	s := Random.Intn(2)
 	if s == 0 {
 		return NameM()
-	} else {
-		return NameF()
 	}
+
+	return NameF()
 }
 
 // NameM returns a random male Name

@@ -100,6 +100,6 @@ func (p *Producer) Produce(_ context.Context, k []byte, v []byte, _ any) {
 
 }
 
-func (p *Producer) Close(ctx context.Context) error {
+func (p *Producer) Close(_ context.Context) error {
 	return nil
 }

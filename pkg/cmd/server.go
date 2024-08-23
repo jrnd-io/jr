@@ -90,6 +90,12 @@ var emitterToRun = make(map[string][]emitter.Emitter)
 
 var store = sessions.NewCookieStore([]byte("templates"))
 
+type serverKey string
+
+const (
+	sessionKey serverKey = "session"
+)
+
 var serverCmd = &cobra.Command{
 	Use:     "server",
 	Short:   "Starts the jr http server",
@@ -153,14 +159,24 @@ var serverCmd = &cobra.Command{
 
 		addr := fmt.Sprintf(":%d", port)
 		log.Info().Int("port", port).Msg("Starting HTTP server")
-		log.Fatal().Err(http.ListenAndServe(addr, router))
+
+		// TODO: must validate values
+		s := &http.Server{
+			Addr:              addr,
+			ReadHeaderTimeout: 20 * time.Second,
+			ReadTimeout:       1 * time.Minute,
+			WriteTimeout:      2 * time.Minute,
+			Handler:           router,
+		}
+
+		log.Fatal().Err(s.ListenAndServe())
 	},
 }
 
 func SessionMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		session, _ := store.Get(r, "session-name")
-		r = r.WithContext(context.WithValue(r.Context(), "session", session))
+		r = r.WithContext(context.WithValue(r.Context(), sessionKey, session))
 		next.ServeHTTP(w, r)
 	})
 }
@@ -244,7 +260,7 @@ func FileServer(r chi.Router, path string, root http.FileSystem) {
 	}
 
 	if path != "/" && path[len(path)-1] != '/' {
-		r.Get(path, http.RedirectHandler(path+"/", 301).ServeHTTP)
+		r.Get(path, http.RedirectHandler(path+"/", http.StatusMovedPermanently).ServeHTTP)
 		path += "/"
 	}
 	path += "*"
@@ -260,7 +276,7 @@ func FileServer(r chi.Router, path string, root http.FileSystem) {
 func listEmitters(w http.ResponseWriter, r *http.Request) {
 	emitters_json, _ := json.Marshal(emitters)
 
-	_, err := w.Write([]byte(emitters_json))
+	_, err := w.Write(emitters_json)
 	if err != nil {
 		log.Error().Err(err).Msg("Error writing response")
 	}
@@ -342,22 +358,25 @@ func runEmitter(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	url := chi.URLParam(r, "emitter")
-	if firstRun[url] == false {
-		for i := 0; i < len(emitters); i++ {
-			if functions.Contains([]string{url}, emitters[i].Name) {
-				emitters[i].Initialize(r.Context(), configuration.GlobalCfg)
-				emitterToRun[url] = append(emitterToRun[url], emitters[i])
-				if emitters[i].Preload > 0 {
-					emitters[i].Run(emitters[i].Preload, w)
-				} else {
-					emitters[i].Run(emitters[i].Num, w)
-				}
-				firstRun[url] = true
-			}
-		}
-	} else {
+
+	if firstRun[url] {
 		for _, e := range emitterToRun[url] {
-			e.Run(e.Num, w)
+			e.Run(r.Context(), e.Num, w)
+		}
+
+		return
+	}
+
+	for i := 0; i < len(emitters); i++ {
+		if functions.Contains([]string{url}, emitters[i].Name) {
+			emitters[i].Initialize(r.Context(), configuration.GlobalCfg)
+			emitterToRun[url] = append(emitterToRun[url], emitters[i])
+			if emitters[i].Preload > 0 {
+				emitters[i].Run(r.Context(), emitters[i].Preload, w)
+			} else {
+				emitters[i].Run(r.Context(), emitters[i].Num, w)
+			}
+			firstRun[url] = true
 		}
 	}
 
@@ -380,12 +399,12 @@ func loadLastStatus(w http.ResponseWriter, r *http.Request) {
 
 	response.WriteString("{")
 
-	session := r.Context().Value("session").(*sessions.Session)
-	lastTemplateSubmittedValue_without_type, _ := session.Values["lastTemplateSubmittedValue"]
-	lastTemplateSubmittedValue, _ := lastTemplateSubmittedValue_without_type.(string)
+	session := r.Context().Value(sessionKey).(*sessions.Session)
+	lastTemplateSubmittedValue_without_type := session.Values["lastTemplateSubmittedValue"]
+	lastTemplateSubmittedValue := lastTemplateSubmittedValue_without_type.(string)
 
-	lastTemplateSubmittedisJsonOutputValue_without_type, _ := session.Values["lastTemplateSubmittedisJsonOutputValue"]
-	lastTemplateSubmittedisJsonOutputValue, _ := lastTemplateSubmittedisJsonOutputValue_without_type.(string)
+	lastTemplateSubmittedisJsonOutputValue_without_type := session.Values["lastTemplateSubmittedisJsonOutputValue"]
+	lastTemplateSubmittedisJsonOutputValue := lastTemplateSubmittedisJsonOutputValue_without_type.(string)
 
 	lastTemplateSubmittedValueB64 := base64.StdEncoding.EncodeToString([]byte(lastTemplateSubmittedValue))
 
@@ -412,7 +431,7 @@ func executeTemplate(w http.ResponseWriter, r *http.Request) {
 	var lastTemplateSubmittedValue = r.Form.Get("template")
 	var lastTemplateSubmittedisJsonOutputValue = r.Form.Get("isJsonOutput")
 
-	session := r.Context().Value("session").(*sessions.Session)
+	session := r.Context().Value(sessionKey).(*sessions.Session)
 	session.Values["lastTemplateSubmittedValue"] = lastTemplateSubmittedValue
 	session.Values["lastTemplateSubmittedisJsonOutputValue"] = lastTemplateSubmittedisJsonOutputValue
 	session.Save(r, w)
@@ -434,7 +453,7 @@ func executeTemplate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err := w.Write([]byte(b.String()))
+	_, err := w.Write(b.Bytes())
 	if err != nil {
 		log.Error().Err(err).Msg("Error writing response")
 	}

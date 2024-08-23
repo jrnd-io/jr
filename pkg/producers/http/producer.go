@@ -142,7 +142,8 @@ func (p *Producer) Produce(_ context.Context, _ []byte, v []byte, _ any) {
 	req := p.client.R().
 		SetBody(v)
 
-	resp := &resty.Response{}
+	var resp *resty.Response
+
 	switch p.configuration.Endpoint.Method {
 	case POST:
 		resp, err = req.Post(p.configuration.Endpoint.URL)

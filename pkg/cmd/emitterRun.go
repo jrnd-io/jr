@@ -42,7 +42,7 @@ func RunEmitters(ctx context.Context, emitterNames []string, ems map[string][]em
 	defer emitter.WriteStats()
 	defer emitter.CloseProducers(ctx, ems)
 	emittersToRun := emitter.Initialize(ctx, emitterNames, ems, dryrun)
-	emitter.DoLoop(emittersToRun)
+	emitter.DoLoop(ctx, emittersToRun)
 }
 
 func init() {

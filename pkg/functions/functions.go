@@ -145,7 +145,7 @@ var fmap = map[string]interface{}{
 	"zip":            Zip,
 	"zip_at":         ZipAt,
 
-	//finance
+	// finance
 	"account":      Account,
 	"amount":       Amount,
 	"bitcoin":      Bitcoin,
@@ -160,7 +160,7 @@ var fmap = map[string]interface{}{
 	"valor":        Valor,
 	"wkn":          Wkn,
 
-	//time and dates
+	// time and dates
 	"birthdate":       BirthDate,
 	"date_between":    DateBetween,
 	"dates_between":   DatesBetween,
@@ -170,7 +170,7 @@ var fmap = map[string]interface{}{
 	"soon":            Soon,
 	"unix_time_stamp": UnixTimeStamp,
 
-	//phone
+	// phone
 	"country_code":    CountryCode,
 	"country_code_at": CountryCodeAt,
 	"imei":            Imei,
@@ -204,10 +204,10 @@ var fmap = map[string]interface{}{
 func Atoi(s string) int {
 	if len(s) == 0 {
 		return 0
-	} else {
-		i, _ := strconv.Atoi(s)
-		return i
 	}
+
+	i, _ := strconv.Atoi(s)
+	return i
 }
 
 // Seed sets seeds and can be used in a template
@@ -256,9 +256,9 @@ func IndexOf(s string, name string) int {
 
 	if index < len(words) && words[index] == s {
 		return index
-	} else {
-		return -1
 	}
+
+	return -1
 }
 
 // Len returns number of words (lines) in a word file
@@ -290,9 +290,9 @@ func RandomValueFromList(s string) string {
 	l := len(list)
 	if l != 0 {
 		return list[Random.Intn(l)]
-	} else {
-		return ""
 	}
+
+	return ""
 }
 
 // GetValuesFromList returns a value from Context list l at index
@@ -304,9 +304,9 @@ func GetValueFromListAtIndex(s string, index int) string {
 	l := len(list)
 	if l != 0 && index < l {
 		return list[index]
-	} else {
-		return ""
 	}
+
+	return ""
 }
 
 // RandomNValuesFromList returns a random value from Context list l
@@ -322,9 +322,9 @@ func RandomNValuesFromList(s string, n int) []string {
 			results[i] = list[i]
 		}
 		return results
-	} else {
-		return []string{""}
 	}
+
+	return []string{""}
 }
 
 // Word returns a random string from a list of strings in a file.
@@ -394,28 +394,29 @@ func Cache(name string) (bool, error) {
 	templateDir := fmt.Sprintf("%s/%s", constants.JR_SYSTEM_DIR, "templates")
 
 	v := data[name]
-	if v == nil {
-		locale := strings.ToLower(ctx.JrContext.Locale)
-		filename := fmt.Sprintf("%s/data/%s/%s", os.ExpandEnv(templateDir), locale, name)
-		if locale != "us" && !(fileExists(filename)) {
-			filename = fmt.Sprintf("%s/data/%s/%s", os.ExpandEnv(templateDir), "us", name)
-		}
-		data[name] = initialize(filename)
-		if len(data[name]) == 0 {
-			return false, fmt.Errorf("no words found in %s", filename)
-		} else {
-			return true, nil
-		}
+	if v != nil {
+		return false, nil
 	}
-	return false, nil
+
+	locale := strings.ToLower(ctx.JrContext.Locale)
+	filename := fmt.Sprintf("%s/data/%s/%s", os.ExpandEnv(templateDir), locale, name)
+	if locale != "us" && !(fileExists(filename)) {
+		filename = fmt.Sprintf("%s/data/%s/%s", os.ExpandEnv(templateDir), "us", name)
+	}
+	data[name] = initialize(filename)
+	if len(data[name]) == 0 {
+		return false, fmt.Errorf("no words found in %s", filename)
+	}
+
+	return true, nil
 }
 
 func fileExists(filename string) bool {
 	if _, err := os.Stat(filename); err == nil {
 		return true
-	} else {
-		return false
 	}
+
+	return false
 }
 
 // Helper function to generate n different integers from 0 to length
@@ -469,59 +470,60 @@ func initialize(filename string) []string {
 }
 
 func InitCSV(csvpath string) {
-	//Loads the csv file in the context
-	if len(csvpath) > 0 {
-
-		var csvHeaders = make(map[int]string)
-		csvValues := make(map[int]map[string]string)
-
-		if _, err := os.Stat(csvpath); err != nil {
-			println("File does not exist: ", csvpath)
-			os.Exit(1)
-		}
-
-		file, err := os.Open(csvpath)
-
-		if err != nil {
-			println("Error opening file:", csvpath, "error:", err)
-			os.Exit(1)
-		} else {
-			reader := csv.NewReader(file)
-
-			lines, err := reader.ReadAll()
-			if err != nil {
-				println("Error reading CSV file:", csvpath, "error:", err)
-				os.Exit(1)
-			} else {
-
-				for row := 0; row < len(lines); row++ {
-					var aRow = lines[row]
-					for col := 0; col < len(aRow); col++ {
-						var value = aRow[col]
-						//print(" ROW -> ",row)
-						if row == 0 {
-							//print(" H: ", value)
-							csvHeaders[col] = strings.Trim(value, " ")
-						} else {
-
-							val, exists := csvValues[row-1]
-							if exists {
-								val[csvHeaders[col]] = strings.Trim(value, " ")
-								csvValues[row-1] = val
-							} else {
-								var localmap = make(map[string]string)
-								localmap[csvHeaders[col]] = strings.Trim(value, " ")
-								csvValues[row-1] = localmap
-							}
-							//	print(" V: ", value)
-						}
-					}
-					//println()
-				}
-				ctx.JrContext.CtxCSV = csvValues
-			}
-		}
-		defer file.Close()
+	// Loads the csv file in the context
+	if len(csvpath) == 0 {
+		return
 	}
 
+	var csvHeaders = make(map[int]string)
+	csvValues := make(map[int]map[string]string)
+
+	if _, err := os.Stat(csvpath); err != nil {
+		println("File does not exist: ", csvpath)
+		os.Exit(1)
+	}
+
+	file, err := os.Open(csvpath)
+
+	if err != nil {
+		println("Error opening file:", csvpath, "error:", err)
+		os.Exit(1)
+	}
+
+	defer file.Close()
+
+	reader := csv.NewReader(file)
+
+	lines, err := reader.ReadAll()
+	if err != nil {
+		println("Error reading CSV file:", csvpath, "error:", err)
+		os.Exit(1)
+	}
+
+	for row := 0; row < len(lines); row++ {
+		var aRow = lines[row]
+		for col := 0; col < len(aRow); col++ {
+			var value = aRow[col]
+			// print(" ROW -> ",row)
+			if row == 0 {
+				// print(" H: ", value)
+				csvHeaders[col] = strings.Trim(value, " ")
+			} else {
+
+				val, exists := csvValues[row-1]
+				if exists {
+					val[csvHeaders[col]] = strings.Trim(value, " ")
+					csvValues[row-1] = val
+				} else {
+					var localmap = make(map[string]string)
+					localmap[csvHeaders[col]] = strings.Trim(value, " ")
+					csvValues[row-1] = localmap
+				}
+				//	print(" V: ", value)
+			}
+		}
+		// println()
+	}
+
+	ctx.JrContext.CtxCSV = csvValues
 }

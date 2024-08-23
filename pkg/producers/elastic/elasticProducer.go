@@ -43,12 +43,12 @@ type Config struct {
 	ElasticPassword string `json:"password"`
 }
 
-type ElasticProducer struct {
-	client elasticsearch.Client
+type Producer struct {
+	client *elasticsearch.Client
 	index  string
 }
 
-func (p *ElasticProducer) Initialize(configFile string) {
+func (p *Producer) Initialize(configFile string) {
 	var config Config
 	file, err := os.ReadFile(configFile)
 	if err != nil {
@@ -83,14 +83,14 @@ func (p *ElasticProducer) Initialize(configFile string) {
 	}
 
 	p.index = config.ElasticIndex
-	p.client = *client
+	p.client = client
 }
 
-func (p *ElasticProducer) Produce(ctx context.Context, k []byte, v []byte, _ any) {
+func (p *Producer) Produce(ctx context.Context, k []byte, v []byte, _ any) {
 
 	var req esapi.IndexRequest
 
-	if k == nil || len(k) == 0 {
+	if len(k) == 0 {
 		// generate a UUID as index
 		id := uuid.New()
 
@@ -109,7 +109,7 @@ func (p *ElasticProducer) Produce(ctx context.Context, k []byte, v []byte, _ any
 		}
 	}
 
-	res, err := req.Do(ctx, &p.client)
+	res, err := req.Do(ctx, p.client)
 	if err != nil {
 		log.Fatal().Err(err).Msg("Failed to write data in Elastic")
 	}
@@ -120,7 +120,7 @@ func (p *ElasticProducer) Produce(ctx context.Context, k []byte, v []byte, _ any
 	}
 }
 
-func (p *ElasticProducer) Close(_ context.Context) error {
+func (p *Producer) Close(_ context.Context) error {
 	log.Warn().Msg("elasticsearch Client doesn't provide a close method!")
 	return nil
 }

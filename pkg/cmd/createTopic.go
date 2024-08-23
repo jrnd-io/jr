@@ -37,11 +37,11 @@ jr createTopic newDefaultTopic
 	Run: func(cmd *cobra.Command, args []string) {
 		kafkaConfig, _ := cmd.Flags().GetString("kafkaConfig")
 
-		kManager := &kafka.KafkaManager{}
+		kManager := &kafka.Manager{}
 		kManager.Initialize(kafkaConfig)
 		partitions, _ := cmd.Flags().GetInt("partitions")
 		replica, _ := cmd.Flags().GetInt("replica")
-		kManager.CreateTopicFull(args[0], partitions, replica)
+		kManager.CreateTopicFull(cmd.Context(), args[0], partitions, replica)
 
 	},
 }

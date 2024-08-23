@@ -22,6 +22,7 @@ package functions_test
 
 import (
 	"bytes"
+	"github.com/stretchr/testify/require"
 	"strconv"
 	"testing"
 	"text/template"
@@ -131,11 +132,11 @@ func TestNestedPassingContext(t *testing.T) {
 
 	var b bytes.Buffer
 
-	//*
+	// *
 	data := struct {
 		C string
 	}{"10"}
-	//*/
+	// */
 
 	err = aggregate.Execute(&b, data)
 	if err != nil {
@@ -281,7 +282,7 @@ func TestTemplatesWithValueFromListAtIndex(t *testing.T) {
 	}
 
 	var expectedOne bytes.Buffer
-	tOne.Execute(&expectedOne, nil)
+	require.NoError(t, tOne.Execute(&expectedOne, nil))
 
 	tTwo, err := v.New("user").Parse(templateTwo)
 	if err != nil {
@@ -289,7 +290,7 @@ func TestTemplatesWithValueFromListAtIndex(t *testing.T) {
 	}
 
 	var expectedTwo bytes.Buffer
-	tTwo.Execute(&expectedTwo, nil)
+	require.NoError(t, tTwo.Execute(&expectedTwo, nil))
 
 	check, err := v.New("order").Parse(checkTemplate)
 	if err != nil {
@@ -321,7 +322,7 @@ func TestTemplatesWithValueFromListAtIndex_greater_than_length(t *testing.T) {
 	}
 
 	var expectedOne bytes.Buffer
-	tOne.Execute(&expectedOne, nil)
+	require.NoError(t, tOne.Execute(&expectedOne, nil))
 
 	tTwo, err := v.New("user").Parse(templateTwo)
 	if err != nil {
@@ -329,7 +330,7 @@ func TestTemplatesWithValueFromListAtIndex_greater_than_length(t *testing.T) {
 	}
 
 	var expectedTwo bytes.Buffer
-	tTwo.Execute(&expectedTwo, nil)
+	require.NoError(t, tTwo.Execute(&expectedTwo, nil))
 
 	check, err := v.New("order").Parse(checkTemplate)
 	if err != nil {

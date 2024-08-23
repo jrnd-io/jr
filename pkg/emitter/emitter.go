@@ -40,7 +40,7 @@ import (
 	"github.com/jrnd-io/jr/pkg/producers/http"
 	"github.com/jrnd-io/jr/pkg/producers/kafka"
 	"github.com/jrnd-io/jr/pkg/producers/luascript"
-	"github.com/jrnd-io/jr/pkg/producers/mongoDB"
+	"github.com/jrnd-io/jr/pkg/producers/mongodb"
 	"github.com/jrnd-io/jr/pkg/producers/redis"
 	"github.com/jrnd-io/jr/pkg/producers/s3"
 	"github.com/jrnd-io/jr/pkg/producers/server"
@@ -98,17 +98,17 @@ func (e *Emitter) Initialize(ctx context.Context, conf configuration.GlobalConfi
 
 	o, _ := tpl.NewTpl("out", e.OutputTemplate, functions.FunctionsMap(), nil)
 	if e.Output == "stdout" {
-		e.Producer = &console.ConsoleProducer{OutputTpl: &o}
+		e.Producer = &console.Producer{OutputTpl: &o}
 		return
 	}
 
 	if e.Output == "kafka" {
 		e.Producer = createKafkaProducer(ctx, conf, e.Topic, templateName)
 		return
-	} else {
-		if conf.SchemaRegistry {
-			log.Warn().Msg("Ignoring schemaRegistry and/or serializer when output not set to kafka")
-		}
+	}
+
+	if conf.SchemaRegistry {
+		log.Warn().Msg("Ignoring schemaRegistry and/or serializer when output not set to kafka")
 	}
 
 	if e.Output == "redis" {
@@ -171,7 +171,7 @@ func (e *Emitter) Initialize(ctx context.Context, conf configuration.GlobalConfi
 
 }
 
-func (e *Emitter) Run(num int, o any) {
+func (e *Emitter) Run(ctx context.Context, num int, o any) {
 
 	for i := 0; i < num; i++ {
 
@@ -180,9 +180,9 @@ func (e *Emitter) Run(num int, o any) {
 		kInValue := functions.GetV("KEY")
 
 		if kInValue != "" {
-			e.Producer.Produce(context.TODO(), []byte(kInValue), []byte(v), o)
+			e.Producer.Produce(ctx, []byte(kInValue), []byte(v), o)
 		} else {
-			e.Producer.Produce(context.TODO(), []byte(k), []byte(v), o)
+			e.Producer.Produce(ctx, []byte(k), []byte(v), o)
 		}
 		jtctx.JrContext.GeneratedObjects++
 		jtctx.JrContext.GeneratedBytes += int64(len(v))
@@ -192,7 +192,7 @@ func (e *Emitter) Run(num int, o any) {
 }
 
 func createRedisProducer(_ context.Context, ttl time.Duration, redisConfig string) Producer {
-	rProducer := &redis.RedisProducer{
+	rProducer := &redis.Producer{
 		Ttl: ttl,
 	}
 	rProducer.Initialize(redisConfig)
@@ -200,21 +200,21 @@ func createRedisProducer(_ context.Context, ttl time.Duration, redisConfig strin
 }
 
 func createMongoProducer(ctx context.Context, mongoConfig string) Producer {
-	mProducer := &mongoDB.MongoProducer{}
+	mProducer := &mongodb.MongoProducer{}
 	mProducer.Initialize(ctx, mongoConfig)
 
 	return mProducer
 }
 
 func createElasticProducer(_ context.Context, elasticConfig string) Producer {
-	eProducer := &elastic.ElasticProducer{}
+	eProducer := &elastic.Producer{}
 	eProducer.Initialize(elasticConfig)
 
 	return eProducer
 }
 
 func createS3Producer(ctx context.Context, s3Config string) Producer {
-	sProducer := &s3.S3Producer{}
+	sProducer := &s3.Producer{}
 	sProducer.Initialize(ctx, s3Config)
 
 	return sProducer
@@ -242,7 +242,7 @@ func createAZCosmosDBProducer(_ context.Context, azConfig string) Producer {
 }
 
 func createGCSProducer(ctx context.Context, gcsConfig string) Producer {
-	gProducer := &gcs.GCSProducer{}
+	gProducer := &gcs.Producer{}
 	gProducer.Initialize(ctx, gcsConfig)
 
 	return gProducer
@@ -269,9 +269,9 @@ func createLUAScriptProducer(_ context.Context, config string) Producer {
 	return producer
 }
 
-func createKafkaProducer(_ context.Context, conf configuration.GlobalConfiguration, topic string, templateType string) *kafka.KafkaManager {
+func createKafkaProducer(ctx context.Context, conf configuration.GlobalConfiguration, topic string, templateType string) *kafka.Manager {
 
-	kManager := &kafka.KafkaManager{
+	kManager := &kafka.Manager{
 		Serializer:   conf.Serializer,
 		Topic:        topic,
 		TemplateType: templateType,
@@ -283,7 +283,7 @@ func createKafkaProducer(_ context.Context, conf configuration.GlobalConfigurati
 		kManager.InitializeSchemaRegistry(conf.RegistryConfig)
 	}
 	if conf.AutoCreate {
-		kManager.CreateTopic(topic)
+		kManager.CreateTopic(ctx, topic)
 	}
 	return kManager
 }

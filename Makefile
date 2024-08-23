@@ -89,7 +89,7 @@ vet:
 	go vet
 
 lint:
-	golangci-lint run --enable-all
+	golangci-lint run --config .localci/lint/golangci.yml --out-format tab
 
 help: hello
 	@echo ''

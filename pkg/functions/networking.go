@@ -36,7 +36,7 @@ func Ip(cidr string) string {
 
 GENERATE:
 
-	ip, ipnet, err := net.ParseCIDR(cidr)
+	_, ipnet, err := net.ParseCIDR(cidr)
 	if err != nil {
 		return "0.0.0.0"
 	}
@@ -56,7 +56,7 @@ GENERATE:
 			r[i] = ipnet.IP[i]
 		}
 	}
-	ip = net.IPv4(r[0], r[1], r[2], r[3])
+	ip := net.IPv4(r[0], r[1], r[2], r[3])
 
 	if ip.Equal(ipnet.IP) /*|| Ip.Equal(broadcast) */ {
 		goto GENERATE

@@ -365,8 +365,7 @@ func readConfig(configFile string) map[string]string {
 }
 
 func convertInKafkaConfig(m map[string]string) kafka.ConfigMap {
-	var conf kafka.ConfigMap
-	conf = make(map[string]kafka.ConfigValue)
+	conf := make(map[string]kafka.ConfigValue)
 	for k, v := range m {
 		conf[k] = v
 	}

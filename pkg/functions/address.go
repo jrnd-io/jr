@@ -55,10 +55,10 @@ func Cardinal(short bool) string {
 	if short {
 		directions := []string{"N", "S", "E", "O", "NE", "NO", "SE", "SO"}
 		return directions[Random.Intn(len(directions))]
-	} else {
-		directions := []string{"North", "South", "East", "Ovest", "North-East", "North-Ovest", "South-East", "South-Ovest"}
-		return directions[Random.Intn(len(directions))]
 	}
+
+	directions := []string{"North", "South", "East", "Ovest", "North-East", "North-Ovest", "South-East", "South-Ovest"}
+	return directions[Random.Intn(len(directions))]
 }
 
 // City returns a random City
@@ -79,9 +79,9 @@ func Country() string {
 	countryIndex := ctx.JrContext.CountryIndex
 	if countryIndex == -1 {
 		return Word("country")
-	} else {
-		return WordAt("country", countryIndex)
 	}
+
+	return WordAt("country", countryIndex)
 }
 
 // CountryRandom returns a random ISO 3166 Country
@@ -163,9 +163,9 @@ func Zip() string {
 		z := Word("zip")
 		zip, _ := Regex(z)
 		return zip
-	} else {
-		return ZipAt(cityIndex)
 	}
+
+	return ZipAt(cityIndex)
 }
 
 // ZipAt returns Zip code at given index

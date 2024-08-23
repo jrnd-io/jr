@@ -27,9 +27,9 @@ func CountryCode() string {
 	countryIndex := ctx.JrContext.CountryIndex
 	if countryIndex == -1 {
 		return Word("country_code")
-	} else {
-		return WordAt("country_code", countryIndex)
 	}
+
+	return WordAt("country_code", countryIndex)
 }
 
 // CountryCodeAt returns a Country Code prefix at a given index
@@ -54,10 +54,9 @@ func Phone() string {
 		l := Word("phone")
 		lp, _ := Regex(l)
 		return lp
-	} else {
-		return PhoneAt(cityIndex)
 	}
 
+	return PhoneAt(cityIndex)
 }
 
 // PhoneAt returns a land prefix at a given index
@@ -74,9 +73,9 @@ func MobilePhone() string {
 		m := Word("mobile_phone")
 		mp, _ := Regex(m)
 		return mp
-	} else {
-		return MobilePhoneAt(countryIndex)
 	}
+
+	return MobilePhoneAt(countryIndex)
 }
 
 // MobilePhoneAt returns a mobile phone at a given index

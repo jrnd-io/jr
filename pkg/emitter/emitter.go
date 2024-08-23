@@ -105,10 +105,10 @@ func (e *Emitter) Initialize(ctx context.Context, conf configuration.GlobalConfi
 	if e.Output == "kafka" {
 		e.Producer = createKafkaProducer(ctx, conf, e.Topic, templateName)
 		return
-	} else {
-		if conf.SchemaRegistry {
-			log.Warn().Msg("Ignoring schemaRegistry and/or serializer when output not set to kafka")
-		}
+	}
+
+	if conf.SchemaRegistry {
+		log.Warn().Msg("Ignoring schemaRegistry and/or serializer when output not set to kafka")
 	}
 
 	if e.Output == "redis" {

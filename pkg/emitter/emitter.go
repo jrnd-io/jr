@@ -40,7 +40,7 @@ import (
 	"github.com/jrnd-io/jr/pkg/producers/http"
 	"github.com/jrnd-io/jr/pkg/producers/kafka"
 	"github.com/jrnd-io/jr/pkg/producers/luascript"
-	"github.com/jrnd-io/jr/pkg/producers/mongoDB"
+	"github.com/jrnd-io/jr/pkg/producers/mongodb"
 	"github.com/jrnd-io/jr/pkg/producers/redis"
 	"github.com/jrnd-io/jr/pkg/producers/s3"
 	"github.com/jrnd-io/jr/pkg/producers/server"
@@ -200,7 +200,7 @@ func createRedisProducer(_ context.Context, ttl time.Duration, redisConfig strin
 }
 
 func createMongoProducer(ctx context.Context, mongoConfig string) Producer {
-	mProducer := &mongoDB.MongoProducer{}
+	mProducer := &mongodb.MongoProducer{}
 	mProducer.Initialize(ctx, mongoConfig)
 
 	return mProducer

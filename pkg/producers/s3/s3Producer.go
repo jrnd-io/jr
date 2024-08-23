@@ -38,12 +38,12 @@ type Config struct {
 	Bucket string `json:"bucket"`
 }
 
-type S3Producer struct {
+type Producer struct {
 	client *s3.Client
 	bucket string
 }
 
-func (p *S3Producer) Initialize(ctx context.Context, configFile string) {
+func (p *Producer) Initialize(ctx context.Context, configFile string) {
 	var config Config
 	file, err := os.ReadFile(configFile)
 	if err != nil {
@@ -65,7 +65,7 @@ func (p *S3Producer) Initialize(ctx context.Context, configFile string) {
 	p.bucket = config.Bucket
 }
 
-func (p *S3Producer) Produce(ctx context.Context, k []byte, v []byte, _ any) {
+func (p *Producer) Produce(ctx context.Context, k []byte, v []byte, _ any) {
 
 	bucket := p.bucket
 	var key string
@@ -89,7 +89,7 @@ func (p *S3Producer) Produce(ctx context.Context, k []byte, v []byte, _ any) {
 	}
 }
 
-func (p *S3Producer) Close(_ context.Context) error {
+func (p *Producer) Close(_ context.Context) error {
 	log.Warn().Msg("S3 Client doesn't provide a close method!")
 	return nil
 }

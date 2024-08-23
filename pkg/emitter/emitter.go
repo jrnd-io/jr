@@ -98,7 +98,7 @@ func (e *Emitter) Initialize(ctx context.Context, conf configuration.GlobalConfi
 
 	o, _ := tpl.NewTpl("out", e.OutputTemplate, functions.FunctionsMap(), nil)
 	if e.Output == "stdout" {
-		e.Producer = &console.ConsoleProducer{OutputTpl: &o}
+		e.Producer = &console.Producer{OutputTpl: &o}
 		return
 	}
 
@@ -192,7 +192,7 @@ func (e *Emitter) Run(num int, o any) {
 }
 
 func createRedisProducer(_ context.Context, ttl time.Duration, redisConfig string) Producer {
-	rProducer := &redis.RedisProducer{
+	rProducer := &redis.Producer{
 		Ttl: ttl,
 	}
 	rProducer.Initialize(redisConfig)
@@ -207,14 +207,14 @@ func createMongoProducer(ctx context.Context, mongoConfig string) Producer {
 }
 
 func createElasticProducer(_ context.Context, elasticConfig string) Producer {
-	eProducer := &elastic.ElasticProducer{}
+	eProducer := &elastic.Producer{}
 	eProducer.Initialize(elasticConfig)
 
 	return eProducer
 }
 
 func createS3Producer(ctx context.Context, s3Config string) Producer {
-	sProducer := &s3.S3Producer{}
+	sProducer := &s3.Producer{}
 	sProducer.Initialize(ctx, s3Config)
 
 	return sProducer
@@ -242,7 +242,7 @@ func createAZCosmosDBProducer(_ context.Context, azConfig string) Producer {
 }
 
 func createGCSProducer(ctx context.Context, gcsConfig string) Producer {
-	gProducer := &gcs.GCSProducer{}
+	gProducer := &gcs.Producer{}
 	gProducer.Initialize(ctx, gcsConfig)
 
 	return gProducer
@@ -269,9 +269,9 @@ func createLUAScriptProducer(_ context.Context, config string) Producer {
 	return producer
 }
 
-func createKafkaProducer(_ context.Context, conf configuration.GlobalConfiguration, topic string, templateType string) *kafka.KafkaManager {
+func createKafkaProducer(_ context.Context, conf configuration.GlobalConfiguration, topic string, templateType string) *kafka.Manager {
 
-	kManager := &kafka.KafkaManager{
+	kManager := &kafka.Manager{
 		Serializer:   conf.Serializer,
 		Topic:        topic,
 		TemplateType: templateType,

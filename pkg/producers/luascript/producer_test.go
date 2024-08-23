@@ -43,7 +43,7 @@ func TestProducer(t *testing.T) {
 	for _, tc := range testCases {
 		someJson := `{"key": "value"}`
 
-		t.Run(tc.name, func(t *testing.T) {
+		t.Run(tc.name, func(_ *testing.T) {
 			p := &luascript.Producer{}
 			p.InitializeFromConfig(tc.config)
 			p.Produce(context.TODO(), []byte("somekey"), []byte(someJson), nil)

@@ -49,7 +49,7 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-type KafkaManager struct {
+type Manager struct {
 	producer       *kafka.Producer
 	admin          *kafka.AdminClient
 	schema         schemaregistry.Client
@@ -60,7 +60,7 @@ type KafkaManager struct {
 	fleEnabled     bool
 }
 
-func (k *KafkaManager) Initialize(configFile string) {
+func (k *Manager) Initialize(configFile string) {
 
 	var err error
 	conf := convertInKafkaConfig(readConfig(configFile))
@@ -74,7 +74,7 @@ func (k *KafkaManager) Initialize(configFile string) {
 	}
 }
 
-func (k *KafkaManager) InitializeSchemaRegistry(configFile string) {
+func (k *Manager) InitializeSchemaRegistry(configFile string) {
 	var err error
 	conf := readConfig(configFile)
 
@@ -94,7 +94,7 @@ func (k *KafkaManager) InitializeSchemaRegistry(configFile string) {
 	k.schemaRegistry = true
 }
 
-func verifyCSFLE(conf map[string]string, k *KafkaManager) {
+func verifyCSFLE(conf map[string]string, k *Manager) {
 	if conf["kekName"] != "" && conf["kmsType"] != "" && conf["kmsKeyID"] != "" {
 		registerProviders()
 
@@ -178,14 +178,14 @@ func registerProviders() {
 	encryption.Register()
 }
 
-func (k *KafkaManager) Close(_ context.Context) error {
+func (k *Manager) Close(_ context.Context) error {
 	k.admin.Close()
 	k.producer.Flush(15 * 1000)
 	k.producer.Close()
 	return nil
 }
 
-func (k *KafkaManager) Produce(_ context.Context, key []byte, data []byte, _ any) {
+func (k *Manager) Produce(_ context.Context, key []byte, data []byte, _ any) {
 
 	go listenToEventsFrom(k.producer, k.Topic)
 
@@ -254,11 +254,11 @@ func (k *KafkaManager) Produce(_ context.Context, key []byte, data []byte, _ any
 
 }
 
-func (k *KafkaManager) CreateTopic(topic string) {
+func (k *Manager) CreateTopic(topic string) {
 	k.CreateTopicFull(topic, 6, 3)
 }
 
-func (k *KafkaManager) CreateTopicFull(topic string, partitions int, rf int) {
+func (k *Manager) CreateTopicFull(topic string, partitions int, rf int) {
 
 	// Contexts are used to abort or limit the amount of time
 	// the Admin call blocks waiting for a result.

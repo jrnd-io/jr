@@ -39,20 +39,20 @@ const STAR = "*"
 const NEW_LINE = '\n'
 const PLUS = "+"
 
-type RedisConfig struct {
+type Config struct {
 	Host     string `json:"host"`
 	Port     string `json:"port"`
 	Username string `json:"username"`
 	Password string `json:"password"`
 }
 
-type RedisClient struct {
-	config RedisConfig
+type Client struct {
+	config Config
 	conn   net.Conn
 }
 
-func InitializeJsonWriter(filename string) (RedisConfig, error) {
-	var config RedisConfig
+func InitializeJsonWriter(filename string) (Config, error) {
+	var config Config
 	data, err := os.ReadFile(filename)
 	if err != nil {
 		return config, err
@@ -66,7 +66,7 @@ func InitializeJsonWriter(filename string) (RedisConfig, error) {
 	return config, nil
 }
 
-func (r *RedisClient) Connect() error {
+func (r *Client) Connect() error {
 	addr := fmt.Sprintf("%s:%s", r.config.Host, r.config.Port)
 	conn, err := net.Dial("tcp", addr)
 	if err != nil {
@@ -101,11 +101,11 @@ func (r *RedisClient) Connect() error {
 	return nil
 }
 
-func (r *RedisClient) Disconnect() {
+func (r *Client) Disconnect() {
 	r.conn.Close()
 }
 
-func (r *RedisClient) Set(key, value, path string) error {
+func (r *Client) Set(key, value, path string) error {
 	args := make([]string, 4)
 	args[0] = JSON_SET
 	args[1] = key
@@ -140,7 +140,7 @@ func (r *RedisClient) Set(key, value, path string) error {
 	return nil
 }
 
-func (r *RedisClient) Get(key, path string) (string, error) {
+func (r *Client) Get(key, path string) (string, error) {
 	args := make([]string, 2, 3)
 	args[0] = JSON_GET
 	args[1] = key

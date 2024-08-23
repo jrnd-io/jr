@@ -32,7 +32,7 @@ func TestConnectAndClose(t *testing.T) {
 		t.Fatalf("Error reading configuration file: %v", err)
 	}
 
-	client := RedisClient{config: config}
+	client := Client{config: config}
 
 	err = client.Connect()
 	if err != nil {
@@ -49,7 +49,7 @@ func TestSetAndGet(t *testing.T) {
 		t.Fatalf("Error reading configuration file: %v", err)
 	}
 
-	client := RedisClient{config: options}
+	client := Client{config: options}
 
 	err = client.Connect()
 	if err != nil {

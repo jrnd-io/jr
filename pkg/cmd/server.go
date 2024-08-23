@@ -387,11 +387,11 @@ func loadLastStatus(w http.ResponseWriter, r *http.Request) {
 	response.WriteString("{")
 
 	session := r.Context().Value(sessionKey).(*sessions.Session)
-	lastTemplateSubmittedValue_without_type, _ := session.Values["lastTemplateSubmittedValue"]
-	lastTemplateSubmittedValue, _ := lastTemplateSubmittedValue_without_type.(string)
+	lastTemplateSubmittedValue_without_type := session.Values["lastTemplateSubmittedValue"]
+	lastTemplateSubmittedValue := lastTemplateSubmittedValue_without_type.(string)
 
-	lastTemplateSubmittedisJsonOutputValue_without_type, _ := session.Values["lastTemplateSubmittedisJsonOutputValue"]
-	lastTemplateSubmittedisJsonOutputValue, _ := lastTemplateSubmittedisJsonOutputValue_without_type.(string)
+	lastTemplateSubmittedisJsonOutputValue_without_type := session.Values["lastTemplateSubmittedisJsonOutputValue"]
+	lastTemplateSubmittedisJsonOutputValue := lastTemplateSubmittedisJsonOutputValue_without_type.(string)
 
 	lastTemplateSubmittedValueB64 := base64.StdEncoding.EncodeToString([]byte(lastTemplateSubmittedValue))
 

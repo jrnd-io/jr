@@ -159,7 +159,17 @@ var serverCmd = &cobra.Command{
 
 		addr := fmt.Sprintf(":%d", port)
 		log.Info().Int("port", port).Msg("Starting HTTP server")
-		log.Fatal().Err(http.ListenAndServe(addr, router))
+
+		// TODO: must validate values
+		s := &http.Server{
+			Addr:              addr,
+			ReadHeaderTimeout: 20 * time.Second,
+			ReadTimeout:       1 * time.Minute,
+			WriteTimeout:      2 * time.Minute,
+			Handler:           router,
+		}
+
+		log.Fatal().Err(s.ListenAndServe())
 	},
 }
 

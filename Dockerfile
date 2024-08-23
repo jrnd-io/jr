@@ -25,3 +25,5 @@ COPY --from=builder /go/src/github.com/jrnd-io/jr/pkg/producers/kafka/*.example 
 COPY --from=builder /go/src/github.com/jrnd-io/jr/build/jr /bin
 
 USER jr
+
+ENV JR_SYSTEM_DIR=/home/jr/.jr

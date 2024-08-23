@@ -23,6 +23,7 @@ package redis
 import (
 	"bufio"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net"
 	"os"
@@ -38,20 +39,20 @@ const STAR = "*"
 const NEW_LINE = '\n'
 const PLUS = "+"
 
-type RedisConfig struct {
+type Config struct {
 	Host     string `json:"host"`
 	Port     string `json:"port"`
 	Username string `json:"username"`
 	Password string `json:"password"`
 }
 
-type RedisClient struct {
-	config RedisConfig
+type Client struct {
+	config Config
 	conn   net.Conn
 }
 
-func InitializeJsonWriter(filename string) (RedisConfig, error) {
-	var config RedisConfig
+func InitializeJsonWriter(filename string) (Config, error) {
+	var config Config
 	data, err := os.ReadFile(filename)
 	if err != nil {
 		return config, err
@@ -65,7 +66,7 @@ func InitializeJsonWriter(filename string) (RedisConfig, error) {
 	return config, nil
 }
 
-func (r *RedisClient) Connect() error {
+func (r *Client) Connect() error {
 	addr := fmt.Sprintf("%s:%s", r.config.Host, r.config.Port)
 	conn, err := net.Dial("tcp", addr)
 	if err != nil {
@@ -92,7 +93,7 @@ func (r *RedisClient) Connect() error {
 		if strings.HasPrefix(authResponse, "-") {
 			msg := fmt.Sprint("Authentication failed:", strings.TrimSpace(authResponse[1:]))
 			fmt.Println(msg)
-			return fmt.Errorf(msg)
+			return errors.New(msg)
 		}
 	}
 
@@ -100,11 +101,11 @@ func (r *RedisClient) Connect() error {
 	return nil
 }
 
-func (r *RedisClient) Disconnect() {
+func (r *Client) Disconnect() {
 	r.conn.Close()
 }
 
-func (r *RedisClient) Set(key, value, path string) error {
+func (r *Client) Set(key, value, path string) error {
 	args := make([]string, 4)
 	args[0] = JSON_SET
 	args[1] = key
@@ -133,19 +134,19 @@ func (r *RedisClient) Set(key, value, path string) error {
 
 	if !strings.HasPrefix(response, PLUS) {
 		msg := fmt.Sprintf("Unexpected response from Redis: %s", response)
-		return fmt.Errorf(msg)
+		return errors.New(msg)
 	}
 
 	return nil
 }
 
-func (r *RedisClient) Get(key, path string) (string, error) {
+func (r *Client) Get(key, path string) (string, error) {
 	args := make([]string, 2, 3)
 	args[0] = JSON_GET
 	args[1] = key
 
 	if path != "" {
-		args[2] = path
+		args = append(args, path)
 	}
 
 	setCmd := fmt.Sprint(STAR, len(args), CRLF)
@@ -166,7 +167,7 @@ func (r *RedisClient) Get(key, path string) (string, error) {
 
 	if !strings.HasPrefix(response, DOLLAR) {
 		msg := fmt.Sprintf("Unexpected response from Redis: %s", response)
-		return msg, fmt.Errorf(msg)
+		return msg, errors.New(msg)
 	}
 
 	valueLen, err := strconv.Atoi(response[1 : len(response)-2])

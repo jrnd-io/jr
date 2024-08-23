@@ -57,7 +57,8 @@ func doList(cmd *cobra.Command, args []string) {
 	isMarkdown, _ := cmd.Flags().GetBool("markdown")
 	noColor, _ := cmd.Flags().GetBool("nocolor")
 
-	if category && len(args) > 0 {
+	switch {
+	case category && len(args) > 0:
 		var functionNames []string
 		for k, v := range functions.DescriptionMap() {
 			if v.Category == args[0] {
@@ -65,7 +66,7 @@ func doList(cmd *cobra.Command, args []string) {
 			}
 		}
 		sortAndPrint(functionNames, isMarkdown, noColor)
-	} else if find && len(args) > 0 {
+	case find && len(args) > 0:
 		var functionNames []string
 		for k, v := range functions.DescriptionMap() {
 			if strings.Contains(v.Description, args[0]) || strings.Contains(v.Name, args[0]) {
@@ -73,8 +74,7 @@ func doList(cmd *cobra.Command, args []string) {
 			}
 		}
 		sortAndPrint(functionNames, isMarkdown, noColor)
-	} else if len(args) == 1 {
-
+	case len(args) == 1:
 		if run {
 			f, found := printFunction(args[0], isMarkdown, noColor)
 			if found {
@@ -87,9 +87,7 @@ func doList(cmd *cobra.Command, args []string) {
 		} else {
 			printFunction(args[0], isMarkdown, noColor)
 		}
-	} else {
-
-		//l := len(functions.FunctionsMap())
+	default:
 		l := len(functions.DescriptionMap())
 		functionNames := make([]string, l)
 
@@ -101,6 +99,7 @@ func doList(cmd *cobra.Command, args []string) {
 		sortAndPrint(functionNames, isMarkdown, noColor)
 
 	}
+
 	fmt.Println()
 }
 
@@ -108,7 +107,7 @@ func sortAndPrint(functionNames []string, isMarkdown bool, noColor bool) {
 	slices.Sort(functionNames)
 	for _, k := range functionNames {
 		printFunction(k, isMarkdown, noColor)
-		//fmt.Println(k)
+		// fmt.Println(k)
 	}
 	fmt.Println()
 	fmt.Printf("Total functions: %d\n", len(functionNames))
@@ -124,34 +123,37 @@ func printFunction(name string, isMarkdown bool, noColor bool) (functions.Functi
 		Reset = "\033[0m"
 	}
 
-	if found {
-		if isMarkdown {
-			fmt.Println()
-			fmt.Printf("### %s \n", f.Name)
-			fmt.Printf("**Category:** %s\\\n", f.Category)
-			fmt.Printf("**Description:** %s\\\n", f.Description)
-
-			if len(f.Parameters) > 0 {
-				fmt.Printf("**Parameters:** `%s`\\\n", f.Parameters)
-			} else {
-				fmt.Printf("**Parameters:** %s \\\n", f.Parameters)
-			}
-			fmt.Printf("**Localizable:** `%v`\\\n", f.Localizable)
-			fmt.Printf("**Return:** `%s`\\\n", f.Return)
-			fmt.Printf("**Example:** `%s`\\\n", f.Example)
-			fmt.Printf("**Output:** `%s`\n", f.Output)
-		} else {
-			fmt.Println()
-			fmt.Printf("%sName: %s%s\n", Cyan, Reset, f.Name)
-			fmt.Printf("%sCategory: %s%s\n", Cyan, Reset, f.Category)
-			fmt.Printf("%sDescription: %s%s\n", Cyan, Reset, f.Description)
-			fmt.Printf("%sParameters: %s%s\n", Cyan, Reset, f.Parameters)
-			fmt.Printf("%sLocalizable: %s%v\n", Cyan, Reset, f.Localizable)
-			fmt.Printf("%sReturn: %s%s\n", Cyan, Reset, f.Return)
-			fmt.Printf("%sExample: %s%s\n", Cyan, Reset, f.Example)
-			fmt.Printf("%sOutput: %s%s\n", Cyan, Reset, f.Output)
-		}
+	if !found {
+		return f, found
 	}
+
+	if isMarkdown {
+		fmt.Println()
+		fmt.Printf("### %s \n", f.Name)
+		fmt.Printf("**Category:** %s\\\n", f.Category)
+		fmt.Printf("**Description:** %s\\\n", f.Description)
+
+		if len(f.Parameters) > 0 {
+			fmt.Printf("**Parameters:** `%s`\\\n", f.Parameters)
+		} else {
+			fmt.Printf("**Parameters:** %s \\\n", f.Parameters)
+		}
+		fmt.Printf("**Localizable:** `%v`\\\n", f.Localizable)
+		fmt.Printf("**Return:** `%s`\\\n", f.Return)
+		fmt.Printf("**Example:** `%s`\\\n", f.Example)
+		fmt.Printf("**Output:** `%s`\n", f.Output)
+	} else {
+		fmt.Println()
+		fmt.Printf("%sName: %s%s\n", Cyan, Reset, f.Name)
+		fmt.Printf("%sCategory: %s%s\n", Cyan, Reset, f.Category)
+		fmt.Printf("%sDescription: %s%s\n", Cyan, Reset, f.Description)
+		fmt.Printf("%sParameters: %s%s\n", Cyan, Reset, f.Parameters)
+		fmt.Printf("%sLocalizable: %s%v\n", Cyan, Reset, f.Localizable)
+		fmt.Printf("%sReturn: %s%s\n", Cyan, Reset, f.Return)
+		fmt.Printf("%sExample: %s%s\n", Cyan, Reset, f.Example)
+		fmt.Printf("%sOutput: %s%s\n", Cyan, Reset, f.Output)
+	}
+
 	return f, found
 
 }

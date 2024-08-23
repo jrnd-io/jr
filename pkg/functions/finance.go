@@ -121,7 +121,7 @@ func Swift() string {
 	location := rand.Intn(100)
 	branch := rand.Intn(1000)
 
-	return string(bankCode) + string(country) + fmt.Sprintf("%02d", location) + fmt.Sprintf("%03d", branch)
+	return string(bankCode) + country + fmt.Sprintf("%02d", location) + fmt.Sprintf("%03d", branch)
 
 }
 

@@ -49,7 +49,7 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-type KafkaManager struct {
+type Manager struct {
 	producer       *kafka.Producer
 	admin          *kafka.AdminClient
 	schema         schemaregistry.Client
@@ -60,7 +60,7 @@ type KafkaManager struct {
 	fleEnabled     bool
 }
 
-func (k *KafkaManager) Initialize(configFile string) {
+func (k *Manager) Initialize(configFile string) {
 
 	var err error
 	conf := convertInKafkaConfig(readConfig(configFile))
@@ -74,7 +74,7 @@ func (k *KafkaManager) Initialize(configFile string) {
 	}
 }
 
-func (k *KafkaManager) InitializeSchemaRegistry(configFile string) {
+func (k *Manager) InitializeSchemaRegistry(configFile string) {
 	var err error
 	conf := readConfig(configFile)
 
@@ -94,80 +94,82 @@ func (k *KafkaManager) InitializeSchemaRegistry(configFile string) {
 	k.schemaRegistry = true
 }
 
-func verifyCSFLE(conf map[string]string, k *KafkaManager) {
-	if conf["kekName"] != "" && conf["kmsType"] != "" && conf["kmsKeyID"] != "" {
-		registerProviders()
-
-		// load avro schema file: CSFLE requires schema registration
-		_, currentFilePath, _, _ := runtime.Caller(0)
-		currentDir := filepath.Dir(currentFilePath)
-		filePath := filepath.Join(currentDir, "../../types/"+k.TemplateType+".avsc")
-		file, err := os.Open(filePath)
-		if err != nil {
-			log.Fatal().Err(err).Msg("Failed to open file")
-		}
-		defer file.Close()
-
-		content, err := io.ReadAll(file)
-		if err != nil {
-			log.Fatal().Err(err).Msg("Failed to read file")
-		}
-		contentString := string(content)
-
-		// check presence of PII in schema
-		substring := `"confluent:tags": [ "PII" ]`
-		normalizedJSON := normalizeWhitespace(contentString)
-		normalizedSubstring := normalizeWhitespace(substring)
-
-		if strings.Contains(normalizedJSON, normalizedSubstring) {
-			// upper-casing the first letter of the fields --> name - required by https://pkg.go.dev/github.com/actgardner/gogen-avro#readme-naming
-			re := regexp.MustCompile(`"name"\s*:\s*"([^"]+)"`)
-			result := re.ReplaceAllStringFunc(contentString, func(match string) string {
-				// extract the name part after "name: "
-				parts := re.FindStringSubmatch(match)
-				fmt.Print(len(parts))
-				if len(parts) > 1 {
-					name := parts[1]
-					// capitalize the first letter of the name
-					capitalized := capitalizeFirstLetter(name)
-					// replace the original match with the new capitalized version
-					return "\"name\":" + "\"" + capitalized + "\""
-				}
-				return match
-			})
-
-			// register the avro schema adding rule set: PII
-			schema := schemaregistry.SchemaInfo{
-				Schema:     result,
-				SchemaType: "AVRO",
-				RuleSet: &schemaregistry.RuleSet{
-					DomainRules: []schemaregistry.Rule{
-						{
-							Name: "encryptPII",
-							Kind: "TRANSFORM",
-							Mode: "WRITEREAD",
-							Type: "ENCRYPT",
-							Tags: []string{"PII"},
-							Params: map[string]string{
-								"encrypt.kek.name":   conf["kekName"],
-								"encrypt.kms.type":   conf["kmsType"],
-								"encrypt.kms.key.id": conf["kmsKeyID"],
-							},
-							OnFailure: "ERROR,NONE",
-						},
-					},
-				},
-			}
-			_, err = k.schema.Register(k.Topic+"-value", schema, true)
-			if err != nil {
-				log.Fatal().Err(err).Msg("Failed to register schema")
-			}
-
-			k.fleEnabled = true
-
-		}
-
+func verifyCSFLE(conf map[string]string, k *Manager) {
+	if conf["kekName"] == "" || conf["kmsType"] == "" || conf["kmsKeyID"] == "" {
+		return
 	}
+
+	registerProviders()
+
+	// load avro schema file: CSFLE requires schema registration
+	_, currentFilePath, _, _ := runtime.Caller(0)
+	currentDir := filepath.Dir(currentFilePath)
+	filePath := filepath.Join(currentDir, "../../types/"+k.TemplateType+".avsc")
+	file, err := os.Open(filePath)
+	if err != nil {
+		log.Fatal().Err(err).Msg("Failed to open file")
+	}
+	defer file.Close()
+
+	content, err := io.ReadAll(file)
+	if err != nil {
+		log.Fatal().Err(err).Msg("Failed to read file")
+	}
+	contentString := string(content)
+
+	// check presence of PII in schema
+	substring := `"confluent:tags": [ "PII" ]`
+	normalizedJSON := normalizeWhitespace(contentString)
+	normalizedSubstring := normalizeWhitespace(substring)
+
+	if !strings.Contains(normalizedJSON, normalizedSubstring) {
+		return
+	}
+
+	// upper-casing the first letter of the fields --> name - required by https://pkg.go.dev/github.com/actgardner/gogen-avro#readme-naming
+	re := regexp.MustCompile(`"name"\s*:\s*"([^"]+)"`)
+	result := re.ReplaceAllStringFunc(contentString, func(match string) string {
+		// extract the name part after "name: "
+		parts := re.FindStringSubmatch(match)
+		fmt.Print(len(parts))
+		if len(parts) > 1 {
+			name := parts[1]
+			// capitalize the first letter of the name
+			capitalized := capitalizeFirstLetter(name)
+			// replace the original match with the new capitalized version
+			return "\"name\":" + "\"" + capitalized + "\""
+		}
+		return match
+	})
+
+	// register the avro schema adding rule set: PII
+	schema := schemaregistry.SchemaInfo{
+		Schema:     result,
+		SchemaType: "AVRO",
+		RuleSet: &schemaregistry.RuleSet{
+			DomainRules: []schemaregistry.Rule{
+				{
+					Name: "encryptPII",
+					Kind: "TRANSFORM",
+					Mode: "WRITEREAD",
+					Type: "ENCRYPT",
+					Tags: []string{"PII"},
+					Params: map[string]string{
+						"encrypt.kek.name":   conf["kekName"],
+						"encrypt.kms.type":   conf["kmsType"],
+						"encrypt.kms.key.id": conf["kmsKeyID"],
+					},
+					OnFailure: "ERROR,NONE",
+				},
+			},
+		},
+	}
+	_, err = k.schema.Register(k.Topic+"-value", schema, true)
+	if err != nil {
+		log.Fatal().Err(err).Msg("Failed to register schema")
+	}
+
+	k.fleEnabled = true
 }
 
 func registerProviders() {
@@ -178,14 +180,14 @@ func registerProviders() {
 	encryption.Register()
 }
 
-func (k *KafkaManager) Close(_ context.Context) error {
+func (k *Manager) Close(_ context.Context) error {
 	k.admin.Close()
 	k.producer.Flush(15 * 1000)
 	k.producer.Close()
 	return nil
 }
 
-func (k *KafkaManager) Produce(_ context.Context, key []byte, data []byte, _ any) {
+func (k *Manager) Produce(_ context.Context, key []byte, data []byte, _ any) {
 
 	go listenToEventsFrom(k.producer, k.Topic)
 
@@ -254,15 +256,15 @@ func (k *KafkaManager) Produce(_ context.Context, key []byte, data []byte, _ any
 
 }
 
-func (k *KafkaManager) CreateTopic(topic string) {
-	k.CreateTopicFull(topic, 6, 3)
+func (k *Manager) CreateTopic(ctx context.Context, topic string) {
+	k.CreateTopicFull(ctx, topic, 6, 3)
 }
 
-func (k *KafkaManager) CreateTopicFull(topic string, partitions int, rf int) {
+func (k *Manager) CreateTopicFull(ctx context.Context, topic string, partitions int, rf int) {
 
 	// Contexts are used to abort or limit the amount of time
 	// the Admin call blocks waiting for a result.
-	ctx, cancel := context.WithCancel(context.Background())
+	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
 	// Create topics on cluster.
@@ -287,7 +289,7 @@ func (k *KafkaManager) CreateTopicFull(topic string, partitions int, rf int) {
 			log.Fatal().
 				Str("topic", result.Topic).
 				Str("code", result.Error.Code().String()).
-				Err(fmt.Errorf(result.Error.String())).
+				Err(result.Error).
 				Msg("Topic creation failed")
 		}
 	}
@@ -365,8 +367,7 @@ func readConfig(configFile string) map[string]string {
 }
 
 func convertInKafkaConfig(m map[string]string) kafka.ConfigMap {
-	var conf kafka.ConfigMap
-	conf = make(map[string]kafka.ConfigValue)
+	conf := make(map[string]kafka.ConfigValue)
 	for k, v := range m {
 		conf[k] = v
 	}

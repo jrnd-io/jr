@@ -12,7 +12,7 @@ apps:
   jr:
     command: bin/jr
     environment:
-      JR_HOME: $SNAP
+      JR_SYSTEM_DIR: $SNAP
     plugs:
       - home
 

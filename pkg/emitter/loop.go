@@ -24,7 +24,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/jrnd-io/jr/pkg/configuration"
-	"github.com/jrnd-io/jr/pkg/ctx"
+	jrctx "github.com/jrnd-io/jr/pkg/ctx"
 	"github.com/jrnd-io/jr/pkg/functions"
 	"os"
 	"os/signal"
@@ -66,12 +66,12 @@ func InitializeEmitters(ctx context.Context, emitters []Emitter, dryrun bool, em
 		}
 		emitters[i].Initialize(ctx, configuration.GlobalCfg)
 		emittersToRun = append(emittersToRun, emitters[i])
-		emitters[i].Run(emitters[i].Preload, nil)
+		emitters[i].Run(ctx, emitters[i].Preload, nil)
 	}
 	return emittersToRun
 }
 
-func DoLoop(es []Emitter) {
+func DoLoop(ctx context.Context, es []Emitter) {
 
 	for _, e := range es {
 		addEmitterToExpectedObjects(e)
@@ -105,14 +105,14 @@ func DoLoop(es []Emitter) {
 						stop()
 						return
 					case <-ticker.C:
-						doTemplate(es[index])
+						doTemplate(ctx, es[index])
 					case <-stopChannels[timerIndex]:
 						return
 					}
 
 				}
 			} else {
-				doTemplate(es[index])
+				doTemplate(ctx, es[index])
 			}
 		}(index)
 
@@ -124,12 +124,12 @@ func DoLoop(es []Emitter) {
 	wg.Wait()
 }
 
-func doTemplate(emitter Emitter) {
-	ctx.JrContext.Locale = emitter.Locale
-	ctx.JrContext.CountryIndex = functions.IndexOf(strings.ToUpper(emitter.Locale), "country")
+func doTemplate(ctx context.Context, emitter Emitter) {
+	jrctx.JrContext.Locale = emitter.Locale
+	jrctx.JrContext.CountryIndex = functions.IndexOf(strings.ToUpper(emitter.Locale), "country")
 
 	for i := 0; i < emitter.Num; i++ {
-		ctx.JrContext.CurrentIterationLoopIndex++
+		jrctx.JrContext.CurrentIterationLoopIndex++
 
 		k := emitter.KTpl.Execute()
 		v := emitter.VTpl.Execute()
@@ -139,13 +139,13 @@ func doTemplate(emitter Emitter) {
 		kInValue := functions.GetV("KEY")
 
 		if (kInValue) != "" {
-			emitter.Producer.Produce(context.TODO(), []byte(kInValue), []byte(v), nil)
+			emitter.Producer.Produce(ctx, []byte(kInValue), []byte(v), nil)
 		} else {
-			emitter.Producer.Produce(context.TODO(), []byte(k), []byte(v), nil)
+			emitter.Producer.Produce(ctx, []byte(k), []byte(v), nil)
 		}
 
-		ctx.JrContext.GeneratedObjects++
-		ctx.JrContext.GeneratedBytes += int64(len(v))
+		jrctx.JrContext.GeneratedObjects++
+		jrctx.JrContext.GeneratedBytes += int64(len(v))
 	}
 
 }
@@ -172,21 +172,21 @@ func addEmitterToExpectedObjects(e Emitter) {
 
 	if d > 0 && f > 0 && n > 0 {
 		expected := (d / f) * int64(n)
-		ctx.JrContext.ExpectedObjects += expected
+		jrctx.JrContext.ExpectedObjects += expected
 	}
 }
 
 func WriteStats() {
 	_, _ = fmt.Fprintln(os.Stderr)
-	elapsed := time.Since(ctx.JrContext.StartTime)
+	elapsed := time.Since(jrctx.JrContext.StartTime)
 	_, _ = fmt.Fprintf(os.Stderr, "Elapsed time: %v\n", elapsed.Round(1*time.Second))
-	_, _ = fmt.Fprintf(os.Stderr, "Data Generated (Objects): %d\n", ctx.JrContext.GeneratedObjects)
+	_, _ = fmt.Fprintf(os.Stderr, "Data Generated (Objects): %d\n", jrctx.JrContext.GeneratedObjects)
 
-	ungenerated := ctx.JrContext.ExpectedObjects - ctx.JrContext.GeneratedObjects
+	ungenerated := jrctx.JrContext.ExpectedObjects - jrctx.JrContext.GeneratedObjects
 	if ungenerated > 0 {
 		_, _ = fmt.Fprintf(os.Stderr, "Data NOT Generated (Objects): %d\n", ungenerated)
 	}
-	_, _ = fmt.Fprintf(os.Stderr, "Data Generated (bytes): %d\n", ctx.JrContext.GeneratedBytes)
-	_, _ = fmt.Fprintf(os.Stderr, "Throughput (bytes per second): %9.f\n", float64(ctx.JrContext.GeneratedBytes)/elapsed.Seconds())
+	_, _ = fmt.Fprintf(os.Stderr, "Data Generated (bytes): %d\n", jrctx.JrContext.GeneratedBytes)
+	_, _ = fmt.Fprintf(os.Stderr, "Throughput (bytes per second): %9.f\n", float64(jrctx.JrContext.GeneratedBytes)/elapsed.Seconds())
 	_, _ = fmt.Fprintln(os.Stderr)
 }

@@ -34,10 +34,10 @@ func Counter(c string, start, step int) int {
 	if exists {
 		ctx.JrContext.CtxCounters[c] = val + step
 		return ctx.JrContext.CtxCounters[c]
-	} else {
-		ctx.JrContext.CtxCounters[c] = start
-		return start
 	}
+
+	ctx.JrContext.CtxCounters[c] = start
+	return start
 }
 
 // Image generates a random Image url of given width, height and type
@@ -60,9 +60,9 @@ func RandomBool() string {
 	b := Random.Intn(2)
 	if b == 0 {
 		return "false"
-	} else {
-		return "true"
 	}
+
+	return "true"
 }
 
 // UniqueId returns a random uuid
@@ -75,9 +75,9 @@ func YesOrNo() string {
 	b := Random.Intn(2)
 	if b == 0 {
 		return "no"
-	} else {
-		return "yes"
 	}
+
+	return "yes"
 }
 
 // Contains checks if the str string is present in an array of string []string
@@ -105,8 +105,7 @@ func FromCsv(c string) string {
 
 	if len(ctx.JrContext.CtxCSV) > 0 {
 		return ctx.JrContext.CtxCSV[(ctx.JrContext.CurrentIterationLoopIndex-1)%len(ctx.JrContext.CtxCSV)][c]
-	} else {
-		return ""
 	}
 
+	return ""
 }

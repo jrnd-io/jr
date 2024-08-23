@@ -1,4 +1,4 @@
-VERSION=0.3.9
+VERSION=0.4.0
 GOVERSION=$(shell go version)
 USER=$(shell id -u -n)
 TIME=$(shell date)
@@ -89,7 +89,7 @@ vet:
 	go vet
 
 lint:
-	golangci-lint run --enable-all
+	golangci-lint run --config .localci/lint/golangci.yml --out-format tab
 
 help: hello
 	@echo ''

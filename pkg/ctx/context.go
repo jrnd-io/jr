@@ -25,7 +25,7 @@ import (
 	"time"
 )
 
-var JrContext Context
+var JrContext *Context
 
 // Context is the object passed on the templates which contains all the needed details.
 type Context struct {
@@ -50,7 +50,7 @@ type Context struct {
 
 func init() {
 
-	JrContext = Context{
+	JrContext = &Context{
 		StartTime:        time.Now(),
 		GeneratedBytes:   0,
 		GeneratedObjects: 0,

@@ -26,16 +26,16 @@ import (
 	"github.com/jrnd-io/jr/pkg/tpl"
 )
 
-type ConsoleProducer struct {
+type Producer struct {
 	OutputTpl *tpl.Tpl
 }
 
-func (c *ConsoleProducer) Close(_ context.Context) error {
+func (c *Producer) Close(_ context.Context) error {
 	// no need to close
 	return nil
 }
 
-func (c *ConsoleProducer) Produce(_ context.Context, key []byte, value []byte, _ any) {
+func (c *Producer) Produce(_ context.Context, key []byte, value []byte, _ any) {
 
 	data := struct {
 		K string

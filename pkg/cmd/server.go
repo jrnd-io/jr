@@ -90,6 +90,12 @@ var emitterToRun = make(map[string][]emitter.Emitter)
 
 var store = sessions.NewCookieStore([]byte("templates"))
 
+type serverKey string
+
+const (
+	sessionKey serverKey = "session"
+)
+
 var serverCmd = &cobra.Command{
 	Use:     "server",
 	Short:   "Starts the jr http server",
@@ -160,7 +166,7 @@ var serverCmd = &cobra.Command{
 func SessionMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		session, _ := store.Get(r, "session-name")
-		r = r.WithContext(context.WithValue(r.Context(), "session", session))
+		r = r.WithContext(context.WithValue(r.Context(), sessionKey, session))
 		next.ServeHTTP(w, r)
 	})
 }
@@ -380,7 +386,7 @@ func loadLastStatus(w http.ResponseWriter, r *http.Request) {
 
 	response.WriteString("{")
 
-	session := r.Context().Value("session").(*sessions.Session)
+	session := r.Context().Value(sessionKey).(*sessions.Session)
 	lastTemplateSubmittedValue_without_type, _ := session.Values["lastTemplateSubmittedValue"]
 	lastTemplateSubmittedValue, _ := lastTemplateSubmittedValue_without_type.(string)
 
@@ -412,7 +418,7 @@ func executeTemplate(w http.ResponseWriter, r *http.Request) {
 	var lastTemplateSubmittedValue = r.Form.Get("template")
 	var lastTemplateSubmittedisJsonOutputValue = r.Form.Get("isJsonOutput")
 
-	session := r.Context().Value("session").(*sessions.Session)
+	session := r.Context().Value(sessionKey).(*sessions.Session)
 	session.Values["lastTemplateSubmittedValue"] = lastTemplateSubmittedValue
 	session.Values["lastTemplateSubmittedisJsonOutputValue"] = lastTemplateSubmittedisJsonOutputValue
 	session.Save(r, w)

@@ -95,79 +95,81 @@ func (k *Manager) InitializeSchemaRegistry(configFile string) {
 }
 
 func verifyCSFLE(conf map[string]string, k *Manager) {
-	if conf["kekName"] != "" && conf["kmsType"] != "" && conf["kmsKeyID"] != "" {
-		registerProviders()
-
-		// load avro schema file: CSFLE requires schema registration
-		_, currentFilePath, _, _ := runtime.Caller(0)
-		currentDir := filepath.Dir(currentFilePath)
-		filePath := filepath.Join(currentDir, "../../types/"+k.TemplateType+".avsc")
-		file, err := os.Open(filePath)
-		if err != nil {
-			log.Fatal().Err(err).Msg("Failed to open file")
-		}
-		defer file.Close()
-
-		content, err := io.ReadAll(file)
-		if err != nil {
-			log.Fatal().Err(err).Msg("Failed to read file")
-		}
-		contentString := string(content)
-
-		// check presence of PII in schema
-		substring := `"confluent:tags": [ "PII" ]`
-		normalizedJSON := normalizeWhitespace(contentString)
-		normalizedSubstring := normalizeWhitespace(substring)
-
-		if strings.Contains(normalizedJSON, normalizedSubstring) {
-			// upper-casing the first letter of the fields --> name - required by https://pkg.go.dev/github.com/actgardner/gogen-avro#readme-naming
-			re := regexp.MustCompile(`"name"\s*:\s*"([^"]+)"`)
-			result := re.ReplaceAllStringFunc(contentString, func(match string) string {
-				// extract the name part after "name: "
-				parts := re.FindStringSubmatch(match)
-				fmt.Print(len(parts))
-				if len(parts) > 1 {
-					name := parts[1]
-					// capitalize the first letter of the name
-					capitalized := capitalizeFirstLetter(name)
-					// replace the original match with the new capitalized version
-					return "\"name\":" + "\"" + capitalized + "\""
-				}
-				return match
-			})
-
-			// register the avro schema adding rule set: PII
-			schema := schemaregistry.SchemaInfo{
-				Schema:     result,
-				SchemaType: "AVRO",
-				RuleSet: &schemaregistry.RuleSet{
-					DomainRules: []schemaregistry.Rule{
-						{
-							Name: "encryptPII",
-							Kind: "TRANSFORM",
-							Mode: "WRITEREAD",
-							Type: "ENCRYPT",
-							Tags: []string{"PII"},
-							Params: map[string]string{
-								"encrypt.kek.name":   conf["kekName"],
-								"encrypt.kms.type":   conf["kmsType"],
-								"encrypt.kms.key.id": conf["kmsKeyID"],
-							},
-							OnFailure: "ERROR,NONE",
-						},
-					},
-				},
-			}
-			_, err = k.schema.Register(k.Topic+"-value", schema, true)
-			if err != nil {
-				log.Fatal().Err(err).Msg("Failed to register schema")
-			}
-
-			k.fleEnabled = true
-
-		}
-
+	if conf["kekName"] == "" || conf["kmsType"] == "" || conf["kmsKeyID"] == "" {
+		return
 	}
+
+	registerProviders()
+
+	// load avro schema file: CSFLE requires schema registration
+	_, currentFilePath, _, _ := runtime.Caller(0)
+	currentDir := filepath.Dir(currentFilePath)
+	filePath := filepath.Join(currentDir, "../../types/"+k.TemplateType+".avsc")
+	file, err := os.Open(filePath)
+	if err != nil {
+		log.Fatal().Err(err).Msg("Failed to open file")
+	}
+	defer file.Close()
+
+	content, err := io.ReadAll(file)
+	if err != nil {
+		log.Fatal().Err(err).Msg("Failed to read file")
+	}
+	contentString := string(content)
+
+	// check presence of PII in schema
+	substring := `"confluent:tags": [ "PII" ]`
+	normalizedJSON := normalizeWhitespace(contentString)
+	normalizedSubstring := normalizeWhitespace(substring)
+
+	if !strings.Contains(normalizedJSON, normalizedSubstring) {
+		return
+	}
+
+	// upper-casing the first letter of the fields --> name - required by https://pkg.go.dev/github.com/actgardner/gogen-avro#readme-naming
+	re := regexp.MustCompile(`"name"\s*:\s*"([^"]+)"`)
+	result := re.ReplaceAllStringFunc(contentString, func(match string) string {
+		// extract the name part after "name: "
+		parts := re.FindStringSubmatch(match)
+		fmt.Print(len(parts))
+		if len(parts) > 1 {
+			name := parts[1]
+			// capitalize the first letter of the name
+			capitalized := capitalizeFirstLetter(name)
+			// replace the original match with the new capitalized version
+			return "\"name\":" + "\"" + capitalized + "\""
+		}
+		return match
+	})
+
+	// register the avro schema adding rule set: PII
+	schema := schemaregistry.SchemaInfo{
+		Schema:     result,
+		SchemaType: "AVRO",
+		RuleSet: &schemaregistry.RuleSet{
+			DomainRules: []schemaregistry.Rule{
+				{
+					Name: "encryptPII",
+					Kind: "TRANSFORM",
+					Mode: "WRITEREAD",
+					Type: "ENCRYPT",
+					Tags: []string{"PII"},
+					Params: map[string]string{
+						"encrypt.kek.name":   conf["kekName"],
+						"encrypt.kms.type":   conf["kmsType"],
+						"encrypt.kms.key.id": conf["kmsKeyID"],
+					},
+					OnFailure: "ERROR,NONE",
+				},
+			},
+		},
+	}
+	_, err = k.schema.Register(k.Topic+"-value", schema, true)
+	if err != nil {
+		log.Fatal().Err(err).Msg("Failed to register schema")
+	}
+
+	k.fleEnabled = true
 }
 
 func registerProviders() {

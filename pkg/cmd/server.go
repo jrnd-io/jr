@@ -348,22 +348,25 @@ func runEmitter(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	url := chi.URLParam(r, "emitter")
-	if firstRun[url] == false {
-		for i := 0; i < len(emitters); i++ {
-			if functions.Contains([]string{url}, emitters[i].Name) {
-				emitters[i].Initialize(r.Context(), configuration.GlobalCfg)
-				emitterToRun[url] = append(emitterToRun[url], emitters[i])
-				if emitters[i].Preload > 0 {
-					emitters[i].Run(r.Context(), emitters[i].Preload, w)
-				} else {
-					emitters[i].Run(r.Context(), emitters[i].Num, w)
-				}
-				firstRun[url] = true
-			}
-		}
-	} else {
+
+	if firstRun[url] {
 		for _, e := range emitterToRun[url] {
 			e.Run(r.Context(), e.Num, w)
+		}
+
+		return
+	}
+
+	for i := 0; i < len(emitters); i++ {
+		if functions.Contains([]string{url}, emitters[i].Name) {
+			emitters[i].Initialize(r.Context(), configuration.GlobalCfg)
+			emitterToRun[url] = append(emitterToRun[url], emitters[i])
+			if emitters[i].Preload > 0 {
+				emitters[i].Run(r.Context(), emitters[i].Preload, w)
+			} else {
+				emitters[i].Run(r.Context(), emitters[i].Num, w)
+			}
+			firstRun[url] = true
 		}
 	}
 

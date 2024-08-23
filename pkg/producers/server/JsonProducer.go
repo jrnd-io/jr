@@ -39,24 +39,25 @@ func (c *JsonProducer) Close(_ context.Context) error {
 
 func (c *JsonProducer) Produce(_ context.Context, key []byte, value []byte, o any) {
 
-	if o != nil {
-		respWriter := o.(http.ResponseWriter)
-		if string(key) != "null" {
-			_, err := (respWriter).Write(key)
-			if err != nil {
-				log.Error().Err(err).Msg("Error writing key")
-			}
-			_, err = (respWriter).Write([]byte(","))
-			if err != nil {
-				log.Error().Err(err).Msg("Error writing comma")
-			}
-		}
-		_, err := (respWriter).Write(value)
-		if err != nil {
-			log.Error().Err(err).Msg("Error writing value")
-		}
-	} else {
+	if o == nil {
 		log.Warn().Interface("o", o).Msg("Server producer must produce to a http.ResponseWriter")
+		return
+	}
+
+	respWriter := o.(http.ResponseWriter)
+	if string(key) != "null" {
+		_, err := (respWriter).Write(key)
+		if err != nil {
+			log.Error().Err(err).Msg("Error writing key")
+		}
+		_, err = (respWriter).Write([]byte(","))
+		if err != nil {
+			log.Error().Err(err).Msg("Error writing comma")
+		}
+	}
+	_, err := (respWriter).Write(value)
+	if err != nil {
+		log.Error().Err(err).Msg("Error writing value")
 	}
 
 }

@@ -39,24 +39,25 @@ func (c *Producer) Close(_ context.Context) error {
 
 func (c *Producer) Produce(_ context.Context, key []byte, value []byte, o any) {
 
-	if o != nil {
-		respWriter := o.(*bytes.Buffer)
-		if string(key) != "null" {
-			_, err := (respWriter).Write(key)
-			if err != nil {
-				log.Error().Err(err).Msg("Error writing key")
-			}
-			_, err = (respWriter).Write([]byte(","))
-			if err != nil {
-				log.Error().Err(err).Msg("Error writing comma")
-			}
-		}
-		_, err := (respWriter).Write(value)
-		if err != nil {
-			log.Error().Err(err).Msg("Error writing value")
-		}
-	} else {
+	if o == nil {
 		log.Warn().Interface("o", o).Msg("Test producer must produce to a bytes.Buffer")
+		return
+	}
+
+	respWriter := o.(*bytes.Buffer)
+	if string(key) != "null" {
+		_, err := (respWriter).Write(key)
+		if err != nil {
+			log.Error().Err(err).Msg("Error writing key")
+		}
+		_, err = (respWriter).Write([]byte(","))
+		if err != nil {
+			log.Error().Err(err).Msg("Error writing comma")
+		}
+	}
+	_, err := (respWriter).Write(value)
+	if err != nil {
+		log.Error().Err(err).Msg("Error writing value")
 	}
 
 }

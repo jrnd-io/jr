@@ -287,7 +287,7 @@ func (k *KafkaManager) CreateTopicFull(topic string, partitions int, rf int) {
 			log.Fatal().
 				Str("topic", result.Topic).
 				Str("code", result.Error.Code().String()).
-				Err(fmt.Errorf(result.Error.String())).
+				Err(result.Error).
 				Msg("Topic creation failed")
 		}
 	}

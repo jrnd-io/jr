@@ -23,6 +23,7 @@ package redis
 import (
 	"bufio"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net"
 	"os"
@@ -92,7 +93,7 @@ func (r *RedisClient) Connect() error {
 		if strings.HasPrefix(authResponse, "-") {
 			msg := fmt.Sprint("Authentication failed:", strings.TrimSpace(authResponse[1:]))
 			fmt.Println(msg)
-			return fmt.Errorf(msg)
+			return errors.New(msg)
 		}
 	}
 
@@ -133,7 +134,7 @@ func (r *RedisClient) Set(key, value, path string) error {
 
 	if !strings.HasPrefix(response, PLUS) {
 		msg := fmt.Sprintf("Unexpected response from Redis: %s", response)
-		return fmt.Errorf(msg)
+		return errors.New(msg)
 	}
 
 	return nil
@@ -166,7 +167,7 @@ func (r *RedisClient) Get(key, path string) (string, error) {
 
 	if !strings.HasPrefix(response, DOLLAR) {
 		msg := fmt.Sprintf("Unexpected response from Redis: %s", response)
-		return msg, fmt.Errorf(msg)
+		return msg, errors.New(msg)
 	}
 
 	valueLen, err := strconv.Atoi(response[1 : len(response)-2])

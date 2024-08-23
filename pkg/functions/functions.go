@@ -471,58 +471,59 @@ func initialize(filename string) []string {
 
 func InitCSV(csvpath string) {
 	// Loads the csv file in the context
-	if len(csvpath) > 0 {
-
-		var csvHeaders = make(map[int]string)
-		csvValues := make(map[int]map[string]string)
-
-		if _, err := os.Stat(csvpath); err != nil {
-			println("File does not exist: ", csvpath)
-			os.Exit(1)
-		}
-
-		file, err := os.Open(csvpath)
-
-		if err != nil {
-			println("Error opening file:", csvpath, "error:", err)
-			os.Exit(1)
-		} else {
-			reader := csv.NewReader(file)
-
-			lines, err := reader.ReadAll()
-			if err != nil {
-				println("Error reading CSV file:", csvpath, "error:", err)
-				os.Exit(1)
-			} else {
-
-				for row := 0; row < len(lines); row++ {
-					var aRow = lines[row]
-					for col := 0; col < len(aRow); col++ {
-						var value = aRow[col]
-						// print(" ROW -> ",row)
-						if row == 0 {
-							// print(" H: ", value)
-							csvHeaders[col] = strings.Trim(value, " ")
-						} else {
-
-							val, exists := csvValues[row-1]
-							if exists {
-								val[csvHeaders[col]] = strings.Trim(value, " ")
-								csvValues[row-1] = val
-							} else {
-								var localmap = make(map[string]string)
-								localmap[csvHeaders[col]] = strings.Trim(value, " ")
-								csvValues[row-1] = localmap
-							}
-							//	print(" V: ", value)
-						}
-					}
-					// println()
-				}
-				ctx.JrContext.CtxCSV = csvValues
-			}
-		}
-		defer file.Close()
+	if len(csvpath) == 0 {
+		return
 	}
 
+	var csvHeaders = make(map[int]string)
+	csvValues := make(map[int]map[string]string)
+
+	if _, err := os.Stat(csvpath); err != nil {
+		println("File does not exist: ", csvpath)
+		os.Exit(1)
+	}
+
+	file, err := os.Open(csvpath)
+
+	if err != nil {
+		println("Error opening file:", csvpath, "error:", err)
+		os.Exit(1)
+	}
+
+	defer file.Close()
+
+	reader := csv.NewReader(file)
+
+	lines, err := reader.ReadAll()
+	if err != nil {
+		println("Error reading CSV file:", csvpath, "error:", err)
+		os.Exit(1)
+	}
+
+	for row := 0; row < len(lines); row++ {
+		var aRow = lines[row]
+		for col := 0; col < len(aRow); col++ {
+			var value = aRow[col]
+			// print(" ROW -> ",row)
+			if row == 0 {
+				// print(" H: ", value)
+				csvHeaders[col] = strings.Trim(value, " ")
+			} else {
+
+				val, exists := csvValues[row-1]
+				if exists {
+					val[csvHeaders[col]] = strings.Trim(value, " ")
+					csvValues[row-1] = val
+				} else {
+					var localmap = make(map[string]string)
+					localmap[csvHeaders[col]] = strings.Trim(value, " ")
+					csvValues[row-1] = localmap
+				}
+				//	print(" V: ", value)
+			}
+		}
+		// println()
+	}
+
+	ctx.JrContext.CtxCSV = csvValues
 }

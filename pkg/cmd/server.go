@@ -440,7 +440,7 @@ func executeTemplate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err := w.Write([]byte(b.String()))
+	_, err := w.Write(b.Bytes())
 	if err != nil {
 		log.Error().Err(err).Msg("Error writing response")
 	}

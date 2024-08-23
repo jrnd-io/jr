@@ -57,7 +57,8 @@ func doList(cmd *cobra.Command, args []string) {
 	isMarkdown, _ := cmd.Flags().GetBool("markdown")
 	noColor, _ := cmd.Flags().GetBool("nocolor")
 
-	if category && len(args) > 0 {
+	switch {
+	case category && len(args) > 0:
 		var functionNames []string
 		for k, v := range functions.DescriptionMap() {
 			if v.Category == args[0] {
@@ -65,7 +66,7 @@ func doList(cmd *cobra.Command, args []string) {
 			}
 		}
 		sortAndPrint(functionNames, isMarkdown, noColor)
-	} else if find && len(args) > 0 {
+	case find && len(args) > 0:
 		var functionNames []string
 		for k, v := range functions.DescriptionMap() {
 			if strings.Contains(v.Description, args[0]) || strings.Contains(v.Name, args[0]) {
@@ -73,8 +74,7 @@ func doList(cmd *cobra.Command, args []string) {
 			}
 		}
 		sortAndPrint(functionNames, isMarkdown, noColor)
-	} else if len(args) == 1 {
-
+	case len(args) == 1:
 		if run {
 			f, found := printFunction(args[0], isMarkdown, noColor)
 			if found {
@@ -87,9 +87,7 @@ func doList(cmd *cobra.Command, args []string) {
 		} else {
 			printFunction(args[0], isMarkdown, noColor)
 		}
-	} else {
-
-		// l := len(functions.FunctionsMap())
+	default:
 		l := len(functions.DescriptionMap())
 		functionNames := make([]string, l)
 
@@ -101,6 +99,7 @@ func doList(cmd *cobra.Command, args []string) {
 		sortAndPrint(functionNames, isMarkdown, noColor)
 
 	}
+
 	fmt.Println()
 }
 

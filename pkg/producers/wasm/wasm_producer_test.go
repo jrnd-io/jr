@@ -1,5 +1,4 @@
 // Copyright © 2024 JR team
-//
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
@@ -17,34 +16,37 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
+package wasm_test
 
-package configuration
+import (
+	"context"
+	"github.com/jrnd-io/jr/pkg/producers/wasm"
+	"testing"
+)
 
-import "time"
+func TestWASMProducer(t *testing.T) {
 
-var GlobalCfg GlobalConfiguration
+	testCases := []struct {
+		name   string
+		config wasm.Config
+	}{
+		{
+			name: "testprint",
+			config: wasm.Config{
+				ModulePath: "wasm_producer_test_function.wasm",
+				BindStdout: true,
+			},
+		},
+	}
 
-type GlobalConfiguration struct {
-	Seed                int64
-	KafkaConfig         string
-	SchemaRegistry      bool
-	RegistryConfig      string
-	Serializer          string
-	AutoCreate          bool
-	RedisTtl            time.Duration
-	RedisConfig         string
-	MongoConfig         string
-	AzBlobStorageConfig string
-	AzCosmosDBConfig    string
-	ElasticConfig       string
-	S3Config            string
-	GCSConfig           string
-	HTTPConfig          string
-	CassandraConfig     string
-	AWSDynamoDBConfig   string
-	LUAScriptConfig     string
-	WASMConfig          string
-	Url                 string
-	EmbeddedTemplate    bool
-	FileNameTemplate    bool
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			ctx := context.Background()
+
+			p := &wasm.Producer{}
+			p.InitializeFromConfig(ctx, tc.config)
+			p.Produce(ctx, []byte("somekey"), []byte("someval"), nil)
+		})
+
+	}
 }

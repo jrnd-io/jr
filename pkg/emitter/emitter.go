@@ -23,6 +23,7 @@ package emitter
 import (
 	"context"
 	"fmt"
+	"github.com/jrnd-io/jr/pkg/producers/wasm"
 	"os"
 	"time"
 
@@ -168,6 +169,10 @@ func (e *Emitter) Initialize(ctx context.Context, conf configuration.GlobalConfi
 		e.Producer = createLUAScriptProducer(ctx, conf.LUAScriptConfig)
 		return
 	}
+	if e.Output == "wasm" {
+		e.Producer = createWASMProducer(ctx, conf.LUAScriptConfig)
+		return
+	}
 
 }
 
@@ -269,7 +274,15 @@ func createLUAScriptProducer(_ context.Context, config string) Producer {
 	return producer
 }
 
+func createWASMProducer(ctx context.Context, config string) Producer {
+	producer := &wasm.Producer{}
+	producer.Initialize(ctx, config)
+
+	return producer
+}
+
 func createKafkaProducer(ctx context.Context, conf configuration.GlobalConfiguration, topic string, templateType string) *kafka.Manager {
+
 
 	kManager := &kafka.Manager{
 		Serializer:   conf.Serializer,

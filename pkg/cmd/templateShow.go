@@ -49,7 +49,7 @@ var templateShowCmd = &cobra.Command{
 		if err != nil {
 			log.Fatal().Err(err).Msg("Failed to ReadFile")
 		}
-		valid, err := isValidTemplate([]byte(templateScript))
+		valid, err := isValidTemplate(templateScript)
 		if err != nil {
 			log.Fatal().Err(err).Msg("Failed to read a template")
 		}

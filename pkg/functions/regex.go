@@ -40,7 +40,7 @@ type regexState struct {
 
 //gocyclo:ignore
 func generate(s *regexState, re *syntax.Regexp) string {
-	//fmt.Println("re:", re, "sub:", re.Sub)
+	// fmt.Println("re:", re, "sub:", re.Sub)
 	op := re.Op
 	switch op {
 	case syntax.OpNoMatch:
@@ -57,7 +57,7 @@ func generate(s *regexState, re *syntax.Regexp) string {
 		sum := 0
 		for i := 0; i < len(re.Rune); i += 2 {
 
-			//fmt.Printf("Range: %#U-%#U\n", re.Rune[i], re.Rune[i+1])
+			// fmt.Printf("Range: %#U-%#U\n", re.Rune[i], re.Rune[i+1])
 
 			sum += int(re.Rune[i+1]-re.Rune[i]) + 1
 			if re.Rune[i+1] == runeRangeEnd {
@@ -70,7 +70,7 @@ func generate(s *regexState, re *syntax.Regexp) string {
 			possibleChars := []uint8{}
 			for j := 0; j < len(printableChars); j++ {
 				c := printableChars[j]
-				//fmt.Printf("Char %c %d\n", c, c)
+				// fmt.Printf("Char %c %d\n", c, c)
 				// Check c in range
 				for i := 0; i < len(re.Rune); i += 2 {
 					if rune(c) >= re.Rune[i] && rune(c) <= re.Rune[i+1] {
@@ -79,16 +79,16 @@ func generate(s *regexState, re *syntax.Regexp) string {
 					}
 				}
 			}
-			//fmt.Println("Possible chars: ", possibleChars)
+			// fmt.Println("Possible chars: ", possibleChars)
 			if len(possibleChars) > 0 {
 				c := possibleChars[Random.Intn(len(possibleChars))]
-				//fmt.Printf("Generated rune %c for inverse range %v\n", c, re)
+				// fmt.Printf("Generated rune %c for inverse range %v\n", c, re)
 				return string([]byte{c})
 			}
 		}
 
-		//fmt.Println("Char range: ", sum)
-		r := Random.Intn(int(sum))
+		// fmt.Println("Char range: ", sum)
+		r := Random.Intn(sum)
 		var ru rune
 		sum = 0
 		for i := 0; i < len(re.Rune); i += 2 {
@@ -100,7 +100,7 @@ func generate(s *regexState, re *syntax.Regexp) string {
 			sum += gap
 		}
 
-		//fmt.Printf("Generated rune %c for range %v\n", ru, re)
+		// fmt.Printf("Generated rune %c for range %v\n", ru, re)
 
 		return string(ru)
 	case syntax.OpAnyCharNotNL, syntax.OpAnyChar:
@@ -117,7 +117,7 @@ func generate(s *regexState, re *syntax.Regexp) string {
 	case syntax.OpWordBoundary:
 	case syntax.OpNoWordBoundary:
 	case syntax.OpCapture:
-		//fmt.Println("OpCapture", re.Sub, len(re.Sub))
+		// fmt.Println("OpCapture", re.Sub, len(re.Sub))
 		return generate(s, re.Sub0[0])
 	case syntax.OpStar:
 		// Repeat zero or more times
@@ -143,7 +143,7 @@ func generate(s *regexState, re *syntax.Regexp) string {
 		// Zero or one instances
 		res := ""
 		count := Random.Intn(2)
-		//fmt.Println("Quest", count)
+		// fmt.Println("Quest", count)
 		for i := 0; i < count; i++ {
 			for _, r := range re.Sub {
 				res += generate(s, r)
@@ -152,7 +152,7 @@ func generate(s *regexState, re *syntax.Regexp) string {
 		return res
 	case syntax.OpRepeat:
 		// Repeat one or more times
-		//fmt.Println("OpRepeat", re.Min, re.Max)
+		// fmt.Println("OpRepeat", re.Min, re.Max)
 
 		res := ""
 		count := 0
@@ -160,7 +160,7 @@ func generate(s *regexState, re *syntax.Regexp) string {
 		if re.Max > re.Min {
 			count = Random.Intn(re.Max - re.Min + 1)
 		}
-		//fmt.Println(re.Max, count)
+		// fmt.Println(re.Max, count)
 
 		for i := 0; i < re.Min || i < (re.Min+count); i++ {
 			for _, r := range re.Sub {
@@ -176,7 +176,7 @@ func generate(s *regexState, re *syntax.Regexp) string {
 		}
 		return res
 	case syntax.OpAlternate:
-		//fmt.Println("OpAlternative", re.Sub, len(re.Sub))
+		// fmt.Println("OpAlternative", re.Sub, len(re.Sub))
 
 		i := Random.Intn(len(re.Sub))
 		return generate(s, re.Sub[i])

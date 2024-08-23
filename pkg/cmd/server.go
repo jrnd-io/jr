@@ -266,7 +266,7 @@ func FileServer(r chi.Router, path string, root http.FileSystem) {
 func listEmitters(w http.ResponseWriter, r *http.Request) {
 	emitters_json, _ := json.Marshal(emitters)
 
-	_, err := w.Write([]byte(emitters_json))
+	_, err := w.Write(emitters_json)
 	if err != nil {
 		log.Error().Err(err).Msg("Error writing response")
 	}

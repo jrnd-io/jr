@@ -146,7 +146,7 @@ func (r *Client) Get(key, path string) (string, error) {
 	args[1] = key
 
 	if path != "" {
-		args[2] = path
+		args = append(args, path)
 	}
 
 	setCmd := fmt.Sprint(STAR, len(args), CRLF)

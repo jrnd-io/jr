@@ -354,16 +354,16 @@ func runEmitter(w http.ResponseWriter, r *http.Request) {
 				emitters[i].Initialize(r.Context(), configuration.GlobalCfg)
 				emitterToRun[url] = append(emitterToRun[url], emitters[i])
 				if emitters[i].Preload > 0 {
-					emitters[i].Run(emitters[i].Preload, w)
+					emitters[i].Run(r.Context(), emitters[i].Preload, w)
 				} else {
-					emitters[i].Run(emitters[i].Num, w)
+					emitters[i].Run(r.Context(), emitters[i].Num, w)
 				}
 				firstRun[url] = true
 			}
 		}
 	} else {
 		for _, e := range emitterToRun[url] {
-			e.Run(e.Num, w)
+			e.Run(r.Context(), e.Num, w)
 		}
 	}
 

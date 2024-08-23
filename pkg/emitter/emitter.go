@@ -171,7 +171,7 @@ func (e *Emitter) Initialize(ctx context.Context, conf configuration.GlobalConfi
 
 }
 
-func (e *Emitter) Run(num int, o any) {
+func (e *Emitter) Run(ctx context.Context, num int, o any) {
 
 	for i := 0; i < num; i++ {
 
@@ -180,9 +180,9 @@ func (e *Emitter) Run(num int, o any) {
 		kInValue := functions.GetV("KEY")
 
 		if kInValue != "" {
-			e.Producer.Produce(context.TODO(), []byte(kInValue), []byte(v), o)
+			e.Producer.Produce(ctx, []byte(kInValue), []byte(v), o)
 		} else {
-			e.Producer.Produce(context.TODO(), []byte(k), []byte(v), o)
+			e.Producer.Produce(ctx, []byte(k), []byte(v), o)
 		}
 		jtctx.JrContext.GeneratedObjects++
 		jtctx.JrContext.GeneratedBytes += int64(len(v))
@@ -269,7 +269,7 @@ func createLUAScriptProducer(_ context.Context, config string) Producer {
 	return producer
 }
 
-func createKafkaProducer(_ context.Context, conf configuration.GlobalConfiguration, topic string, templateType string) *kafka.Manager {
+func createKafkaProducer(ctx context.Context, conf configuration.GlobalConfiguration, topic string, templateType string) *kafka.Manager {
 
 	kManager := &kafka.Manager{
 		Serializer:   conf.Serializer,
@@ -283,7 +283,7 @@ func createKafkaProducer(_ context.Context, conf configuration.GlobalConfigurati
 		kManager.InitializeSchemaRegistry(conf.RegistryConfig)
 	}
 	if conf.AutoCreate {
-		kManager.CreateTopic(topic)
+		kManager.CreateTopic(ctx, topic)
 	}
 	return kManager
 }

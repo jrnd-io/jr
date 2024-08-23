@@ -254,15 +254,15 @@ func (k *Manager) Produce(_ context.Context, key []byte, data []byte, _ any) {
 
 }
 
-func (k *Manager) CreateTopic(topic string) {
-	k.CreateTopicFull(topic, 6, 3)
+func (k *Manager) CreateTopic(ctx context.Context, topic string) {
+	k.CreateTopicFull(ctx, topic, 6, 3)
 }
 
-func (k *Manager) CreateTopicFull(topic string, partitions int, rf int) {
+func (k *Manager) CreateTopicFull(ctx context.Context, topic string, partitions int, rf int) {
 
 	// Contexts are used to abort or limit the amount of time
 	// the Admin call blocks waiting for a result.
-	ctx, cancel := context.WithCancel(context.Background())
+	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
 	// Create topics on cluster.

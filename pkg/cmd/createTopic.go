@@ -41,7 +41,7 @@ jr createTopic newDefaultTopic
 		kManager.Initialize(kafkaConfig)
 		partitions, _ := cmd.Flags().GetInt("partitions")
 		replica, _ := cmd.Flags().GetInt("replica")
-		kManager.CreateTopicFull(args[0], partitions, replica)
+		kManager.CreateTopicFull(cmd.Context(), args[0], partitions, replica)
 
 	},
 }

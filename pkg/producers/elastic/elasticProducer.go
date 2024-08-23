@@ -44,7 +44,7 @@ type Config struct {
 }
 
 type ElasticProducer struct {
-	client elasticsearch.Client
+	client *elasticsearch.Client
 	index  string
 }
 
@@ -83,7 +83,7 @@ func (p *ElasticProducer) Initialize(configFile string) {
 	}
 
 	p.index = config.ElasticIndex
-	p.client = *client
+	p.client = client
 }
 
 func (p *ElasticProducer) Produce(ctx context.Context, k []byte, v []byte, _ any) {
@@ -109,7 +109,7 @@ func (p *ElasticProducer) Produce(ctx context.Context, k []byte, v []byte, _ any
 		}
 	}
 
-	res, err := req.Do(ctx, &p.client)
+	res, err := req.Do(ctx, p.client)
 	if err != nil {
 		log.Fatal().Err(err).Msg("Failed to write data in Elastic")
 	}

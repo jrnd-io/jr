@@ -85,7 +85,7 @@ func (p *MongoProducer) Produce(ctx context.Context, k []byte, v []byte, _ any) 
 		log.Fatal().Err(err).Msg("Failed to unmarshal json")
 	}
 
-	if k == nil || len(k) == 0 {
+	if len(k) == 0 {
 		dev["_id"] = string(k)
 	}
 

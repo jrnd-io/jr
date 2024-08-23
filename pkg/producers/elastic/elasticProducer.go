@@ -90,7 +90,7 @@ func (p *ElasticProducer) Produce(ctx context.Context, k []byte, v []byte, _ any
 
 	var req esapi.IndexRequest
 
-	if k == nil || len(k) == 0 {
+	if len(k) == 0 {
 		// generate a UUID as index
 		id := uuid.New()
 

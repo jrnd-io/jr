@@ -166,18 +166,21 @@ List of JR producers:
 
 Console * (--output = stdout)
 Kafka (--output = kafka)
+HTTP (--output = http)
 Redis (--output = redis)
 Mongodb (--output = mongo)
 Elastic (--output = elastic)
 S3 (--output = s3)
 GCS (--output = gcs)
-Azure Blob Storage (--output = azblobstorage)
-Azure Cosmos DB (--output = azcosmosdb)
+AZBlobStorage (--output = azblobstorage)
+AZCosmosDB (--output = azcosmosdb)
 Cassandra (--output = cassandra)
-HTTP (--output = http)
+LUA Script (--output = luascript)
+WASM Function (--output = wasm)
+AWS DynamoDB (--output = awsdynamodb)
 
 ```
-to use an output, just set the corresponding value in `--output`
+to use a producer, just set the corresponding value in `--output`
 
 
 ## Distributed Testing

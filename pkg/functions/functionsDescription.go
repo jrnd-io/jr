@@ -115,7 +115,7 @@ var funcDesc = map[string]FunctionDescription{
 	"concat": {
 		Name:        "concat",
 		Category:    "text",
-		Description: "converts an integer to a string",
+		Description: "concatenates two strings",
 		Parameters:  "string string",
 		Localizable: false,
 		Return:      "string",

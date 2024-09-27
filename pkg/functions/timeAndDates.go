@@ -64,6 +64,36 @@ func DatesBetween(fromDate string, toDate string, num int) []string {
 	return dates
 }
 
+// Justpassed returns a date in the past not before the given milliseconds
+func Justpassed(milliseconds int64) string {
+	now := time.Now()
+
+	duration := time.Duration(Random.Int63n(milliseconds)) * time.Millisecond
+	pastTime := now.Add(-duration)
+
+	return pastTime.Format(time.DateTime)
+}
+
+// Nowsub returns a date in the past of given milliseconds
+func Nowsub(milliseconds int64) string {
+	now := time.Now()
+
+	duration := time.Duration(milliseconds) * time.Millisecond
+	pastTime := now.Add(-duration)
+
+	return pastTime.Format(time.DateTime)
+}
+
+// Nowadd returns a date in the future of given milliseconds
+func Nowadd(milliseconds int64) string {
+	now := time.Now()
+
+	duration := time.Duration(milliseconds) * time.Millisecond
+	pastTime := now.Add(duration)
+
+	return pastTime.Format(time.DateTime)
+}
+
 // BirthDate returns a birthdate between minAge and maxAge
 func BirthDate(minAge int, maxAge int) string {
 
@@ -108,16 +138,6 @@ func Recent(days int) string {
 	randNsec := Random.Int63n(delta)
 	d := start.Add(time.Duration(randNsec))
 	return d.Format(time.DateOnly)
-}
-
-// Justpassed returns a date in the past not before the given milliseconds
-func Justpassed(milliseconds int64) string {
-	now := time.Now()
-
-	duration := time.Duration(milliseconds) * time.Millisecond
-	pastTime := now.Add(-duration)
-
-	return pastTime.Format(time.DateTime)
 }
 
 // Soon returns a date in the future not after the given days

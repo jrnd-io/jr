@@ -110,6 +110,16 @@ func Recent(days int) string {
 	return d.Format(time.DateOnly)
 }
 
+// Justpassed returns a date in the past not before the given milliseconds
+func Justpassed(milliseconds int64) string {
+	now := time.Now()
+
+	duration := time.Duration(milliseconds) * time.Millisecond
+	pastTime := now.Add(-duration)
+
+	return pastTime.Format(time.DateTime)
+}
+
 // Soon returns a date in the future not after the given days
 func Soon(days int) string {
 	now := time.Now().UTC()

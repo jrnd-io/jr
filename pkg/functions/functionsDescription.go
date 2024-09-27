@@ -654,6 +654,16 @@ var funcDesc = map[string]FunctionDescription{
 		Example:     "jr template run --embedded '{{join \"hello,\" \"world\"}}'",
 		Output:      "hello,world",
 	},
+	"justpassed": {
+		Name:        "justpassed",
+		Category:    "time",
+		Description: "returns a date in the past not before the given milliseconds",
+		Parameters:  "milliseconds int",
+		Localizable: false,
+		Return:      "string",
+		Example:     "jr template run --embedded '{{justpassed 15}}'",
+		Output:      "2024-11-10 22:59:5",
+	},
 	"key": {
 		Name:        "key",
 		Category:    "utilities",

@@ -167,6 +167,7 @@ var fmap = map[string]interface{}{
 	"future":          Future,
 	"past":            Past,
 	"recent":          Recent,
+	"justpassed":      Justpassed,
 	"soon":            Soon,
 	"unix_time_stamp": UnixTimeStamp,
 

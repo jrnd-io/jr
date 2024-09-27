@@ -61,8 +61,8 @@ func init() {
 		ID:    "server",
 		Title: "HTTP Server",
 	})
-	rootCmd.PersistentFlags().StringVar(&constants.JR_SYSTEM_DIR, "system_dir", "", "JR system dir")
-	rootCmd.PersistentFlags().StringVar(&constants.JR_USER_DIR, "user_dir", "", "JR user dir")
+	rootCmd.PersistentFlags().StringVar(&constants.JR_SYSTEM_DIR, "jr_system_dir", "", "JR system dir")
+	rootCmd.PersistentFlags().StringVar(&constants.JR_USER_DIR, "jr_user_dir", "", "JR user dir")
 	rootCmd.PersistentFlags().StringVar(&logLevel, "log_level", constants.DEFAULT_LOG_LEVEL, "HR Log Level")
 }
 

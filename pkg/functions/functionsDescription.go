@@ -661,7 +661,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "milliseconds int",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr template run --embedded '{{justpassed 15}}'",
+		Example:     "jr template run --embedded '{{justpassed 60000}}'",
 		Output:      "2024-11-10 22:59:5",
 	},
 	"key": {

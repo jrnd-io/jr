@@ -4,6 +4,7 @@ USER=$(shell id -u -n)
 TIME=$(shell date)
 JR_HOME=jr
 
+ifndef XDG_DATA_DIRS
 ifeq ($(OS), Windows_NT)
 	detectedOS := Windows
 else
@@ -12,15 +13,35 @@ endif
 
 ifeq ($(detectedOS), Darwin)
 	JR_SYSTEM_DIR="$(HOME)/Library/Application Support"
-	JR_USER_DIR="$(HOME)/.local/share"
 endif
-ifeq ($(detectedOS), Linux)
+ifeq ($(detectedOS),  Linux)
 	JR_SYSTEM_DIR="$(HOME)/.config"
-	JR_USER_DIR="$(HOME)/.local/share"
 endif
 ifeq ($(detectedOS), Windows_NT)
 	JR_SYSTEM_DIR="$(LOCALAPPDATA)"
+endif
+else
+	JR_SYSTEM_DIR=$(XDG_DATA_DIRS)
+endif
+
+ifndef XDG_DATA_HOME
+ifeq ($(OS), Windows_NT)
+	detectedOS := Windows
+else
+	detectedOS := $(shell sh -c 'uname 2>/dev/null || echo Unknown')
+endif
+
+ifeq ($(detectedOS), Darwin)
+	JR_USER_DIR="$(HOME)/.local/share"
+endif
+ifeq ($(detectedOS),  Linux)
+	JR_USER_DIR="$(HOME)/.local/share"
+endif
+ifeq ($(detectedOS), Windows_NT)
 	JR_USER_DIR="$(LOCALAPPDATA)" //@TODO
+endif
+else
+	JR_USER_DIR=$(XDG_DATA_HOME)
 endif
 
 hello:
@@ -42,11 +63,11 @@ generate:
 
 compile:
 	@echo "Compiling"
-	go build -v -ldflags="-X 'github.com/jrnd-io/jr/pkg/cmd.Version=$(VERSION)' \
+	go build -v -ldflags="-w -s -X 'github.com/jrnd-io/jr/pkg/cmd.Version=$(VERSION)' \
 	-X 'github.com/jrnd-io/jr/pkg/cmd.GoVersion=$(GOVERSION)' \
 	-X 'github.com/jrnd-io/jr/pkg/cmd.BuildUser=$(USER)' \
 	-X 'github.com/jrnd-io/jr/pkg/cmd.BuildTime=$(TIME)'" \
-	-ldflags -s -o build/jr jr.go
+	-o build/jr jr.go
 
 run: compile
 	./build/jr

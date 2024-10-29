@@ -220,7 +220,7 @@ func RandomString(min, max int) string {
 
 // RandomStringVocabulary returns a random string long between min and max characters using a vocabulary
 func RandomStringVocabulary(min, max int, source string) string {
-	textb := make([]byte, min+Random.Intn(max-min))
+	textb := make([]byte, min+Random.Intn(max-min+1))
 	for i := range textb {
 		textb[i] = source[Random.Intn(len(source))]
 	}

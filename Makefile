@@ -42,7 +42,7 @@ generate:
 
 compile:
 	@echo "Compiling"
-	go build -v -ldflags="-X 'github.com/jrnd-io/jr/pkg/cmd.Version=$(VERSION)' \
+	go build -v -ldflags="-s -w -X 'github.com/jrnd-io/jr/pkg/cmd.Version=$(VERSION)' \
 	-X 'github.com/jrnd-io/jr/pkg/cmd.GoVersion=$(GOVERSION)' \
 	-X 'github.com/jrnd-io/jr/pkg/cmd.BuildUser=$(USER)' \
 	-X 'github.com/jrnd-io/jr/pkg/cmd.BuildTime=$(TIME)'" \

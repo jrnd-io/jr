@@ -128,15 +128,25 @@ func NearbyGPS(latitude float64, longitude float64, radius int) string {
 
 }
 
-// NearbyGPSIntoPolygon generates a random latitude and longitude within a specified radius (in meters)
+// NearbyGPSIntoPolygon generates a random latitude and longitude within a specified radius (in meters) starting from an initial point
 // and checks if the generated point falls within the boundaries of a polygon defined in a GeoJSON file.
 func NearbyGPSIntoPolygon(latitude float64, longitude float64, radius int) string {
 	ctx.JrContext.CtxGeoJsonLock.Lock()
 	defer ctx.JrContext.CtxGeoJsonLock.Unlock()
 
+	lastLat := latitude
+	lastLon := longitude
+
+	if ctx.JrContext.CtxLastPointLat != 0 {
+		lastLat = ctx.JrContext.CtxLastPointLat
+	}
+	if ctx.JrContext.CtxLastPointLon != 0 {
+		lastLon = ctx.JrContext.CtxLastPointLon
+	}
+
 	// Ensure the polygon exists and has at least 3 vertices
 	if len(ctx.JrContext.CtxGeoJson) < 3 {
-		return fmt.Sprintf("%.12f %.12f", latitude, longitude)
+		return fmt.Sprintf("%.12f %.12f", lastLat, lastLon)
 	}
 
 	radiusInMeters := float64(radius)
@@ -153,11 +163,13 @@ func NearbyGPSIntoPolygon(latitude float64, longitude float64, radius int) strin
 		distanceInDegrees := distanceInMeters * degreesPerMeter
 
 		// Calculate new latitude and longitude based on the random angle and distance
-		newLatitude := latitude + (distanceInDegrees * math.Cos(randomAngle))
-		newLongitude := longitude + (distanceInDegrees * math.Sin(randomAngle))
+		newLatitude := lastLat + (distanceInDegrees * math.Cos(randomAngle))
+		newLongitude := lastLon + (distanceInDegrees * math.Sin(randomAngle))
 
 		// Check if the new point is within the polygon
 		if isPointInPolygon([]float64{newLatitude, newLongitude}, ctx.JrContext.CtxGeoJson) {
+			ctx.JrContext.CtxLastPointLat = newLatitude
+			ctx.JrContext.CtxLastPointLon = newLongitude
 			return fmt.Sprintf("%.12f %.12f", newLatitude, newLongitude)
 		}
 		// Retry if the point is not within the polygon

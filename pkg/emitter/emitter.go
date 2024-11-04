@@ -23,9 +23,10 @@ package emitter
 import (
 	"context"
 	"fmt"
-	"github.com/jrnd-io/jr/pkg/producers/wasm"
 	"os"
 	"time"
+
+	"github.com/jrnd-io/jr/pkg/producers/wasm"
 
 	"github.com/jrnd-io/jr/pkg/configuration"
 	"github.com/jrnd-io/jr/pkg/constants"
@@ -65,6 +66,7 @@ type Emitter struct {
 	Kcat             bool          `mapstructure:"kcat"`
 	Oneline          bool          `mapstructure:"oneline"`
 	Csv              string        `mapstructure:"csv"`
+	GeoJson          string        `mapstructure:"geojson"`
 	Producer         Producer
 	KTpl             tpl.Tpl
 	VTpl             tpl.Tpl
@@ -73,6 +75,8 @@ type Emitter struct {
 func (e *Emitter) Initialize(ctx context.Context, conf configuration.GlobalConfiguration) {
 
 	functions.InitCSV(e.Csv)
+
+	functions.InitGeoJson(e.GeoJson)
 
 	templateName := e.ValueTemplate
 	if e.EmbeddedTemplate == "" {
@@ -282,7 +286,6 @@ func createWASMProducer(ctx context.Context, config string) Producer {
 }
 
 func createKafkaProducer(ctx context.Context, conf configuration.GlobalConfiguration, topic string, templateType string) *kafka.Manager {
-
 
 	kManager := &kafka.Manager{
 		Serializer:   conf.Serializer,

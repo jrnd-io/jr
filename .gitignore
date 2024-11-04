@@ -42,6 +42,8 @@ _testmain.go
 *.iml
 .idea/
 .idea
+.vscode/
+.vscode
 .DS_Store
 
 # Specific project files

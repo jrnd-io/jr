@@ -61,6 +61,7 @@ jr template run --template "{{name}}"
 		preload, _ := cmd.Flags().GetInt("preload")
 
 		csv, _ := cmd.Flags().GetString("csv")
+		geojson, _ := cmd.Flags().GetString("geojson")
 
 		if kcat {
 			oneline = true
@@ -145,6 +146,7 @@ jr template run --template "{{name}}"
 			Kcat:             kcat,
 			Oneline:          oneline,
 			Csv:              csv,
+			GeoJson:          geojson,
 		}
 
 		functions.SetSeed(seed)
@@ -163,6 +165,8 @@ func init() {
 	templateRunCmd.Flags().Int64("seed", time.Now().UTC().UnixNano(), "Seed to init pseudorandom generator")
 
 	templateRunCmd.Flags().String("csv", "", "Path to csv file to use")
+
+	templateRunCmd.Flags().String("geojson", "", "Path to geojson file to use")
 
 	templateRunCmd.Flags().StringP("kafkaConfig", "F", "", "Kafka configuration")
 	templateRunCmd.Flags().String("registryConfig", "", "Kafka configuration")

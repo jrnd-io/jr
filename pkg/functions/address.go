@@ -22,8 +22,9 @@ package functions
 
 import (
 	"fmt"
-	"github.com/jrnd-io/jr/pkg/ctx"
 	"math"
+
+	"github.com/jrnd-io/jr/pkg/ctx"
 )
 
 const (
@@ -125,6 +126,64 @@ func NearbyGPS(latitude float64, longitude float64, radius int) string {
 
 	return fmt.Sprintf("%.4f %.4f", newLatitude, newLongitude)
 
+}
+
+// NearbyGPSIntoPolygon generates a random latitude and longitude within a specified radius (in meters)
+// and checks if the generated point falls within the boundaries of a polygon defined in a GeoJSON file.
+func NearbyGPSIntoPolygon(latitude float64, longitude float64, radius int) string {
+	ctx.JrContext.CtxGeoJsonLock.Lock()
+	defer ctx.JrContext.CtxGeoJsonLock.Unlock()
+
+	// Ensure the polygon exists and has at least 3 vertices
+	if len(ctx.JrContext.CtxGeoJson) < 3 {
+		return fmt.Sprintf("%.12f %.12f", latitude, longitude)
+	}
+
+	radiusInMeters := float64(radius)
+
+	// Start Loop
+	for {
+		// Generate a random angle (0 to 2π radians)
+		randomAngle := Random.Float64() * 2 * math.Pi
+
+		// Generate a random distance within the given radius
+		distanceInMeters := Random.Float64() * radiusInMeters
+
+		// Convert the distance to degrees (assuming small distances)
+		distanceInDegrees := distanceInMeters * degreesPerMeter
+
+		// Calculate new latitude and longitude based on the random angle and distance
+		newLatitude := latitude + (distanceInDegrees * math.Cos(randomAngle))
+		newLongitude := longitude + (distanceInDegrees * math.Sin(randomAngle))
+
+		// Check if the new point is within the polygon
+		if isPointInPolygon([]float64{newLatitude, newLongitude}, ctx.JrContext.CtxGeoJson) {
+			return fmt.Sprintf("%.12f %.12f", newLatitude, newLongitude)
+		}
+		// Retry if the point is not within the polygon
+	}
+}
+
+// isPointInPolygon checks if a given point lies within a specified polygon.
+func isPointInPolygon(point []float64, vertices [][]float64) bool {
+	x, y := point[1], point[0]
+	n := len(vertices)
+	// A polygon must have at least 3 vertices
+	if n < 3 {
+		return false
+	}
+	intersections := 0
+	for i := 0; i < n; i++ {
+		x1, y1 := vertices[i][0], vertices[i][1]
+		x2, y2 := vertices[(i+1)%n][0], vertices[(i+1)%n][1]
+		if (y1 > y) != (y2 > y) {
+			xInt := (y-y1)*(x2-x1)/(y2-y1) + x1
+			if x < xInt {
+				intersections++
+			}
+		}
+	}
+	return intersections%2 == 1
 }
 
 // State returns a random State

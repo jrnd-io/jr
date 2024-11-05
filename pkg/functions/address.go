@@ -23,9 +23,7 @@ package functions
 import (
 	"fmt"
 	"math"
-	"os"
 
-	"github.com/cnkei/gospline"
 	"github.com/jrnd-io/jr/pkg/ctx"
 )
 
@@ -234,12 +232,12 @@ func isPointInPolygon(point []float64, vertices [][]float64) bool {
 
 // predictNextPoint predicts the next latitude and longitude using cubic spline interpolation
 func predictNextPoint(latitudes, longitudes []float64) (float64, float64) {
-	if len(longitudes) != len(latitudes) {
+	if len(latitudes) != len(longitudes) {
 		println("Need at least two points and matching latitude/longitude arrays: latitudes: ", len(latitudes), " e longitudes:", len(longitudes))
-		os.Exit(1)
+		return 0, 0
 	}
 
-	if len(latitudes) < 2 && len(longitudes) < 2 {
+	if len(latitudes) < 2 || len(longitudes) < 2 {
 		fmt.Println("Need at least two points !")
 		return 0, 0
 	}
@@ -250,18 +248,57 @@ func predictNextPoint(latitudes, longitudes []float64) (float64, float64) {
 		x[i] = float64(i)
 	}
 
-	// Create splines for latitude and longitude
-	latSpline := gospline.NewCubicSpline(x, latitudes)
-	lonSpline := gospline.NewCubicSpline(x, longitudes)
-
-	// Predict the next index position (next point in the sequence)
+	// Implement cubic spline interpolation
 	nextX := float64(len(latitudes))
-
-	// Interpolate to get the predicted latitude and longitude for nextX
-	nextLatitude := latSpline.At(nextX)
-	nextLongitude := lonSpline.At(nextX)
+	nextLatitude := cubicSplineInterpolate(x, latitudes, nextX)
+	nextLongitude := cubicSplineInterpolate(x, longitudes, nextX)
 
 	return nextLatitude, nextLongitude
+}
+
+func cubicSplineInterpolate(x, y []float64, nextX float64) float64 {
+	n := len(x)
+	h := make([]float64, n)
+	a := make([]float64, n)
+	b := make([]float64, n)
+	c := make([]float64, n)
+	d := make([]float64, n)
+
+	// Calculate the coefficients for the cubic spline
+	for i := 1; i < n; i++ {
+		h[i-1] = x[i] - x[i-1]
+		a[i] = (y[i] - y[i-1]) / h[i-1]
+	}
+
+	b[0] = 0
+	for i := 1; i < n-1; i++ {
+		b[i] = 3 * (a[i+1] - a[i])
+	}
+	b[n-1] = 0
+
+	c[0] = 0
+	for i := 1; i < n-1; i++ {
+		c[i] = (b[i] - c[i-1]) / (2 * h[i-1])
+	}
+	c[n-1] = 0
+
+	d[0] = 0
+	for i := 1; i < n; i++ {
+		d[i-1] = (a[i] - c[i-1]) / h[i-1]
+	}
+
+	// Interpolate the value at the next X
+	index := 0
+	for i := 1; i < n; i++ {
+		if x[i] <= nextX {
+			index = i
+		} else {
+			break
+		}
+	}
+
+	dx := nextX - x[index-1]
+	return y[index-1] + d[index-1]*dx + c[index-1]*dx*dx + b[index-1]*dx*dx*dx
 }
 
 // selectRandomPoint selects a random point within the polygon defined by the given coordinates.

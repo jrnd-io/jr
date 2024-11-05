@@ -292,7 +292,9 @@ func selectRandomPoint(coords [][]float64) (float64, float64) {
 	return randY, randX // Return as (latitude, longitude)
 }
 
-// boundingBox calculates the minimum and maximum coordinates of the given vertices.
+// boundingBox calculates the minimum and maximum coordinates (bounding box) of the provided vertices.
+// It returns the coordinates of the bottom-left (minX, minY) and top-right (maxX, maxY) corners
+// of the bounding box that encompasses all the given vertices.
 func boundingBox(vertices [][]float64) (minX, minY, maxX, maxY float64) {
 	if len(vertices) == 0 {
 		return 0, 0, 0, 0 // Return zero values if no vertices are provided

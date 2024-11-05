@@ -142,10 +142,6 @@ func NearbyGPSIntoPolygon(latitude float64, longitude float64, radius int) strin
 	lastLat := latitude
 	lastLon := longitude
 
-	if lastLat == 0 && lastLon == 0 {
-		lastLat, lastLon = selectRandomPoint(ctx.JrContext.CtxGeoJson)
-	}
-
 	// Update last known point if there are recent saved coordinates
 	if len(ctx.JrContext.CtxLastPointLat) == 1 {
 		lastLat = ctx.JrContext.CtxLastPointLat[len(ctx.JrContext.CtxLastPointLat)-1]
@@ -206,6 +202,12 @@ func NearbyGPSIntoPolygon(latitude float64, longitude float64, radius int) strin
 		attempts++
 		// Retry if the generated point is not within the polygon boundaries
 	}
+}
+
+// NearbyGPSIntoPolygonWhitoutStart
+func NearbyGPSIntoPolygonWhitoutStart(radius int) string {
+	latitude, longitude := selectRandomPoint(ctx.JrContext.CtxGeoJson)
+	return NearbyGPSIntoPolygon(latitude, longitude, radius)
 }
 
 // isPointInPolygon checks if a given point lies within a specified polygon.

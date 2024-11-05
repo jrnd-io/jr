@@ -891,7 +891,17 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "string",
 		Localizable: false,
 		Return:      "string",
-		Example:     "jr template run --embedded '{{nearby_gps_into_polygon 45.849539549943 9.3874341200659 10}}' --geojson testfiles/poligon.geojson",
+		Example:     `jr template run --embedded '{{nearby_gps_into_polygon 45.849539549943 9.3874341200659 10}}' --geojson testfiles/poligon.geojson`,
+		Output:      "41.8963 12.4975",
+	},
+	"nearby_gps_into_polygon_without_start": {
+		Name:        "nearby_gps_into_polygon",
+		Category:    "address",
+		Description: "returns a random latitude longitude within a given start point, radius in meters and poligon from a GeoJson file",
+		Parameters:  "string",
+		Localizable: false,
+		Return:      "string",
+		Example:     `jr template run --embedded '{{nearby_gps_into_polygon 10}}' --geojson testfiles/poligon.geojson`,
 		Output:      "41.8963 12.4975",
 	},
 	"now_add": {

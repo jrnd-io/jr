@@ -140,7 +140,7 @@ var fmap = map[string]interface{}{
 	"longitude":                             Longitude,
 	"nearby_gps":                            NearbyGPS,
 	"nearby_gps_into_polygon":               NearbyGPSIntoPolygon,
-	"nearby_gps_into_polygon_without_start": NearbyGPSIntoPolygonWhitoutStart,
+	"nearby_gps_into_polygon_without_start": NearbyGPSIntoPolygonWithoutStart,
 	"state":                                 State,
 	"state_at":                              StateAt,
 	"state_short":                           StateShort,

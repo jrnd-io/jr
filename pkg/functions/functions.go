@@ -545,16 +545,16 @@ func InitGeoJson(geojsonpath string) {
 	}
 	defer file.Close()
 
-	var polygonTest struct {
+	var polygon struct {
 		Features   []geojson.Feature      `json:"features"`
 		Properties map[string]interface{} `json:"properties"`
 		CRS        map[string]interface{} `json:"crs,omitempty"`
 	}
-	if err := json.NewDecoder(file).Decode(&polygonTest); err != nil {
+	if err := json.NewDecoder(file).Decode(&polygon); err != nil {
 		panic(err)
 	}
 
-	geoTest := polygonTest.Features[0].Geometry
+	geoTest := polygon.Features[0].Geometry
 	ctxgeojson := geoTest.Polygon[0]
 	ctx.JrContext.CtxGeoJson = ctxgeojson
 }

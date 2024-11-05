@@ -541,7 +541,8 @@ func InitGeoJson(geojsonpath string) {
 	}
 	file, err := os.Open(geojsonpath)
 	if err != nil {
-		panic(err)
+		println("Error reading GeoJson file:", geojsonpath, "error:", err)
+		os.Exit(1)
 	}
 	defer file.Close()
 
@@ -551,7 +552,8 @@ func InitGeoJson(geojsonpath string) {
 		CRS        map[string]interface{} `json:"crs,omitempty"`
 	}
 	if err := json.NewDecoder(file).Decode(&polygon); err != nil {
-		panic(err)
+		println("Error decoding GeoJson file:", geojsonpath, "error:", err)
+		os.Exit(1)
 	}
 
 	geoTest := polygon.Features[0].Geometry

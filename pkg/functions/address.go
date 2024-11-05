@@ -204,8 +204,8 @@ func NearbyGPSIntoPolygon(latitude float64, longitude float64, radius int) strin
 	}
 }
 
-// NearbyGPSIntoPolygonWhitoutStart
-func NearbyGPSIntoPolygonWhitoutStart(radius int) string {
+// NearbyGPSIntoPolygonWithoutStart
+func NearbyGPSIntoPolygonWithoutStart(radius int) string {
 	latitude, longitude := selectRandomPoint(ctx.JrContext.CtxGeoJson)
 	return NearbyGPSIntoPolygon(latitude, longitude, radius)
 }

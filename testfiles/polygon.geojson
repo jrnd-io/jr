@@ -4,7 +4,14 @@
   "features": [
     {
       "type": "Feature",
-      "properties": {"name": "Lago di Como"},
+      "properties": {
+        "name": "Lago di Como",
+        "stroke": "#1100ff",
+        "stroke-width": 5,
+        "stroke-opacity": 1,
+        "fill": "#cbbdff",
+        "fill-opacity": 0.5
+      },
       "geometry": {
         "type": "Polygon",
         "coordinates": [

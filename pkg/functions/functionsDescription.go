@@ -891,7 +891,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "string",
 		Localizable: false,
 		Return:      "string",
-		Example:     `jr template run --embedded '{{nearby_gps_into_polygon 45.849539549943 9.3874341200659 10}}' --geojson testfiles/poligon.geojson`,
+		Example:     `jr template run --embedded '{{nearby_gps_into_polygon 45.849539549943 9.3874341200659 10}}' --geojson testfiles/polygon.geojson`,
 		Output:      "41.8963 12.4975",
 	},
 	"nearby_gps_into_polygon_without_start": {
@@ -901,7 +901,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "string",
 		Localizable: false,
 		Return:      "string",
-		Example:     `jr template run --embedded '{{nearby_gps_into_polygon_without_start 10}}' --geojson testfiles/poligon.geojson`,
+		Example:     `jr template run --embedded '{{nearby_gps_into_polygon_without_start 10}}' --geojson testfiles/polygon.geojson`,
 		Output:      "41.8963 12.4975",
 	},
 	"now_add": {

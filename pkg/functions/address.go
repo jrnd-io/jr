@@ -127,7 +127,125 @@ func NearbyGPS(latitude float64, longitude float64, radius int) string {
 	newLongitude := longitude + (distanceInDegrees * math.Sin(randomAngle))
 
 	return fmt.Sprintf("%.4f %.4f", newLatitude, newLongitude)
+}
 
+// NearbyGPSOnPolyline generates a random latitude and longitude within a specified radius (in meters)
+// along a given polyline path. Upon reaching the end of the path, the function reverses direction and continues
+// generating points along the same path, allowing for continuous point generation in a back-and-forth pattern.
+func NearbyGPSOnPolyline(radius int) string {
+	ctx.JrContext.CtxGeoJsonLock.Lock()
+	defer ctx.JrContext.CtxGeoJsonLock.Unlock()
+
+	// Ensure the path is available and has enough points
+	if len(ctx.JrContext.CtxGeoJson) < 2 {
+		println("Path must contain at least two points.")
+		os.Exit(1)
+	}
+
+	// Get the current point on the path
+	currentPoint := ctx.JrContext.CtxGeoJson[0]
+	currentLat, currentLon := currentPoint[0], currentPoint[1]
+
+	// Update last known point if there are recent saved coordinates
+	if len(ctx.JrContext.CtxLastPointLat) == 1 {
+		currentLat = ctx.JrContext.CtxLastPointLat[len(ctx.JrContext.CtxLastPointLat)-1]
+	}
+	if len(ctx.JrContext.CtxLastPointLon) == 1 {
+		currentLon = ctx.JrContext.CtxLastPointLon[len(ctx.JrContext.CtxLastPointLon)-1]
+	}
+
+	// Convert radius to float for calculations
+	radiusInMeters := float64(radius)
+
+	// Find the next point on the polyline at the specified distance
+	newLatitude, newLongitude, newDirection := findNextPointOnPolyline(ctx.JrContext.CtxGeoJson, []float64{currentLat, currentLon}, radiusInMeters, ctx.JrContext.CtxForward)
+	ctx.JrContext.CtxForward = newDirection
+
+	// Update the context with the new valid point, maintaining a maximum ctx of 10 points
+	ctx.JrContext.CtxLastPointLat = append(ctx.JrContext.CtxLastPointLat, newLatitude)
+	ctx.JrContext.CtxLastPointLon = append(ctx.JrContext.CtxLastPointLon, newLongitude)
+	// Keep only the last point in the ctx
+	ctx.JrContext.CtxLastPointLat = ctx.JrContext.CtxLastPointLat[1:]
+	ctx.JrContext.CtxLastPointLon = ctx.JrContext.CtxLastPointLon[1:]
+
+	// Return the coordinates of the valid point
+	return fmt.Sprintf("%.12f %.12f", newLatitude, newLongitude)
+}
+
+// FindNextPointOnPolyline finds the next point on the polyline at a fixed distance,
+// reversing direction when reaching the end of the path.
+func findNextPointOnPolyline(polyline [][]float64, currentPoint []float64, distance float64, forward bool) (float64, float64, bool) {
+	if len(polyline) < 2 {
+		return currentPoint[0], currentPoint[1], forward // If the polyline is too short, return the current point
+	}
+
+	totalDistance := 0.0
+	foundCurrent := false
+
+	// Traverse polyline based on the current direction
+	for i := 0; i < len(polyline)-1; i++ {
+		// Choose direction based on forward flag
+		index1, index2 := i, i+1
+		if !forward {
+			index1, index2 = len(polyline)-1-i, len(polyline)-2-i
+		}
+
+		segmentStart, segmentEnd := polyline[index1], polyline[index2]
+
+		// Check if we are starting from the current point
+		if !foundCurrent && (comparePoints(segmentStart, currentPoint) || comparePoints(segmentEnd, currentPoint)) {
+			foundCurrent = true
+		}
+
+		if foundCurrent {
+			// Calculate the distance to the end of this segment
+			segmentDistance := haversineDistance(segmentStart, segmentEnd)
+
+			// Check if the target distance falls within this segment
+			if totalDistance+segmentDistance >= distance {
+				// Interpolate between segmentStart and segmentEnd
+				remainingDistance := distance - totalDistance
+				fraction := remainingDistance / segmentDistance
+				nextPoint := interpolate(segmentStart, segmentEnd, fraction)
+				return nextPoint[0], nextPoint[1], forward
+			}
+
+			// Otherwise, accumulate distance and continue to the next segment
+			totalDistance += segmentDistance
+		}
+	}
+
+	// If we reach the end of the polyline in forward direction, reverse direction
+	// and continue from the current point
+	return findNextPointOnPolyline(polyline, polyline[len(polyline)-1], distance-totalDistance, !forward)
+}
+
+// haversineDistance calculates the Haversine distance (in meters) between two points.
+func haversineDistance(p1, p2 []float64) float64 {
+	const R = 6371000 // Earth radius in meters
+	lat1, lon1 := p1[0]*math.Pi/180, p1[1]*math.Pi/180
+	lat2, lon2 := p2[0]*math.Pi/180, p2[1]*math.Pi/180
+
+	dLat := lat2 - lat1
+	dLon := lon2 - lon1
+
+	a := math.Sin(dLat/2)*math.Sin(dLat/2) + math.Cos(lat1)*math.Cos(lat2)*math.Sin(dLon/2)*math.Sin(dLon/2)
+	c := 2 * math.Atan2(math.Sqrt(a), math.Sqrt(1-a))
+
+	return R * c
+}
+
+// ComparePoints checks if two points are approximately equal within a small tolerance,
+// accounting for potential floating-point inaccuracies.
+func comparePoints(p1, p2 []float64) bool {
+	return math.Abs(p1[0]-p2[0]) < 0 && math.Abs(p1[1]-p2[1]) < 0
+}
+
+// interpolate calculates a point at a fraction of the distance between two points.
+func interpolate(start, end []float64, fraction float64) []float64 {
+	lat := start[0] + fraction*(end[0]-start[0])
+	lng := start[1] + fraction*(end[1]-start[1])
+	return []float64{lat, lng}
 }
 
 // NearbyGPSIntoPolygon generates a random latitude and longitude within a specified radius (in meters)

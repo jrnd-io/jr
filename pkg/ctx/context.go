@@ -47,6 +47,7 @@ type Context struct {
 	CtxLastPointLat           []float64
 	CtxLastPointLon           []float64
 	CtxForward                bool
+	CtxIndex                  int
 	LastIndex                 int
 	CountryIndex              int
 	CityIndex                 int
@@ -73,6 +74,7 @@ func init() {
 		CtxLastPointLat:  []float64{},
 		CtxLastPointLon:  []float64{},
 		CtxForward:       true,
+		CtxIndex:         0,
 		LastIndex:        -1,
 		CountryIndex:     232,
 		CityIndex:        -1,

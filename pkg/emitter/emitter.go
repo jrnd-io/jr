@@ -23,9 +23,10 @@ package emitter
 import (
 	"context"
 	"fmt"
-	"github.com/jrnd-io/jr/pkg/producers/wasm"
 	"os"
 	"time"
+
+	"github.com/jrnd-io/jr/pkg/producers/wasm"
 
 	"github.com/jrnd-io/jr/pkg/configuration"
 	"github.com/jrnd-io/jr/pkg/constants"
@@ -173,6 +174,10 @@ func (e *Emitter) Initialize(ctx context.Context, conf configuration.GlobalConfi
 		e.Producer = createWASMProducer(ctx, conf.LUAScriptConfig)
 		return
 	}
+	if e.Output == "wamp" {
+		e.Producer = createWAMPProducer(ctx, conf.WAMPConfig)
+		return
+	}
 
 }
 
@@ -281,8 +286,14 @@ func createWASMProducer(ctx context.Context, config string) Producer {
 	return producer
 }
 
-func createKafkaProducer(ctx context.Context, conf configuration.GlobalConfiguration, topic string, templateType string) *kafka.Manager {
+func createWAMPProducer(ctx context.Context, config string) Producer {
+	producer := &wasm.Producer{}
+	producer.Initialize(ctx, config)
 
+	return producer
+}
+
+func createKafkaProducer(ctx context.Context, conf configuration.GlobalConfiguration, topic string, templateType string) *kafka.Manager {
 
 	kManager := &kafka.Manager{
 		Serializer:   conf.Serializer,

@@ -47,6 +47,7 @@ import (
 	"github.com/jrnd-io/jr/pkg/producers/s3"
 	"github.com/jrnd-io/jr/pkg/producers/server"
 	"github.com/jrnd-io/jr/pkg/producers/wamp"
+	"github.com/jrnd-io/jr/pkg/producers/wamprpc"
 	"github.com/jrnd-io/jr/pkg/tpl"
 	"github.com/rs/zerolog/log"
 )
@@ -179,6 +180,10 @@ func (e *Emitter) Initialize(ctx context.Context, conf configuration.GlobalConfi
 		e.Producer = createWAMPProducer(ctx, conf.WAMPConfig)
 		return
 	}
+	if e.Output == "wamprpc" {
+		e.Producer = createWAMPRPCProducer(ctx, conf.WAMPConfig)
+		return
+	}
 
 }
 
@@ -289,6 +294,13 @@ func createWASMProducer(ctx context.Context, config string) Producer {
 
 func createWAMPProducer(ctx context.Context, config string) Producer {
 	producer := &wamp.Producer{}
+	producer.Initialize(ctx, config)
+
+	return producer
+}
+
+func createWAMPRPCProducer(ctx context.Context, config string) Producer {
+	producer := &wamprpc.Producer{}
 	producer.Initialize(ctx, config)
 
 	return producer

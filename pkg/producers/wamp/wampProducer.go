@@ -38,15 +38,17 @@ type Config struct {
 	Topic    string `json:"topic"`
 	SerType  string `json:"serType"`
 	Compress bool   `json:"compress"`
+	Authid   string `json:"authid"`
 }
 
-type WampProducer struct {
+type Producer struct {
 	client client.Client
 	realm  string
 	topic  string
+	authid string
 }
 
-func (p *WampProducer) Initialize(ctx context.Context, configFile string) {
+func (p *Producer) Initialize(ctx context.Context, configFile string) {
 	var config Config
 	file, err := os.ReadFile(configFile)
 	if err != nil {
@@ -73,6 +75,9 @@ func (p *WampProducer) Initialize(ctx context.Context, configFile string) {
 	cfg := client.Config{
 		Realm:         config.Realm,
 		Serialization: serialization,
+		HelloDetails: wamp.Dict{
+			"authid": config.Authid,
+		},
 	}
 
 	if config.Compress {
@@ -85,22 +90,28 @@ func (p *WampProducer) Initialize(ctx context.Context, configFile string) {
 	if err != nil {
 		log.Fatal().Err(err).Msg("Can't connect to WAMP Router")
 	}
+	// defer wampclient.Close()
 
 	p.realm = config.Realm
 	p.topic = config.Topic
+	p.authid = config.Authid
 
 	p.client = *wampclient
 }
 
-func (p *WampProducer) Produce(ctx context.Context, k []byte, v []byte, _ any) {
-	args := wamp.List{ctx}
-	err := p.client.Publish(p.topic, nil, args, nil)
+func (p *Producer) Produce(ctx context.Context, k []byte, v []byte, _ any) {
+	data := string(v)
+	args := wamp.List{data}
+	opts := wamp.Dict{
+		"authid": p.authid,
+	}
+	err := p.client.Publish(p.topic, opts, args, nil)
 	if err != nil {
 		log.Fatal().Err(err).Msgf("publish error: %s", err)
 	}
 }
 
-func (p *WampProducer) Close(ctx context.Context) error {
+func (p *Producer) Close(ctx context.Context) error {
 	err := p.client.Close()
 	if err != nil {
 		log.Warn().Err(err).Msg("Failed to close WAMP connection")

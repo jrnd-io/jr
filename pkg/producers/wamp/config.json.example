@@ -6,4 +6,5 @@
   "topic": "example.hello",
   "serType": "json",
   "compress": true,
+  "authid": "clientJR"
 }

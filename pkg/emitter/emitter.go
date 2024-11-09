@@ -181,7 +181,7 @@ func (e *Emitter) Initialize(ctx context.Context, conf configuration.GlobalConfi
 		return
 	}
 	if e.Output == "wamprpc" {
-		e.Producer = createWAMPRPCProducer(ctx, conf.WAMPConfig)
+		e.Producer = createWAMPRPCProducer(ctx, conf.WAMPRPCConfig)
 		return
 	}
 

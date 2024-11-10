@@ -42,6 +42,10 @@ type Context struct {
 	CtxListLock               sync.RWMutex
 	CtxCSV                    map[int]map[string]string
 	CtxCSVLock                sync.RWMutex
+	CtxGeoJson                [][]float64
+	CtxGeoJsonLock            sync.RWMutex
+	CtxLastPointLat           []float64
+	CtxLastPointLon           []float64
 	LastIndex                 int
 	CountryIndex              int
 	CityIndex                 int
@@ -49,7 +53,7 @@ type Context struct {
 }
 
 func init() {
-
+	var ctxgeojson [][]float64
 	JrContext = &Context{
 		StartTime:        time.Now(),
 		GeneratedBytes:   0,
@@ -63,6 +67,10 @@ func init() {
 		CtxListLock:      sync.RWMutex{},
 		CtxCSV:           make(map[int]map[string]string),
 		CtxCSVLock:       sync.RWMutex{},
+		CtxGeoJson:       ctxgeojson,
+		CtxGeoJsonLock:   sync.RWMutex{},
+		CtxLastPointLat:  []float64{},
+		CtxLastPointLon:  []float64{},
 		LastIndex:        -1,
 		CountryIndex:     232,
 		CityIndex:        -1,

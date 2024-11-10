@@ -6,13 +6,13 @@ import (
 	"context"
 	"testing"
 
-	"github.com/jrnd-io/jr/pkg/producers/wamp"
+	"github.com/jrnd-io/jr/pkg/producers/wamprpc"
 )
 
 func TestProducer_Initialize(t *testing.T) {
 	configFile := "config.json.example"
 
-	producer, err := wamp.ProducerFactory("wamp")
+	producer, err := wamprpc.ProducerFactory("wamprpc")
 	if err != nil {
 		t.Fatalf("Error reading configuration file: %v", err)
 	}
@@ -25,7 +25,7 @@ func TestProducer_Initialize(t *testing.T) {
 func TestProducer_Close(t *testing.T) {
 	configFile := "config.json.example"
 
-	producer, err := wamp.ProducerFactory("wamp")
+	producer, err := wamprpc.ProducerFactory("wamprpc")
 	if err != nil {
 		t.Fatalf("Error reading configuration file: %v", err)
 	}
@@ -40,7 +40,7 @@ func TestProducer_Close(t *testing.T) {
 func TestProducer_Produce(t *testing.T) {
 	configFile := "config.json.example"
 
-	producer, err := wamp.ProducerFactory("wamp")
+	producer, err := wamprpc.ProducerFactory("wamprpc")
 	if err != nil {
 		t.Fatalf("Error reading configuration file: %v", err)
 	}

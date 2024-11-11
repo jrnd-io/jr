@@ -126,6 +126,8 @@ jr template run --template "{{name}}"
 					configuration.GlobalCfg.LUAScriptConfig, _ = cmd.Flags().GetString(f.Name)
 				case "wasmConfig":
 					configuration.GlobalCfg.WASMConfig, _ = cmd.Flags().GetString(f.Name)
+				case "wampConfig":
+					configuration.GlobalCfg.WAMPConfig, _ = cmd.Flags().GetString(f.Name)
 				}
 			}
 		})
@@ -198,5 +200,6 @@ func init() {
 	templateRunCmd.Flags().String("cassandraConfig", "", "Cassandra configuration")
 	templateRunCmd.Flags().String("luascriptConfig", "", "LUA Script configuration")
 	templateRunCmd.Flags().String("wasmConfig", "", "WASM configuration")
+	templateRunCmd.Flags().String("wampConfig", "", "WAMP configuration")
 
 }

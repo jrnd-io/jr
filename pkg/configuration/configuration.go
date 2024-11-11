@@ -44,6 +44,7 @@ type GlobalConfiguration struct {
 	AWSDynamoDBConfig   string
 	LUAScriptConfig     string
 	WASMConfig          string
+	WAMPConfig          string
 	Url                 string
 	EmbeddedTemplate    bool
 	FileNameTemplate    bool

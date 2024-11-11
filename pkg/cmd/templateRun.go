@@ -202,6 +202,7 @@ func init() {
 	templateRunCmd.Flags().String("cassandraConfig", "", "Cassandra configuration")
 	templateRunCmd.Flags().String("luascriptConfig", "", "LUA Script configuration")
 	templateRunCmd.Flags().String("wasmConfig", "", "WASM configuration")
+	templateRunCmd.Flags().String("wampConfig", "", "WAMP configuration")
 	templateRunCmd.Flags().String("wampRpcConfig", "", "WAMP-RPC configuration")
 
 }

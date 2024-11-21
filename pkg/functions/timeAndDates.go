@@ -74,6 +74,18 @@ func Justpassed(milliseconds int64) string {
 	return pastTime.Format(time.DateTime)
 }
 
+// Now returns the current time as a Unix millisecond timestamp
+func Now() int64 {
+	return time.Now().UnixMilli()
+}
+
+// FormatTimestamp formats a unix millisecond timestamp with the given pattern
+func FormatTimestamp(timestamp int64, format string) string {
+	t := time.Unix(0, timestamp*int64(time.Millisecond))
+	formattedDate := t.Format(format)
+	return formattedDate
+}
+
 // Nowsub returns a date in the past of given milliseconds
 func Nowsub(milliseconds int64) string {
 	now := time.Now()

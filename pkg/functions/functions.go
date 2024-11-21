@@ -23,6 +23,7 @@ package functions
 import (
 	"bufio"
 	"encoding/csv"
+	"encoding/json"
 	"fmt"
 	"math"
 	"math/rand"
@@ -35,6 +36,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/jrnd-io/jr/pkg/constants"
 	"github.com/jrnd-io/jr/pkg/ctx"
+	geojson "github.com/paulmach/go.geojson"
 	"github.com/rs/zerolog/log"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
@@ -125,25 +127,27 @@ var fmap = map[string]interface{}{
 	"username":       Username,
 
 	// address
-	"building":       BuildingNumber,
-	"cardinal":       Cardinal,
-	"capital":        Capital,
-	"capital_at":     CapitalAt,
-	"city":           City,
-	"city_at":        CityAt,
-	"country":        Country,
-	"country_random": CountryRandom,
-	"country_at":     CountryAt,
-	"latitude":       Latitude,
-	"longitude":      Longitude,
-	"nearby_gps":     NearbyGPS,
-	"state":          State,
-	"state_at":       StateAt,
-	"state_short":    StateShort,
-	"state_short_at": StateShortAt,
-	"street":         Street,
-	"zip":            Zip,
-	"zip_at":         ZipAt,
+	"building":                              BuildingNumber,
+	"cardinal":                              Cardinal,
+	"capital":                               Capital,
+	"capital_at":                            CapitalAt,
+	"city":                                  City,
+	"city_at":                               CityAt,
+	"country":                               Country,
+	"country_random":                        CountryRandom,
+	"country_at":                            CountryAt,
+	"latitude":                              Latitude,
+	"longitude":                             Longitude,
+	"nearby_gps":                            NearbyGPS,
+	"nearby_gps_into_polygon":               NearbyGPSIntoPolygon,
+	"nearby_gps_into_polygon_without_start": NearbyGPSIntoPolygonWithoutStart,
+	"state":                                 State,
+	"state_at":                              StateAt,
+	"state_short":                           StateShort,
+	"state_short_at":                        StateShortAt,
+	"street":                                Street,
+	"zip":                                   Zip,
+	"zip_at":                                ZipAt,
 
 	// finance
 	"account":      Account,
@@ -531,4 +535,31 @@ func InitCSV(csvpath string) {
 	}
 
 	ctx.JrContext.CtxCSV = csvValues
+}
+
+func InitGeoJson(geojsonpath string) {
+	// Loads the csv file in the context
+	if len(geojsonpath) == 0 {
+		return
+	}
+	file, err := os.Open(geojsonpath)
+	if err != nil {
+		println("Error reading GeoJson file:", geojsonpath, "error:", err)
+		os.Exit(1)
+	}
+	defer file.Close()
+
+	var polygon struct {
+		Features   []geojson.Feature      `json:"features"`
+		Properties map[string]interface{} `json:"properties"`
+		CRS        map[string]interface{} `json:"crs,omitempty"`
+	}
+	if err := json.NewDecoder(file).Decode(&polygon); err != nil {
+		println("Error decoding GeoJson file:", geojsonpath, "error:", err)
+		os.Exit(1)
+	}
+
+	geoTest := polygon.Features[0].Geometry
+	ctxgeojson := geoTest.Polygon[0]
+	ctx.JrContext.CtxGeoJson = ctxgeojson
 }

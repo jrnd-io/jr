@@ -61,6 +61,7 @@ jr template run --template "{{name}}"
 		preload, _ := cmd.Flags().GetInt("preload")
 
 		csv, _ := cmd.Flags().GetString("csv")
+		geojson, _ := cmd.Flags().GetString("geojson")
 
 		if kcat {
 			oneline = true
@@ -125,6 +126,8 @@ jr template run --template "{{name}}"
 					configuration.GlobalCfg.LUAScriptConfig, _ = cmd.Flags().GetString(f.Name)
 				case "wasmConfig":
 					configuration.GlobalCfg.WASMConfig, _ = cmd.Flags().GetString(f.Name)
+				case "wampConfig":
+					configuration.GlobalCfg.WAMPConfig, _ = cmd.Flags().GetString(f.Name)
 				}
 			}
 		})
@@ -145,6 +148,7 @@ jr template run --template "{{name}}"
 			Kcat:             kcat,
 			Oneline:          oneline,
 			Csv:              csv,
+			GeoJson:          geojson,
 		}
 
 		functions.SetSeed(seed)
@@ -163,6 +167,8 @@ func init() {
 	templateRunCmd.Flags().Int64("seed", time.Now().UTC().UnixNano(), "Seed to init pseudorandom generator")
 
 	templateRunCmd.Flags().String("csv", "", "Path to csv file to use")
+
+	templateRunCmd.Flags().String("geojson", "", "Path to geojson file to use")
 
 	templateRunCmd.Flags().StringP("kafkaConfig", "F", "", "Kafka configuration")
 	templateRunCmd.Flags().String("registryConfig", "", "Kafka configuration")
@@ -194,5 +200,6 @@ func init() {
 	templateRunCmd.Flags().String("cassandraConfig", "", "Cassandra configuration")
 	templateRunCmd.Flags().String("luascriptConfig", "", "LUA Script configuration")
 	templateRunCmd.Flags().String("wasmConfig", "", "WASM configuration")
+	templateRunCmd.Flags().String("wampConfig", "", "WAMP configuration")
 
 }

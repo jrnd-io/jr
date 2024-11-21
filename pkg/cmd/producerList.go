@@ -60,6 +60,7 @@ var producerListCmd = &cobra.Command{
 		fmt.Printf("%sLUA Script%s (--output = luascript)\n", Green, Reset)
 		fmt.Printf("%sWASM Function%s (--output = wasm)\n", Green, Reset)
 		fmt.Printf("%sAWS DynamoDB%s (--output = awsdynamodb)\n", Green, Reset)
+		fmt.Printf("%sWAMP Topic%s (--output = wamp)\n", Green, Reset)
 		fmt.Println()
 
 	},

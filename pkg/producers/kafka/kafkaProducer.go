@@ -353,10 +353,12 @@ func readConfig(configFile string) map[string]string {
 	for scanner.Scan() {
 		line := strings.TrimSpace(scanner.Text())
 		if !strings.HasPrefix(line, "#") && len(line) != 0 {
-			kv := strings.Split(line, "=")
-			parameter := strings.TrimSpace(kv[0])
-			value := strings.TrimSpace(kv[1])
-			m[parameter] = value
+			index := strings.Index(line, "=")
+			if index >= 0 {
+				parameter := strings.TrimSpace(line[:index])
+				value := strings.TrimSpace(line[index+1:])
+				m[parameter] = value
+			} // else: the line is not a parameter=value line
 		}
 	}
 

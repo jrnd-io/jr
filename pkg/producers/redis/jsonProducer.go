@@ -11,7 +11,7 @@ import (
 )
 
 type JSONProducer struct {
-	client redis.Client
+	client *redis.Client
 	Ttl    time.Duration
 }
 

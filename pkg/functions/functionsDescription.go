@@ -1327,11 +1327,21 @@ var funcDesc = map[string]FunctionDescription{
 	"unix_time_stamp": {
 		Name:        "unix_time_stamp",
 		Category:    "time",
-		Description: "returns a random unix timestamp not older than the given number of days",
+		Description: "returns a random unix timestamp not older than the given number of days (in seconds)",
 		Parameters:  "days int",
 		Localizable: false,
 		Return:      "int64",
 		Example:     "jr template run --embedded '{{unix_time_stamp 10}}'",
+		Output:      "1679703304",
+	},
+	"unix_time_stamp_ms": {
+		Name:        "unix_time_stamp_ms",
+		Category:    "time",
+		Description: "returns a random unix timestamp not older than the given number of days (in milliseconds)",
+		Parameters:  "days int",
+		Localizable: false,
+		Return:      "int64",
+		Example:     "jr template run --embedded '{{unix_time_stamp_ms 10}}'",
 		Output:      "1679703304",
 	},
 	"upper": {

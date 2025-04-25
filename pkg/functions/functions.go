@@ -88,17 +88,22 @@ var fmap = map[string]interface{}{
 	// math utilities
 	"add":          func(a, b int) int { return a + b },
 	"div":          func(a, b int) int { return a / b },
+	"sub":          func(a, b int) int { return a - b },
+	"mul":          func(a, b int) int { return a * b },
+	"mod":          func(a, b int) int { return a % b },
+	"add64":        func(a, b int64) int64 { return a + b },
+	"div64":        func(a, b int64) int64 { return a / b },
+	"sub64":        func(a, b int64) int64 { return a - b },
+	"mul64":        func(a, b int64) int64 { return a * b },
+	"mod64":        func(a, b int64) int64 { return a % b },
 	"format_float": func(f string, v float32) string { return fmt.Sprintf(f, v) },
 	"integer":      func(min, max int) int { return min + Random.Intn(max-min) },
 	"integer64":    func(min, max int64) int64 { return min + Random.Int63n(max-min) },
 	"floating":     func(min, max float32) float32 { return min + Random.Float32()*(max-min) },
-	"sub":          func(a, b int) int { return a - b },
 	"max":          math.Max,
 	"min":          math.Min,
 	"minint":       Minint,
 	"maxint":       Maxint,
-	"mod":          func(a, b int) int { return a % b },
-	"mul":          func(a, b int) int { return a * b },
 
 	// networking and time utilities
 	"http_method":       HttpMethod,
@@ -305,7 +310,7 @@ func RandomValueFromList(s string) string {
 	return ""
 }
 
-// GetValuesFromList returns a value from Context list l at index
+// GetValueFromListAtIndex returns a value from Context list l at index
 func GetValueFromListAtIndex(s string, index int) string {
 
 	ctx.JrContext.CtxListLock.RLock()

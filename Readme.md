@@ -20,7 +20,7 @@ For full documentation about emitters, referential integrity, how to write templ
 
 ## Building and compiling
 
-JR requires Go 1.22
+JR requires Go 1.24
 
 you can use the `make_install.sh` to install JR. This script does everything needed in one simple command.
 
@@ -30,9 +30,12 @@ you can use the `make_install.sh` to install JR. This script does everything nee
 
 These are the steps in the `make_install.sh` script if you want to use them separately:
 
-```shell
+```bash
+# generates the code and compile everything
 make all
-make copy_templates
+# copy the templates and data directory in your $JR_SYSTEM_DIR, which defaults to $XDG_CONFIGDIR for your OS
+make copy_templates  
+# copy the jr bin in /usr/local/bin
 sudo make install
 ```
 

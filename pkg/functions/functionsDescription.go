@@ -69,7 +69,7 @@ var funcDesc = map[string]FunctionDescription{
 		Localizable: false,
 		Description: "adds two numbers",
 		Return:      "int64",
-		Example:     "jr template run --embedded '{{add 1 2}}'",
+		Example:     "jr template run --embedded '{{add64 1 2}}'",
 		Output:      "3",
 	},
 	"add_v_to_list": {
@@ -379,7 +379,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "first int64, second int64",
 		Localizable: false,
 		Return:      "int64",
-		Example:     "jr template run --embedded '{{div 10 2}}'",
+		Example:     "jr template run --embedded '{{div64 10 2}}'",
 		Output:      "5",
 	},
 	"email": {
@@ -901,7 +901,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "first int64, second int64",
 		Localizable: false,
 		Return:      "int64",
-		Example:     "jr template run --embedded '{{mod 10 2}}'",
+		Example:     "jr template run --embedded '{{mod64 10 2}}'",
 		Output:      "0",
 	},
 	"mul": {
@@ -921,7 +921,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "first int64, second int64",
 		Localizable: false,
 		Return:      "int64",
-		Example:     "jr template run --embedded '{{mul 10 2}}'",
+		Example:     "jr template run --embedded '{{mul64 10 2}}'",
 		Output:      "20",
 	},
 	"name": {
@@ -1321,7 +1321,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "first int64, second int64",
 		Localizable: false,
 		Return:      "int64",
-		Example:     "jr template run --embedded '{{sub 1 2}}'",
+		Example:     "jr template run --embedded '{{sub64 1 2}}'",
 		Output:      "-1",
 	},
 	"surname": {

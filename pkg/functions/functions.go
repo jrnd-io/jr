@@ -96,14 +96,16 @@ var fmap = map[string]interface{}{
 	"sub64":        func(a, b int64) int64 { return a - b },
 	"mul64":        func(a, b int64) int64 { return a * b },
 	"mod64":        func(a, b int64) int64 { return a % b },
+	"min":          math.Min,
+	"max":          math.Max,
+	"minint":       Minint,
+	"maxint":       Maxint,
+	"minint64":     Minint64,
+	"maxint64":     Maxint64,
 	"format_float": func(f string, v float32) string { return fmt.Sprintf(f, v) },
 	"integer":      func(min, max int) int { return min + Random.Intn(max-min) },
 	"integer64":    func(min, max int64) int64 { return min + Random.Int63n(max-min) },
 	"floating":     func(min, max float32) float32 { return min + Random.Float32()*(max-min) },
-	"max":          math.Max,
-	"min":          math.Min,
-	"minint":       Minint,
-	"maxint":       Maxint,
 
 	// networking and time utilities
 	"http_method":       HttpMethod,
@@ -397,6 +399,22 @@ func Minint(a, b int) int {
 
 // Maxint returns the minimum between two ints
 func Maxint(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
+}
+
+// Minint64 returns the minimum between two ints
+func Minint64(a, b int64) int64 {
+	if a < b {
+		return a
+	}
+	return b
+}
+
+// Maxint64 returns the minimum between two ints
+func Maxint64(a, b int64) int64 {
 	if a > b {
 		return a
 	}

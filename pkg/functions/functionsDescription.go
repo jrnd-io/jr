@@ -801,7 +801,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "first int, second int",
 		Localizable: false,
 		Return:      "int",
-		Example:     "jr template run --embedded '{{max 10 2}}'",
+		Example:     "jr template run --embedded '{{maxint 10 2}}'",
 		Output:      "10",
 	},
 	"maxint64": {
@@ -811,7 +811,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "first int64, second int64",
 		Localizable: false,
 		Return:      "int64",
-		Example:     "jr template run --embedded '{{max 10 2}}'",
+		Example:     "jr template run --embedded '{{maxint64 10 2}}'",
 		Output:      "10",
 	},
 	"markov": {
@@ -841,7 +841,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "first int, second int",
 		Localizable: false,
 		Return:      "int",
-		Example:     "jr template run --embedded '{{min 10 2}}'",
+		Example:     "jr template run --embedded '{{minint 10 2}}'",
 		Output:      "2",
 	},
 	"minint64": {
@@ -851,7 +851,7 @@ var funcDesc = map[string]FunctionDescription{
 		Parameters:  "first int64, second int64",
 		Localizable: false,
 		Return:      "int64",
-		Example:     "jr template run --embedded '{{min 10 2}}'",
+		Example:     "jr template run --embedded '{{minint64 10 2}}'",
 		Output:      "2",
 	},
 	"middle_name": {

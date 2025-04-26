@@ -385,7 +385,7 @@ func WordShuffleN(name string, n int) []string {
 	Random.Shuffle(len(words), func(i, j int) {
 		words[i], words[j] = words[j], words[i]
 	})
-	number := Minint(n, len(words))
+	number := min(n, len(words))
 	return words[:number]
 }
 
@@ -455,7 +455,7 @@ func fileExists(filename string) bool {
 // Helper function to generate n different integers from 0 to length
 func findNDifferentInts(n, max int) []int {
 
-	n = Minint(n, max)
+	n = min(n, max)
 	ints := make([]int, n)
 
 	// Generate n different random indices of maximum length

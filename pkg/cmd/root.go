@@ -81,9 +81,15 @@ func initConfig() {
 	for _, path := range strings.Split(os.ExpandEnv("$PATH"), ":") {
 		viper.AddConfigPath(path)
 	}
+	
 	viper.SetEnvPrefix(constants.DEFAULT_ENV_PREFIX)
 	viper.SetEnvKeyReplacer(strings.NewReplacer("-", "_"))
 	viper.AutomaticEnv()
+	
+	// Explicitly bind environment variables without the JR_ prefix
+	viper.BindEnv("jr_system_dir", "JR_SYSTEM_DIR")
+	viper.BindEnv("jr_user_dir", "JR_USER_DIR")
+	
 	bindFlags(rootCmd, viper.GetViper())
 	if constants.JR_SYSTEM_DIR == "" {
 		constants.JR_SYSTEM_DIR = constants.SYSTEM_DIR

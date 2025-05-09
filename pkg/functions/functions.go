@@ -332,16 +332,12 @@ func RandomNValuesFromList(s string, n int) []string {
 	defer ctx.JrContext.CtxListLock.RUnlock()
 	list := ctx.JrContext.CtxList[s]
 	l := len(list)
-	if l != 0 {
-		ints := findNDifferentInts(n, l)
-		results := make([]string, len(ints))
-		for i := range ints {
-			results[i] = list[i]
-		}
-		return results
-	}
+	Random.Shuffle((l), func(i, j int) {
+		list[i], list[j] = list[j], list[i]
+	})
 
-	return []string{""}
+	return list[:min(n, l)]
+
 }
 
 // Word returns a random string from a list of strings in a file.
@@ -449,34 +445,6 @@ func fileExists(filename string) bool {
 		return true
 	}
 
-	return false
-}
-
-// Helper function to generate n different integers from 0 to length
-func findNDifferentInts(n, max int) []int {
-
-	n = min(n, max)
-	ints := make([]int, n)
-
-	// Generate n different random indices of maximum length
-	for i := 0; i < n; {
-		index := Random.Intn(max)
-		if !contains(ints, index) {
-			ints[i] = index
-			i++
-		}
-	}
-
-	return ints
-}
-
-// Helper function to check if an int is in a slice of ints
-func contains(values []int, value int) bool {
-	for _, v := range values {
-		if v == value {
-			return true
-		}
-	}
 	return false
 }
 

@@ -213,6 +213,8 @@ var fmap = map[string]interface{}{
 	"random_v_from_list":       RandomValueFromList,
 	"random_n_v_from_list":     RandomNValuesFromList,
 	"get_v_from_list_at_index": GetValueFromListAtIndex,
+	"get_list":                 GetList,
+	"get_first_n_in_list":      GetFirstNInList,
 	"get_v":                    GetV,
 	"set_v":                    SetV,
 	"fromcsv":                  FromCsv,
@@ -299,7 +301,7 @@ func RandomIndex(name string) string {
 	return strconv.Itoa(ctx.JrContext.LastIndex)
 }
 
-// RandomValueFromList returns a random value from Context list l
+// RandomValueFromList returns a random value from Context list s
 func RandomValueFromList(s string) string {
 	ctx.JrContext.CtxListLock.RLock()
 	defer ctx.JrContext.CtxListLock.RUnlock()
@@ -312,7 +314,7 @@ func RandomValueFromList(s string) string {
 	return ""
 }
 
-// GetValueFromListAtIndex returns a value from Context list l at index
+// GetValueFromListAtIndex returns a value from Context list s at index
 func GetValueFromListAtIndex(s string, index int) string {
 
 	ctx.JrContext.CtxListLock.RLock()
@@ -326,7 +328,23 @@ func GetValueFromListAtIndex(s string, index int) string {
 	return ""
 }
 
-// RandomNValuesFromList returns a random value from Context list l
+// GetList returns all values in a Context list s
+func GetList(s string) []string {
+	ctx.JrContext.CtxListLock.RLock()
+	defer ctx.JrContext.CtxListLock.RUnlock()
+	return ctx.JrContext.CtxList[s]
+}
+
+// GetFirstNInList returns first n values in a Context list s
+func GetFirstNInList(s string, n int) []string {
+	ctx.JrContext.CtxListLock.RLock()
+	defer ctx.JrContext.CtxListLock.RUnlock()
+	list := ctx.JrContext.CtxList[s]
+	l := len(list)
+	return list[:min(n, l)]
+}
+
+// RandomNValuesFromList returns n random values from Context list s
 func RandomNValuesFromList(s string, n int) []string {
 	ctx.JrContext.CtxListLock.RLock()
 	defer ctx.JrContext.CtxListLock.RUnlock()

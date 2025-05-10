@@ -365,6 +365,8 @@ func Word(name string) string {
 		return ""
 	}
 	words := data[name]
+	ctx.JrContext.CtxLock.Lock()
+	defer ctx.JrContext.CtxLock.Unlock()
 	ctx.JrContext.LastIndex = Random.Intn(len(words))
 	return words[ctx.JrContext.LastIndex]
 }

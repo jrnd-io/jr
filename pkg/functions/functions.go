@@ -271,6 +271,8 @@ func IndexOf(s string, name string) int {
 		return -1
 	}
 	words := data[name]
+	ctx.JrContext.CtxLock.RLock()
+	defer ctx.JrContext.CtxLock.RUnlock()
 	index := sort.Search(len(words), func(i int) bool { return strings.ToLower(words[i]) >= strings.ToLower(s) })
 
 	if index < len(words) && words[index] == s {
@@ -297,6 +299,8 @@ func RandomIndex(name string) string {
 		return ""
 	}
 	words := data[name]
+	ctx.JrContext.CtxLock.Lock()
+	defer ctx.JrContext.CtxLock.Unlock()
 	ctx.JrContext.LastIndex = Random.Intn(len(words))
 	return strconv.Itoa(ctx.JrContext.LastIndex)
 }

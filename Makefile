@@ -61,6 +61,13 @@ install-gogen:
 generate:
 	go generate pkg/generator/generate.go
 
+compile-race:
+	@echo "Compiling with race detector enabled"
+	go build -race -v -ldflags="-s -w -X 'github.com/jrnd-io/jr/pkg/cmd.Version=$(VERSION)' \
+	-X 'github.com/jrnd-io/jr/pkg/cmd.GoVersion=$(GOVERSION)' \
+	-X 'github.com/jrnd-io/jr/pkg/cmd.BuildUser=$(USER)' \
+	-X 'github.com/jrnd-io/jr/pkg/cmd.BuildTime=$(TIME)'" \
+	-o build/jr jr.go
 compile:
 	@echo "Compiling"
 	go build -v -ldflags="-s -w -X 'github.com/jrnd-io/jr/pkg/cmd.Version=$(VERSION)' \
@@ -110,4 +117,5 @@ install:
 	install build/jr /usr/local/bin
 
 all: hello install-gogen generate compile
+all-race: hello install-gogen generate compile-race
 all_offline: hello generate compile

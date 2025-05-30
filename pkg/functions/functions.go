@@ -88,17 +88,24 @@ var fmap = map[string]interface{}{
 	// math utilities
 	"add":          func(a, b int) int { return a + b },
 	"div":          func(a, b int) int { return a / b },
+	"sub":          func(a, b int) int { return a - b },
+	"mul":          func(a, b int) int { return a * b },
+	"mod":          func(a, b int) int { return a % b },
+	"add64":        func(a, b int64) int64 { return a + b },
+	"div64":        func(a, b int64) int64 { return a / b },
+	"sub64":        func(a, b int64) int64 { return a - b },
+	"mul64":        func(a, b int64) int64 { return a * b },
+	"mod64":        func(a, b int64) int64 { return a % b },
+	"min":          math.Min,
+	"max":          math.Max,
+	"minint":       Minint,
+	"maxint":       Maxint,
+	"minint64":     Minint64,
+	"maxint64":     Maxint64,
 	"format_float": func(f string, v float32) string { return fmt.Sprintf(f, v) },
 	"integer":      func(min, max int) int { return min + Random.Intn(max-min) },
 	"integer64":    func(min, max int64) int64 { return min + Random.Int63n(max-min) },
 	"floating":     func(min, max float32) float32 { return min + Random.Float32()*(max-min) },
-	"sub":          func(a, b int) int { return a - b },
-	"max":          math.Max,
-	"min":          math.Min,
-	"minint":       Minint,
-	"maxint":       Maxint,
-	"mod":          func(a, b int) int { return a % b },
-	"mul":          func(a, b int) int { return a * b },
 
 	// networking and time utilities
 	"http_method":       HttpMethod,
@@ -165,19 +172,20 @@ var fmap = map[string]interface{}{
 	"wkn":          Wkn,
 
 	// time and dates
-	"birthdate":        BirthDate,
-	"date_between":     DateBetween,
-	"dates_between":    DatesBetween,
-	"future":           Future,
-	"past":             Past,
-	"recent":           Recent,
-	"just_passed":      Justpassed,
-	"format_timestamp": FormatTimestamp,
-	"now":              Now,
-	"now_sub":          Nowsub,
-	"now_add":          Nowadd,
-	"soon":             Soon,
-	"unix_time_stamp":  UnixTimeStamp,
+	"birthdate":          BirthDate,
+	"date_between":       DateBetween,
+	"dates_between":      DatesBetween,
+	"future":             Future,
+	"past":               Past,
+	"recent":             Recent,
+	"just_passed":        Justpassed,
+	"format_timestamp":   FormatTimestamp,
+	"now":                Now,
+	"now_sub":            Nowsub,
+	"now_add":            Nowadd,
+	"soon":               Soon,
+	"unix_time_stamp":    UnixTimeStamp,
+	"unix_time_stamp_ms": UnixTimeStampMS,
 
 	// phone
 	"country_code":    CountryCode,
@@ -205,6 +213,8 @@ var fmap = map[string]interface{}{
 	"random_v_from_list":       RandomValueFromList,
 	"random_n_v_from_list":     RandomNValuesFromList,
 	"get_v_from_list_at_index": GetValueFromListAtIndex,
+	"get_list":                 GetList,
+	"get_first_n_in_list":      GetFirstNInList,
 	"get_v":                    GetV,
 	"set_v":                    SetV,
 	"fromcsv":                  FromCsv,
@@ -261,6 +271,8 @@ func IndexOf(s string, name string) int {
 		return -1
 	}
 	words := data[name]
+	ctx.JrContext.CtxLock.RLock()
+	defer ctx.JrContext.CtxLock.RUnlock()
 	index := sort.Search(len(words), func(i int) bool { return strings.ToLower(words[i]) >= strings.ToLower(s) })
 
 	if index < len(words) && words[index] == s {
@@ -287,11 +299,13 @@ func RandomIndex(name string) string {
 		return ""
 	}
 	words := data[name]
+	ctx.JrContext.CtxLock.Lock()
+	defer ctx.JrContext.CtxLock.Unlock()
 	ctx.JrContext.LastIndex = Random.Intn(len(words))
 	return strconv.Itoa(ctx.JrContext.LastIndex)
 }
 
-// RandomValueFromList returns a random value from Context list l
+// RandomValueFromList returns a random value from Context list s
 func RandomValueFromList(s string) string {
 	ctx.JrContext.CtxListLock.RLock()
 	defer ctx.JrContext.CtxListLock.RUnlock()
@@ -304,7 +318,7 @@ func RandomValueFromList(s string) string {
 	return ""
 }
 
-// GetValuesFromList returns a value from Context list l at index
+// GetValueFromListAtIndex returns a value from Context list s at index
 func GetValueFromListAtIndex(s string, index int) string {
 
 	ctx.JrContext.CtxListLock.RLock()
@@ -318,22 +332,34 @@ func GetValueFromListAtIndex(s string, index int) string {
 	return ""
 }
 
-// RandomNValuesFromList returns a random value from Context list l
+// GetList returns all values in a Context list s
+func GetList(s string) []string {
+	ctx.JrContext.CtxListLock.RLock()
+	defer ctx.JrContext.CtxListLock.RUnlock()
+	return ctx.JrContext.CtxList[s]
+}
+
+// GetFirstNInList returns first n values in a Context list s
+func GetFirstNInList(s string, n int) []string {
+	ctx.JrContext.CtxListLock.RLock()
+	defer ctx.JrContext.CtxListLock.RUnlock()
+	list := ctx.JrContext.CtxList[s]
+	l := len(list)
+	return list[:min(n, l)]
+}
+
+// RandomNValuesFromList returns n random values from Context list s
 func RandomNValuesFromList(s string, n int) []string {
 	ctx.JrContext.CtxListLock.RLock()
 	defer ctx.JrContext.CtxListLock.RUnlock()
 	list := ctx.JrContext.CtxList[s]
 	l := len(list)
-	if l != 0 {
-		ints := findNDifferentInts(n, l)
-		results := make([]string, len(ints))
-		for i := range ints {
-			results[i] = list[i]
-		}
-		return results
-	}
+	Random.Shuffle((l), func(i, j int) {
+		list[i], list[j] = list[j], list[i]
+	})
 
-	return []string{""}
+	return list[:min(n, l)]
+
 }
 
 // Word returns a random string from a list of strings in a file.
@@ -343,6 +369,8 @@ func Word(name string) string {
 		return ""
 	}
 	words := data[name]
+	ctx.JrContext.CtxLock.Lock()
+	defer ctx.JrContext.CtxLock.Unlock()
 	ctx.JrContext.LastIndex = Random.Intn(len(words))
 	return words[ctx.JrContext.LastIndex]
 }
@@ -377,7 +405,7 @@ func WordShuffleN(name string, n int) []string {
 	Random.Shuffle(len(words), func(i, j int) {
 		words[i], words[j] = words[j], words[i]
 	})
-	number := Minint(n, len(words))
+	number := min(n, len(words))
 	return words[:number]
 }
 
@@ -391,6 +419,22 @@ func Minint(a, b int) int {
 
 // Maxint returns the minimum between two ints
 func Maxint(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
+}
+
+// Minint64 returns the minimum between two ints
+func Minint64(a, b int64) int64 {
+	if a < b {
+		return a
+	}
+	return b
+}
+
+// Maxint64 returns the minimum between two ints
+func Maxint64(a, b int64) int64 {
 	if a > b {
 		return a
 	}
@@ -425,34 +469,6 @@ func fileExists(filename string) bool {
 		return true
 	}
 
-	return false
-}
-
-// Helper function to generate n different integers from 0 to length
-func findNDifferentInts(n, max int) []int {
-
-	n = Minint(n, max)
-	ints := make([]int, n)
-
-	// Generate n different random indices of maximum length
-	for i := 0; i < n; {
-		index := Random.Intn(max)
-		if !contains(ints, index) {
-			ints[i] = index
-			i++
-		}
-	}
-
-	return ints
-}
-
-// Helper function to check if an int is in a slice of ints
-func contains(values []int, value int) bool {
-	for _, v := range values {
-		if v == value {
-			return true
-		}
-	}
 	return false
 }
 

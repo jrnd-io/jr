@@ -31,6 +31,7 @@ type GlobalConfiguration struct {
 	RegistryConfig      string
 	Serializer          string
 	AutoCreate          bool
+	AutoRegisterSchemas bool
 	RedisTtl            time.Duration
 	RedisConfig         string
 	MongoConfig         string

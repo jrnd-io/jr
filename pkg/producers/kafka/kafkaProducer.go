@@ -50,14 +50,15 @@ import (
 )
 
 type Manager struct {
-	producer       *kafka.Producer
-	admin          *kafka.AdminClient
-	schema         schemaregistry.Client
-	schemaRegistry bool
-	Topic          string
-	Serializer     string
-	TemplateType   string
-	fleEnabled     bool
+	producer            *kafka.Producer
+	admin               *kafka.AdminClient
+	schema              schemaregistry.Client
+	schemaRegistry      bool
+	Topic               string
+	Serializer          string
+	TemplateType        string
+	fleEnabled          bool
+	autoRegisterSchemas bool
 }
 
 func (k *Manager) Initialize(configFile string) {
@@ -72,6 +73,7 @@ func (k *Manager) Initialize(configFile string) {
 	if err != nil {
 		log.Fatal().Err(err).Msg("Failed to create producer")
 	}
+
 }
 
 func (k *Manager) InitializeSchemaRegistry(configFile string) {
@@ -92,6 +94,7 @@ func (k *Manager) InitializeSchemaRegistry(configFile string) {
 	}
 
 	k.schemaRegistry = true
+	k.autoRegisterSchemas = true // auto register schemas by default
 }
 
 func verifyCSFLE(conf map[string]string, k *Manager) {
@@ -199,7 +202,7 @@ func (k *Manager) Produce(_ context.Context, key []byte, data []byte, _ any) {
 		if k.Serializer == "avro" || k.Serializer == "avro-generic" {
 			serConfig := avrov2.NewSerializerConfig()
 			// CSFLE requires auto register to false
-			if k.fleEnabled {
+			if k.fleEnabled || !k.autoRegisterSchemas {
 				serConfig.AutoRegisterSchemas = false
 				serConfig.UseLatestVersion = true
 			}
@@ -208,7 +211,10 @@ func (k *Manager) Produce(_ context.Context, key []byte, data []byte, _ any) {
 			// ser, err = protobuf.NewSerializer(k.schema, serde.ValueSerde, protobuf.NewSerializerConfig())
 			log.Fatal().Msg("Protobuf not yet implemented")
 		} else if k.Serializer == "json-schema" {
-			ser, err = jsonschema.NewSerializer(k.schema, serde.ValueSerde, jsonschema.NewSerializerConfig())
+			serConfig := jsonschema.NewSerializerConfig()
+			serConfig.AutoRegisterSchemas = k.autoRegisterSchemas
+			serConfig.UseLatestVersion = !k.autoRegisterSchemas
+			ser, err = jsonschema.NewSerializer(k.schema, serde.ValueSerde, serConfig)
 		} else {
 			log.Fatal().Str("serializer", k.Serializer).Msg("Serializer not supported")
 		}
@@ -353,10 +359,12 @@ func readConfig(configFile string) map[string]string {
 	for scanner.Scan() {
 		line := strings.TrimSpace(scanner.Text())
 		if !strings.HasPrefix(line, "#") && len(line) != 0 {
-			kv := strings.Split(line, "=")
-			parameter := strings.TrimSpace(kv[0])
-			value := strings.TrimSpace(kv[1])
-			m[parameter] = value
+			index := strings.Index(line, "=")
+			if index >= 0 {
+				parameter := strings.TrimSpace(line[:index])
+				value := strings.TrimSpace(line[index+1:])
+				m[parameter] = value
+			} // else: the line is not a parameter=value line
 		}
 	}
 

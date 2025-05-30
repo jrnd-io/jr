@@ -126,6 +126,10 @@ jr template run --template "{{name}}"
 					configuration.GlobalCfg.LUAScriptConfig, _ = cmd.Flags().GetString(f.Name)
 				case "wasmConfig":
 					configuration.GlobalCfg.WASMConfig, _ = cmd.Flags().GetString(f.Name)
+				case "wampConfig":
+					configuration.GlobalCfg.WAMPConfig, _ = cmd.Flags().GetString(f.Name)
+				case "autoRegisterSchemas":
+					configuration.GlobalCfg.AutoRegisterSchemas, _ = cmd.Flags().GetBool(f.Name)
 				}
 			}
 		})
@@ -185,6 +189,7 @@ func init() {
 
 	templateRunCmd.Flags().BoolP("schemaRegistry", "s", false, "If you want to use Confluent Schema Registry")
 	templateRunCmd.Flags().String("serializer", "", "Type of serializer: json-schema, avro-generic, avro, protobuf")
+	templateRunCmd.Flags().Bool("autoRegisterSchemas", true, "Enable/disable auto-registration of schemas in Schema Registry")
 	templateRunCmd.Flags().Duration("redis.ttl", -1, "If output is redis, ttl of the object")
 	templateRunCmd.Flags().String("httpConfig", "", "HTTP configuration")
 	templateRunCmd.Flags().String("redisConfig", "", "Redis configuration")
@@ -198,5 +203,6 @@ func init() {
 	templateRunCmd.Flags().String("cassandraConfig", "", "Cassandra configuration")
 	templateRunCmd.Flags().String("luascriptConfig", "", "LUA Script configuration")
 	templateRunCmd.Flags().String("wasmConfig", "", "WASM configuration")
+	templateRunCmd.Flags().String("wampConfig", "", "WAMP configuration")
 
 }

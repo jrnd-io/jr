@@ -1,6 +1,6 @@
 name: jrnd
 base: core22
-version: 0.3.9
+version: 0.4.0
 summary: Random data generator
 description: |
   Command line generator of random data.
@@ -20,7 +20,7 @@ parts:
   jr:
     plugin: make
     source-type: git
-    source-tag: v0.3.9
+    source-tag: v0.4.0
     source: https://github.com/jrnd-io/jr
     build-snaps: [go/1.22/stable]
     disable-parallel: true
@@ -33,7 +33,7 @@ parts:
   jr-copy-files-templates:
     plugin: dump
     source-type: git
-    source-tag: v0.3.9
+    source-tag: v0.4.0
     source: https://github.com/jrnd-io/jr
     source-subdir: "templates"
     organize:
@@ -42,6 +42,6 @@ parts:
   jr-copy-files-config:
     plugin: dump
     source-type: git
-    source-tag: v0.3.9
+    source-tag: v0.4.0
     source: https://github.com/jrnd-io/jr
     source-subdir: "config"

@@ -34,11 +34,13 @@ import (
 // CodiceFiscale return a valid Italian Codice Fiscale
 func CodiceFiscale() string {
 
+	ctx.JrContext.CtxLock.RLock()
 	name := ctx.JrContext.Ctx["_name"]
 	surname := ctx.JrContext.Ctx["_surname"]
 	gender := ctx.JrContext.Ctx["_gender"]
 	birthdate := ctx.JrContext.Ctx["_birthdate"]
 	city := ctx.JrContext.Ctx["_city"]
+	ctx.JrContext.CtxLock.RUnlock()
 
 	if name == "" {
 		name = Name()
@@ -105,9 +107,11 @@ func WorkEmail() string {
 
 // Email returns a random email.
 func Email() string {
+	ctx.JrContext.CtxLock.RLock()
 	name := ctx.JrContext.Ctx["_name"]
 	surname := ctx.JrContext.Ctx["_surname"]
 	provider := Word("mail_provider")
+	ctx.JrContext.CtxLock.RUnlock()
 
 	if name == "" {
 		name = Name()
@@ -126,6 +130,8 @@ func EmailProvider() string {
 
 // Gender returns a random gender. Note: it gets the gender context automatically setup by previous name calls
 func Gender() string {
+	ctx.JrContext.CtxLock.Lock()
+	defer ctx.JrContext.CtxLock.Unlock()
 	g := ctx.JrContext.Ctx["_gender"]
 	if g == "" {
 		gender := []string{"M", "F"}
@@ -154,6 +160,8 @@ func Name() string {
 // NameM returns a random male Name
 func NameM() string {
 	name := Word("nameM")
+	ctx.JrContext.CtxLock.Lock()
+	defer ctx.JrContext.CtxLock.Unlock()
 	ctx.JrContext.Ctx["_name"] = name
 	ctx.JrContext.Ctx["_gender"] = "M"
 	return name
@@ -162,6 +170,8 @@ func NameM() string {
 // NameF returns a random female Name
 func NameF() string {
 	name := Word("nameF")
+	ctx.JrContext.CtxLock.Lock()
+	defer ctx.JrContext.CtxLock.Unlock()
 	ctx.JrContext.Ctx["_name"] = name
 	ctx.JrContext.Ctx["_gender"] = "F"
 	return name
@@ -178,6 +188,8 @@ func Ssn() string {
 // Surname returns a random Surname
 func Surname() string {
 	s := Word("surname")
+	ctx.JrContext.CtxLock.Lock()
+	defer ctx.JrContext.CtxLock.Unlock()
 	ctx.JrContext.Ctx["_surname"] = s
 	return s
 }

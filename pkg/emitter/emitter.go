@@ -46,6 +46,7 @@ import (
 	"github.com/jrnd-io/jr/pkg/producers/redis"
 	"github.com/jrnd-io/jr/pkg/producers/s3"
 	"github.com/jrnd-io/jr/pkg/producers/server"
+	"github.com/jrnd-io/jr/pkg/producers/wamp"
 	"github.com/jrnd-io/jr/pkg/tpl"
 	"github.com/rs/zerolog/log"
 )
@@ -177,6 +178,10 @@ func (e *Emitter) Initialize(ctx context.Context, conf configuration.GlobalConfi
 		e.Producer = createWASMProducer(ctx, conf.LUAScriptConfig)
 		return
 	}
+	if e.Output == "wamp" {
+		e.Producer = createWAMPProducer(ctx, conf.WAMPConfig)
+		return
+	}
 
 }
 
@@ -280,6 +285,13 @@ func createLUAScriptProducer(_ context.Context, config string) Producer {
 
 func createWASMProducer(ctx context.Context, config string) Producer {
 	producer := &wasm.Producer{}
+	producer.Initialize(ctx, config)
+
+	return producer
+}
+
+func createWAMPProducer(ctx context.Context, config string) Producer {
+	producer := &wamp.Producer{}
 	producer.Initialize(ctx, config)
 
 	return producer

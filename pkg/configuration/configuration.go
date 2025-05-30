@@ -31,6 +31,7 @@ type GlobalConfiguration struct {
 	RegistryConfig      string
 	Serializer          string
 	AutoCreate          bool
+	AutoRegisterSchemas bool
 	RedisTtl            time.Duration
 	RedisConfig         string
 	MongoConfig         string
@@ -44,6 +45,7 @@ type GlobalConfiguration struct {
 	AWSDynamoDBConfig   string
 	LUAScriptConfig     string
 	WASMConfig          string
+	WAMPConfig          string
 	Url                 string
 	EmbeddedTemplate    bool
 	FileNameTemplate    bool

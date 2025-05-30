@@ -26,13 +26,28 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-// UnixTimeStamp returns a random unix timestamp not older than the given number of days
+// UnixTimeStamp returns a random unix timestamp not older than the given number of days (in seconds)
 func UnixTimeStamp(days int) int64 {
+	return UnixTS(days, false)
+}
+
+// UnixTimeStampMS returns a random unix timestamp not older than the given number of days (in milliseconds)
+func UnixTimeStampMS(days int) int64 {
+	return UnixTS(days, true)
+}
+
+func UnixTS(days int, millisecondPrecision bool) int64 {
 	unixEpoch := time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC)
 	now := time.Now()
-	first := now.AddDate(0, 0, -days).Sub(unixEpoch).Seconds()
-	last := now.Sub(unixEpoch).Seconds()
-	return Random.Int63n(int64(last-first)) + int64(first)
+	if millisecondPrecision {
+		first := now.AddDate(0, 0, -days).Sub(unixEpoch).Milliseconds()
+		last := now.Sub(unixEpoch).Milliseconds()
+		return Random.Int63n(last-first) + first
+	} else {
+		first := now.AddDate(0, 0, -days).Sub(unixEpoch).Seconds()
+		last := now.Sub(unixEpoch).Seconds()
+		return Random.Int63n(int64(last-first)) + int64(first)
+	}
 }
 
 // DateBetween returns a date between fromDate and toDate
@@ -72,6 +87,18 @@ func Justpassed(milliseconds int64) string {
 	pastTime := now.Add(-duration)
 
 	return pastTime.Format(time.DateTime)
+}
+
+// Now returns the current time as a Unix millisecond timestamp
+func Now() int64 {
+	return time.Now().UnixMilli()
+}
+
+// FormatTimestamp formats a unix millisecond timestamp with the given pattern
+func FormatTimestamp(timestamp int64, format string) string {
+	t := time.Unix(0, timestamp*int64(time.Millisecond))
+	formattedDate := t.Format(format)
+	return formattedDate
 }
 
 // Nowsub returns a date in the past of given milliseconds

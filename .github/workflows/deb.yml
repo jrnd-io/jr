@@ -1,0 +1,64 @@
+name: build-deb
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "debian/**"
+      - ".github/workflows/deb.yml"
+      - "make_install.sh"
+      - "build/**"
+      - "src/**"
+
+jobs:
+  build-deb:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        arch: [amd64, arm64]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Enable QEMU for arm64
+        if: matrix.arch == 'arm64'
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up environment variables
+        run: |
+          PKG_VER=0.4.0
+          echo "PKG_VER=$PKG_VER" >> $GITHUB_ENV
+          echo "ARCH=${{ matrix.arch }}" >> $GITHUB_ENV
+
+      - name: Build binary for ${{ matrix.arch }}
+        run: |
+          chmod +x make_install.sh
+          ./make_install.sh
+          mkdir -p out
+          cp build/jr out/jr
+
+      - name: Prepare debian package structure
+        run: |
+          mkdir -p pkg/usr/local/bin
+          cp out/jr pkg/usr/local/bin/jr
+          mkdir -p pkg/DEBIAN
+          cat > pkg/DEBIAN/control <<EOF
+          Package: jrnd-io-jr
+          Version: $PKG_VER
+          Section: utils
+          Priority: optional
+          Architecture: ${{ matrix.arch }}
+          Depends: golang
+          Maintainer: https://jrnd.io
+          Description: JR streaming quality random data from the command line. JR is a CLI program that helps you to stream quality random data for your applications.
+          EOF
+
+      - name: Build deb package
+        run: |
+          dpkg-deb --build pkg jrnd-io-jr_${PKG_VER}_${{ matrix.arch }}.deb
+
+      - name: Upload .deb artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: jrnd-io-jr_${{ matrix.arch }}
+          path: jrnd-io-jr_*.deb
